@@ -1,4 +1,4 @@
-package com.interior.customer;
+package com.interior.adapter.outbound.jpa.customer;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
