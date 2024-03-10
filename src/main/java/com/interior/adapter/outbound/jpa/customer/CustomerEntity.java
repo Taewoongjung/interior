@@ -1,5 +1,6 @@
 package com.interior.adapter.outbound.jpa.customer;
 
+import com.interior.adapter.outbound.jpa.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
