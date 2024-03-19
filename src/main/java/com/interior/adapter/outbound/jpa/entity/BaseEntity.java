@@ -1,4 +1,4 @@
-package com.interior.adapter.outbound.jpa;
+package com.interior.adapter.outbound.jpa.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
