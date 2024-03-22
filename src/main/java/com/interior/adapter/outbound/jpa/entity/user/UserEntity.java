@@ -35,6 +35,7 @@ public class UserEntity extends BaseEntity {
     private String tel;
     
     @Enumerated(EnumType.STRING)
+    @Column(name = "user_role", nullable = false)
     private UserRole userRole;
 
     private UserEntity(
