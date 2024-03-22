@@ -34,7 +34,8 @@ public class UserEntity extends BaseEntity {
     @Column(name = "tel", nullable = false)
     private String tel;
     
-    @Enumerated(EnumType.STRING)
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "role", nullable = false, columnDefinition = "varchar")
     private UserRole role;
 
     private UserEntity(
@@ -43,7 +44,7 @@ public class UserEntity extends BaseEntity {
         final String email,
         final String password,
         final String tel,
-        final UserRole userRole
+        final UserRole role
     ) {
         super(LocalDateTime.now(), LocalDateTime.now());
         
@@ -52,7 +53,7 @@ public class UserEntity extends BaseEntity {
         this.email = email;
         this.password = password;
         this.tel = tel;
-        this.userRole = userRole;
+        this.role = role;
     }
 
     public static UserEntity of(
@@ -83,7 +84,7 @@ public class UserEntity extends BaseEntity {
                 getEmail(),
                 getPassword(),
                 getTel(),
-                getUserRole(),
+                getRole(),
                 getLastModified(),
                 getCreatedAt()
         );
