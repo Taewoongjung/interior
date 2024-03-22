@@ -7,11 +7,13 @@ import static com.interior.adapter.common.exception.ErrorType.INVALID_CUSTOMER_T
 import static com.interior.adapter.common.exception.ErrorType.INVALID_CUSTOMER_USER_ROLE;
 import static com.interior.adapter.outbound.util.CheckUtil.require;
 
+import jakarta.validation.constraints.Email;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import lombok.Getter;
 import lombok.ToString;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,5 +1,6 @@
 package com.interior.application.security;
 
+import com.interior.domain.user.User;
 import com.interior.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,8 +15,14 @@ public class UserDetailService implements UserDetailsService {
 	private final UserRepository userRepository;
 	
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		
-		return userRepository.findByEmail(username);
+		User user = userRepository.findByEmail(email);
+		
+		if (user == null) {
+			throw new UsernameNotFoundException(email);
+		}
+		
+		return user;
 	}
 }

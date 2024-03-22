@@ -28,6 +28,8 @@ public class SecurityConfig {
 			.authorizeHttpRequests((authorizeRequests) ->
 				authorizeRequests
 					.requestMatchers("/", "/login/**").permitAll()
+					.requestMatchers("/", "/signup/**").permitAll()
+					.requestMatchers("/", "/actuator/**").permitAll()
 //					.requestMatchers("/posts/**", "/api/v1/posts/**").hasRole(Role.USER.name())
 //					.requestMatchers("/admins/**", "/api/v1/admins/**").hasRole(Role.ADMIN.name())
 					.anyRequest().authenticated()

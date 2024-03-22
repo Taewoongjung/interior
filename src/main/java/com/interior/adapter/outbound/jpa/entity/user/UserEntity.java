@@ -4,12 +4,14 @@ import com.interior.adapter.outbound.jpa.entity.BaseEntity;
 import com.interior.domain.user.User;
 import com.interior.domain.user.UserRole;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Getter
@@ -25,12 +27,14 @@ public class UserEntity extends BaseEntity {
     @Column(name = "name", nullable = false)
     private String name;
     
+    @Email
     @Column(name = "email", nullable = false, unique = true)
     private String email;
     
     @Column(name = "password", nullable = false)
     private String password;
     
+    @Length(min=10, max=11)
     @Column(name = "tel", nullable = false)
     private String tel;
     
