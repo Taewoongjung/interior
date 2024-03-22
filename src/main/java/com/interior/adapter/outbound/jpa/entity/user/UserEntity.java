@@ -35,7 +35,7 @@ public class UserEntity extends BaseEntity {
     private String tel;
     
     @Enumerated(EnumType.STRING)
-    private UserRole userRole;
+    private UserRole role;
 
     private UserEntity(
         final Long id,
