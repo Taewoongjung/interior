@@ -8,7 +8,7 @@ import lombok.ToString;
 @ToString
 public class Company {
 
-    private long id;
+    private Long id;
     private String name;
     private String address;
     private String subAddress;
@@ -18,7 +18,7 @@ public class Company {
     private LocalDateTime createdAt;
 
     public Company(
-            final long id,
+            final Long id,
             final String name,
             final String address,
             final String subAddress,

@@ -21,7 +21,7 @@ public class CompanyEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     private String name;
     private String address;
@@ -30,7 +30,7 @@ public class CompanyEntity extends BaseEntity {
     private String tel;
 
     public CompanyEntity(
-        final long id,
+        final Long id,
         final String name,
         final String address,
         final String subAddress,
@@ -45,5 +45,15 @@ public class CompanyEntity extends BaseEntity {
         this.subAddress = subAddress;
         this.buildingNumber = buildingNumber;
         this.tel = tel;
+    }
+
+    public CompanyEntity of(
+            final String name,
+            final String address,
+            final String subAddress,
+            final String buildingNumber,
+            final String tel
+    ) {
+        return new CompanyEntity(null, name, address, subAddress, buildingNumber, tel);
     }
 }

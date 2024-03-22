@@ -1,6 +1,13 @@
 package com.interior.adapter.outbound.jpa.entity.customer;
 
+import static com.interior.adapter.common.exception.ErrorType.INVALID_CUSTOMER_EMAIL;
+import static com.interior.adapter.common.exception.ErrorType.INVALID_CUSTOMER_NAME;
+import static com.interior.adapter.common.exception.ErrorType.INVALID_CUSTOMER_PASSWORD;
+import static com.interior.adapter.common.exception.ErrorType.INVALID_CUSTOMER_TEL;
+import static com.interior.adapter.outbound.util.CheckUtil.require;
+
 import com.interior.adapter.outbound.jpa.entity.BaseEntity;
+import com.interior.domain.customer.Customer;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -10,23 +17,23 @@ import lombok.ToString;
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
+@ToString
 @Table(name = "customer")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString
-@Getter
 public class CustomerEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     private String name;
     private String email;
     private String password;
     private String tel;
 
-    public CustomerEntity(
-        final long id,
+    private CustomerEntity(
+        final Long id,
         final String name,
         final String email,
         final String password,
@@ -39,5 +46,46 @@ public class CustomerEntity extends BaseEntity {
         this.email = email;
         this.password = password;
         this.tel = tel;
+    }
+
+    public static CustomerEntity of(
+            final Long id,
+            final String name,
+            final String email,
+            final String password,
+            final String tel
+    ) {
+        require(o -> name == null, name, INVALID_CUSTOMER_NAME);
+        require(o -> email == null, name, INVALID_CUSTOMER_EMAIL);
+        require(o -> password == null, password, INVALID_CUSTOMER_PASSWORD);
+        require(o -> tel == null, tel, INVALID_CUSTOMER_TEL);
+
+        return new CustomerEntity(id, name, email, password, tel);
+    }
+
+    public static CustomerEntity of(
+            final String name,
+            final String email,
+            final String password,
+            final String tel
+    ) {
+        require(o -> name == null, name, INVALID_CUSTOMER_NAME);
+        require(o -> email == null, name, INVALID_CUSTOMER_EMAIL);
+        require(o -> password == null, password, INVALID_CUSTOMER_PASSWORD);
+        require(o -> tel == null, tel, INVALID_CUSTOMER_TEL);
+
+        return new CustomerEntity(null, name, email, password, tel);
+    }
+
+    public Customer toPojo() {
+        return Customer.of(
+                getId(),
+                getName(),
+                getEmail(),
+                getPassword(),
+                getTel(),
+                getLastModified(),
+                getCreatedAt()
+        );
     }
 }
