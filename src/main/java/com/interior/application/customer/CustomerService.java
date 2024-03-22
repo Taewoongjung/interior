@@ -1,6 +1,7 @@
 package com.interior.application.customer;
 
 import com.interior.application.customer.dto.SignUpDto.SignUpReqDto;
+import com.interior.application.customer.dto.SignUpDto.SignUpResDto;
 import com.interior.domain.customer.Customer;
 import com.interior.domain.customer.repository.CustomerRepository;
 import java.time.LocalDateTime;
@@ -15,19 +16,14 @@ public class CustomerService {
     private final CustomerRepository customerRepository;
 
     @Transactional
-    public boolean signUp(final SignUpReqDto signUp) {
+    public SignUpResDto signUp(final SignUpReqDto req) {
 
         Customer customer = Customer.of(
-                signUp.name(),
-                signUp.email(),
-                signUp.password(),
-                signUp.tel(),
-                LocalDateTime.now(),
-                LocalDateTime.now()
-        );
+            req.name(), req.email(), req.password(), req.tel(),
+            LocalDateTime.now(), LocalDateTime.now());
 
         Customer result = customerRepository.save(customer);
 
-        return result != null;
+        return new SignUpResDto(result != null, result.getName());
     }
 }

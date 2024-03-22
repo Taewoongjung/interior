@@ -55,11 +55,6 @@ public class CustomerEntity extends BaseEntity {
             final String password,
             final String tel
     ) {
-        require(o -> name == null, name, INVALID_CUSTOMER_NAME);
-        require(o -> email == null, name, INVALID_CUSTOMER_EMAIL);
-        require(o -> password == null, password, INVALID_CUSTOMER_PASSWORD);
-        require(o -> tel == null, tel, INVALID_CUSTOMER_TEL);
-
         return new CustomerEntity(id, name, email, password, tel);
     }
 
@@ -69,11 +64,6 @@ public class CustomerEntity extends BaseEntity {
             final String password,
             final String tel
     ) {
-        require(o -> name == null, name, INVALID_CUSTOMER_NAME);
-        require(o -> email == null, name, INVALID_CUSTOMER_EMAIL);
-        require(o -> password == null, password, INVALID_CUSTOMER_PASSWORD);
-        require(o -> tel == null, tel, INVALID_CUSTOMER_TEL);
-
         return new CustomerEntity(null, name, email, password, tel);
     }
 

@@ -2,10 +2,12 @@ package com.interior.adapter.inbound.customer;
 
 import com.interior.application.customer.CustomerService;
 import com.interior.application.customer.dto.SignUpDto.SignUpReqDto;
+import com.interior.application.customer.dto.SignUpDto.SignUpResDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -15,7 +17,7 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @PostMapping(value = "/customers")
-    public ResponseEntity<Boolean> signup(final SignUpReqDto req) {
+    public ResponseEntity<SignUpResDto> signup(@RequestBody final SignUpReqDto req) {
 
         return ResponseEntity.status(HttpStatus.OK).body(customerService.signUp(req));
     }
