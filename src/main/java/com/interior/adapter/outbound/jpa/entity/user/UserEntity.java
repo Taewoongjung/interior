@@ -34,7 +34,7 @@ public class UserEntity extends BaseEntity {
     @Column(name = "tel", nullable = false)
     private String tel;
     
-    @Enumerated(value = EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
     private UserEntity(
