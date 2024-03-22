@@ -1,4 +1,4 @@
-CREATE TABLE `user`
+CREATE TABLE `users`
 (
     `id`              BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
     `name`            VARCHAR(20)         NOT NULL                  COMMENT '유저 이름',
