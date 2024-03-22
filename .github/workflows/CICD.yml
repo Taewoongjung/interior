@@ -42,7 +42,7 @@ jobs:
   test:
       needs: build
       runs-on: ubuntu-latest
-      step:
+      steps:
       - name: Verify the server's active status.
         uses: appleboy/ssh-action@v1.0.3
         with:
