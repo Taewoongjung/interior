@@ -1,13 +1,8 @@
-package com.interior.adapter.outbound.jpa.entity.customer;
-
-import static com.interior.adapter.common.exception.ErrorType.INVALID_CUSTOMER_EMAIL;
-import static com.interior.adapter.common.exception.ErrorType.INVALID_CUSTOMER_NAME;
-import static com.interior.adapter.common.exception.ErrorType.INVALID_CUSTOMER_PASSWORD;
-import static com.interior.adapter.common.exception.ErrorType.INVALID_CUSTOMER_TEL;
-import static com.interior.adapter.outbound.util.CheckUtil.require;
+package com.interior.adapter.outbound.jpa.entity.user;
 
 import com.interior.adapter.outbound.jpa.entity.BaseEntity;
-import com.interior.domain.customer.Customer;
+import com.interior.domain.user.User;
+import com.interior.domain.user.UserRole;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -19,61 +14,76 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @ToString
-@Table(name = "customer")
+@Table(name = "user")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CustomerEntity extends BaseEntity {
+public class UserEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "name", nullable = false)
     private String name;
+    
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
+    
+    @Column(name = "password", nullable = false)
     private String password;
+    
+    @Column(name = "tel", nullable = false)
     private String tel;
+    
+    @Enumerated(EnumType.STRING)
+    private UserRole userRole;
 
-    private CustomerEntity(
+    private UserEntity(
         final Long id,
         final String name,
         final String email,
         final String password,
-        final String tel
+        final String tel,
+        final UserRole userRole
     ) {
         super(LocalDateTime.now(), LocalDateTime.now());
-
+        
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
         this.tel = tel;
+        this.userRole = userRole;
     }
 
-    public static CustomerEntity of(
+    public static UserEntity of(
             final Long id,
             final String name,
             final String email,
             final String password,
-            final String tel
+            final String tel,
+            final UserRole userRole
     ) {
-        return new CustomerEntity(id, name, email, password, tel);
+        return new UserEntity(id, name, email, password, tel, userRole);
     }
 
-    public static CustomerEntity of(
+    public static UserEntity of(
             final String name,
             final String email,
             final String password,
-            final String tel
+            final String tel,
+            final UserRole userRole
     ) {
-        return new CustomerEntity(null, name, email, password, tel);
+        return new UserEntity(null, name, email, password, tel, userRole);
     }
 
-    public Customer toPojo() {
-        return Customer.of(
+    public User toPojo() {
+        return User.of(
                 getId(),
                 getName(),
                 getEmail(),
                 getPassword(),
                 getTel(),
+                getUserRole(),
                 getLastModified(),
                 getCreatedAt()
         );
