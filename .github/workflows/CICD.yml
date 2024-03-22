@@ -38,6 +38,6 @@ jobs:
           git pull
           ./gradlew build
           cd /home/twj/interior/build/libs
-          nohup java -jar interior-0.0.1-SNAPSHOT.jar &
+          nohup java -jar interior-0.0.1-SNAPSHOT.jar > stdout.txt &
           echo -ne '\n' | command
           curl http://localhost:${{ secrets.BACKEND_PORT }}/actuator/health
