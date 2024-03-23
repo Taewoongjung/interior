@@ -49,7 +49,7 @@ public class SecurityConfig {
 		CorsConfiguration config = new CorsConfiguration();
 		config.setAllowCredentials(true); // 자바스크립트 응답을 처리할 수 있게 할지 설정(ajax, axios)
 		config.addAllowedOrigin("http://localhost:80/");
-		config.addAllowedOrigin("http://0.0.0.0:80/");
+		config.addAllowedOrigin("http://interiorjung.shop/");
 		config.addAllowedOrigin("http://localhost:3000/");
 		config.addAllowedHeader("*");
 		config.addAllowedMethod("*");
