@@ -14,6 +14,9 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer.FrameOptionsConfig;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -25,19 +28,36 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(final @NotNull HttpSecurity http) throws Exception {
 		return http
-				.cors(Customizer.withDefaults())
+				.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsFilter()))
 				.csrf(AbstractHttpConfigurer::disable)
 				.headers((headerConfig) -> headerConfig.frameOptions(FrameOptionsConfig::disable))
 				.authorizeHttpRequests((authorizeRequests) ->
 								authorizeRequests
-										.requestMatchers("/", "/login/**").permitAll()
-										.requestMatchers("/", "/signup/**").permitAll()
+										.requestMatchers("/", "/api/login/**").permitAll()
+										.requestMatchers("/", "/api/signup/**").permitAll()
 										.requestMatchers("/", "/actuator/**").permitAll()
 //              .requestMatchers("/posts/**", "/api/v1/posts/**").hasRole(Role.USER.name())
 //              .requestMatchers("/admins/**", "/api/v1/admins/**").hasRole(Role.ADMIN.name())
 										.anyRequest().authenticated()
 				)
+
 				.build();
+	}
+
+	@Bean
+	public CorsConfigurationSource corsFilter(){
+		CorsConfiguration config = new CorsConfiguration();
+		config.setAllowCredentials(true); // 자바스크립트 응답을 처리할 수 있게 할지 설정(ajax, axios)
+		config.addAllowedOrigin("*");
+		config.addAllowedHeader("*");
+		config.addAllowedMethod("*");
+
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/api/*", config);
+		source.registerCorsConfiguration("/actuator/*", config);
+		// TODO /api/* 으로 요청이 왔을때, Allowed 된 요청만 받는지 확인하기
+
+		return source;
 	}
 	
 	// 인증 관리자 관련 설정

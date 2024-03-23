@@ -16,7 +16,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping(value = "/signup")
+    @PostMapping(value = "/api/signup")
     public ResponseEntity<SignUpResDto> signup(@RequestBody final SignUpReqDto req) {
 
         return ResponseEntity.status(HttpStatus.OK).body(userService.signUp(req));
