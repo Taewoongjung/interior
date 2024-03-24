@@ -1,75 +1,86 @@
 package com.interior.adapter.config;
 
 import com.interior.application.security.UserDetailService;
-import jakarta.validation.constraints.NotNull;
+import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer.FrameOptionsConfig;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-	
+
+	private final JwtProvider jwtProvider;
+	private final RedisTemplate<String,String> redisTemplate;
 	private final UserDetailService userDetailService;
 
 	@Bean
-	public SecurityFilterChain filterChain(final @NotNull HttpSecurity http) throws Exception {
-		return http
-				.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsFilter()))
-				.csrf(AbstractHttpConfigurer::disable)
-				.headers((headerConfig) -> headerConfig.frameOptions(FrameOptionsConfig::disable))
-				.authorizeHttpRequests((authorizeRequests) ->
-								authorizeRequests
-										.requestMatchers("/", "/api/login/**").permitAll()
-										.requestMatchers("/", "/api/signup/**").permitAll()
-										.requestMatchers("/", "/actuator/**").permitAll()
-//              .requestMatchers("/posts/**", "/api/v1/posts/**").hasRole(Role.USER.name())
-//              .requestMatchers("/admins/**", "/api/v1/admins/**").hasRole(Role.ADMIN.name())
-										.anyRequest().authenticated()
-				)
+	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-				.build();
+		http.csrf().disable();
+		http.cors().disable();
+
+		http.formLogin()
+				.loginPage("/login")
+				.usernameParameter("loginId")
+				.usernameParameter("password")
+				.successForwardUrl("/");
+
+		http.headers().frameOptions().sameOrigin();
+
+		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		http.addFilterAt(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+
+		return http.build();
+	}
+
+	private AbstractAuthenticationProcessingFilter customAuthenticationFilter() throws Exception {
+		CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManager(null), jwtProvider);
+
+		//Filter 적용 url
+		customAuthenticationFilter.setFilterProcessesUrl("/auth/login");
+		//인증 실패시 작동할 FailurHandler
+		customAuthenticationFilter.setAuthenticationFailureHandler(authenticationFailureHandler());
+
+		return customAuthenticationFilter;
+	}
+
+
+	@Bean
+	public AuthenticationFailureHandler authenticationFailureHandler() {
+		return new JwtFailureHandler();
+
 	}
 
 	@Bean
-	public CorsConfigurationSource corsFilter(){
-		CorsConfiguration config = new CorsConfiguration();
-		config.setAllowCredentials(true); // 자바스크립트 응답을 처리할 수 있게 할지 설정(ajax, axios)
-		config.addAllowedOrigin("*");
-		config.addAllowedHeader("*");
-		config.addAllowedMethod("*");
-
-		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("**", config);
-		return source;
-	}
-	
-	// 인증 관리자 관련 설정
-	@Bean
-	public AuthenticationManager authenticationManager(AuthenticationManagerBuilder authenticationManagerBuilder,
-			BCryptPasswordEncoder bCryptPasswordEncoder,
-			UserDetailService userDetailService) throws Exception {
-		authenticationManagerBuilder
-				.userDetailsService(userDetailService) // 사용자 정보 서비스 설정
-				.passwordEncoder(bCryptPasswordEncoder);
-
+	public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+		AuthenticationManagerBuilder authenticationManagerBuilder =
+				http.getSharedObject(AuthenticationManagerBuilder.class);
+		authenticationManagerBuilder.authenticationProvider(authenticationProvider());
 		return authenticationManagerBuilder.build();
 	}
-	
-	// 패스워드 인코더로 사용할 빈 등록
+
+	@Bean
+	public AuthenticationProvider authenticationProvider() {
+		return new JwtAuthenticationProvider(userDetailService, bCryptPasswordEncoder());
+	}
+
+	/**
+	 * 비밀번호 평문 저장을 방지하기 위한 인코더 빈등록
+	 * */
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder(){
 		return new BCryptPasswordEncoder();
