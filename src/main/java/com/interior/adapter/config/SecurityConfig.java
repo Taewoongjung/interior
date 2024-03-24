@@ -53,10 +53,7 @@ public class SecurityConfig {
 		config.addAllowedMethod("*");
 
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/api/*", config);
-		source.registerCorsConfiguration("/actuator/*", config);
-		// TODO /api/* 으로 요청이 왔을때, Allowed 된 요청만 받는지 확인하기
-
+		source.registerCorsConfiguration("**", config);
 		return source;
 	}
 	
