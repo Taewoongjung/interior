@@ -59,13 +59,14 @@ public class SecurityConfig {
 	
 	// 인증 관리자 관련 설정
 	@Bean
-	public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder, UserDetailService userDetailService)
-		throws Exception{
-		return http.getSharedObject(AuthenticationManagerBuilder.class)
-			.userDetailsService(userDetailService) // 사용자 정보 서비스 설정
-			.passwordEncoder(bCryptPasswordEncoder)
-			.and()
-			.build();
+	public AuthenticationManager authenticationManager(AuthenticationManagerBuilder authenticationManagerBuilder,
+			BCryptPasswordEncoder bCryptPasswordEncoder,
+			UserDetailService userDetailService) throws Exception {
+		authenticationManagerBuilder
+				.userDetailsService(userDetailService) // 사용자 정보 서비스 설정
+				.passwordEncoder(bCryptPasswordEncoder);
+
+		return authenticationManagerBuilder.build();
 	}
 	
 	// 패스워드 인코더로 사용할 빈 등록
