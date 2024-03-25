@@ -1,4 +1,4 @@
-package com.interior.adapter.outbound.util.converter.jpa.user;
+package com.interior.util.converter.jpa.user;
 
 import com.interior.adapter.outbound.jpa.entity.user.UserEntity;
 import com.interior.domain.user.User;

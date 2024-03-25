@@ -1,4 +1,4 @@
-package com.interior.adapter.outbound.util;
+package com.interior.util;
 
 import com.interior.adapter.common.exception.ErrorType;
 import com.interior.adapter.common.exception.InvalidInputException;

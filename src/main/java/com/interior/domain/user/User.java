@@ -5,22 +5,20 @@ import static com.interior.adapter.common.exception.ErrorType.INVALID_CUSTOMER_N
 import static com.interior.adapter.common.exception.ErrorType.INVALID_CUSTOMER_PASSWORD;
 import static com.interior.adapter.common.exception.ErrorType.INVALID_CUSTOMER_TEL;
 import static com.interior.adapter.common.exception.ErrorType.INVALID_CUSTOMER_USER_ROLE;
-import static com.interior.adapter.outbound.util.CheckUtil.require;
+import static com.interior.util.CheckUtil.require;
 
-import jakarta.validation.constraints.Email;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import lombok.Getter;
 import lombok.ToString;
-import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @Getter
 @ToString
-public class User implements UserDetails {
+public class User extends Throwable implements UserDetails {
 
 	private Long id;
 	private String name;
@@ -60,13 +58,13 @@ public class User implements UserDetails {
 			final LocalDateTime lastModified,
 			final LocalDateTime createdAt
 	) {
-		
+
 		require(o -> name == null, name, INVALID_CUSTOMER_NAME);
-		require(o -> email == null, name, INVALID_CUSTOMER_EMAIL);
+		require(o -> email == null, email, INVALID_CUSTOMER_EMAIL);
 		require(o -> password == null, password, INVALID_CUSTOMER_PASSWORD);
 		require(o -> tel == null, tel, INVALID_CUSTOMER_TEL);
-		require(o -> userRole == null, tel, INVALID_CUSTOMER_USER_ROLE);
-		
+		require(o -> userRole == null, userRole, INVALID_CUSTOMER_USER_ROLE);
+
 		return new User(null, name, email, password, tel, userRole, lastModified, createdAt);
 	}
 
@@ -80,41 +78,51 @@ public class User implements UserDetails {
 			final LocalDateTime lastModified,
 			final LocalDateTime createdAt
 	) {
-		
+
 		require(o -> name == null, name, INVALID_CUSTOMER_NAME);
-		require(o -> email == null, name, INVALID_CUSTOMER_EMAIL);
+		require(o -> email == null, email, INVALID_CUSTOMER_EMAIL);
 		require(o -> password == null, password, INVALID_CUSTOMER_PASSWORD);
 		require(o -> tel == null, tel, INVALID_CUSTOMER_TEL);
-		require(o -> userRole == null, tel, INVALID_CUSTOMER_USER_ROLE);
-		
+		require(o -> userRole == null, userRole, INVALID_CUSTOMER_USER_ROLE);
+
 		return new User(id, name, email, password, tel, userRole, lastModified, createdAt);
 	}
-	
+
+	public static User of(
+			final String email,
+			final String userRole
+	) {
+		require(o -> email == null, email, INVALID_CUSTOMER_EMAIL);
+		require(o -> userRole == null, userRole, INVALID_CUSTOMER_USER_ROLE);
+
+		return new User(null, null, email, null, null, UserRole.from(userRole), null, null);
+	}
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return List.of(new SimpleGrantedAuthority("customer"));
+		return List.of(new SimpleGrantedAuthority("CUSTOMER"));
 	}
-	
+
 	@Override
 	public String getUsername() {
 		return email;
 	}
-	
+
 	@Override
 	public boolean isAccountNonExpired() {
 		return true;
 	}
-	
+
 	@Override
 	public boolean isAccountNonLocked() {
 		return true;
 	}
-	
+
 	@Override
 	public boolean isCredentialsNonExpired() {
 		return true;
 	}
-	
+
 	@Override
 	public boolean isEnabled() {
 		return true;
