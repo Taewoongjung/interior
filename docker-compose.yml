@@ -9,3 +9,8 @@ services:
     ports:
       - "3309:3306"
     restart: unless-stopped
+  nginx:
+    container_name: nginx
+    image: "nginx:test"
+    ports:
+      - "80:80"
