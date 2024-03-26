@@ -42,7 +42,24 @@ public class SecurityConfig {
 
 		http.csrf(AbstractHttpConfigurer::disable);
 
-		http.cors(AbstractHttpConfigurer::disable);
+		http.cors((corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
+			@Override
+			public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+
+				CorsConfiguration configuration = new CorsConfiguration();
+
+				configuration.setAllowedOrigins(Collections.singletonList(frontOriginUrl));
+				configuration.setAllowedMethods(Collections.singletonList("*"));
+				configuration.setAllowCredentials(true);
+				configuration.setAllowedHeaders(Collections.singletonList("*"));
+				configuration.setMaxAge(3600L);
+
+				configuration.setExposedHeaders(Collections.singletonList("Authorization"));
+
+				return configuration;
+			}
+		})));
+
 
 		http.formLogin(AbstractHttpConfigurer::disable);
 
