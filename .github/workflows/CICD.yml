@@ -36,7 +36,7 @@ jobs:
           git pull
           ./gradlew build
           kill -9 $(lsof -t -i :7070)
-          nohup java -jar /home/twj/interior/build/libs/interior-0.0.1-SNAPSHOT.jar >/dev/null 2>&1 & disown;
+          nohup java -jar /home/twj/interior/build/libs/interior-0.0.1-SNAPSHOT.jar < /dev/null &
 
   test:
       needs: build
