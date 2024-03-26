@@ -1,3 +1,3 @@
 FROM nginx
 
-ADD default.conf /et가c/nginx/conf.d/default.conf
+ADD default.conf /etc/nginx/conf.d/default.conf
