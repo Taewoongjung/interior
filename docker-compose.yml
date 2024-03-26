@@ -9,3 +9,9 @@ services:
     ports:
       - "3309:3306"
     restart: unless-stopped
+
+  backend:
+    build: .
+    ports:
+      - "707:7070"
+    restart: unless-stopped
