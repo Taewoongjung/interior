@@ -42,24 +42,7 @@ public class SecurityConfig {
 
 		http.csrf(AbstractHttpConfigurer::disable);
 
-		http.cors((corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
-			@Override
-			public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
-
-				CorsConfiguration configuration = new CorsConfiguration();
-
-				configuration.setAllowedOrigins(Collections.singletonList("/**"));
-				configuration.setAllowedMethods(Collections.singletonList("*"));
-				configuration.setAllowPrivateNetwork(true);
-				configuration.setAllowCredentials(true);
-				configuration.setAllowedHeaders(Collections.singletonList("*"));
-				configuration.setMaxAge(3600L);
-
-				configuration.setExposedHeaders(Collections.singletonList("Authorization"));
-
-				return configuration;
-			}
-		})));
+		http.cors(AbstractHttpConfigurer::disable);
 
 		http.formLogin(AbstractHttpConfigurer::disable);
 
@@ -68,7 +51,7 @@ public class SecurityConfig {
 		http.authorizeHttpRequests((auth) -> auth
 				.requestMatchers(HttpMethod.GET,
 						"/actuator/health",
-						"api/*"
+						"/api/*"
 				).permitAll()
 				.requestMatchers(HttpMethod.POST,
 						"/login",
