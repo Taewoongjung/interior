@@ -5,9 +5,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class JWTUtil {
 
@@ -35,12 +37,19 @@ public class JWTUtil {
 
     public String createJwt(String username, String role, Long expiredMs) {
 
-        return Jwts.builder()
+        log.info("username = ", username);
+        log.info("role = ", role);
+        String re = Jwts.builder()
                 .claim("username", username)
                 .claim("role", role)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expiredMs))
                 .signWith(secretKey)
                 .compact();
+
+        log.info("secretKey = ", secretKey);
+        log.info("jwt = ", re);
+
+        return re;
     }
 }
