@@ -39,6 +39,8 @@ public class JWTUtil {
 
         log.info("username = ", username);
         log.info("role = ", role);
+        log.info("secretKeyBefore = ", secretKey);
+
         String re = Jwts.builder()
                 .claim("username", username)
                 .claim("role", role)
@@ -47,7 +49,7 @@ public class JWTUtil {
                 .signWith(secretKey)
                 .compact();
 
-        log.info("secretKey = ", secretKey);
+        log.info("secretKeyAfter = ", secretKey);
         log.info("jwt = ", re);
 
         return re;

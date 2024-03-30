@@ -50,13 +50,17 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         User userDetails = (User) authentication.getPrincipal();
 
-        String email = userDetails.getEmail();
+        log.info("userDetails = ",userDetails);
+        String email = userDetails.getUsername();
+
+        log.info("email = ",email);
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
         GrantedAuthority auth = iterator.next();
 
         String role = auth.getAuthority();
+        log.info(role);
 
         String token = jwtUtil.createJwt(email, role, 60 * 60 * 10L);
 
