@@ -60,6 +60,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         String token = jwtUtil.createJwt(email, role, 60 * 60 * 10L);
 
+        log.info("token = ", token);
+
         response.addHeader("Authorization", "Bearer " + token);
     }
 
