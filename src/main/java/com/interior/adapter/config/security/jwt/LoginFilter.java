@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.Collection;
 import java.util.Iterator;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,6 +15,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+@Slf4j
 @RequiredArgsConstructor
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -28,9 +30,14 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String email = obtainUsername(request);
         String password = obtainPassword(request);
 
+        log.info("email = "+email);
+        log.info("password = "+password);
+
         // 스프링 시큐리티에서 username과 password를 검증하기 위해서는 token에 담아야 함.
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                 email, password, null);
+
+        log.info("token = "+ authToken);
 
         return authenticationManager.authenticate(authToken);
     }
