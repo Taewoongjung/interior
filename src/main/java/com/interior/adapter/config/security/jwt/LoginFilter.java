@@ -37,7 +37,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                 email, password, null);
 
-        log.info("token = "+ authToken);
+        System.out.println("token = "+ authToken);
 
         return authenticationManager.authenticate(authToken);
     }
@@ -46,25 +46,21 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     protected void successfulAuthentication(HttpServletRequest request,
             HttpServletResponse response, FilterChain chain, Authentication authentication) {
 
-        System.out.println("success login");
+        log.info("success login");
 
         User userDetails = (User) authentication.getPrincipal();
 
-        log.info("userDetails = ",userDetails);
         String email = userDetails.getUsername();
-
-        log.info("email = ",email);
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
         GrantedAuthority auth = iterator.next();
 
         String role = auth.getAuthority();
-        log.info(role);
 
         String token = jwtUtil.createJwt(email, role, 60 * 60 * 10L);
 
-        log.info("token = ", token);
+        System.out.println("token = "+ token);
 
         response.addHeader("Authorization", "Bearer " + token);
     }
