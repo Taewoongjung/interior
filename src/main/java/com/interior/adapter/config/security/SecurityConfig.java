@@ -54,8 +54,6 @@ public class SecurityConfig {
 				configuration.setAllowedHeaders(Collections.singletonList("*"));
 				configuration.setMaxAge(3600L);
 
-				configuration.setExposedHeaders(Collections.singletonList("*"));
-
 				return configuration;
 			}
 		})));
