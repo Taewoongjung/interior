@@ -24,10 +24,4 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.OK).body(userService.signUp(req));
     }
-
-    @PostMapping(value = "/api/login")
-    public ResponseEntity<LogInResDto> login(final @Valid @RequestBody LogInReqDto req) {
-
-        return ResponseEntity.status(HttpStatus.OK).body(userService.logIn(req));
-    }
 }

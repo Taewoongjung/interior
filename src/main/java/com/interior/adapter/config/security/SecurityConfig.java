@@ -40,9 +40,9 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-		http.csrf(AbstractHttpConfigurer::disable);
-
-		http.cors((corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
+		http
+			.csrf(AbstractHttpConfigurer::disable)
+			.cors((corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
 			@Override
 			public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
 
@@ -58,33 +58,42 @@ public class SecurityConfig {
 			}
 		})));
 
-
-		http.formLogin(AbstractHttpConfigurer::disable);
-
 		http.httpBasic(AbstractHttpConfigurer::disable);
-
+		
 		http.authorizeHttpRequests((auth) -> auth
 				.requestMatchers(HttpMethod.GET,
 						"/actuator/health",
 						"/api/*"
 				).permitAll()
 				.requestMatchers(HttpMethod.POST,
-						"/login",
+						"/api/login",
 						"/api/signup"
 				).permitAll()
 				.requestMatchers("/admin").hasRole("CUSTOMER")
-				.anyRequest().authenticated());
-
+				.anyRequest().authenticated())
+				.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class)
+				.addFilterAt(
+					new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil),
+					UsernamePasswordAuthenticationFilter.class
+				)
+				.sessionManagement((session) -> session
+					.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+		
+		http
+			.formLogin(formLogin -> formLogin
+				.loginProcessingUrl("/api/login")
+			);
+		
 		// 로그인 필터 앞에서 JWTFilter 검증
-		http.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
+//		http.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
 
-		http.addFilterAt(
-				new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil),
-				UsernamePasswordAuthenticationFilter.class
-		);
+//		http.addFilterAt(
+//				new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil),
+//				UsernamePasswordAuthenticationFilter.class
+//		);
 
-		http.sessionManagement((session) -> session
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+//		http.sessionManagement((session) -> session
+//				.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
 		return http.build();
 	}
