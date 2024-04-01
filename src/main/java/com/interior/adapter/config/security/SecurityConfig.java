@@ -48,7 +48,7 @@ public class SecurityConfig {
 
 				CorsConfiguration configuration = new CorsConfiguration();
 
-				configuration.setAllowedOrigins(Collections.singletonList(frontOriginUrl));
+				configuration.setAllowedOrigins(Collections.singletonList("*"));
 				configuration.setAllowedMethods(Collections.singletonList("*"));
 				configuration.setAllowCredentials(true);
 				configuration.setAllowedHeaders(Collections.singletonList("*"));
@@ -72,6 +72,8 @@ public class SecurityConfig {
 				.requestMatchers("/admin").hasRole("CUSTOMER")
 				.anyRequest().authenticated())
 				.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class)
+				
+				// 로그인 필터 앞에서 JWTFilter 검증
 				.addFilterAt(
 					new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil),
 					UsernamePasswordAuthenticationFilter.class
@@ -84,17 +86,6 @@ public class SecurityConfig {
 				.loginProcessingUrl("/api/login")
 			);
 		
-		// 로그인 필터 앞에서 JWTFilter 검증
-//		http.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
-
-//		http.addFilterAt(
-//				new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil),
-//				UsernamePasswordAuthenticationFilter.class
-//		);
-
-//		http.sessionManagement((session) -> session
-//				.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
 		return http.build();
 	}
 
