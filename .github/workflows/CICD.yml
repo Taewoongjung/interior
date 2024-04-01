@@ -51,7 +51,7 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           script: |
             whoami
-            response=$(curl -s http://localhost:7070/actuator/health)
+            response=$(curl -s http://localhost:707/actuator/health)
             if [[ "$response" == *"\"status\":\"UP\""* ]]; then
               echo "true"
             else
