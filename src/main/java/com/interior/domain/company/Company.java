@@ -1,5 +1,10 @@
 package com.interior.domain.company;
 
+import static com.interior.adapter.common.exception.ErrorType.INVALID_COMPANY_NAME;
+import static com.interior.adapter.common.exception.ErrorType.INVALID_COMPANY_TEL;
+import static com.interior.util.CheckUtil.check;
+import static com.interior.util.CheckUtil.require;
+
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.ToString;
@@ -17,7 +22,7 @@ public class Company {
     private LocalDateTime lastModified;
     private LocalDateTime createdAt;
 
-    public Company(
+    private Company(
             final Long id,
             final String name,
             final String address,
@@ -35,5 +40,23 @@ public class Company {
         this.tel = tel;
         this.lastModified = lastModified;
         this.createdAt = createdAt;
+    }
+
+    public static Company of(
+            final Long id,
+            final String name,
+            final String address,
+            final String subAddress,
+            final String buildingNumber,
+            final String tel,
+            final LocalDateTime lastModified,
+            final LocalDateTime createdAt
+    ) {
+
+        require(o-> name == null, name, INVALID_COMPANY_NAME);
+        require(o -> tel == null, tel, INVALID_COMPANY_TEL);
+
+        return new Company(id, name, address, subAddress, buildingNumber, tel, lastModified,
+                createdAt);
     }
 }
