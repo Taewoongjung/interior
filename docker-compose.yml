@@ -11,17 +11,17 @@ services:
     restart: unless-stopped
   app: #4
     build: #5
-      context: ./app
+      context: ./
       dockerfile: Dockerfile
-      container_name: twj_spring
-      links: #6
-        - db
-      restart: always
-      ports:
-        - "80:8080"
-      depends_on: #7
-        - db
-      environment: #8
-        SPRING_DATASOURCE_URL: jdbc:mysql://db:3309/interior?characterEncoding=UTF-8&serverTimezone=UTC&&allowPublicKeyRetrieval=true&useSSL=false
-        SPRING_DATASOURCE_USERNAME: root
-        SPRING_DATASOURCE_PASSWORD: 1234567
+    container_name: twj_spring
+    links: #6
+      - db
+    restart: always
+    ports:
+      - "80:8080"
+    depends_on: #7
+      - db
+    environment: #8
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3309/interior?characterEncoding=UTF-8&serverTimezone=UTC&&allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 1234567
