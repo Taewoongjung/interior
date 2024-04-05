@@ -49,7 +49,7 @@ public class SecurityConfig {
 
 				CorsConfiguration configuration = new CorsConfiguration();
 
-				configuration.setAllowedOrigins(Arrays.asList(frontOriginUrl, "http://localhost:707"));
+				configuration.setAllowedOrigins(Arrays.asList(frontOriginUrl, "http://localhost:707", "http://localhost:8080"));
 				configuration.setAllowedMethods(Collections.singletonList("*"));
 				configuration.setAllowCredentials(true);
 				configuration.setAllowedHeaders(Collections.singletonList("*"));
