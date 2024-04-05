@@ -16,16 +16,6 @@ WORKDIR /app
 # 빌더 이미지에서 jar 파일만 복사
 COPY --from=builder /build/build/libs/*-SNAPSHOT.jar ./app.jar
 
-# MySQL 이미지를 기반으로 이미지 생성
-FROM mysql:8.0.33
-
-# MySQL 설정
-ENV MYSQL_ROOT_PASSWORD=1234567
-ENV MYSQL_DATABASE=interior
-
-# 포트 설정 (기본 MySQL 포트는 3306)
-EXPOSE 3306
-
 EXPOSE 8080
 
 # root 대신 nobody 권한으로 실행
