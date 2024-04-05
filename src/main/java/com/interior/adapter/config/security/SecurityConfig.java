@@ -5,6 +5,7 @@ import com.interior.adapter.config.security.jwt.JWTUtil;
 import com.interior.adapter.config.security.jwt.LoginFilter;
 import com.interior.application.security.UserDetailService;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -48,7 +49,7 @@ public class SecurityConfig {
 
 				CorsConfiguration configuration = new CorsConfiguration();
 
-				configuration.setAllowedOrigins(Collections.singletonList(frontOriginUrl));
+				configuration.setAllowedOrigins(Arrays.asList(frontOriginUrl, "http://localhost:707"));
 				configuration.setAllowedMethods(Collections.singletonList("*"));
 				configuration.setAllowCredentials(true);
 				configuration.setAllowedHeaders(Collections.singletonList("*"));
