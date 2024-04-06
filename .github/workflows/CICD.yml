@@ -33,7 +33,7 @@ jobs:
         script: |
           cd /home/twj/interior
           git pull
-          docker compose down && docker compose up -d
+          docker compose down && docker compose up -d --build 
 
   test:
       needs: build
@@ -50,7 +50,7 @@ jobs:
             whoami
             
             # 헬스체크 10번
-            for i in {1..10}
+            for i in {1..20}
             do
             response=$(curl -s http://localhost:707/actuator/health)
             
@@ -67,7 +67,7 @@ jobs:
             done
             
             # 10번 시도 후에도 성공하지 못한 경우
-            if [[ "$i" == 10 ]]; then
-              echo "Server did not come up after 10 attempts"
+            if [[ "$i" == 20 ]]; then
+              echo "서버가 정상적으로 시동되지 않았음."
               exit 1
             fi
