@@ -6,8 +6,8 @@ networks:
 
 services:
   nginx:
-    container_name: nginx
-    image: nginx_tws_back
+    container_name: nginx_tws_back
+    image: nginx
     restart: always
     ports:
       - '707:707'
