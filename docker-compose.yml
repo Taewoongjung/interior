@@ -4,7 +4,6 @@ services:
     image: mysql:8.0.33
     restart: unless-stopped
     platform: linux/amd64
-    container_name: twj_db
     environment:
       MYSQL_DATABASE: interior
       MYSQL_ROOT_HOST: '%'
@@ -12,11 +11,6 @@ services:
       TZ: 'Asia/Seoul'
     ports:
       - "3306:3306"
-    #    command: [ "--character-set-server=utf8mb4","--collation-server=utf8mb4_unicode_ci" ]
-    volumes:
-      - ./db/data:/var/lib/mysql
-      - ./db/config:/etc/mysql/conf.d
-      - ./db/init:/docker-entrypoint-initdb.d
     healthcheck:
       test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
       interval: 3s
@@ -27,26 +21,17 @@ services:
       - "--character-set-server=utf8mb4"
       - "--collation-server=utf8mb4_unicode_ci"
 
-    networks:
-      - my_network
-
-  app: #4
-    build: #5
+  app:
+    build:
       context: ./
       dockerfile: Dockerfile
     container_name: twj_spring
     restart: on-failure
     ports:
       - "707:7070"
-    depends_on: #7
+    depends_on:
       - database
-    environment: #8
-      SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/interior?autoReconnect=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: 1234567
-    networks:
-      - my_network
     command: ./gradlew bootRun
-
-networks:
-  my_network:
+    environment:
+      - FRONT_ORIGIN_URL=${FRONT_ORIGIN_URL}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
