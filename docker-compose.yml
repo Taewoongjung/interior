@@ -40,6 +40,8 @@ services:
       - "mysqld"
       - "--character-set-server=utf8mb4"
       - "--collation-server=utf8mb4_unicode_ci"
+    networks:
+      - server-connection
 
   app:
     build:
@@ -55,3 +57,5 @@ services:
     environment:
       - FRONT_ORIGIN_URL=${FRONT_ORIGIN_URL}
       - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+    networks:
+      - server-connection
