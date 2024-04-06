@@ -33,7 +33,8 @@ jobs:
         script: |
           cd /home/twj/interior
           git pull
-          docker compose down && docker compose up -d --build 
+          docker compose down
+          docker compose up -d --build 
 
   test:
       needs: build
