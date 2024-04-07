@@ -2,7 +2,6 @@ package com.interior.domain.company;
 
 import static com.interior.adapter.common.exception.ErrorType.INVALID_COMPANY_NAME;
 import static com.interior.adapter.common.exception.ErrorType.INVALID_COMPANY_TEL;
-import static com.interior.util.CheckUtil.check;
 import static com.interior.util.CheckUtil.require;
 
 import java.time.LocalDateTime;
