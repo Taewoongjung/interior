@@ -7,6 +7,7 @@ import static com.interior.adapter.common.exception.ErrorType.INVALID_CUSTOMER_T
 import static com.interior.adapter.common.exception.ErrorType.INVALID_CUSTOMER_USER_ROLE;
 import static com.interior.util.CheckUtil.require;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -18,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 @Getter
 @ToString
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class User extends Throwable implements UserDetails {
 
 	private Long id;

@@ -61,6 +61,7 @@ public class SecurityConfig {
 		http.httpBasic(AbstractHttpConfigurer::disable);
 		
 		http.authorizeHttpRequests((auth) -> auth
+				.requestMatchers("/login").permitAll()
 				.requestMatchers(HttpMethod.GET,
 						"/actuator/health",
 						"/api/*"
@@ -83,7 +84,7 @@ public class SecurityConfig {
 		
 		http
 			.formLogin(formLogin -> formLogin
-				.loginProcessingUrl("/api/login")
+				.loginProcessingUrl("/api/login").permitAll()
 			);
 		
 		return http.build();

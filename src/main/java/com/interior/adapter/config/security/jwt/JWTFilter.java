@@ -1,5 +1,8 @@
 package com.interior.adapter.config.security.jwt;
 
+import static com.interior.adapter.common.exception.ErrorType.EXPIRED_ACCESS_TOKEN;
+import static com.interior.util.CheckUtil.check;
+
 import com.interior.domain.user.User;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -23,7 +26,6 @@ public class JWTFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
-
         // request 에서 Authorization 헤더를 찾음
         String authorization = request.getHeader("Authorization");
 
@@ -36,7 +38,8 @@ public class JWTFilter extends OncePerRequestFilter {
             return;
         }
 
-        String token = authorization.split(" ")[1];
+        String token = jwtUtil.getTokenWithoutBearer(authorization);
+        check(jwtUtil.isExpired(token), EXPIRED_ACCESS_TOKEN);
 
         // 토큰 소멸 시간 검증
         if (jwtUtil.isExpired(token)) {
@@ -62,6 +65,8 @@ public class JWTFilter extends OncePerRequestFilter {
         // 세선에 사용자 등록 (유저 세선 등록)
         SecurityContextHolder.getContext().setAuthentication(authToken);
 
+        response.setHeader("Authorization", token);
+        response.addHeader("Authorization", token);
         filterChain.doFilter(request, response);
     }
 }
