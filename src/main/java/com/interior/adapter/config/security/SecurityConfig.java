@@ -61,16 +61,16 @@ public class SecurityConfig {
 		http.httpBasic(AbstractHttpConfigurer::disable);
 		
 		http.authorizeHttpRequests((auth) -> auth
-				.requestMatchers("/login").permitAll()
 				.requestMatchers(HttpMethod.GET,
-						"/actuator/health",
-						"/api/*"
+						"/actuator/health"
+						,"/api/me"
 				).permitAll()
 				.requestMatchers(HttpMethod.POST,
-						"/api/login",
-						"/api/signup"
+						"/api/login"
+						,"/api/signup"
 				).permitAll()
 				.requestMatchers("/admin").hasRole("CUSTOMER")
+				.requestMatchers("/login").permitAll()
 				.anyRequest().authenticated())
 				.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class)
 				
