@@ -33,7 +33,6 @@ jobs:
         script: |
           cd /home/twj/interior
           git pull
-          docker compose down
           sleep 3
           docker compose up -d --build 
 
