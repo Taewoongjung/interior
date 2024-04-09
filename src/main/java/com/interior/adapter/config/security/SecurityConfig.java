@@ -81,12 +81,7 @@ public class SecurityConfig {
 				)
 				.sessionManagement((session) -> session
 					.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-		
-//		http
-//			.formLogin(formLogin -> formLogin
-//				.loginProcessingUrl("/api/login").permitAll()
-//			);
-		
+
 		return http.build();
 	}
 
