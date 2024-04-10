@@ -16,8 +16,8 @@ public class CompanyService {
 
     private final CompanyRepository companyRepository;
 
-    public List<Company> getCompany(final User user) {
-        return user.getCompanyList();
+    public Company getCompany(final long companyId) {
+        return companyRepository.findById(companyId);
     }
 
     public boolean createCompany(

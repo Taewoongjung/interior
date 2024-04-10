@@ -4,7 +4,7 @@ import com.interior.domain.company.Company;
 
 public interface CompanyRepository {
 
-    Company findByName(final String companyName);
+    Company findById(final Long companyId);
 
     boolean save(final String userEmail, final Company createCompany);
 }

@@ -2,10 +2,13 @@ package com.interior.adapter.outbound.jpa.repository.company;
 
 import static com.interior.util.converter.jpa.company.CompanyEntityConverter.companyToEntity;
 
+import com.interior.adapter.outbound.jpa.entity.company.CompanyEntity;
 import com.interior.adapter.outbound.jpa.entity.user.UserEntity;
 import com.interior.adapter.outbound.jpa.repository.user.UserJpaRepository;
 import com.interior.domain.company.Company;
 import com.interior.domain.company.repository.CompanyRepository;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -17,8 +20,12 @@ public class CompanyRepositoryAdapter implements CompanyRepository {
     private final CompanyJpaRepository companyJpaRepository;
 
     @Override
-    public Company findByName(final String companyName) {
-        return null;
+    public Company findById(final Long companyId) {
+
+        CompanyEntity company = companyJpaRepository.findById(companyId)
+                .orElseThrow(() -> new NoSuchElementException("Company not found"));
+
+        return company.toPojo();
     }
 
     @Override

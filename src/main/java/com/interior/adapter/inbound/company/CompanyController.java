@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,9 +26,9 @@ public class CompanyController {
 
     private final CompanyService companyService;
 
-    @GetMapping(value = "/api/companies")
-    public ResponseEntity<List<Company>> getCompany(@AuthenticationPrincipal User user) {
-        return ResponseEntity.status(HttpStatus.OK).body(companyService.getCompany(user));
+    @GetMapping(value = "/api/companies/{companyId}")
+    public ResponseEntity<Company> getCompany(@PathVariable("companyId") final Long companyId) {
+        return ResponseEntity.status(HttpStatus.OK).body(companyService.getCompany(companyId));
     }
 
     @PostMapping(value = "/api/companies")
