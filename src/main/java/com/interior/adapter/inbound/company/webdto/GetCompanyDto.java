@@ -5,5 +5,8 @@ import com.interior.domain.user.User;
 
 public class GetCompanyDto {
 
-    public record GetCompanyResDto(User user, Company company) { }
+    public record GetCompanyResDto(
+            String userName,
+            Company company
+    ) { }
 }

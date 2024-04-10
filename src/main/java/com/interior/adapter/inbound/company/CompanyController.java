@@ -4,7 +4,6 @@ import com.interior.adapter.inbound.company.webdto.CreateCompanyDto;
 import com.interior.adapter.inbound.company.webdto.GetCompanyDto.GetCompanyResDto;
 import com.interior.application.company.CompanyService;
 import com.interior.application.company.dto.CreateCompanyServiceDto;
-import com.interior.domain.company.Company;
 import com.interior.domain.user.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -32,7 +30,7 @@ public class CompanyController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(
                         new GetCompanyResDto(
-                                user,
+                                user.getName(),
                                 companyService.getCompany(user.getEmail(), companyId))
                 );
     }
