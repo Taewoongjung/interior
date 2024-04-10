@@ -1,23 +1,21 @@
 package com.interior.adapter.inbound.company;
 
 import com.interior.adapter.inbound.company.webdto.CreateCompanyDto;
+import com.interior.adapter.inbound.company.webdto.GetCompanyDto.GetCompanyResDto;
 import com.interior.application.company.CompanyService;
 import com.interior.application.company.dto.CreateCompanyServiceDto;
 import com.interior.domain.company.Company;
 import com.interior.domain.user.User;
 import jakarta.validation.Valid;
-import java.nio.file.attribute.UserPrincipal;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -27,14 +25,22 @@ public class CompanyController {
     private final CompanyService companyService;
 
     @GetMapping(value = "/api/companies/{companyId}")
-    public ResponseEntity<Company> getCompany(@PathVariable("companyId") final Long companyId) {
-        return ResponseEntity.status(HttpStatus.OK).body(companyService.getCompany(companyId));
+    public ResponseEntity<GetCompanyResDto> getCompany(
+            @AuthenticationPrincipal final User user,
+            @PathVariable("companyId") final Long companyId
+    ) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(
+                        new GetCompanyResDto(
+                                user,
+                                companyService.getCompany(user.getEmail(), companyId))
+                );
     }
 
     @PostMapping(value = "/api/companies")
     public ResponseEntity<Boolean> createCompany(
             @Valid @RequestBody final CreateCompanyDto.CreateCompanyReqDto req,
-            @AuthenticationPrincipal User user
+            @AuthenticationPrincipal final User user
     ) {
 
         return ResponseEntity.status(HttpStatus.OK).body(
