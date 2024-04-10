@@ -1,5 +1,8 @@
 package com.interior.application.company;
 
+import static com.interior.adapter.common.exception.ErrorType.LIMIT_OF_COMPANY_COUNT_IS_FIVE;
+import static com.interior.util.CheckUtil.check;
+
 import com.interior.application.company.dto.CreateCompanyServiceDto;
 import com.interior.domain.company.Company;
 import com.interior.domain.company.repository.CompanyRepository;
@@ -24,6 +27,8 @@ public class CompanyService {
             User user,
             final CreateCompanyServiceDto.CreateCompanyDto reqDto
     ) {
+
+        check(user.getCompanyList().size() >= 5, LIMIT_OF_COMPANY_COUNT_IS_FIVE);
 
         Company company = Company.of(
                 reqDto.companyName(),

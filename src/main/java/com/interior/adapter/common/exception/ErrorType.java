@@ -18,7 +18,9 @@ public enum ErrorType {
     INVALID_COMPANY_NAME(1050, "올바르지 않은 이름입니다."),
     INVALID_COMPANY_TEL(1051, "올바르지 않은 전화번호입니다."),
 
-    INVALID_SIGNUP_REQUEST_DUPLICATE_EMAIL(1100, "이미 존재하는 이메일 입니다.")
+    INVALID_SIGNUP_REQUEST_DUPLICATE_EMAIL(1100, "이미 존재하는 이메일 입니다."),
+
+    LIMIT_OF_COMPANY_COUNT_IS_FIVE(1201, "유저당 최고 5개의 회사만 등록 가능합니다.")
     ;
 
     private final int code;
