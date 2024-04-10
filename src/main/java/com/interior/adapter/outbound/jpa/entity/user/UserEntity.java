@@ -1,10 +1,14 @@
 package com.interior.adapter.outbound.jpa.entity.user;
 
 import com.interior.adapter.outbound.jpa.entity.BaseEntity;
+import com.interior.adapter.outbound.jpa.entity.company.CompanyEntity;
 import com.interior.domain.user.User;
 import com.interior.domain.user.UserRole;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,13 +46,17 @@ public class UserEntity extends BaseEntity {
     @Column(name = "role", nullable = false, columnDefinition = "varchar")
     private UserRole role;
 
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CompanyEntity> companyEntityList = new ArrayList<>();
+
     private UserEntity(
         final Long id,
         final String name,
         final String email,
         final String password,
         final String tel,
-        final UserRole role
+        final UserRole role,
+        final List<CompanyEntity> companyEntityList
     ) {
         super(LocalDateTime.now(), LocalDateTime.now());
         
@@ -58,6 +66,7 @@ public class UserEntity extends BaseEntity {
         this.password = password;
         this.tel = tel;
         this.role = role;
+        this.companyEntityList = companyEntityList;
     }
 
     public static UserEntity of(
@@ -68,7 +77,7 @@ public class UserEntity extends BaseEntity {
             final String tel,
             final UserRole userRole
     ) {
-        return new UserEntity(id, name, email, password, tel, userRole);
+        return new UserEntity(id, name, email, password, tel, userRole, null);
     }
 
     public static UserEntity of(
@@ -76,9 +85,10 @@ public class UserEntity extends BaseEntity {
             final String email,
             final String password,
             final String tel,
-            final UserRole userRole
+            final UserRole userRole,
+            final List<CompanyEntity> companyEntityList
     ) {
-        return new UserEntity(null, name, email, password, tel, userRole);
+        return new UserEntity(null, name, email, password, tel, userRole, companyEntityList);
     }
 
     public User toPojo() {
@@ -90,7 +100,8 @@ public class UserEntity extends BaseEntity {
                 getTel(),
                 getRole(),
                 getLastModified(),
-                getCreatedAt()
+                getCreatedAt(),
+                getCompanyEntityList().stream().map(CompanyEntity::toPojo).collect(Collectors.toList())
         );
     }
 }

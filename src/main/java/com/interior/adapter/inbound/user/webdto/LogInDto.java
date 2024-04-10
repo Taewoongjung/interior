@@ -1,4 +1,4 @@
-package com.interior.application.user.dto;
+package com.interior.adapter.inbound.user.webdto;
 
 import com.interior.domain.auth.JwtToken;
 import jakarta.validation.constraints.Email;

@@ -8,6 +8,7 @@ import static com.interior.adapter.common.exception.ErrorType.INVALID_CUSTOMER_U
 import static com.interior.util.CheckUtil.require;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.interior.domain.company.Company;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -30,6 +31,7 @@ public class User extends Throwable implements UserDetails {
 	private UserRole userRole;
 	private LocalDateTime lastModified;
 	private LocalDateTime createdAt;
+	private List<Company> companyList;
 
 	private User(
 			final Long id,
@@ -39,7 +41,8 @@ public class User extends Throwable implements UserDetails {
 			final String tel,
 			final UserRole userRole,
 			final LocalDateTime lastModified,
-			final LocalDateTime createdAt
+			final LocalDateTime createdAt,
+			final List<Company> companyList
 	) {
 		this.id = id;
 		this.name = name;
@@ -49,6 +52,7 @@ public class User extends Throwable implements UserDetails {
 		this.userRole = userRole;
 		this.lastModified = lastModified;
 		this.createdAt = createdAt;
+		this.companyList = companyList;
 	}
 
 	public static User of(
@@ -67,7 +71,7 @@ public class User extends Throwable implements UserDetails {
 		require(o -> tel == null, tel, INVALID_CUSTOMER_TEL);
 		require(o -> userRole == null, userRole, INVALID_CUSTOMER_USER_ROLE);
 
-		return new User(null, name, email, password, tel, userRole, lastModified, createdAt);
+		return new User(null, name, email, password, tel, userRole, lastModified, createdAt, null);
 	}
 
 	public static User of(
@@ -87,7 +91,28 @@ public class User extends Throwable implements UserDetails {
 		require(o -> tel == null, tel, INVALID_CUSTOMER_TEL);
 		require(o -> userRole == null, userRole, INVALID_CUSTOMER_USER_ROLE);
 
-		return new User(id, name, email, password, tel, userRole, lastModified, createdAt);
+		return new User(id, name, email, password, tel, userRole, lastModified, createdAt, null);
+	}
+
+	public static User of(
+			final Long id,
+			final String name,
+			final String email,
+			final String password,
+			final String tel,
+			final UserRole userRole,
+			final LocalDateTime lastModified,
+			final LocalDateTime createdAt,
+			final List<Company> companyList
+	) {
+
+		require(o -> name == null, name, INVALID_CUSTOMER_NAME);
+		require(o -> email == null, email, INVALID_CUSTOMER_EMAIL);
+		require(o -> password == null, password, INVALID_CUSTOMER_PASSWORD);
+		require(o -> tel == null, tel, INVALID_CUSTOMER_TEL);
+		require(o -> userRole == null, userRole, INVALID_CUSTOMER_USER_ROLE);
+
+		return new User(id, name, email, password, tel, userRole, lastModified, createdAt, companyList);
 	}
 
 	public static User of(
@@ -97,7 +122,7 @@ public class User extends Throwable implements UserDetails {
 		require(o -> email == null, email, INVALID_CUSTOMER_EMAIL);
 		require(o -> userRole == null, userRole, INVALID_CUSTOMER_USER_ROLE);
 
-		return new User(null, null, email, null, null, UserRole.from(userRole), null, null);
+		return new User(null, null, email, null, null, UserRole.from(userRole), null, null, null);
 	}
 
 	@Override

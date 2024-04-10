@@ -1,13 +1,7 @@
 package com.interior.application.user;
 
-import static com.interior.adapter.common.exception.ErrorType.INVALID_SIGNUP_REQUEST_DUPLICATE_EMAIL;
-import static com.interior.util.CheckUtil.check;
-
-import com.interior.application.user.dto.LogInDto.LogInReqDto;
-import com.interior.application.user.dto.LogInDto.LogInResDto;
-import com.interior.application.user.dto.SignUpDto.SignUpReqDto;
-import com.interior.application.user.dto.SignUpDto.SignUpResDto;
-import com.interior.domain.auth.JwtToken;
+import com.interior.adapter.inbound.user.webdto.SignUpDto.SignUpReqDto;
+import com.interior.adapter.inbound.user.webdto.SignUpDto.SignUpResDto;
 import com.interior.domain.user.User;
 import com.interior.domain.user.repository.UserRepository;
 import java.time.LocalDateTime;

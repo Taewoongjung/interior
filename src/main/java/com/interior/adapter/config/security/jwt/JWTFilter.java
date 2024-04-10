@@ -3,7 +3,7 @@ package com.interior.adapter.config.security.jwt;
 import static com.interior.adapter.common.exception.ErrorType.EXPIRED_ACCESS_TOKEN;
 import static com.interior.util.CheckUtil.check;
 
-import com.interior.domain.user.User;
+import com.interior.application.security.UserDetailService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,6 +22,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class JWTFilter extends OncePerRequestFilter {
 
     private final JWTUtil jwtUtil;
+    private final UserDetailService userDetailService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -53,10 +54,9 @@ public class JWTFilter extends OncePerRequestFilter {
 
         // 토큰에서 email, role 값 획득
         String email = jwtUtil.getEmail(token);
-        String role = jwtUtil.getRole(token);
 
         // 토큰으로 User 객체 생성
-        UserDetails user = User.of(email, role);
+        UserDetails user = userDetailService.loadUserByUsername(email);
 
         // 스프링 시큐리티 인증 토큰 생성
         Authentication authToken = new UsernamePasswordAuthenticationToken(user, null,

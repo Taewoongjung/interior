@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Collection;
 import java.util.Iterator;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,14 +16,17 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Slf4j
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
-    
+
     private final AuthenticationManager authenticationManager;
     private final JWTUtil jwtUtil;
     
-    public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil) {
+    public LoginFilter(
+            final AuthenticationManager authenticationManager,
+            final JWTUtil jwtUtil
+    ) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
-        
+
         setFilterProcessesUrl("/api/login");
     }
     

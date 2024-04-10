@@ -63,16 +63,18 @@ public class SecurityConfig {
 		http.authorizeHttpRequests((auth) -> auth
 				.requestMatchers(HttpMethod.GET,
 						"/actuator/health"
-						,"/api/me"
+						, "/api/me"
+						, "/api/companies"
 				).permitAll()
 				.requestMatchers(HttpMethod.POST,
 						"/api/login"
 						,"/api/signup"
+						,"/api/companies"
 				).permitAll()
 				.requestMatchers("/admin").hasRole("CUSTOMER")
 				.requestMatchers("/login").permitAll()
 				.anyRequest().authenticated())
-				.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class)
+				.addFilterBefore(new JWTFilter(jwtUtil, userDetailService), LoginFilter.class)
 				
 				// 로그인 필터 앞에서 JWTFilter 검증
 				.addFilterAt(
