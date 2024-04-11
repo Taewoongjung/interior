@@ -1,6 +1,7 @@
 package com.interior.domain.company;
 
 import static com.interior.adapter.common.exception.ErrorType.INVALID_COMPANY_NAME;
+import static com.interior.adapter.common.exception.ErrorType.INVALID_COMPANY_OWNER_ID;
 import static com.interior.adapter.common.exception.ErrorType.INVALID_COMPANY_TEL;
 import static com.interior.util.CheckUtil.require;
 
@@ -48,6 +49,7 @@ public class Company {
     ) {
 
         require(o-> name == null, name, INVALID_COMPANY_NAME);
+        require(o-> ownerId == null, ownerId, INVALID_COMPANY_OWNER_ID);
         require(o -> tel == null, tel, INVALID_COMPANY_TEL);
 
         return new Company(id, name, ownerId, address, subAddress, buildingNumber, tel);
