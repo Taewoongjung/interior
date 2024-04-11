@@ -38,8 +38,22 @@ class CompanyTest {
     }
 
     @Test
-    @DisplayName("이름이 필수값이다.")
+    @DisplayName("소유자 정보는 필수값이다.")
     void test3() {
+        assertThatThrownBy(() -> Company.of(
+                1L,
+                "홍길동",
+                null,
+                "메인 주소",
+                "서브 주소",
+                "빌딩번호",
+                "01088257754"
+        ));
+    }
+
+    @Test
+    @DisplayName("전화번호는 필수값이다.")
+    void test4() {
         assertThatThrownBy(() -> Company.of(
                 1L,
                 "홍길동",
