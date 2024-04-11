@@ -1,0 +1,49 @@
+package com.interior.adapter.inbound.business;
+
+import com.interior.adapter.inbound.business.webdto.CreateBusiness.CreateBusinessReqDto;
+import com.interior.application.businesss.BusinessService;
+import com.interior.domain.business.Business;
+import com.interior.domain.user.User;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequiredArgsConstructor
+public class BusinessController {
+
+    private final BusinessService businessService;
+
+    @PostMapping(value = "/api/businesses")
+    public ResponseEntity<Boolean> createBusiness(
+            @AuthenticationPrincipal final User user,
+            @RequestBody final CreateBusinessReqDto createBusinessReqDto
+    ) {
+        businessService.createBusiness(user, createBusinessReqDto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(true);
+    }
+
+    @GetMapping(value = "/api/businesses/{businessId}")
+    public ResponseEntity<Business> getBusiness(
+            @PathVariable(value = "businessId") final Long businessId
+    ) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(businessService.getBusiness(businessId));
+    }
+
+    @GetMapping(value = "/api/businesses")
+    public ResponseEntity<List<Business>> getBusinessByHostId(
+            @AuthenticationPrincipal final User user
+    ) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(businessService.getBusinessesByHostId(user.getId()));
+    }
+}

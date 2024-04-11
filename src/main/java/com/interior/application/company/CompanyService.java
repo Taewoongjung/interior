@@ -8,6 +8,7 @@ import com.interior.domain.company.Company;
 import com.interior.domain.company.repository.CompanyRepository;
 import com.interior.domain.user.User;
 import com.interior.domain.user.repository.UserRepository;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -44,7 +45,10 @@ public class CompanyService {
                 reqDto.mainAddress(),
                 reqDto.subAddress(),
                 reqDto.bdgNumber(),
-                reqDto.tel());
+                reqDto.tel(),
+                LocalDateTime.now(),
+                LocalDateTime.now()
+        );
 
         if (companyRepository.save(user.getEmail(), company)) {
             return true;

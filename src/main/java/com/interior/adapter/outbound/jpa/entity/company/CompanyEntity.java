@@ -88,7 +88,9 @@ public class CompanyEntity extends BaseEntity {
                 getAddress(),
                 getSubAddress(),
                 getBuildingNumber(),
-                getTel()
+                getTel(),
+                getLastModified(),
+                getCreatedAt()
         );
     }
 }

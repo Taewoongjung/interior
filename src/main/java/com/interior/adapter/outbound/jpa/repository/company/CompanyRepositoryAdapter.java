@@ -8,7 +8,6 @@ import com.interior.adapter.outbound.jpa.repository.user.UserJpaRepository;
 import com.interior.domain.company.Company;
 import com.interior.domain.company.repository.CompanyRepository;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
