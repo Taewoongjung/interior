@@ -65,11 +65,14 @@ public class SecurityConfig {
 						"/actuator/health"
 						, "/api/me"
 						, "/api/companies"
+						, "/api/businesses"
+						, "/api/businesses/{businessId}"
 				).permitAll()
 				.requestMatchers(HttpMethod.POST,
 						"/api/login"
 						,"/api/signup"
 						,"/api/companies"
+						,"/api/businesses"
 				).permitAll()
 				.requestMatchers("/admin").hasRole("CUSTOMER")
 				.requestMatchers("/login").permitAll()

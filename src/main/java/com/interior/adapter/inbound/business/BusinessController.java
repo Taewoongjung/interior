@@ -42,10 +42,10 @@ public class BusinessController {
                 .body(businessService.createBusinessMaterial(
                         businessId,
                         new CreateBusinessMaterialDto(
-                                req.name(),
-                                req.category(),
-                                req.amount(),
-                                req.memo()
+                                req.materialName(),
+                                req.materialCategory(),
+                                req.materialAmount(),
+                                req.materialMemo()
                         )
                         ));
     }
