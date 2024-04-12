@@ -1,7 +1,6 @@
 package com.interior.adapter.outbound.jpa.repository.business;
 
 import static com.interior.util.converter.jpa.business.BusinessEntityConverter.businessMaterialToEntity;
-import static com.interior.util.converter.jpa.business.BusinessEntityConverter.businessToEntity;
 
 import com.interior.adapter.outbound.jpa.entity.business.BusinessEntity;
 import com.interior.domain.business.Business;
@@ -32,9 +31,9 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
     }
 
     @Override
-    public List<Business> findBusinessByHostId(final Long hostId) {
+    public List<Business> findBusinessByCompanyId(final Long companyId) {
 
-        List<BusinessEntity> business = businessJpaRepository.findBusinessesEntityByHostId(hostId);
+        List<BusinessEntity> business = businessJpaRepository.findBusinessesEntityByCompanyId(companyId);
 
         return business.stream()
                 .map(BusinessEntity::toPojo)
@@ -46,7 +45,7 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
 
         businessJpaRepository.save(BusinessEntity.of(
                 createBusiness.businessName(),
-                createBusiness.hostId(),
+                createBusiness.companyId(),
                 createBusiness.customerId(),
                 createBusiness.status()
         ));

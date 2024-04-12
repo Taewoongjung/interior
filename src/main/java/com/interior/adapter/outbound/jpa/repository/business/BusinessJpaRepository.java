@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BusinessJpaRepository extends JpaRepository<BusinessEntity, Long> {
 
-    List<BusinessEntity> findBusinessesEntityByHostId(final Long hostId);
+    List<BusinessEntity> findBusinessesEntityByCompanyId(final Long companyId);
 }

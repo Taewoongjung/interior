@@ -34,8 +34,8 @@ public class BusinessEntity extends BaseEntity {
 
     private String name;
 
-    @Column(name = "host_id", nullable = false, columnDefinition = "bigint")
-    private Long hostId;
+    @Column(name = "company_id", nullable = false, columnDefinition = "bigint")
+    private Long companyId;
 
     @Column(name = "customer_id", nullable = false, columnDefinition = "bigint")
     private Long customerId;
@@ -48,7 +48,7 @@ public class BusinessEntity extends BaseEntity {
     private BusinessEntity(
             final Long id,
             final String name,
-            final Long hostId,
+            final Long companyId,
             final Long customerId,
             final String status,
             final List<BusinessMaterialEntity> businessMaterialList
@@ -57,7 +57,7 @@ public class BusinessEntity extends BaseEntity {
 
         this.id = id;
         this.name = name;
-        this.hostId = hostId;
+        this.companyId = companyId;
         this.customerId = customerId;
         this.status = status;
         this.businessMaterialList = businessMaterialList;
@@ -65,28 +65,28 @@ public class BusinessEntity extends BaseEntity {
 
     public static BusinessEntity of(
             final String name,
-            final Long hostId,
+            final Long companyId,
             final Long customerId,
             final String status
     ) {
-        return new BusinessEntity(null, name, hostId, customerId, status, null);
+        return new BusinessEntity(null, name, companyId, customerId, status, null);
     }
 
     public static BusinessEntity of(
             final String name,
-            final Long hostId,
+            final Long companyId,
             final Long customerId,
             final String status,
             final List<BusinessMaterialEntity> businessMaterialList
     ) {
-        return new BusinessEntity(null, name, hostId, customerId, status, businessMaterialList);
+        return new BusinessEntity(null, name, companyId, customerId, status, businessMaterialList);
     }
 
     public Business toPojo() {
         return Business.of(
                 getId(),
                 getName(),
-                getHostId(),
+                getCompanyId(),
                 getCustomerId(),
                 getStatus(),
                 getBusinessMaterialList().stream()

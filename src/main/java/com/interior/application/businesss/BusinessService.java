@@ -3,7 +3,6 @@ package com.interior.application.businesss;
 import com.interior.adapter.inbound.business.webdto.CreateBusiness.CreateBusinessReqDto;
 import com.interior.application.businesss.dto.CreateBusinessServiceDto.CreateBusinessMaterialDto;
 import com.interior.domain.business.Business;
-import com.interior.domain.business.businessmaterial.BusinessMaterial;
 import com.interior.domain.business.repository.BusinessRepository;
 import com.interior.domain.business.repository.dto.CreateBusiness;
 import com.interior.domain.business.repository.dto.CreateBusinessMaterial;
@@ -25,17 +24,17 @@ public class BusinessService {
     }
 
     @Transactional(readOnly = true)
-    public List<Business> getBusinessesByHostId(final Long hostId) {
-        return businessRepository.findBusinessByHostId(hostId);
+    public List<Business> getBusinessesByCompanyId(final Long companyId) {
+        return businessRepository.findBusinessByCompanyId(companyId);
     }
 
-    public boolean createBusiness(final User user, final CreateBusinessReqDto req) {
+    public boolean createBusiness(final User user, final Long companyId, final CreateBusinessReqDto req) {
 
         businessRepository.save(new CreateBusiness(
                 req.businessName(),
-                user.getId(),
+                companyId,
                 null,
-                "진행중"
+                "진행중-계약전"
                 )
         );
 

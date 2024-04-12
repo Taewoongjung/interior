@@ -11,7 +11,7 @@ public class BusinessEntityConverter {
     public static BusinessEntity businessToEntity(final Business business) {
         return BusinessEntity.of(
                 business.getName(),
-                business.getHostId(),
+                business.getCompanyId(),
                 business.getCustomerId(),
                 business.getStatus(),
                 business.getBusinessMaterialList().stream()

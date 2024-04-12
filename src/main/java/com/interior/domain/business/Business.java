@@ -16,7 +16,7 @@ public class Business {
 
     private String name;
 
-    private Long hostId;
+    private Long companyId;
 
     private Long customerId;
 
@@ -30,7 +30,7 @@ public class Business {
     private Business(
             final Long id,
             final String name,
-            final Long hostId,
+            final Long companyId,
             final Long customerId,
             final String status,
             final List<BusinessMaterial> businessMaterialList,
@@ -39,7 +39,7 @@ public class Business {
     ) {
         this.id = id;
         this.name = name;
-        this.hostId = hostId;
+        this.companyId = companyId;
         this.customerId = customerId;
         this.status = status;
         this.businessMaterialList = businessMaterialList;
@@ -50,23 +50,23 @@ public class Business {
     public static Business of(
             final Long id,
             final String name,
-            final Long hostId,
+            final Long companyId,
             final Long customerId,
             final String status,
             final List<BusinessMaterial> businessMaterialList
     ) {
-        return new Business(id, name, hostId, customerId, status, businessMaterialList,
+        return new Business(id, name, companyId, customerId, status, businessMaterialList,
                 LocalDateTime.now(), LocalDateTime.now());
     }
 
     public static Business of(
             final String name,
-            final Long hostId,
+            final Long companyId,
             final Long customerId,
             final String status,
             final List<BusinessMaterial> businessMaterialList
     ) {
-        return new Business(null, name, hostId, customerId, status, businessMaterialList,
+        return new Business(null, name, companyId, customerId, status, businessMaterialList,
                 LocalDateTime.now(), LocalDateTime.now());
     }
 }

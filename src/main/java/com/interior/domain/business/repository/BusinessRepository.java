@@ -9,7 +9,7 @@ public interface BusinessRepository {
 
     Business findById(final Long businessId);
 
-    List<Business> findBusinessByHostId(final Long hostId);
+    List<Business> findBusinessByCompanyId(final Long companyId);
 
     boolean save(final CreateBusiness createBusiness);
 

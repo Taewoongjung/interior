@@ -23,12 +23,13 @@ public class BusinessController {
 
     private final BusinessService businessService;
 
-    @PostMapping(value = "/api/businesses")
+    @PostMapping(value = "/api/companies/{companyId}/businesses")
     public ResponseEntity<Boolean> createBusiness(
             @AuthenticationPrincipal final User user,
+            @PathVariable(value = "companyId") final Long companyId,
             @RequestBody final CreateBusinessReqDto createBusinessReqDto
     ) {
-        businessService.createBusiness(user, createBusinessReqDto);
+        businessService.createBusiness(user, companyId, createBusinessReqDto);
 
         return ResponseEntity.status(HttpStatus.OK).body(true);
     }
@@ -47,7 +48,7 @@ public class BusinessController {
                                 req.materialAmount(),
                                 req.materialMemo()
                         )
-                        ));
+                ));
     }
 
     @GetMapping(value = "/api/businesses/{businessId}")
@@ -58,11 +59,12 @@ public class BusinessController {
                 .body(businessService.getBusiness(businessId));
     }
 
-    @GetMapping(value = "/api/businesses")
-    public ResponseEntity<List<Business>> getBusinessByHostId(
-            @AuthenticationPrincipal final User user
+    @GetMapping(value = "/api/companies/{companyId}/businesses")
+    public ResponseEntity<List<Business>> getBusinessByCompanyId(
+            @AuthenticationPrincipal final User user,
+            @PathVariable(value = "companyId") final Long companyId
     ) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(businessService.getBusinessesByHostId(user.getId()));
+                .body(businessService.getBusinessesByCompanyId(companyId));
     }
 }
