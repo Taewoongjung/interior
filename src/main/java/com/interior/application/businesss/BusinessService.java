@@ -6,7 +6,6 @@ import com.interior.domain.business.Business;
 import com.interior.domain.business.repository.BusinessRepository;
 import com.interior.domain.business.repository.dto.CreateBusiness;
 import com.interior.domain.business.repository.dto.CreateBusinessMaterial;
-import com.interior.domain.user.User;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,7 +27,8 @@ public class BusinessService {
         return businessRepository.findBusinessByCompanyId(companyId);
     }
 
-    public boolean createBusiness(final User user, final Long companyId, final CreateBusinessReqDto req) {
+    @Transactional
+    public boolean createBusiness(final Long companyId, final CreateBusinessReqDto req) {
 
         businessRepository.save(new CreateBusiness(
                 req.businessName(),
@@ -41,6 +41,7 @@ public class BusinessService {
         return true;
     }
 
+    @Transactional
     public boolean createBusinessMaterial(final Long businessId, final CreateBusinessMaterialDto req) {
 
         businessRepository.save(new CreateBusinessMaterial(

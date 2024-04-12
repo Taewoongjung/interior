@@ -25,11 +25,10 @@ public class BusinessController {
 
     @PostMapping(value = "/api/companies/{companyId}/businesses")
     public ResponseEntity<Boolean> createBusiness(
-            @AuthenticationPrincipal final User user,
             @PathVariable(value = "companyId") final Long companyId,
             @RequestBody final CreateBusinessReqDto createBusinessReqDto
     ) {
-        businessService.createBusiness(user, companyId, createBusinessReqDto);
+        businessService.createBusiness(companyId, createBusinessReqDto);
 
         return ResponseEntity.status(HttpStatus.OK).body(true);
     }
