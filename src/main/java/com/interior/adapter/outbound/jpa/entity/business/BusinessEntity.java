@@ -84,6 +84,7 @@ public class BusinessEntity extends BaseEntity {
 
     public Business toPojo() {
         return Business.of(
+                getId(),
                 getName(),
                 getHostId(),
                 getCustomerId(),

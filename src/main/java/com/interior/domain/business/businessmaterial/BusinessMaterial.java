@@ -46,6 +46,24 @@ public class BusinessMaterial {
     }
 
     public static BusinessMaterial of(
+            final Long id,
+            final Long businessId,
+            final String name,
+            final String category,
+            final int amount,
+            final String memo
+    ) {
+        return new BusinessMaterial(
+                id,
+                businessId,
+                name,
+                category,
+                amount,
+                memo,
+                LocalDateTime.now(), LocalDateTime.now());
+    }
+
+    public static BusinessMaterial of(
             final Long businessId,
             final String name,
             final String category,

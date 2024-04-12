@@ -15,12 +15,12 @@ public class BusinessEntityConverter {
                 business.getCustomerId(),
                 business.getStatus(),
                 business.getBusinessMaterialList().stream()
-                        .map(BusinessEntityConverter::businessToEntity)
+                        .map(BusinessEntityConverter::businessMaterialToEntity)
                         .collect(Collectors.toList())
         );
     }
 
-    public static BusinessMaterialEntity businessToEntity(final BusinessMaterial businessMaterial) {
+    public static BusinessMaterialEntity businessMaterialToEntity(final BusinessMaterial businessMaterial) {
         return BusinessMaterialEntity.of(
                 businessMaterial.getBusinessId(),
                 businessMaterial.getName(),

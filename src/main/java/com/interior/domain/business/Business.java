@@ -48,6 +48,18 @@ public class Business {
     }
 
     public static Business of(
+            final Long id,
+            final String name,
+            final Long hostId,
+            final Long customerId,
+            final String status,
+            final List<BusinessMaterial> businessMaterialList
+    ) {
+        return new Business(id, name, hostId, customerId, status, businessMaterialList,
+                LocalDateTime.now(), LocalDateTime.now());
+    }
+
+    public static Business of(
             final String name,
             final Long hostId,
             final Long customerId,

@@ -1,9 +1,12 @@
 package com.interior.application.businesss;
 
 import com.interior.adapter.inbound.business.webdto.CreateBusiness.CreateBusinessReqDto;
+import com.interior.application.businesss.dto.CreateBusinessServiceDto.CreateBusinessMaterialDto;
 import com.interior.domain.business.Business;
+import com.interior.domain.business.businessmaterial.BusinessMaterial;
 import com.interior.domain.business.repository.BusinessRepository;
 import com.interior.domain.business.repository.dto.CreateBusiness;
+import com.interior.domain.business.repository.dto.CreateBusinessMaterial;
 import com.interior.domain.user.User;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +38,19 @@ public class BusinessService {
                 "진행중"
                 )
         );
+
+        return true;
+    }
+
+    public boolean createBusinessMaterial(final Long businessId, final CreateBusinessMaterialDto req) {
+
+        businessRepository.save(new CreateBusinessMaterial(
+                businessId,
+                req.name(),
+                req.category(),
+                req.amount(),
+                req.memo()
+        ));
 
         return true;
     }

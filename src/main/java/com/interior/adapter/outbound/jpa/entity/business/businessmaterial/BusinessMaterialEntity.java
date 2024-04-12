@@ -77,6 +77,7 @@ public class BusinessMaterialEntity extends BaseEntity {
 
     public BusinessMaterial toPojo() {
         return BusinessMaterial.of(
+                getId(),
                 getBusinessId(),
                 getName(),
                 getCategory(),

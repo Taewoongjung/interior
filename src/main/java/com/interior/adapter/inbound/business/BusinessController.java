@@ -1,7 +1,9 @@
 package com.interior.adapter.inbound.business;
 
 import com.interior.adapter.inbound.business.webdto.CreateBusiness.CreateBusinessReqDto;
+import com.interior.adapter.inbound.business.webdto.CreateBusinessMaterial.CreateBusinessMaterialReqDto;
 import com.interior.application.businesss.BusinessService;
+import com.interior.application.businesss.dto.CreateBusinessServiceDto.CreateBusinessMaterialDto;
 import com.interior.domain.business.Business;
 import com.interior.domain.user.User;
 import java.util.List;
@@ -29,6 +31,23 @@ public class BusinessController {
         businessService.createBusiness(user, createBusinessReqDto);
 
         return ResponseEntity.status(HttpStatus.OK).body(true);
+    }
+
+    @PostMapping(value = "/api/businesses/{businessId}/materials")
+    public ResponseEntity<Boolean> createBusinessMaterial(
+            @PathVariable(value = "businessId") final Long businessId,
+            @RequestBody final CreateBusinessMaterialReqDto req
+    ) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(businessService.createBusinessMaterial(
+                        businessId,
+                        new CreateBusinessMaterialDto(
+                                req.name(),
+                                req.category(),
+                                req.amount(),
+                                req.memo()
+                        )
+                        ));
     }
 
     @GetMapping(value = "/api/businesses/{businessId}")
