@@ -1,10 +1,12 @@
 package com.interior.adapter.inbound.business;
 
 import com.interior.adapter.inbound.business.webdto.CreateBusiness.CreateBusinessReqDto;
+import com.interior.adapter.inbound.business.webdto.CreateBusiness.CreateBusinessResDto;
 import com.interior.adapter.inbound.business.webdto.CreateBusinessMaterial.CreateBusinessMaterialReqDto;
 import com.interior.application.businesss.BusinessService;
 import com.interior.application.businesss.dto.CreateBusinessServiceDto.CreateBusinessMaterialDto;
 import com.interior.domain.business.Business;
+import com.interior.domain.company.Company;
 import com.interior.domain.user.User;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -24,13 +26,16 @@ public class BusinessController {
     private final BusinessService businessService;
 
     @PostMapping(value = "/api/companies/{companyId}/businesses")
-    public ResponseEntity<Boolean> createBusiness(
+    public ResponseEntity<CreateBusinessResDto> createBusiness(
             @PathVariable(value = "companyId") final Long companyId,
             @RequestBody final CreateBusinessReqDto createBusinessReqDto
     ) {
-        businessService.createBusiness(companyId, createBusinessReqDto);
 
-        return ResponseEntity.status(HttpStatus.OK).body(true);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new CreateBusinessResDto(
+                        true,
+                        businessService.createBusiness(companyId, createBusinessReqDto)
+                ));
     }
 
     @PostMapping(value = "/api/businesses/{businessId}/materials")
@@ -56,6 +61,18 @@ public class BusinessController {
     ) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(businessService.getBusiness(businessId));
+    }
+
+    @GetMapping(value = "/api/businesses")
+    public ResponseEntity<List<Business>> getBusinessByUser(
+            @AuthenticationPrincipal final User user
+    ) {
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(businessService.getAllBusinessesByUser(
+                        user.getCompanyList().stream()
+                        .map(Company::getId)
+                                .toList()));
     }
 
     @GetMapping(value = "/api/companies/{companyId}/businesses")

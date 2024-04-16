@@ -23,22 +23,25 @@ public class BusinessService {
     }
 
     @Transactional(readOnly = true)
+    public List<Business> getAllBusinessesByUser(final List<Long> companyIdList) {
+        return businessRepository.findAllByCompanyIdIn(companyIdList);
+    }
+
+    @Transactional(readOnly = true)
     public List<Business> getBusinessesByCompanyId(final Long companyId) {
         return businessRepository.findBusinessByCompanyId(companyId);
     }
 
     @Transactional
-    public boolean createBusiness(final Long companyId, final CreateBusinessReqDto req) {
+    public Long createBusiness(final Long companyId, final CreateBusinessReqDto req) {
 
-        businessRepository.save(new CreateBusiness(
+        return businessRepository.save(new CreateBusiness(
                 req.businessName(),
                 companyId,
                 null,
                 "진행중-계약전"
                 )
         );
-
-        return true;
     }
 
     @Transactional

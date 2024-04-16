@@ -33,24 +33,35 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
     @Override
     public List<Business> findBusinessByCompanyId(final Long companyId) {
 
-        List<BusinessEntity> business = businessJpaRepository.findBusinessesEntityByCompanyId(companyId);
+        List<BusinessEntity> businessEntities = businessJpaRepository.findBusinessesEntityByCompanyId(companyId);
 
-        return business.stream()
+        return businessEntities.stream()
                 .map(BusinessEntity::toPojo)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public boolean save(final CreateBusiness createBusiness) {
+    public List<Business> findAllByCompanyIdIn(final List<Long> companyIdList) {
 
-        businessJpaRepository.save(BusinessEntity.of(
+        List<BusinessEntity> businessEntities = businessJpaRepository.findBusinessEntitiesByCompanyIdIn(
+                companyIdList);
+
+        return businessEntities.stream()
+                .map(BusinessEntity::toPojo)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Long save(final CreateBusiness createBusiness) {
+
+        BusinessEntity business = businessJpaRepository.save(BusinessEntity.of(
                 createBusiness.businessName(),
                 createBusiness.companyId(),
                 createBusiness.customerId(),
                 createBusiness.status()
         ));
 
-        return true;
+        return business.getId();
     }
 
     @Override
