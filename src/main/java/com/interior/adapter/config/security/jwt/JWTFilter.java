@@ -45,7 +45,9 @@ public class JWTFilter extends OncePerRequestFilter {
         try {
             jwtUtil.isExpired(token);
         } catch (ExpiredJwtException jwtException) {
-            throw new ServletException(EXPIRED_ACCESS_TOKEN.getMessage());
+            log.info("토큰 만료: {}", token);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 Unauthorized status code
+            return;
         }
 
         // 토큰 소멸 시간 검증

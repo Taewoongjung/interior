@@ -7,8 +7,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ErrorType {
 
-    EXPIRED_ACCESS_TOKEN(0001, "만료 된 토큰입니다."),
     LOGIN_FAIL(0010, "로그인 실패, 아이디 또는 비밀번호를 확인해주세요."),
+    EXPIRED_ACCESS_TOKEN(0100, "만료 된 토큰입니다."),
 
     INVALID_CUSTOMER_NAME(1001, "올바르지 않은 이름입니다."),
     INVALID_CUSTOMER_EMAIL(1002, "올바르지 않은 이메일입니다."),
