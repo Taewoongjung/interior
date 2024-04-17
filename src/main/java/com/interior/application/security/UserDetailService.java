@@ -20,7 +20,7 @@ public class UserDetailService implements UserDetailsService {
 	private final JWTUtil jwtUtil;
 
 	@Override
-	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
 
 		User user = userRepository.findByEmail(email);
 

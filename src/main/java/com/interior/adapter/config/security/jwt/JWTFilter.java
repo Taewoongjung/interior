@@ -1,9 +1,9 @@
 package com.interior.adapter.config.security.jwt;
 
 import static com.interior.adapter.common.exception.ErrorType.EXPIRED_ACCESS_TOKEN;
-import static com.interior.util.CheckUtil.check;
 
 import com.interior.application.security.UserDetailService;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -39,8 +39,14 @@ public class JWTFilter extends OncePerRequestFilter {
             return;
         }
 
+
         String token = jwtUtil.getTokenWithoutBearer(authorization);
-        check(jwtUtil.isExpired(token), EXPIRED_ACCESS_TOKEN);
+
+        try {
+            jwtUtil.isExpired(token);
+        } catch (ExpiredJwtException jwtException) {
+            throw new ServletException(EXPIRED_ACCESS_TOKEN.getMessage());
+        }
 
         // 토큰 소멸 시간 검증
         if (jwtUtil.isExpired(token)) {
