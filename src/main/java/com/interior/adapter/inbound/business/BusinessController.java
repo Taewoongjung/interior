@@ -3,8 +3,10 @@ package com.interior.adapter.inbound.business;
 import com.interior.adapter.inbound.business.webdto.CreateBusiness.CreateBusinessReqDto;
 import com.interior.adapter.inbound.business.webdto.CreateBusiness.CreateBusinessResDto;
 import com.interior.adapter.inbound.business.webdto.CreateBusinessMaterial.CreateBusinessMaterialReqDto;
+import com.interior.adapter.inbound.business.webdto.ReviseBusiness;
 import com.interior.application.businesss.BusinessService;
 import com.interior.application.businesss.dto.CreateBusinessServiceDto.CreateBusinessMaterialDto;
+import com.interior.application.businesss.dto.ReviseBusinessServiceDto;
 import com.interior.domain.business.Business;
 import com.interior.domain.company.Company;
 import com.interior.domain.user.User;
@@ -13,7 +15,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -71,7 +75,7 @@ public class BusinessController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(businessService.getAllBusinessesByUser(
                         user.getCompanyList().stream()
-                        .map(Company::getId)
+                                .map(Company::getId)
                                 .toList()));
     }
 
@@ -82,5 +86,29 @@ public class BusinessController {
     ) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(businessService.getBusinessesByCompanyId(companyId));
+    }
+
+    @DeleteMapping(value = "/api/businesses/{businessId}")
+    public ResponseEntity<Boolean> deleteBusiness(
+            @PathVariable(value = "businessId") final Long businessId
+    ) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(businessService.deleteBusiness(businessId));
+    }
+
+    @PatchMapping(value = "/api/businesses/{businessId}")
+    public ResponseEntity<Boolean> reviseBusiness(
+            @PathVariable(value = "businessId") final Long businessId,
+            @RequestBody final ReviseBusiness.WebReqV1 req
+    ) {
+        System.out.println("req = " + req.changeBusinessName());
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(businessService.reviseBusiness(
+                        businessId,
+                        new ReviseBusinessServiceDto.Req(
+                                req.changeBusinessName()
+                        )
+                ));
     }
 }

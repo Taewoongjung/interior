@@ -16,9 +16,11 @@ public enum ErrorType {
     INVALID_CUSTOMER_PASSWORD(1004, "올바르지 않은 비밀번호입니다."),
     INVALID_CUSTOMER_USER_ROLE(1005, "올바르지 않은 유저역할입니다."),
 
-    INVALID_COMPANY_NAME(1050, "올바르지 않은 이름입니다."),
+    INVALID_COMPANY_NAME(1050, "올바르지 않은 사업체 명 입니다."),
     INVALID_COMPANY_OWNER_ID(1051, "소유자 정보는 필수입니다."),
     INVALID_COMPANY_TEL(1052, "올바르지 않은 전화번호입니다."),
+
+    INVALID_BUSINESS_NAME(1100, "올바르지 않은 사업명 입니다."),
 
     INVALID_SIGNUP_REQUEST_DUPLICATE_EMAIL(1100, "이미 존재하는 이메일 입니다."),
 

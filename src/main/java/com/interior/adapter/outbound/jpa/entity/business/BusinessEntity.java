@@ -1,5 +1,8 @@
 package com.interior.adapter.outbound.jpa.entity.business;
 
+import static com.interior.util.CheckUtil.check;
+
+import com.interior.adapter.common.exception.ErrorType;
 import com.interior.adapter.outbound.jpa.entity.BaseEntity;
 import com.interior.adapter.outbound.jpa.entity.business.businessmaterial.BusinessMaterialEntity;
 import com.interior.domain.business.Business;
@@ -93,5 +96,11 @@ public class BusinessEntity extends BaseEntity {
                         .map(BusinessMaterialEntity::toPojo)
                         .collect(Collectors.toList())
         );
+    }
+
+    public void setName(final String name) {
+        check(name == null || "".equals(name.trim()), ErrorType.INVALID_BUSINESS_NAME);
+
+        this.name = name;
     }
 }

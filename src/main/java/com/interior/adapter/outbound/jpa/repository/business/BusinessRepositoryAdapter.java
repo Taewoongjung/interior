@@ -1,8 +1,10 @@
 package com.interior.adapter.outbound.jpa.repository.business;
 
 import static com.interior.util.converter.jpa.business.BusinessEntityConverter.businessMaterialToEntity;
+import static com.interior.util.converter.jpa.business.BusinessEntityConverter.businessToEntity;
 
 import com.interior.adapter.outbound.jpa.entity.business.BusinessEntity;
+import com.interior.application.businesss.dto.ReviseBusinessServiceDto;
 import com.interior.domain.business.Business;
 import com.interior.domain.business.businessmaterial.BusinessMaterial;
 import com.interior.domain.business.repository.BusinessRepository;
@@ -75,6 +77,26 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
                 createBusinessMaterial.memo()
                 )
         ));
+
+        return true;
+    }
+
+    @Override
+    public boolean deleteBusiness(final Long businessId) {
+        businessMaterialJpaRepository.deleteById(businessId);
+
+        return true;
+    }
+
+    @Override
+    public boolean reviseBusiness(final Long businessId, final ReviseBusinessServiceDto.Req req) {
+
+        BusinessEntity business = businessJpaRepository.findById(businessId)
+                .orElseThrow(() -> new NoSuchElementException("Business not found"));
+
+        business.setName(req.changeBusinessName());
+
+        businessJpaRepository.save(business);
 
         return true;
     }

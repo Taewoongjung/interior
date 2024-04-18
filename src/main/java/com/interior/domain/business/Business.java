@@ -1,6 +1,9 @@
 package com.interior.domain.business;
 
+import static com.interior.util.CheckUtil.check;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.interior.adapter.common.exception.ErrorType;
 import com.interior.domain.business.businessmaterial.BusinessMaterial;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -68,5 +71,11 @@ public class Business {
     ) {
         return new Business(null, name, companyId, customerId, status, businessMaterialList,
                 LocalDateTime.now(), LocalDateTime.now());
+    }
+
+    public void setName(final String name) {
+        check(name == null || "".equals(name.trim()), ErrorType.INVALID_BUSINESS_NAME);
+
+        this.name = name;
     }
 }

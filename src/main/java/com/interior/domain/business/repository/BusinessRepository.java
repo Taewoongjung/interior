@@ -1,5 +1,6 @@
 package com.interior.domain.business.repository;
 
+import com.interior.application.businesss.dto.ReviseBusinessServiceDto;
 import com.interior.domain.business.Business;
 import com.interior.domain.business.repository.dto.CreateBusiness;
 import com.interior.domain.business.repository.dto.CreateBusinessMaterial;
@@ -16,4 +17,8 @@ public interface BusinessRepository {
     Long save(final CreateBusiness createBusiness);
 
     boolean save(final CreateBusinessMaterial createBusinessMaterial);
+
+    boolean deleteBusiness(final Long businessId);
+
+    boolean reviseBusiness(final Long businessId, final ReviseBusinessServiceDto.Req req);
 }

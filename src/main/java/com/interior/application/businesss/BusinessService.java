@@ -2,6 +2,7 @@ package com.interior.application.businesss;
 
 import com.interior.adapter.inbound.business.webdto.CreateBusiness.CreateBusinessReqDto;
 import com.interior.application.businesss.dto.CreateBusinessServiceDto.CreateBusinessMaterialDto;
+import com.interior.application.businesss.dto.ReviseBusinessServiceDto;
 import com.interior.domain.business.Business;
 import com.interior.domain.business.repository.BusinessRepository;
 import com.interior.domain.business.repository.dto.CreateBusiness;
@@ -56,5 +57,20 @@ public class BusinessService {
         ));
 
         return true;
+    }
+
+    @Transactional
+    public boolean deleteBusiness(final Long businessId) {
+
+        return businessRepository.deleteBusiness(businessId);
+    }
+
+    @Transactional
+    public boolean reviseBusiness(
+            final Long businessId,
+            final ReviseBusinessServiceDto.Req req
+    ) {
+
+        return businessRepository.reviseBusiness(businessId, req);
     }
 }
