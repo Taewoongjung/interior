@@ -20,5 +20,6 @@ public interface BusinessRepository {
 
     boolean deleteBusiness(final Long businessId);
 
-    boolean reviseBusiness(final Long businessId, final ReviseBusinessServiceDto.Req req);
+    boolean reviseBusiness(final Long userId, final Long businessId,
+            final ReviseBusinessServiceDto.Req req);
 }

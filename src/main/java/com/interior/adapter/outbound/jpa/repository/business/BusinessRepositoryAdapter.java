@@ -1,9 +1,12 @@
 package com.interior.adapter.outbound.jpa.repository.business;
 
+import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_BUSINESS;
+import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_COMPANY;
 import static com.interior.util.converter.jpa.business.BusinessEntityConverter.businessMaterialToEntity;
-import static com.interior.util.converter.jpa.business.BusinessEntityConverter.businessToEntity;
 
 import com.interior.adapter.outbound.jpa.entity.business.BusinessEntity;
+import com.interior.adapter.outbound.jpa.entity.company.CompanyEntity;
+import com.interior.adapter.outbound.jpa.repository.company.CompanyJpaRepository;
 import com.interior.application.businesss.dto.ReviseBusinessServiceDto;
 import com.interior.domain.business.Business;
 import com.interior.domain.business.businessmaterial.BusinessMaterial;
@@ -20,6 +23,7 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class BusinessRepositoryAdapter implements BusinessRepository {
 
+    private final CompanyJpaRepository companyJpaRepository;
     private final BusinessJpaRepository businessJpaRepository;
     private final BusinessMaterialJpaRepository businessMaterialJpaRepository;
 
@@ -27,7 +31,7 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
     public Business findById(Long businessId) {
 
         BusinessEntity business = businessJpaRepository.findById(businessId)
-                .orElseThrow(() -> new NoSuchElementException("Business not found"));
+                .orElseThrow(() -> new NoSuchElementException(NOT_EXIST_BUSINESS.getMessage()));
 
         return business.toPojo();
     }
@@ -89,14 +93,14 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
     }
 
     @Override
-    public boolean reviseBusiness(final Long businessId, final ReviseBusinessServiceDto.Req req) {
+    public boolean reviseBusiness(final Long companyId, final Long businessId, final ReviseBusinessServiceDto.Req req) {
 
-        BusinessEntity business = businessJpaRepository.findById(businessId)
-                .orElseThrow(() -> new NoSuchElementException("Business not found"));
+        CompanyEntity company = companyJpaRepository.findById(companyId)
+                .orElseThrow(() -> new NoSuchElementException(NOT_EXIST_COMPANY.getMessage()));
 
-        business.setName(req.changeBusinessName());
+        company.reviseBusiness(businessId, req);
 
-        businessJpaRepository.save(business);
+        companyJpaRepository.save(company);
 
         return true;
     }

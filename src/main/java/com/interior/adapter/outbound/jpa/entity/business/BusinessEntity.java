@@ -2,9 +2,11 @@ package com.interior.adapter.outbound.jpa.entity.business;
 
 import static com.interior.util.CheckUtil.check;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.interior.adapter.common.exception.ErrorType;
 import com.interior.adapter.outbound.jpa.entity.BaseEntity;
 import com.interior.adapter.outbound.jpa.entity.business.businessmaterial.BusinessMaterialEntity;
+import com.interior.adapter.outbound.jpa.entity.company.CompanyEntity;
 import com.interior.domain.business.Business;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -13,6 +15,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
@@ -47,6 +51,11 @@ public class BusinessEntity extends BaseEntity {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "business", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BusinessMaterialEntity> businessMaterialList = new ArrayList<>();
+
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "company_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private CompanyEntity company;
 
     private BusinessEntity(
             final Long id,

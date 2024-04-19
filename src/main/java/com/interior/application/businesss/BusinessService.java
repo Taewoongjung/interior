@@ -67,10 +67,11 @@ public class BusinessService {
 
     @Transactional
     public boolean reviseBusiness(
+            final Long companyId,
             final Long businessId,
             final ReviseBusinessServiceDto.Req req
     ) {
 
-        return businessRepository.reviseBusiness(businessId, req);
+        return businessRepository.reviseBusiness(companyId, businessId, req);
     }
 }

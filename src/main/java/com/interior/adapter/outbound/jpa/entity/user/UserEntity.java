@@ -1,7 +1,7 @@
 package com.interior.adapter.outbound.jpa.entity.user;
 
-import com.interior.adapter.outbound.jpa.entity.BaseEntity;
 import com.interior.adapter.outbound.jpa.entity.company.CompanyEntity;
+import com.interior.adapter.outbound.jpa.entity.BaseEntity;
 import com.interior.domain.user.User;
 import com.interior.domain.user.UserRole;
 import jakarta.persistence.*;

@@ -96,8 +96,9 @@ public class BusinessController {
                 .body(businessService.deleteBusiness(businessId));
     }
 
-    @PatchMapping(value = "/api/businesses/{businessId}")
+    @PatchMapping(value = "/api/companies/{companyId}/businesses/{businessId}")
     public ResponseEntity<Boolean> reviseBusiness(
+            @PathVariable(value = "companyId") final Long companyId,
             @PathVariable(value = "businessId") final Long businessId,
             @RequestBody final ReviseBusiness.WebReqV1 req
     ) {
@@ -105,6 +106,7 @@ public class BusinessController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(businessService.reviseBusiness(
+                        companyId,
                         businessId,
                         new ReviseBusinessServiceDto.Req(
                                 req.changeBusinessName()

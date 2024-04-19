@@ -1,8 +1,8 @@
 package com.interior.adapter.outbound.jpa.entity.business.businessmaterial;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.interior.adapter.outbound.jpa.entity.BaseEntity;
 import com.interior.adapter.outbound.jpa.entity.business.BusinessEntity;
+import com.interior.adapter.outbound.jpa.entity.BaseEntity;
 import com.interior.domain.business.businessmaterial.BusinessMaterial;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
