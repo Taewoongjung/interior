@@ -18,6 +18,8 @@ public interface BusinessRepository {
 
     boolean save(final CreateBusinessMaterial createBusinessMaterial);
 
+    boolean deleteBusinessMaterial(final Long businessId, final Long materialId);
+
     boolean deleteBusiness(final Long companyId, final Long businessId);
 
     boolean reviseBusiness(final Long userId, final Long businessId,

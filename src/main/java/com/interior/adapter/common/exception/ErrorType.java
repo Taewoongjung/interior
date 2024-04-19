@@ -9,6 +9,8 @@ public enum ErrorType {
 
     // 도메인 depth 순서로 작성
 
+    INAPPROPRIATE_REQUEST(1, "부적절한 요청 입니다."),
+
     LOGIN_FAIL(0010, "로그인 실패, 아이디 또는 비밀번호를 확인해주세요."),
     EXPIRED_ACCESS_TOKEN(0100, "만료 된 토큰입니다."),
 
@@ -26,7 +28,9 @@ public enum ErrorType {
 
     NOT_EXIST_BUSINESS(1100, "사업이 존재하지 않습니다."),
     INVALID_BUSINESS_NAME(1101, "올바르지 않은 사업명 입니다."),
-    DUPLICATE_BUSINESS_NAME(1102, ""),
+    DUPLICATE_BUSINESS_NAME(1102, "이미 해당 사업이 존재합니다."),
+
+    NOT_EXIST_BUSINESS_MATERIAL(1200, "사업재료가 존재하지 않습니다."),
 
     INVALID_SIGNUP_REQUEST_DUPLICATE_EMAIL(1100, "이미 존재하는 이메일 입니다."),
 

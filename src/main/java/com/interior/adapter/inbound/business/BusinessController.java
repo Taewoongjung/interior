@@ -59,6 +59,15 @@ public class BusinessController {
                 ));
     }
 
+    @DeleteMapping(value = "/api/businesses/{businessId}/materials/{materialId}")
+    public ResponseEntity<Boolean> deleteBusinessMaterial(
+            @PathVariable(value = "businessId") final Long businessId,
+            @PathVariable(value = "materialId") final Long materialId
+    ) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(businessService.deleteBusinessMaterial(businessId, materialId));
+    }
+
     @GetMapping(value = "/api/businesses/{businessId}")
     public ResponseEntity<Business> getBusiness(
             @PathVariable(value = "businessId") final Long businessId
@@ -81,7 +90,6 @@ public class BusinessController {
 
     @GetMapping(value = "/api/companies/{companyId}/businesses")
     public ResponseEntity<List<Business>> getBusinessByCompanyId(
-            @AuthenticationPrincipal final User user,
             @PathVariable(value = "companyId") final Long companyId
     ) {
         return ResponseEntity.status(HttpStatus.OK)

@@ -7,7 +7,9 @@ import com.interior.adapter.outbound.jpa.entity.BaseEntity;
 import com.interior.adapter.outbound.jpa.entity.business.BusinessEntity;
 import com.interior.adapter.outbound.jpa.entity.user.UserEntity;
 import com.interior.application.businesss.dto.ReviseBusinessServiceDto;
+import com.interior.domain.business.Business;
 import com.interior.domain.company.Company;
+import com.interior.util.converter.jpa.business.BusinessEntityConverter;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,6 +25,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -101,7 +104,9 @@ public class CompanyEntity extends BaseEntity {
                 getBuildingNumber(),
                 getTel(),
                 getLastModified(),
-                getCreatedAt()
+                getCreatedAt(),
+                getBusinessEntityList().stream().map(BusinessEntity::toPojo)
+                        .collect(Collectors.toList())
         );
     }
 

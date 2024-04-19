@@ -22,6 +22,7 @@ import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -111,5 +112,17 @@ public class BusinessEntity extends BaseEntity {
         check(name == null || "".equals(name.trim()), ErrorType.INVALID_BUSINESS_NAME);
 
         this.name = name;
+    }
+
+    public void deleteMaterial(final Long materialId) {
+        check(materialId == null || materialId == 0, ErrorType.INAPPROPRIATE_REQUEST);
+
+        this.businessMaterialList.stream()
+                .filter(f -> materialId.equals(f.getId()))
+                .findFirst()
+                .orElseThrow(() -> new NoSuchElementException(
+                        ErrorType.NOT_EXIST_BUSINESS_MATERIAL.getMessage()));
+
+        this.businessMaterialList.removeIf(e -> materialId.equals(e.getId()));
     }
 }

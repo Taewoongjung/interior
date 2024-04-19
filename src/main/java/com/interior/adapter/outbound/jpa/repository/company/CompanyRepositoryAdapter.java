@@ -2,6 +2,7 @@ package com.interior.adapter.outbound.jpa.repository.company;
 
 import static com.interior.util.converter.jpa.company.CompanyEntityConverter.companyToEntity;
 
+import com.interior.adapter.common.exception.ErrorType;
 import com.interior.adapter.outbound.jpa.entity.company.CompanyEntity;
 import com.interior.adapter.outbound.jpa.entity.user.UserEntity;
 import com.interior.adapter.outbound.jpa.repository.user.UserJpaRepository;
@@ -22,7 +23,8 @@ public class CompanyRepositoryAdapter implements CompanyRepository {
     public Company findById(final Long companyId) {
 
         CompanyEntity company = companyJpaRepository.findById(companyId)
-                .orElseThrow(() -> new NoSuchElementException("Company not found"));
+                .orElseThrow(() -> new NoSuchElementException(
+                        ErrorType.NOT_EXIST_COMPANY.getMessage()));
 
         return company.toPojo();
     }

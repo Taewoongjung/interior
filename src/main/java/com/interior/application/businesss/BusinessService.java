@@ -7,6 +7,8 @@ import com.interior.domain.business.Business;
 import com.interior.domain.business.repository.BusinessRepository;
 import com.interior.domain.business.repository.dto.CreateBusiness;
 import com.interior.domain.business.repository.dto.CreateBusinessMaterial;
+import com.interior.domain.company.Company;
+import com.interior.domain.company.repository.CompanyRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class BusinessService {
 
+    private final CompanyRepository companyRepository;
     private final BusinessRepository businessRepository;
 
     @Transactional(readOnly = true)
@@ -60,6 +63,12 @@ public class BusinessService {
     }
 
     @Transactional
+    public boolean deleteBusinessMaterial(final Long businessId, final Long materialId) {
+
+        return businessRepository.deleteBusinessMaterial(businessId, materialId);
+    }
+
+    @Transactional
     public boolean deleteBusiness(final Long companyId, final Long businessId) {
 
         return businessRepository.deleteBusiness(companyId, businessId);
@@ -71,6 +80,10 @@ public class BusinessService {
             final Long businessId,
             final ReviseBusinessServiceDto.Req req
     ) {
+
+        Company company = companyRepository.findById(companyId);
+
+        company.validateDuplicateName(req.changeBusinessName());
 
         return businessRepository.reviseBusiness(companyId, businessId, req);
     }

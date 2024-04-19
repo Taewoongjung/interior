@@ -86,6 +86,17 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
     }
 
     @Override
+    public boolean deleteBusinessMaterial(final Long businessId, final Long materialId) {
+
+        BusinessEntity business = businessJpaRepository.findById(businessId)
+                .orElseThrow(() -> new NoSuchElementException(NOT_EXIST_BUSINESS.getMessage()));
+
+        business.deleteMaterial(materialId);
+
+        return true;
+    }
+
+    @Override
     public boolean deleteBusiness(final Long companyId, final Long businessId) {
 
         CompanyEntity company = companyJpaRepository.findById(companyId)
