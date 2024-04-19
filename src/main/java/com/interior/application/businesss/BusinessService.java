@@ -60,9 +60,9 @@ public class BusinessService {
     }
 
     @Transactional
-    public boolean deleteBusiness(final Long businessId) {
+    public boolean deleteBusiness(final Long companyId, final Long businessId) {
 
-        return businessRepository.deleteBusiness(businessId);
+        return businessRepository.deleteBusiness(companyId, businessId);
     }
 
     @Transactional

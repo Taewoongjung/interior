@@ -18,7 +18,7 @@ public interface BusinessRepository {
 
     boolean save(final CreateBusinessMaterial createBusinessMaterial);
 
-    boolean deleteBusiness(final Long businessId);
+    boolean deleteBusiness(final Long companyId, final Long businessId);
 
     boolean reviseBusiness(final Long userId, final Long businessId,
             final ReviseBusinessServiceDto.Req req);

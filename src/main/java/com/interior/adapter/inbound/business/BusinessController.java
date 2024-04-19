@@ -88,12 +88,13 @@ public class BusinessController {
                 .body(businessService.getBusinessesByCompanyId(companyId));
     }
 
-    @DeleteMapping(value = "/api/businesses/{businessId}")
+    @DeleteMapping(value = "/api/companies/{companyId}/businesses/{businessId}")
     public ResponseEntity<Boolean> deleteBusiness(
+            @PathVariable(value = "companyId") final Long companyId,
             @PathVariable(value = "businessId") final Long businessId
     ) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(businessService.deleteBusiness(businessId));
+                .body(businessService.deleteBusiness(companyId, businessId));
     }
 
     @PatchMapping(value = "/api/companies/{companyId}/businesses/{businessId}")
@@ -102,8 +103,6 @@ public class BusinessController {
             @PathVariable(value = "businessId") final Long businessId,
             @RequestBody final ReviseBusiness.WebReqV1 req
     ) {
-        System.out.println("req = " + req.changeBusinessName());
-
         return ResponseEntity.status(HttpStatus.OK)
                 .body(businessService.reviseBusiness(
                         companyId,
