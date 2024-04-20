@@ -7,9 +7,7 @@ import com.interior.adapter.outbound.jpa.entity.BaseEntity;
 import com.interior.adapter.outbound.jpa.entity.business.BusinessEntity;
 import com.interior.adapter.outbound.jpa.entity.user.UserEntity;
 import com.interior.application.businesss.dto.ReviseBusinessServiceDto;
-import com.interior.domain.business.Business;
 import com.interior.domain.company.Company;
-import com.interior.util.converter.jpa.business.BusinessEntityConverter;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -44,6 +42,9 @@ public class CompanyEntity extends BaseEntity {
 
     private String name;
 
+    @Column(name = "zipcode", nullable = false, columnDefinition = "varchar")
+    private String zipCode;
+
     @Column(name = "owner_id", nullable = false, columnDefinition = "bigint")
     private Long ownerId;
 
@@ -66,6 +67,7 @@ public class CompanyEntity extends BaseEntity {
     public CompanyEntity(
         final Long id,
         final String name,
+        final String zipCode,
         final Long ownerId,
         final String address,
         final String subAddress,
@@ -76,6 +78,7 @@ public class CompanyEntity extends BaseEntity {
 
         this.id = id;
         this.name = name;
+        this.zipCode = zipCode;
         this.ownerId = ownerId;
         this.address = address;
         this.subAddress = subAddress;
@@ -85,19 +88,21 @@ public class CompanyEntity extends BaseEntity {
 
     public static CompanyEntity of(
             final String name,
+            final String zipCode,
             final Long ownerId,
             final String address,
             final String subAddress,
             final String buildingNumber,
             final String tel
     ) {
-        return new CompanyEntity(null, name, ownerId, address, subAddress, buildingNumber, tel);
+        return new CompanyEntity(null, name, zipCode, ownerId, address, subAddress, buildingNumber, tel);
     }
 
     public Company toPojo() {
         return Company.of(
                 getId(),
                 getName(),
+                getZipCode(),
                 getOwnerId(),
                 getAddress(),
                 getSubAddress(),

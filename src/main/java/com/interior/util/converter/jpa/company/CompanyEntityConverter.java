@@ -8,6 +8,7 @@ public class CompanyEntityConverter {
     public static CompanyEntity companyToEntity(final Company company) {
         return CompanyEntity.of(
                 company.getName(),
+                company.getZipCode(),
                 company.getOwnerId(),
                 company.getAddress(),
                 company.getSubAddress(),

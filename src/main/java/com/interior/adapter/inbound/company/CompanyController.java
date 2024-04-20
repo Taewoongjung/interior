@@ -46,6 +46,7 @@ public class CompanyController {
                         user,
                         new CreateCompanyServiceDto.CreateCompanyDto(
                                 req.companyName(),
+                                req.zipCode(),
                                 req.mainAddress(),
                                 req.subAddress(),
                                 req.bdgNumber(),

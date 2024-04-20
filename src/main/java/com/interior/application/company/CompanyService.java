@@ -41,6 +41,7 @@ public class CompanyService {
 
         Company company = Company.of(
                 reqDto.companyName(),
+                reqDto.zipCode(),
                 user.getId(),
                 reqDto.mainAddress(),
                 reqDto.subAddress(),

@@ -19,6 +19,7 @@ public class Company {
 
     private Long id;
     private String name;
+    private String zipCode;
     private Long ownerId;
     private String address;
     private String subAddress;
@@ -32,6 +33,7 @@ public class Company {
     private Company(
             final Long id,
             final String name,
+            final String zipCode,
             final Long ownerId,
             final String address,
             final String subAddress,
@@ -43,6 +45,7 @@ public class Company {
     ) {
         this.id = id;
         this.name = name;
+        this.zipCode = zipCode;
         this.ownerId = ownerId;
         this.address = address;
         this.subAddress = subAddress;
@@ -56,6 +59,7 @@ public class Company {
     public static Company of(
             final Long id,
             final String name,
+            final String zipCode,
             final Long ownerId,
             final String address,
             final String subAddress,
@@ -69,11 +73,12 @@ public class Company {
         require(o-> ownerId == null, ownerId, INVALID_COMPANY_OWNER_ID);
         require(o -> tel == null, tel, INVALID_COMPANY_TEL);
 
-        return new Company(id, name, ownerId, address, subAddress, buildingNumber, tel, lastModified, createdAt, null);
+        return new Company(id, name, zipCode, ownerId, address, subAddress, buildingNumber, tel, lastModified, createdAt, null);
     }
 
     public static Company of(
             final String name,
+            final String zipCode,
             final Long ownerId,
             final String address,
             final String subAddress,
@@ -86,12 +91,13 @@ public class Company {
         require(o-> name == null, name, INVALID_COMPANY_NAME);
         require(o -> tel == null, tel, INVALID_COMPANY_TEL);
 
-        return new Company(null, name, ownerId, address, subAddress, buildingNumber, tel, lastModified, createdAt, null);
+        return new Company(null, name, zipCode, ownerId, address, subAddress, buildingNumber, tel, lastModified, createdAt, null);
     }
 
     public static Company of(
             final Long id,
             final String name,
+            final String zipCode,
             final Long ownerId,
             final String address,
             final String subAddress,
@@ -105,7 +111,7 @@ public class Company {
         require(o-> name == null, name, INVALID_COMPANY_NAME);
         require(o -> tel == null, tel, INVALID_COMPANY_TEL);
 
-        return new Company(id, name, ownerId, address, subAddress, buildingNumber, tel, lastModified, createdAt, businessList);
+        return new Company(id, name, zipCode, ownerId, address, subAddress, buildingNumber, tel, lastModified, createdAt, businessList);
     }
 
     public void validateDuplicateName(final String targetName) {
