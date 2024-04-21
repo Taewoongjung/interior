@@ -32,6 +32,7 @@ public class CompanyService {
                 .findFirst().orElse(null);
     }
 
+    @Transactional
     public boolean createCompany(
             User user,
             final CreateCompanyServiceDto.CreateCompanyDto reqDto
@@ -56,5 +57,13 @@ public class CompanyService {
         }
 
         return false;
+    }
+
+    @Transactional
+    public boolean deleteCompany(final Long userId, final Long companyId) {
+
+        companyRepository.delete(userId, companyId);
+
+        return true;
     }
 }

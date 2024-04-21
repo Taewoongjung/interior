@@ -29,6 +29,7 @@ public class BusinessController {
 
     private final BusinessService businessService;
 
+    // 사업 추가
     @PostMapping(value = "/api/companies/{companyId}/businesses")
     public ResponseEntity<CreateBusinessResDto> createBusiness(
             @PathVariable(value = "companyId") final Long companyId,
@@ -42,6 +43,7 @@ public class BusinessController {
                 ));
     }
 
+    // 특정 사업에 재료 추가
     @PostMapping(value = "/api/businesses/{businessId}/materials")
     public ResponseEntity<Boolean> createBusinessMaterial(
             @PathVariable(value = "businessId") final Long businessId,
@@ -59,6 +61,7 @@ public class BusinessController {
                 ));
     }
 
+    // 특정 사업에 포함 된 특정 재료 삭제
     @DeleteMapping(value = "/api/businesses/{businessId}/materials/{materialId}")
     public ResponseEntity<Boolean> deleteBusinessMaterial(
             @PathVariable(value = "businessId") final Long businessId,
@@ -68,6 +71,7 @@ public class BusinessController {
                 .body(businessService.deleteBusinessMaterial(businessId, materialId));
     }
 
+    // 특정 사업 조회
     @GetMapping(value = "/api/businesses/{businessId}")
     public ResponseEntity<Business> getBusiness(
             @PathVariable(value = "businessId") final Long businessId
@@ -76,6 +80,7 @@ public class BusinessController {
                 .body(businessService.getBusiness(businessId));
     }
 
+    // 유저의 모든 사업들 조회
     @GetMapping(value = "/api/businesses")
     public ResponseEntity<List<Business>> getBusinessByUser(
             @AuthenticationPrincipal final User user
@@ -88,6 +93,7 @@ public class BusinessController {
                                 .toList()));
     }
 
+    // 회사의 사업들 조회
     @GetMapping(value = "/api/companies/{companyId}/businesses")
     public ResponseEntity<List<Business>> getBusinessByCompanyId(
             @PathVariable(value = "companyId") final Long companyId
@@ -96,6 +102,7 @@ public class BusinessController {
                 .body(businessService.getBusinessesByCompanyId(companyId));
     }
 
+    // 사업 삭제
     @DeleteMapping(value = "/api/companies/{companyId}/businesses/{businessId}")
     public ResponseEntity<Boolean> deleteBusiness(
             @PathVariable(value = "companyId") final Long companyId,
@@ -105,6 +112,7 @@ public class BusinessController {
                 .body(businessService.deleteBusiness(companyId, businessId));
     }
 
+    // 사업 수정
     @PatchMapping(value = "/api/companies/{companyId}/businesses/{businessId}")
     public ResponseEntity<Boolean> reviseBusiness(
             @PathVariable(value = "companyId") final Long companyId,

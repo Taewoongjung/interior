@@ -1,5 +1,7 @@
 package com.interior.adapter.outbound.jpa.repository.company;
 
+import static com.interior.adapter.common.exception.ErrorType.COMPANY_NOT_EXIST_IN_THE_USER;
+import static com.interior.util.CheckUtil.check;
 import static com.interior.util.converter.jpa.company.CompanyEntityConverter.companyToEntity;
 
 import com.interior.adapter.common.exception.ErrorType;
@@ -9,6 +11,7 @@ import com.interior.adapter.outbound.jpa.repository.user.UserJpaRepository;
 import com.interior.domain.company.Company;
 import com.interior.domain.company.repository.CompanyRepository;
 import java.util.NoSuchElementException;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -36,6 +39,20 @@ public class CompanyRepositoryAdapter implements CompanyRepository {
         user.getCompanyEntityList().add(companyToEntity(addingCompany));
 
         userJpaRepository.save(user);
+
+        return true;
+    }
+
+    @Override
+    public boolean delete(final Long userId, final Long companyId) {
+
+        UserEntity user = userJpaRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchElementException(
+                        ErrorType.NOT_EXIST_CUSTOMER.getMessage()));
+
+        boolean isDeleted = user.getCompanyEntityList().removeIf(f -> companyId.equals(f.getId()));
+
+        check(!isDeleted, COMPANY_NOT_EXIST_IN_THE_USER);
 
         return true;
     }

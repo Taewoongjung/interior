@@ -25,6 +25,7 @@ public enum ErrorType {
     INVALID_COMPANY_NAME(1051, "올바르지 않은 사업체 명 입니다."),
     INVALID_COMPANY_OWNER_ID(1052, "소유자 정보는 필수입니다."),
     INVALID_COMPANY_TEL(1053, "올바르지 않은 전화번호입니다."),
+    COMPANY_NOT_EXIST_IN_THE_USER(1054, "삭제 하려고 하는 사업체를 가지고 있지 않습니다."),
 
     NOT_EXIST_BUSINESS(1100, "사업이 존재하지 않습니다."),
     INVALID_BUSINESS_NAME(1101, "올바르지 않은 사업명 입니다."),
