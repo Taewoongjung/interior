@@ -56,8 +56,8 @@ public class CompanyController {
     // 특정 사업체 삭제
     @DeleteMapping(value = "/api/companies/{companyId}")
     public ResponseEntity<Boolean> deleteCompany(
-            @AuthenticationPrincipal final User user,
-            @PathVariable(value = "companyId") final Long companyId
+            @PathVariable(value = "companyId") final Long companyId,
+            @AuthenticationPrincipal final User user
     ) {
         return ResponseEntity.status(HttpStatus.OK).body(
                 companyService.deleteCompany(user.getId(), companyId)
