@@ -15,8 +15,8 @@ class CompanyTest {
     void test1() {
         assertDoesNotThrow(() -> Company.of(
                 1L,
-                "01000",
                 "홍길동",
+                "01000",
                 3L,
                 "메인 주소",
                 "서브 주소",
@@ -32,8 +32,8 @@ class CompanyTest {
     void test2() {
         assertThatThrownBy(() -> Company.of(
                 1L,
-                "01000",
                 null,
+                "01000",
                 3L,
                 "메인 주소",
                 "서브 주소",
@@ -49,8 +49,8 @@ class CompanyTest {
     void test3() {
         assertThatThrownBy(() -> Company.of(
                 1L,
-                "01000",
                 "홍길동",
+                "01000",
                 null,
                 "메인 주소",
                 "서브 주소",
@@ -66,8 +66,8 @@ class CompanyTest {
     void test4() {
         assertThatThrownBy(() -> Company.of(
                 1L,
-                "01000",
                 "홍길동",
+                "01000",
                 3L,
                 "메인 주소",
                 "서브 주소",
