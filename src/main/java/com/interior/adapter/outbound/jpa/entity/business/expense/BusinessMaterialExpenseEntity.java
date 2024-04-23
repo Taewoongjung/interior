@@ -22,7 +22,7 @@ import lombok.ToString;
 @Entity
 @Getter
 @ToString
-@Table(name = "business_expense")
+@Table(name = "business_material_expense")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BusinessMaterialExpenseEntity extends BaseEntity {
 
