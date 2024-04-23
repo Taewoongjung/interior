@@ -9,7 +9,7 @@ import com.interior.adapter.outbound.jpa.entity.company.CompanyEntity;
 import com.interior.adapter.outbound.jpa.repository.company.CompanyJpaRepository;
 import com.interior.application.businesss.dto.ReviseBusinessServiceDto;
 import com.interior.domain.business.Business;
-import com.interior.domain.business.businessmaterial.BusinessMaterial;
+import com.interior.domain.business.material.BusinessMaterial;
 import com.interior.domain.business.repository.BusinessRepository;
 import com.interior.domain.business.repository.dto.CreateBusiness;
 import com.interior.domain.business.repository.dto.CreateBusinessMaterial;

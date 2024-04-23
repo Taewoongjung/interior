@@ -1,9 +1,9 @@
 package com.interior.util.converter.jpa.business;
 
 import com.interior.adapter.outbound.jpa.entity.business.BusinessEntity;
-import com.interior.adapter.outbound.jpa.entity.business.businessmaterial.BusinessMaterialEntity;
+import com.interior.adapter.outbound.jpa.entity.business.material.BusinessMaterialEntity;
 import com.interior.domain.business.Business;
-import com.interior.domain.business.businessmaterial.BusinessMaterial;
+import com.interior.domain.business.material.BusinessMaterial;
 import java.util.stream.Collectors;
 
 public class BusinessEntityConverter {

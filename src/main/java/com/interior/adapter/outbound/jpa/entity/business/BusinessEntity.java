@@ -5,7 +5,7 @@ import static com.interior.util.CheckUtil.check;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.interior.adapter.common.exception.ErrorType;
 import com.interior.adapter.outbound.jpa.entity.BaseEntity;
-import com.interior.adapter.outbound.jpa.entity.business.businessmaterial.BusinessMaterialEntity;
+import com.interior.adapter.outbound.jpa.entity.business.material.BusinessMaterialEntity;
 import com.interior.adapter.outbound.jpa.entity.company.CompanyEntity;
 import com.interior.domain.business.Business;
 import jakarta.persistence.CascadeType;

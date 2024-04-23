@@ -4,7 +4,7 @@ import static com.interior.util.CheckUtil.check;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.interior.adapter.common.exception.ErrorType;
-import com.interior.domain.business.businessmaterial.BusinessMaterial;
+import com.interior.domain.business.material.BusinessMaterial;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Getter;

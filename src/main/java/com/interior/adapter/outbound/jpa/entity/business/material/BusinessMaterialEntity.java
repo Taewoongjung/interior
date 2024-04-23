@@ -1,4 +1,4 @@
-package com.interior.adapter.outbound.jpa.entity.business.businessmaterial;
+package com.interior.adapter.outbound.jpa.entity.business.material;
 
 import static com.interior.adapter.common.exception.ErrorType.EMPTY_USAGE_CATEGORY_INVALID;
 import static com.interior.util.CheckUtil.check;
@@ -6,7 +6,8 @@ import static com.interior.util.CheckUtil.check;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.interior.adapter.outbound.jpa.entity.business.BusinessEntity;
 import com.interior.adapter.outbound.jpa.entity.BaseEntity;
-import com.interior.domain.business.businessmaterial.BusinessMaterial;
+import com.interior.adapter.outbound.jpa.entity.business.expense.BusinessMaterialExpenseEntity;
+import com.interior.domain.business.material.BusinessMaterial;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,8 +17,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -48,6 +52,9 @@ public class BusinessMaterialEntity extends BaseEntity {
     private String unit;
 
     private String memo;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "businessMaterial", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BusinessMaterialExpenseEntity> businessMaterialExpenseEntityList = new ArrayList<>();
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)

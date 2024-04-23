@@ -7,7 +7,7 @@ import com.interior.adapter.inbound.business.webdto.GetBusiness;
 import com.interior.application.businesss.dto.CreateBusinessServiceDto.CreateBusinessMaterialDto;
 import com.interior.application.businesss.dto.ReviseBusinessServiceDto;
 import com.interior.domain.business.Business;
-import com.interior.domain.business.businessmaterial.BusinessMaterial;
+import com.interior.domain.business.material.BusinessMaterial;
 import com.interior.domain.business.repository.BusinessRepository;
 import com.interior.domain.business.repository.dto.CreateBusiness;
 import com.interior.domain.business.repository.dto.CreateBusinessMaterial;
@@ -31,11 +31,18 @@ public class BusinessService {
 
         Business business = businessRepository.findById(businessId);
 
+        int count = 0;
+
+        if (business.getBusinessMaterialList() != null) {
+            count = business.getBusinessMaterialList().size();
+        }
+
         return new GetBusiness.Response(
                 business.getName(),
                 (HashMap<String, List<BusinessMaterial>>)
                 business.getBusinessMaterialList().stream()
-                        .collect(groupingBy(BusinessMaterial::getUsageCategory))
+                        .collect(groupingBy(BusinessMaterial::getUsageCategory)),
+                count
         );
     }
 

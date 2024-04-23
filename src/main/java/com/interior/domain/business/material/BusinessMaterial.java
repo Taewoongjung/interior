@@ -1,4 +1,4 @@
-package com.interior.domain.business.businessmaterial;
+package com.interior.domain.business.material;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.time.LocalDateTime;
