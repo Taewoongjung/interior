@@ -4,8 +4,10 @@ public class CreateBusinessServiceDto {
 
     public record CreateBusinessMaterialDto(
         String name,
+        String usageCategory,
         String category,
         int amount,
+        String unit,
         String memo
     ) { }
 }

@@ -3,7 +3,9 @@ package com.interior.adapter.inbound.business;
 import com.interior.adapter.inbound.business.webdto.CreateBusiness.CreateBusinessReqDto;
 import com.interior.adapter.inbound.business.webdto.CreateBusiness.CreateBusinessResDto;
 import com.interior.adapter.inbound.business.webdto.CreateBusinessMaterial.CreateBusinessMaterialReqDto;
+import com.interior.adapter.inbound.business.webdto.GetBusiness;
 import com.interior.adapter.inbound.business.webdto.ReviseBusiness;
+import com.interior.adapter.inbound.business.webdto.ReviseUsageCategoryOfMaterial;
 import com.interior.application.businesss.BusinessService;
 import com.interior.application.businesss.dto.CreateBusinessServiceDto.CreateBusinessMaterialDto;
 import com.interior.application.businesss.dto.ReviseBusinessServiceDto;
@@ -49,13 +51,16 @@ public class BusinessController {
             @PathVariable(value = "businessId") final Long businessId,
             @RequestBody final CreateBusinessMaterialReqDto req
     ) {
+
         return ResponseEntity.status(HttpStatus.OK)
                 .body(businessService.createBusinessMaterial(
                         businessId,
                         new CreateBusinessMaterialDto(
                                 req.materialName(),
+                                req.materialUsageCategory(),
                                 req.materialCategory(),
                                 req.materialAmount(),
+                                req.materialAmountUnit(),
                                 req.materialMemo()
                         )
                 ));
@@ -71,13 +76,27 @@ public class BusinessController {
                 .body(businessService.deleteBusinessMaterial(businessId, materialId));
     }
 
-    // 특정 사업 조회
+    // 특정 사업의 모든 재료 조회
     @GetMapping(value = "/api/businesses/{businessId}")
-    public ResponseEntity<Business> getBusiness(
+    public ResponseEntity<GetBusiness.Response> getBusiness(
             @PathVariable(value = "businessId") final Long businessId
     ) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(businessService.getBusiness(businessId));
+    }
+
+    // 특정 사업 재료의 사업 분류 수정
+    @PatchMapping(value = "/api/businesses/{businessId}")
+    public ResponseEntity<Boolean> reviseUsageCategoryOfMaterial(
+            @PathVariable(value = "businessId") final Long businessId,
+            @RequestBody final ReviseUsageCategoryOfMaterial.Req req
+    ) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(businessService.reviseUsageCategoryOfMaterial(
+                        businessId,
+                        req.subDataIds(),
+                        req.usageCategoryName()
+                ));
     }
 
     // 유저의 모든 사업들 조회

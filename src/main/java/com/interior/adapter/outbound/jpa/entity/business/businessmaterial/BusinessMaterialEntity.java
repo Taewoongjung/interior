@@ -1,5 +1,8 @@
 package com.interior.adapter.outbound.jpa.entity.business.businessmaterial;
 
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_USAGE_CATEGORY_INVALID;
+import static com.interior.util.CheckUtil.check;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.interior.adapter.outbound.jpa.entity.business.BusinessEntity;
 import com.interior.adapter.outbound.jpa.entity.BaseEntity;
@@ -36,9 +39,13 @@ public class BusinessMaterialEntity extends BaseEntity {
 
     private String name;
 
+    private String usageCategory;
+
     private String category;
 
     private Integer amount;
+
+    private String unit;
 
     private String memo;
 
@@ -51,8 +58,10 @@ public class BusinessMaterialEntity extends BaseEntity {
             final Long id,
             final Long businessId,
             final String name,
+            final String usageCategory,
             final String category,
             final Integer amount,
+            final String unit,
             final String memo
     ) {
         super(LocalDateTime.now(), LocalDateTime.now());
@@ -60,19 +69,23 @@ public class BusinessMaterialEntity extends BaseEntity {
         this.id = id;
         this.businessId = businessId;
         this.name = name;
+        this.usageCategory = usageCategory;
         this.category = category;
         this.amount = amount;
+        this.unit = unit;
         this.memo = memo;
     }
 
     public static BusinessMaterialEntity of(
             final Long businessId,
             final String name,
+            final String usageCategory,
             final String category,
             final Integer amount,
+            final String unit,
             final String memo
     ) {
-        return new BusinessMaterialEntity(null, businessId, name, category, amount, memo);
+        return new BusinessMaterialEntity(null, businessId, name, usageCategory, category, amount, unit, memo);
     }
 
     public BusinessMaterial toPojo() {
@@ -80,9 +93,17 @@ public class BusinessMaterialEntity extends BaseEntity {
                 getId(),
                 getBusinessId(),
                 getName(),
+                getUsageCategory(),
                 getCategory(),
                 getAmount(),
+                getUnit(),
                 getMemo()
         );
+    }
+
+    public void setUsageCategory(final String usageCategory) {
+        check("".equals(usageCategory.trim()), EMPTY_USAGE_CATEGORY_INVALID);
+
+        this.usageCategory = usageCategory;
     }
 }

@@ -24,8 +24,10 @@ public class BusinessEntityConverter {
         return BusinessMaterialEntity.of(
                 businessMaterial.getBusinessId(),
                 businessMaterial.getName(),
+                businessMaterial.getUsageCategory(),
                 businessMaterial.getCategory(),
                 businessMaterial.getAmount(),
+                businessMaterial.getUnit(),
                 businessMaterial.getMemo()
         );
     }

@@ -76,8 +76,10 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
         businessMaterialJpaRepository.save(businessMaterialToEntity(BusinessMaterial.of(
                 createBusinessMaterial.businessId(),
                 createBusinessMaterial.name(),
+                createBusinessMaterial.usageCategory(),
                 createBusinessMaterial.category(),
                 createBusinessMaterial.amount(),
+                createBusinessMaterial.unit(),
                 createBusinessMaterial.memo()
                 )
         ));
@@ -116,6 +118,25 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
         company.reviseBusiness(businessId, req);
 
         companyJpaRepository.save(company);
+
+        return true;
+    }
+
+    @Override
+    public boolean reviseUsageCategoryOfMaterial(
+            final Long businessId,
+            final List<Long> targetList,
+            final String usageCategoryName)
+    {
+
+        BusinessEntity business = businessJpaRepository.findById(businessId)
+                .orElseThrow(() -> new NoSuchElementException(NOT_EXIST_BUSINESS.getMessage()));
+
+        business.getBusinessMaterialList().stream()
+                .filter(f -> targetList.contains(f.getId()))
+                .forEach(e -> e.setUsageCategory(usageCategoryName));
+
+        businessJpaRepository.save(business);
 
         return true;
     }

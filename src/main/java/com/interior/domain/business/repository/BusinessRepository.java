@@ -24,4 +24,9 @@ public interface BusinessRepository {
 
     boolean reviseBusiness(final Long userId, final Long businessId,
             final ReviseBusinessServiceDto.Req req);
+
+    boolean reviseUsageCategoryOfMaterial(
+            final Long businessId,
+            final List<Long> targetList,
+            final String usageCategoryName);
 }

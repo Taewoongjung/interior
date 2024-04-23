@@ -75,6 +75,9 @@ public class SecurityConfig {
 						,"/api/businesses"
 						,"/api/companies/{companyId}/businesses"
 				).permitAll()
+				.requestMatchers(HttpMethod.PATCH,
+						 "/api/businesses/{businessId}"
+				).permitAll()
 				.requestMatchers("/admin").hasRole("CUSTOMER")
 				.requestMatchers("/login").permitAll()
 				.anyRequest().authenticated())
