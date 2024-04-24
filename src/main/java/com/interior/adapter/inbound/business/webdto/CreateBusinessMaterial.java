@@ -10,6 +10,8 @@ public class CreateBusinessMaterial {
         String materialCategory,
         int materialAmount,
         String materialAmountUnit,
-        String materialMemo
+        String materialMemo,
+        String materialCostPerUnit,
+        String laborCostPerUnit
     ) { }
 }

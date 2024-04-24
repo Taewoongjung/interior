@@ -17,11 +17,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -53,8 +51,8 @@ public class BusinessMaterialEntity extends BaseEntity {
 
     private String memo;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "businessMaterial", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BusinessMaterialExpenseEntity> businessMaterialExpenseEntityList = new ArrayList<>();
+    @OneToOne(mappedBy = "businessMaterial", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private BusinessMaterialExpenseEntity businessMaterialExpense;
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
@@ -69,7 +67,8 @@ public class BusinessMaterialEntity extends BaseEntity {
             final String category,
             final Integer amount,
             final String unit,
-            final String memo
+            final String memo,
+            final BusinessMaterialExpenseEntity businessMaterialExpense
     ) {
         super(LocalDateTime.now(), LocalDateTime.now());
 
@@ -81,6 +80,7 @@ public class BusinessMaterialEntity extends BaseEntity {
         this.amount = amount;
         this.unit = unit;
         this.memo = memo;
+        this.businessMaterialExpense = businessMaterialExpense;
     }
 
     public static BusinessMaterialEntity of(
@@ -90,12 +90,16 @@ public class BusinessMaterialEntity extends BaseEntity {
             final String category,
             final Integer amount,
             final String unit,
-            final String memo
+            final String memo,
+            final BusinessMaterialExpenseEntity businessMaterialExpense
     ) {
-        return new BusinessMaterialEntity(null, businessId, name, usageCategory, category, amount, unit, memo);
+        return new BusinessMaterialEntity(null, businessId, name, usageCategory, category, amount,
+                unit, memo, businessMaterialExpense);
     }
 
     public BusinessMaterial toPojo() {
+        BusinessMaterialExpenseEntity businessMaterialExpenseEntity = getBusinessMaterialExpense();
+
         return BusinessMaterial.of(
                 getId(),
                 getBusinessId(),
@@ -104,13 +108,26 @@ public class BusinessMaterialEntity extends BaseEntity {
                 getCategory(),
                 getAmount(),
                 getUnit(),
-                getMemo()
+                getMemo(),
+                businessMaterialExpenseEntity != null ?
+                    businessMaterialExpenseEntity.toPojo() : null
         );
+        /**
+            getBusinessMaterialExpense() 삼항연산자를 이용한 이유는
+            business를 조회를 할 때 businessMaterial 도 같이 조회 하는데 이 과정에서
+            businessMaterialExpense 도 같이 조회되는데, 해당 객체가 필요 없을 때 null 일 수도
+            있기 때문에 사용 함.
+         * */
     }
 
     public void setUsageCategory(final String usageCategory) {
         check("".equals(usageCategory.trim()), EMPTY_USAGE_CATEGORY_INVALID);
 
         this.usageCategory = usageCategory;
+    }
+
+    public void setBusinessMaterialExpense(
+            final BusinessMaterialExpenseEntity businessMaterialExpense) {
+        this.businessMaterialExpense = businessMaterialExpense;
     }
 }

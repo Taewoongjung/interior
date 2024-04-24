@@ -7,5 +7,7 @@ public record CreateBusinessMaterial(
         String category,
         Integer amount,
         String unit,
-        String memo
+        String memo,
+        String materialCostPerUnit,
+        String laborCostPerUnit
 ) { }

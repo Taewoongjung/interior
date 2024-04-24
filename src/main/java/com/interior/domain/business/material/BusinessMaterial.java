@@ -1,6 +1,7 @@
 package com.interior.domain.business.material;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.interior.domain.business.expense.BusinessMaterialExpense;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.ToString;
@@ -26,6 +27,8 @@ public class BusinessMaterial {
 
     private String memo;
 
+    private BusinessMaterialExpense businessMaterialExpense;
+
     private LocalDateTime lastModified;
     private LocalDateTime createdAt;
 
@@ -38,6 +41,7 @@ public class BusinessMaterial {
             final int amount,
             final String unit,
             final String memo,
+            final BusinessMaterialExpense businessMaterialExpense,
             final LocalDateTime lastModified,
             final LocalDateTime createdAt
     ) {
@@ -49,6 +53,7 @@ public class BusinessMaterial {
         this.amount = amount;
         this.unit = unit;
         this.memo = memo;
+        this.businessMaterialExpense = businessMaterialExpense;
         this.lastModified = lastModified;
         this.createdAt = createdAt;
     }
@@ -61,7 +66,8 @@ public class BusinessMaterial {
             final String category,
             final int amount,
             final String unit,
-            final String memo
+            final String memo,
+            final BusinessMaterialExpense businessMaterialExpense
     ) {
         return new BusinessMaterial(
                 id,
@@ -72,6 +78,7 @@ public class BusinessMaterial {
                 amount,
                 unit,
                 memo,
+                businessMaterialExpense,
                 LocalDateTime.now(), LocalDateTime.now());
     }
 
@@ -93,6 +100,7 @@ public class BusinessMaterial {
                 amount,
                 unit,
                 memo,
+                null,
                 LocalDateTime.now(), LocalDateTime.now());
     }
 }

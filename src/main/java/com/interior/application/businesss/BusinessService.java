@@ -78,7 +78,9 @@ public class BusinessService {
                 req.category(),
                 req.amount(),
                 req.unit(),
-                req.memo()
+                req.memo(),
+                req.materialCostPerUnit(),
+                req.laborCostPerUnit()
         ));
 
         return true;

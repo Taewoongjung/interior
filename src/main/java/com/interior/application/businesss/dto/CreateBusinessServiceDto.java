@@ -8,6 +8,8 @@ public class CreateBusinessServiceDto {
         String category,
         int amount,
         String unit,
-        String memo
+        String memo,
+        String materialCostPerUnit,
+        String laborCostPerUnit
     ) { }
 }

@@ -1,9 +1,8 @@
 package com.interior.adapter.outbound.jpa.entity.business.expense;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.interior.adapter.outbound.jpa.entity.BaseEntity;
 import com.interior.adapter.outbound.jpa.entity.business.material.BusinessMaterialEntity;
-import jakarta.persistence.CascadeType;
+import com.interior.domain.business.expense.BusinessMaterialExpense;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -11,7 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
@@ -39,8 +38,7 @@ public class BusinessMaterialExpenseEntity extends BaseEntity {
     @Column(name = "labor_cost_per_unit", columnDefinition = "varchar")
     private String laborCostPerUnit;
 
-    @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "business_material_id", referencedColumnName = "id", insertable = false, updatable = false)
     private BusinessMaterialEntity businessMaterial;
 
@@ -65,5 +63,14 @@ public class BusinessMaterialExpenseEntity extends BaseEntity {
     ) {
         return new BusinessMaterialExpenseEntity(null, businessMaterialId, materialCostPerUnit,
                 laborCostPerUnit);
+    }
+
+    public BusinessMaterialExpense toPojo() {
+        return BusinessMaterialExpense.of(
+                getId(),
+                getBusinessMaterialId(),
+                getMaterialCostPerUnit(),
+                getLaborCostPerUnit()
+        );
     }
 }

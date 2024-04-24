@@ -61,7 +61,9 @@ public class BusinessController {
                                 req.materialCategory(),
                                 req.materialAmount(),
                                 req.materialAmountUnit(),
-                                req.materialMemo()
+                                req.materialMemo(),
+                                req.materialCostPerUnit(),
+                                req.laborCostPerUnit()
                         )
                 ));
     }

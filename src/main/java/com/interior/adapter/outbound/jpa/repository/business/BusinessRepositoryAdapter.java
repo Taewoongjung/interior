@@ -5,10 +5,13 @@ import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_COMPANY;
 import static com.interior.util.converter.jpa.business.BusinessEntityConverter.businessMaterialToEntity;
 
 import com.interior.adapter.outbound.jpa.entity.business.BusinessEntity;
+import com.interior.adapter.outbound.jpa.entity.business.expense.BusinessMaterialExpenseEntity;
+import com.interior.adapter.outbound.jpa.entity.business.material.BusinessMaterialEntity;
 import com.interior.adapter.outbound.jpa.entity.company.CompanyEntity;
 import com.interior.adapter.outbound.jpa.repository.company.CompanyJpaRepository;
 import com.interior.application.businesss.dto.ReviseBusinessServiceDto;
 import com.interior.domain.business.Business;
+import com.interior.domain.business.expense.BusinessMaterialExpense;
 import com.interior.domain.business.material.BusinessMaterial;
 import com.interior.domain.business.repository.BusinessRepository;
 import com.interior.domain.business.repository.dto.CreateBusiness;
@@ -73,7 +76,7 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
     @Override
     public boolean save(final CreateBusinessMaterial createBusinessMaterial) {
 
-        businessMaterialJpaRepository.save(businessMaterialToEntity(BusinessMaterial.of(
+        BusinessMaterialEntity businessMaterialEntity = businessMaterialJpaRepository.save(businessMaterialToEntity(BusinessMaterial.of(
                 createBusinessMaterial.businessId(),
                 createBusinessMaterial.name(),
                 createBusinessMaterial.usageCategory(),
@@ -81,8 +84,18 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
                 createBusinessMaterial.amount(),
                 createBusinessMaterial.unit(),
                 createBusinessMaterial.memo()
-                )
+            )
         ));
+
+        businessMaterialEntity.setBusinessMaterialExpense(
+                BusinessMaterialExpenseEntity.of(
+                    businessMaterialEntity.getId(),
+                    createBusinessMaterial.materialCostPerUnit(),
+                    createBusinessMaterial.laborCostPerUnit()
+            )
+        );
+
+        businessMaterialJpaRepository.save(businessMaterialEntity);
 
         return true;
     }
