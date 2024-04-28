@@ -6,6 +6,7 @@ import static com.interior.adapter.common.exception.ErrorType.INVALID_COMPANY_TE
 import static com.interior.util.CheckUtil.check;
 import static com.interior.util.CheckUtil.require;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.interior.adapter.common.exception.ErrorType;
 import com.interior.domain.business.Business;
 import java.time.LocalDateTime;
@@ -25,7 +26,11 @@ public class Company {
     private String subAddress;
     private String buildingNumber;
     private String tel;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime lastModified;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdAt;
 
     private List<Business> businessList;

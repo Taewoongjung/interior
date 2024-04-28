@@ -1,5 +1,6 @@
 package com.interior.domain.business.expense;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.time.LocalDateTime;
 import lombok.Getter;
@@ -15,7 +16,10 @@ public class BusinessMaterialExpense {
     private String materialCostPerUnit;
     private String laborCostPerUnit;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime lastModified;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdAt;
 
     private BusinessMaterialExpense(

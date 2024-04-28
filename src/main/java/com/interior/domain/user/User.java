@@ -7,6 +7,7 @@ import static com.interior.adapter.common.exception.ErrorType.INVALID_CUSTOMER_T
 import static com.interior.adapter.common.exception.ErrorType.INVALID_CUSTOMER_USER_ROLE;
 import static com.interior.util.CheckUtil.require;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.interior.domain.company.Company;
 import java.time.LocalDateTime;
@@ -29,8 +30,13 @@ public class User extends Throwable implements UserDetails {
 	private String password;
 	private String tel;
 	private UserRole userRole;
+
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
 	private LocalDateTime lastModified;
+
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
 	private LocalDateTime createdAt;
+
 	private List<Company> companyList;
 
 	private User(

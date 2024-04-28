@@ -2,6 +2,7 @@ package com.interior.domain.business;
 
 import static com.interior.util.CheckUtil.check;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.interior.adapter.common.exception.ErrorType;
 import com.interior.domain.business.material.BusinessMaterial;
@@ -27,7 +28,10 @@ public class Business {
 
     private List<BusinessMaterial> businessMaterialList;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime lastModified;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdAt;
 
     private Business(

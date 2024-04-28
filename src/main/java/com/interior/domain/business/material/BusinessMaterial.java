@@ -1,5 +1,6 @@
 package com.interior.domain.business.material;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.interior.domain.business.expense.BusinessMaterialExpense;
 import java.math.BigDecimal;
@@ -30,7 +31,10 @@ public class BusinessMaterial {
 
     private BusinessMaterialExpense businessMaterialExpense;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime lastModified;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdAt;
 
     private BusinessMaterial(
