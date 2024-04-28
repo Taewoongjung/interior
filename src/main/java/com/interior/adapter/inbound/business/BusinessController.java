@@ -149,4 +149,10 @@ public class BusinessController {
                         )
                 ));
     }
+
+    @GetMapping(value = "/api/aaa")
+    public ResponseEntity<Boolean> aaa() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(businessService.aaa());
+    }
 }

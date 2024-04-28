@@ -122,4 +122,8 @@ public class BusinessService {
         return businessRepository.reviseUsageCategoryOfMaterial(
                 businessId, targetList, usageCategoryName);
     }
+
+    public boolean aaa() {
+        return true;
+    }
 }
