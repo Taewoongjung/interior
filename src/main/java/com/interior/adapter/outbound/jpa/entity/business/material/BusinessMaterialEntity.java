@@ -19,6 +19,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -45,7 +46,7 @@ public class BusinessMaterialEntity extends BaseEntity {
 
     private String category;
 
-    private Integer amount;
+    private BigDecimal amount;
 
     private String unit;
 
@@ -65,7 +66,7 @@ public class BusinessMaterialEntity extends BaseEntity {
             final String name,
             final String usageCategory,
             final String category,
-            final Integer amount,
+            final BigDecimal amount,
             final String unit,
             final String memo,
             final BusinessMaterialExpenseEntity businessMaterialExpense
@@ -88,7 +89,7 @@ public class BusinessMaterialEntity extends BaseEntity {
             final String name,
             final String usageCategory,
             final String category,
-            final Integer amount,
+            final BigDecimal amount,
             final String unit,
             final String memo,
             final BusinessMaterialExpenseEntity businessMaterialExpense

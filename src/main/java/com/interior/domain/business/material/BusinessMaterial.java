@@ -2,6 +2,7 @@ package com.interior.domain.business.material;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.interior.domain.business.expense.BusinessMaterialExpense;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.ToString;
@@ -21,7 +22,7 @@ public class BusinessMaterial {
 
     private String category;
 
-    private int amount;
+    private BigDecimal amount;
 
     private String unit;
 
@@ -38,7 +39,7 @@ public class BusinessMaterial {
             final String name,
             final String usageCategory,
             final String category,
-            final int amount,
+            final BigDecimal amount,
             final String unit,
             final String memo,
             final BusinessMaterialExpense businessMaterialExpense,
@@ -64,7 +65,7 @@ public class BusinessMaterial {
             final String name,
             final String usageCategory,
             final String category,
-            final int amount,
+            final BigDecimal amount,
             final String unit,
             final String memo,
             final BusinessMaterialExpense businessMaterialExpense
@@ -87,7 +88,7 @@ public class BusinessMaterial {
             final String name,
             final String usageCategory,
             final String category,
-            final int amount,
+            final BigDecimal amount,
             final String unit,
             final String memo
     ) {
