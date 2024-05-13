@@ -142,10 +142,11 @@ public class BusinessService {
         BusinessListExcel businessListExcel = null;
 
         try (XSSFWorkbook workbook = new XSSFWorkbook()) {
-            businessListExcel = BusinessListExcel.of(workbook);
 
-            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
             response.setHeader("Content-Disposition", "attachment; filename=\"" + URLEncoder.encode("재료 리스트.xlsx", "UTF-8") + "\"");
+            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
+            businessListExcel = BusinessListExcel.of(workbook);
 
             ServletOutputStream outputStream = response.getOutputStream();
             businessListExcel.getWorkbook().write(outputStream);
