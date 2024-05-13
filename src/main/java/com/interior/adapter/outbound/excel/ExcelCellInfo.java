@@ -7,10 +7,10 @@ import org.apache.poi.ss.usermodel.CellStyle;
 public class ExcelCellInfo {
 
     private String name;
-    private int width;
+    private Integer width;
     private CellStyle style;
 
-    public ExcelCellInfo(final String name, final int width, final CellStyle style) {
+    public ExcelCellInfo(final String name, final Integer width, final CellStyle style) {
         this.name = name;
         this.width = width;
         this.style = style;

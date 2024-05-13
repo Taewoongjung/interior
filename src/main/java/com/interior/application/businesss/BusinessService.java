@@ -160,7 +160,7 @@ public class BusinessService {
             businessListExcel = BusinessListExcel.of(workbook);
 
             // 데이터 세팅
-            businessListExcel.setDate(business);
+            businessListExcel.setData(business);
 
             ServletOutputStream outputStream = response.getOutputStream();
             businessListExcel.getWorkbook().write(outputStream);

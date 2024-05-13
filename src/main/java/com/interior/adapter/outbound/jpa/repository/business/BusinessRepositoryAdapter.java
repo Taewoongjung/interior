@@ -33,10 +33,10 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
     @Override
     public Business findById(Long businessId) {
 
-        BusinessEntity business = businessJpaRepository.findById(businessId)
+        BusinessEntity businessEntities = businessJpaRepository.findById(businessId)
                 .orElseThrow(() -> new NoSuchElementException(NOT_EXIST_BUSINESS.getMessage()));
 
-        return business.toPojo();
+        return businessEntities.toPojo();
     }
 
     @Override
