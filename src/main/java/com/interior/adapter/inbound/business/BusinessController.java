@@ -6,15 +6,21 @@ import com.interior.adapter.inbound.business.webdto.CreateBusinessMaterial.Creat
 import com.interior.adapter.inbound.business.webdto.GetBusiness;
 import com.interior.adapter.inbound.business.webdto.ReviseBusiness;
 import com.interior.adapter.inbound.business.webdto.ReviseUsageCategoryOfMaterial;
+import com.interior.adapter.outbound.excel.BusinessMaterialExcelDownload;
+import com.interior.adapter.outbound.excel.ExcelUtils;
 import com.interior.application.businesss.BusinessService;
 import com.interior.application.businesss.dto.CreateBusinessServiceDto.CreateBusinessMaterialDto;
 import com.interior.application.businesss.dto.ReviseBusinessServiceDto;
 import com.interior.domain.business.Business;
 import com.interior.domain.company.Company;
 import com.interior.domain.user.User;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,6 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class BusinessController {
 
+    private final ExcelUtils excelUtils;
     private final BusinessService businessService;
 
     // 사업 추가
@@ -150,9 +157,25 @@ public class BusinessController {
                 ));
     }
 
-    @GetMapping(value = "/api/aaa")
-    public ResponseEntity<Boolean> aaa() {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(businessService.aaa());
+    // 회사의 사업 리스트 엑셀 다운로드
+    @GetMapping(value = "/api/excels/companies/{companyId}/businesses")
+    public void getExcelOfBusinessMaterialList(
+            @PathVariable(value = "companyId") final Long companyId,
+            HttpServletResponse response
+    ) {
+
+        businessService.getExcelOfBusinessMaterialList(companyId, response);
+    }
+
+    // 회사의 사업 리스트 엑셀 다운로드
+    @GetMapping(value = "/api/excels/v2/companies/{companyId}/businesses")
+    public void getExcelOfBusinessMaterialListV2(
+            @PathVariable(value = "companyId") final Long companyId,
+            HttpServletResponse response
+    ) {
+
+        List<BusinessMaterialExcelDownload> result = businessService.getExcelOfBusinessMaterialListV2(companyId);
+
+        excelUtils.download(BusinessMaterialExcelDownload.class, result, "재료리스트", response);
     }
 }

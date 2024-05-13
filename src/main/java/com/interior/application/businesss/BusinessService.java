@@ -4,6 +4,9 @@ import static java.util.stream.Collectors.groupingBy;
 
 import com.interior.adapter.inbound.business.webdto.CreateBusiness.CreateBusinessReqDto;
 import com.interior.adapter.inbound.business.webdto.GetBusiness;
+import com.interior.adapter.outbound.excel.BusinessListExcel;
+import com.interior.adapter.outbound.excel.BusinessMaterialExcelDownload;
+import com.interior.adapter.outbound.jpa.querydsl.BusinessDao;
 import com.interior.application.businesss.dto.CreateBusinessServiceDto.CreateBusinessMaterialDto;
 import com.interior.application.businesss.dto.ReviseBusinessServiceDto;
 import com.interior.domain.business.Business;
@@ -13,16 +16,24 @@ import com.interior.domain.business.repository.dto.CreateBusiness;
 import com.interior.domain.business.repository.dto.CreateBusinessMaterial;
 import com.interior.domain.company.Company;
 import com.interior.domain.company.repository.CompanyRepository;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BusinessService {
 
+    private final BusinessDao businessDao;
     private final CompanyRepository companyRepository;
     private final BusinessRepository businessRepository;
 
@@ -123,7 +134,33 @@ public class BusinessService {
                 businessId, targetList, usageCategoryName);
     }
 
-    public boolean aaa() {
-        return true;
+    @Transactional(readOnly = true)
+    public void getExcelOfBusinessMaterialList(
+            final Long companyId, HttpServletResponse response)
+    {
+
+        BusinessListExcel businessListExcel = null;
+
+        try (XSSFWorkbook workbook = new XSSFWorkbook()) {
+            businessListExcel = BusinessListExcel.of(workbook);
+
+            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            response.setHeader("Content-Disposition", "attachment; filename=\"" + URLEncoder.encode("재료 리스트.xlsx", "UTF-8") + "\"");
+
+            ServletOutputStream outputStream = response.getOutputStream();
+            businessListExcel.getWorkbook().write(outputStream);
+            outputStream.flush();
+            outputStream.close();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    @Transactional(readOnly = true)
+    public List<BusinessMaterialExcelDownload> getExcelOfBusinessMaterialListV2(final Long companyId) {
+
+        return businessDao.getBusinessMaterialList(companyId);
     }
 }
