@@ -15,12 +15,9 @@ import com.interior.domain.business.Business;
 import com.interior.domain.company.Company;
 import com.interior.domain.user.User;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.net.URLEncoder;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -158,13 +155,14 @@ public class BusinessController {
     }
 
     // 회사의 사업 리스트 엑셀 다운로드
-    @GetMapping(value = "/api/excels/companies/{companyId}/businesses")
+    @GetMapping(value = "/api/excels/companies/{companyId}/businesses/{businessId}")
     public void getExcelOfBusinessMaterialList(
             @PathVariable(value = "companyId") final Long companyId,
+            @PathVariable(value = "businessId") final Long businessId,
             HttpServletResponse response
     ) {
 
-        businessService.getExcelOfBusinessMaterialList(companyId, response);
+        businessService.getExcelOfBusinessMaterialList(companyId, businessId, response);
     }
 
     // 회사의 사업 리스트 엑셀 다운로드

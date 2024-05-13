@@ -50,6 +50,15 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
     }
 
     @Override
+    public Business findBusinessByCompanyIdAndBusinessId(final Long companyId,
+            final Long businessId) {
+
+        BusinessEntity businessEntities = businessJpaRepository.findBusinessEntityByCompanyIdAndId(companyId, businessId);
+
+        return businessEntities.toPojo();
+    }
+
+    @Override
     public List<Business> findAllByCompanyIdIn(final List<Long> companyIdList) {
 
         List<BusinessEntity> businessEntities = businessJpaRepository.findBusinessEntitiesByCompanyIdIn(

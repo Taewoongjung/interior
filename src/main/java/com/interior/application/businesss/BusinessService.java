@@ -67,6 +67,13 @@ public class BusinessService {
         return businessRepository.findBusinessByCompanyId(companyId);
     }
 
+    @Transactional(readOnly = true)
+    public Business getBusinessByCompanyIdAndBusinessId(final Long companyId,
+            final Long businessId) {
+
+        return businessRepository.findBusinessByCompanyIdAndBusinessId(companyId, businessId);
+    }
+
     @Transactional
     public Long createBusiness(final Long companyId, final CreateBusinessReqDto req) {
 
@@ -136,10 +143,14 @@ public class BusinessService {
 
     @Transactional(readOnly = true)
     public void getExcelOfBusinessMaterialList(
-            final Long companyId, HttpServletResponse response)
-    {
+            final Long companyId,
+            final Long businessId,
+            HttpServletResponse response
+    ) {
 
         BusinessListExcel businessListExcel = null;
+
+        Business business = getBusinessByCompanyIdAndBusinessId(companyId, businessId);
 
         try (XSSFWorkbook workbook = new XSSFWorkbook()) {
 
@@ -147,7 +158,9 @@ public class BusinessService {
             response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 
             businessListExcel = BusinessListExcel.of(workbook);
-            businessListExcel.setHeaders();
+
+            // 데이터 세팅
+            businessListExcel.setDate(business);
 
             ServletOutputStream outputStream = response.getOutputStream();
             businessListExcel.getWorkbook().write(outputStream);

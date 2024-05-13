@@ -1,47 +1,125 @@
 package com.interior.adapter.outbound.excel;
 
+import com.interior.domain.business.Business;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
 
 @Getter
 public class BusinessListExcel {
 
     private Workbook workbook;
     private Sheet sheet;
+    private int columnCount;
 
     private BusinessListExcel(
             final Workbook workbook,
-            final Sheet sheet
+            final Sheet sheet,
+            final int columnCount
     ) {
         this.workbook = workbook;
         this.sheet = sheet;
+        this.columnCount = columnCount;
     }
 
     public static BusinessListExcel of(final Workbook workbook) {
 
         Sheet sheet = workbook.createSheet("재료 견적");
 
-        return new BusinessListExcel(workbook, sheet);
+        int columnCount = setHeaders(workbook, sheet);
+
+        return new BusinessListExcel(workbook, sheet, columnCount - 1);
     }
 
-    public void setHeaders() {
+    private static int setHeaders(Workbook workbook, Sheet sheet) {
 
-        int rowCount = 0;
+        List<ExcelCellInfo> cellInfoList = new ArrayList<>();
+
+        CellStyle cellStyle = getMyStyleTitle(workbook);
 
         // 헤더 목록
-        Row headerRow = this.sheet.createRow(rowCount++);
-        headerRow.createCell(0).setCellValue("카테고리");
-        headerRow.createCell(1).setCellValue("재료 명");
-        headerRow.createCell(2).setCellValue("수량");
-        headerRow.createCell(3).setCellValue("단위");
-        headerRow.createCell(4).setCellValue("재료비 - 단가");
-        headerRow.createCell(5).setCellValue("재료비 - 금액");
-        headerRow.createCell(6).setCellValue("노무비 - 단가");
-        headerRow.createCell(7).setCellValue("노무비 - 금액");
-        headerRow.createCell(8).setCellValue("합계 - 단가");
-        headerRow.createCell(9).setCellValue("합계 - 금액");
-        headerRow.createCell(10).setCellValue("비고");
+        cellInfoList.add(new ExcelCellInfo("", 2000, cellStyle));
+        cellInfoList.add(new ExcelCellInfo("명칭", 5000, cellStyle));
+        cellInfoList.add(new ExcelCellInfo("카테고리", 7000, cellStyle));
+        cellInfoList.add(new ExcelCellInfo("재료 명", 5000, cellStyle));
+        cellInfoList.add(new ExcelCellInfo("수량", 2000, cellStyle));
+        cellInfoList.add(new ExcelCellInfo("단위", 2000, cellStyle));
+        cellInfoList.add(new ExcelCellInfo("재료비 - 단가", 7000, cellStyle));
+        cellInfoList.add(new ExcelCellInfo("재료비 - 금액", 7000, cellStyle));
+        cellInfoList.add(new ExcelCellInfo("노무비 - 단가", 7000, cellStyle));
+        cellInfoList.add(new ExcelCellInfo("노무비 - 금액", 7000, cellStyle));
+        cellInfoList.add(new ExcelCellInfo("합계 - 단가", 7000, cellStyle));
+        cellInfoList.add(new ExcelCellInfo("합계 - 금액", 7000, cellStyle));
+        cellInfoList.add(new ExcelCellInfo("비고", 10000, cellStyle));
+
+        Row headerRow = sheet.createRow(1);
+
+        // 헤더 생성
+        int cellCount = 0;
+        for (ExcelCellInfo cellInfo : cellInfoList) {
+            Cell cell = headerRow.createCell(cellCount);
+
+            cell.setCellValue(cellInfo.getName()); // 컬럼명 설정
+            cell.getSheet().setColumnWidth(cellCount, cellInfo.getWidth()); // width 설정
+            cell.setCellStyle(cellInfo.getStyle()); // 컬럼 스타일 설정
+
+            cellCount++;
+        }
+
+        return cellCount;
+    }
+
+    private static CellStyle getMyStyleTitle(Workbook workbook) {
+        CellStyle cellStyle = workbook.createCellStyle();
+
+        Font font = workbook.createFont();
+        font.setFontHeightInPoints((short) 9);
+        font.setBold(true);
+
+        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+        cellStyle.setFont(font);
+        cellStyle.setAlignment(HorizontalAlignment.CENTER);
+        cellStyle.setWrapText(true);
+        cellStyle.setBorderBottom(BorderStyle.THIN);
+        cellStyle.setBorderTop(BorderStyle.THIN);
+        cellStyle.setBorderRight(BorderStyle.THIN);
+        cellStyle.setBorderLeft(BorderStyle.THIN);
+
+        cellStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.index);
+        cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+        return cellStyle;
+    }
+
+    public void setDate(final Business business) {
+
+        /* 사업명 row 설정 start */
+        Row titleRow = sheet.createRow(0);
+
+        // 첫 번째 row 병합
+        sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, columnCount));
+
+        Cell title = titleRow.createCell(0);
+
+        CellStyle titleStyle = workbook.createCellStyle();
+        titleStyle.setFillForegroundColor(IndexedColors.PALE_BLUE.index);
+        titleStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+        title.setCellValue("■ " + business.getName());
+        title.setCellStyle(titleStyle);
+        /* 사업명 row 설정 end */
+
     }
 }

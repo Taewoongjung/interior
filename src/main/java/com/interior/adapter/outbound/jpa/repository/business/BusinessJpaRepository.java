@@ -8,5 +8,7 @@ public interface BusinessJpaRepository extends JpaRepository<BusinessEntity, Lon
 
     List<BusinessEntity> findBusinessesEntityByCompanyId(final Long companyId);
 
+    BusinessEntity findBusinessEntityByCompanyIdAndId(final Long companyId, final Long id);
+
     List<BusinessEntity> findBusinessEntitiesByCompanyIdIn(final List<Long> companyIdList);
 }

@@ -12,6 +12,8 @@ public interface BusinessRepository {
 
     List<Business> findBusinessByCompanyId(final Long companyId);
 
+    Business findBusinessByCompanyIdAndBusinessId(final Long companyId, final Long businessId);
+
     List<Business> findAllByCompanyIdIn(final List<Long> companyIdList);
 
     Long save(final CreateBusiness createBusiness);
