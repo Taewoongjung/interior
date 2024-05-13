@@ -147,6 +147,7 @@ public class BusinessService {
             response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 
             businessListExcel = BusinessListExcel.of(workbook);
+            businessListExcel.setHeaders();
 
             ServletOutputStream outputStream = response.getOutputStream();
             businessListExcel.getWorkbook().write(outputStream);

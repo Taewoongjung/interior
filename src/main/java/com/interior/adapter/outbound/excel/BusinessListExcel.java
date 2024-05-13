@@ -26,7 +26,7 @@ public class BusinessListExcel {
         return new BusinessListExcel(workbook, sheet);
     }
 
-    public void getExcelFile() {
+    public void setHeaders() {
 
         int rowCount = 0;
 
