@@ -11,6 +11,7 @@ import com.interior.adapter.outbound.jpa.entity.company.CompanyEntity;
 import com.interior.adapter.outbound.jpa.repository.company.CompanyJpaRepository;
 import com.interior.application.businesss.dto.ReviseBusinessServiceDto;
 import com.interior.domain.business.Business;
+import com.interior.domain.business.BusinessStatus;
 import com.interior.domain.business.expense.BusinessMaterialExpense;
 import com.interior.domain.business.material.BusinessMaterial;
 import com.interior.domain.business.repository.BusinessRepository;
@@ -76,7 +77,7 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
                 createBusiness.businessName(),
                 createBusiness.companyId(),
                 createBusiness.customerId(),
-                createBusiness.status()
+                BusinessStatus.from(createBusiness.status())
         ));
 
         return business.getId();

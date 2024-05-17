@@ -1,7 +1,7 @@
 package com.interior.domain.business;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import java.util.ArrayList;
 import org.junit.jupiter.api.DisplayName;
@@ -18,7 +18,8 @@ class BusinessTest {
                 "아파트 사업건",
                 10L,
                 12L,
-                "진행중",
+                BusinessStatus.IN_PROGRESS,
+                BusinessStatusDetail.CONSTRUCTING,
                 new ArrayList<>()
         ));
     }
@@ -31,7 +32,8 @@ class BusinessTest {
                 null,
                 10L,
                 12L,
-                "진행중",
+                BusinessStatus.IN_PROGRESS,
+                null,
                 new ArrayList<>()
         ));
     }
@@ -44,7 +46,8 @@ class BusinessTest {
                 "아파트 사업건",
                 null,
                 12L,
-                "진행중",
+                BusinessStatus.IN_PROGRESS,
+                null,
                 new ArrayList<>()
         ));
     }
@@ -57,7 +60,8 @@ class BusinessTest {
                 "아파트 사업건",
                 10L,
                 null,
-                "진행중",
+                BusinessStatus.IN_PROGRESS,
+                null,
                 new ArrayList<>()
         ));
     }

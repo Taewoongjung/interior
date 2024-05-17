@@ -30,12 +30,16 @@ public enum ErrorType {
     NOT_EXIST_BUSINESS(1100, "사업이 존재하지 않습니다."),
     INVALID_BUSINESS_NAME(1101, "올바르지 않은 사업명 입니다."),
     DUPLICATE_BUSINESS_NAME(1102, "이미 해당 사업이 존재합니다.\n다시 입력해주세요."),
-    NOT_EXIST_BUSINESS_NAME(1103, "사업명이 존재하지 않습니다"),
-    NOT_EXIST_RELATED_COMPANY(1104, "연관 된 회사 정보가 존재하지 않습니다."),
-    NOT_EXIST_RELATED_CUSTOMER(1105, "연관 된 고객 정보가 존재하지 않습니다."),
+    EMPTY_BUSINESS_NAME(1103, "사업명이 존재하지 않습니다"),
+    EMPTY_RELATED_COMPANY_TO_BUSINESS(1104, "연관 된 회사 정보는 필수값입니다."),
+    EMPTY_RELATED_CUSTOMER_TO_BUSINESS(1105, "연관 된 고객 정보는 필수값입니다."),
 
     NOT_EXIST_BUSINESS_MATERIAL(1200, "사업재료가 존재하지 않습니다."),
     EMPTY_USAGE_CATEGORY_INVALID(1201, "재료의 공사 구분에 빈 값은 허용하지 않습니다."),
+    EMPTY_BUSINESS_MATERIAL_NAME(1202, "재료 명은 필수값입니다."),
+    EMPTY_RELATED_BUSINESS_TO_BUSINESS_MATERIAL(1203, "연관 된 사업 정보는 필수값입니다."),
+    EMPTY_BUSINESS_MATERIAL_CATEGORY(1204, "재료의 카테고리는 필수값입니다."),
+    EMPTY_BUSINESS_MATERIAL_AMOUNT(1205, "재료의 수량은 필수값입니다."),
 
     INVALID_SIGNUP_REQUEST_DUPLICATE_EMAIL(1100, "이미 존재하는 이메일 입니다."),
 

@@ -8,9 +8,13 @@ import com.interior.adapter.outbound.jpa.entity.BaseEntity;
 import com.interior.adapter.outbound.jpa.entity.business.material.BusinessMaterialEntity;
 import com.interior.adapter.outbound.jpa.entity.company.CompanyEntity;
 import com.interior.domain.business.Business;
+import com.interior.domain.business.BusinessStatus;
+import com.interior.domain.business.BusinessStatusDetail;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -48,7 +52,13 @@ public class BusinessEntity extends BaseEntity {
     @Column(name = "customer_id", nullable = false, columnDefinition = "bigint")
     private Long customerId;
 
-    private String status;
+    @Enumerated(value = EnumType.STRING)
+    @Column(columnDefinition = "varchar(20)")
+    private BusinessStatus status;
+
+    @Enumerated(value = EnumType.STRING)
+    @Column(columnDefinition = "varchar(50)")
+    private BusinessStatusDetail statusDetail;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "business", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BusinessMaterialEntity> businessMaterialList = new ArrayList<>();
@@ -63,7 +73,8 @@ public class BusinessEntity extends BaseEntity {
             final String name,
             final Long companyId,
             final Long customerId,
-            final String status,
+            final BusinessStatus status,
+            final BusinessStatusDetail statusDetail,
             final List<BusinessMaterialEntity> businessMaterialList
     ) {
         super(LocalDateTime.now(), LocalDateTime.now());
@@ -73,6 +84,7 @@ public class BusinessEntity extends BaseEntity {
         this.companyId = companyId;
         this.customerId = customerId;
         this.status = status;
+        this.statusDetail = statusDetail;
         this.businessMaterialList = businessMaterialList;
     }
 
@@ -80,19 +92,20 @@ public class BusinessEntity extends BaseEntity {
             final String name,
             final Long companyId,
             final Long customerId,
-            final String status
+            final BusinessStatus status
     ) {
-        return new BusinessEntity(null, name, companyId, customerId, status, null);
+        return new BusinessEntity(null, name, companyId, customerId, status, null, null);
     }
 
     public static BusinessEntity of(
             final String name,
             final Long companyId,
             final Long customerId,
-            final String status,
+            final BusinessStatus status,
+            final BusinessStatusDetail statusDetail,
             final List<BusinessMaterialEntity> businessMaterialList
     ) {
-        return new BusinessEntity(null, name, companyId, customerId, status, businessMaterialList);
+        return new BusinessEntity(null, name, companyId, customerId, status, statusDetail, businessMaterialList);
     }
 
     public Business toPojo() {
@@ -102,6 +115,7 @@ public class BusinessEntity extends BaseEntity {
                 getCompanyId(),
                 getCustomerId(),
                 getStatus(),
+                getStatusDetail(),
                 getBusinessMaterialList().stream()
                         .map(BusinessMaterialEntity::toPojo)
                         .collect(Collectors.toList())

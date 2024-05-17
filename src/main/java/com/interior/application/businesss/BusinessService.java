@@ -81,7 +81,7 @@ public class BusinessService {
                 req.businessName(),
                 companyId,
                 null,
-                "진행중-계약전"
+                "진행중"
                 )
         );
     }

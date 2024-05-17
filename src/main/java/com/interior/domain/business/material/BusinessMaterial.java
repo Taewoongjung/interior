@@ -1,5 +1,12 @@
 package com.interior.domain.business.material;
 
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_BUSINESS_MATERIAL_AMOUNT;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_BUSINESS_MATERIAL_CATEGORY;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_BUSINESS_MATERIAL_NAME;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_RELATED_BUSINESS_TO_BUSINESS_MATERIAL;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_USAGE_CATEGORY_INVALID;
+import static com.interior.util.CheckUtil.require;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.interior.domain.business.expense.BusinessMaterialExpense;
@@ -93,6 +100,14 @@ public class BusinessMaterial {
             final BusinessMaterialExpense businessMaterialExpense
     ) {
 
+        require(o -> businessId == null, businessId, EMPTY_RELATED_BUSINESS_TO_BUSINESS_MATERIAL);
+        require(o -> name == null, name, EMPTY_BUSINESS_MATERIAL_NAME);
+        require(o -> (usageCategory == null || "".equals(usageCategory.trim())),
+                usageCategory, EMPTY_USAGE_CATEGORY_INVALID);
+        require(o -> category == null, category, EMPTY_BUSINESS_MATERIAL_CATEGORY);
+        require(o -> amount == null, amount, EMPTY_BUSINESS_MATERIAL_AMOUNT);
+
+
         String allMaterialCostPerUnit = null;
         String allLaborCostPerUnit = null;
         String totalUnitPrice = null;
@@ -164,6 +179,14 @@ public class BusinessMaterial {
             final String unit,
             final String memo
     ) {
+
+        require(o -> businessId == null, businessId, EMPTY_RELATED_BUSINESS_TO_BUSINESS_MATERIAL);
+        require(o -> name == null, name, EMPTY_BUSINESS_MATERIAL_NAME);
+        require(o -> (usageCategory == null || "".equals(usageCategory.trim())),
+                usageCategory, EMPTY_USAGE_CATEGORY_INVALID);
+        require(o -> category == null, category, EMPTY_BUSINESS_MATERIAL_CATEGORY);
+        require(o -> amount == null, amount, EMPTY_BUSINESS_MATERIAL_AMOUNT);
+
         return new BusinessMaterial(
                 null,
                 businessId,

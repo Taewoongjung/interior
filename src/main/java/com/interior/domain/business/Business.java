@@ -1,9 +1,9 @@
 package com.interior.domain.business;
 
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_BUSINESS_NAME;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_RELATED_COMPANY_TO_BUSINESS;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_RELATED_CUSTOMER_TO_BUSINESS;
 import static com.interior.adapter.common.exception.ErrorType.INVALID_BUSINESS_NAME;
-import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_BUSINESS_NAME;
-import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_RELATED_COMPANY;
-import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_RELATED_CUSTOMER;
 import static com.interior.util.CheckUtil.check;
 import static com.interior.util.CheckUtil.require;
 
@@ -28,7 +28,9 @@ public class Business {
 
     private Long customerId;
 
-    private String status;
+    private BusinessStatus status;
+
+    private BusinessStatusDetail statusDetail;
 
     private List<BusinessMaterial> businessMaterialList;
 
@@ -43,7 +45,8 @@ public class Business {
             final String name,
             final Long companyId,
             final Long customerId,
-            final String status,
+            final BusinessStatus status,
+            final BusinessStatusDetail statusDetail,
             final List<BusinessMaterial> businessMaterialList,
             final LocalDateTime lastModified,
             final LocalDateTime createdAt
@@ -53,6 +56,7 @@ public class Business {
         this.companyId = companyId;
         this.customerId = customerId;
         this.status = status;
+        this.statusDetail = statusDetail;
         this.businessMaterialList = businessMaterialList;
         this.lastModified = lastModified;
         this.createdAt = createdAt;
@@ -63,15 +67,16 @@ public class Business {
             final String name,
             final Long companyId,
             final Long customerId,
-            final String status,
+            final BusinessStatus status,
+            final BusinessStatusDetail statusDetail,
             final List<BusinessMaterial> businessMaterialList
     ) {
 
-        require(o -> name == null, name, NOT_EXIST_BUSINESS_NAME);
-        require(o -> companyId == null, companyId, NOT_EXIST_RELATED_COMPANY);
-        require(o -> customerId == null, customerId, NOT_EXIST_RELATED_CUSTOMER);
+        require(o -> name == null, name, EMPTY_BUSINESS_NAME);
+        require(o -> companyId == null, companyId, EMPTY_RELATED_COMPANY_TO_BUSINESS);
+        require(o -> customerId == null, customerId, EMPTY_RELATED_CUSTOMER_TO_BUSINESS);
 
-        return new Business(id, name, companyId, customerId, status, businessMaterialList,
+        return new Business(id, name, companyId, customerId, status, statusDetail, businessMaterialList,
                 LocalDateTime.now(), LocalDateTime.now());
     }
 
@@ -79,15 +84,16 @@ public class Business {
             final String name,
             final Long companyId,
             final Long customerId,
-            final String status,
+            final BusinessStatus status,
+            final BusinessStatusDetail statusDetail,
             final List<BusinessMaterial> businessMaterialList
     ) {
 
-        require(o -> name == null, name, NOT_EXIST_BUSINESS_NAME);
-        require(o -> companyId == null, companyId, NOT_EXIST_RELATED_COMPANY);
-        require(o -> customerId == null, customerId, NOT_EXIST_RELATED_CUSTOMER);
+        require(o -> name == null, name, EMPTY_BUSINESS_NAME);
+        require(o -> companyId == null, companyId, EMPTY_RELATED_COMPANY_TO_BUSINESS);
+        require(o -> customerId == null, customerId, EMPTY_RELATED_CUSTOMER_TO_BUSINESS);
 
-        return new Business(null, name, companyId, customerId, status, businessMaterialList,
+        return new Business(null, name, companyId, customerId, status, statusDetail, businessMaterialList,
                 LocalDateTime.now(), LocalDateTime.now());
     }
 

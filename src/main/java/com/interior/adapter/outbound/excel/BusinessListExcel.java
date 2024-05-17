@@ -110,14 +110,18 @@ public class BusinessListExcel {
     public void setData(final Business business) {
 
         // 사업명 설정 (첫 번째)
-        setTitle(business.getName(), business.getStatus());
+        setTitle(
+                business.getName(),
+                business.getStatus().getDesc(),
+                business.getStatusDetail().getDesc()
+        );
 
         // 실제 데이터 설정
         setRealData(business.getBusinessMaterialList().stream()
                 .collect(groupingBy(BusinessMaterial::getUsageCategory)));
     }
 
-    private void setTitle(final String businessName, final String status) {
+    private void setTitle(final String businessName, final String status, final String statusDetail) {
         Row titleRow = sheet.createRow(0);
 
         // 첫 번째 row 병합
@@ -133,7 +137,11 @@ public class BusinessListExcel {
         font.setBold(true);
         titleStyle.setFont(font);
 
-        title.setCellValue("■ " + businessName + " (" + status + ")");
+        String titleStr = statusDetail != null ?
+                "■ " + businessName + " (" + status + " - " + statusDetail+ ")" :
+                "■ " + businessName + " (" + status + ")";
+
+        title.setCellValue(titleStr);
         title.setCellStyle(titleStyle);
     }
 

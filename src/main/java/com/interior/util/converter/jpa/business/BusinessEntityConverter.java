@@ -16,6 +16,7 @@ public class BusinessEntityConverter {
                 business.getCompanyId(),
                 business.getCustomerId(),
                 business.getStatus(),
+                business.getStatusDetail(),
                 business.getBusinessMaterialList().stream()
                         .map(BusinessEntityConverter::businessMaterialToEntity)
                         .collect(Collectors.toList())
