@@ -56,7 +56,7 @@ class BusinessTest {
                 1L,
                 "아파트 사업건",
                 10L,
-                null,
+                1L,
                 "진행중",
                 new ArrayList<>()
         ));
