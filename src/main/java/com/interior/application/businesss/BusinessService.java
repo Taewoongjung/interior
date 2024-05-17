@@ -44,17 +44,19 @@ public class BusinessService {
 
         int count = 0;
 
+        HashMap<String, List<BusinessMaterial>> businessMaterials = new HashMap<>();
+
         if (business.getBusinessMaterialList() != null) {
+
+            businessMaterials =
+                    (HashMap<String, List<BusinessMaterial>>)
+                    business.getBusinessMaterialList().stream()
+                    .collect(groupingBy(BusinessMaterial::getUsageCategory));
+
             count = business.getBusinessMaterialList().size();
         }
 
-        return new GetBusiness.Response(
-                business.getName(),
-                (HashMap<String, List<BusinessMaterial>>)
-                business.getBusinessMaterialList().stream()
-                        .collect(groupingBy(BusinessMaterial::getUsageCategory)),
-                count
-        );
+        return new GetBusiness.Response(business.getName(), businessMaterials, count);
     }
 
     @Transactional(readOnly = true)
