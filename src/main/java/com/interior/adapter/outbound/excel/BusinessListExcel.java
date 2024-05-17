@@ -113,7 +113,8 @@ public class BusinessListExcel {
         setTitle(
                 business.getName(),
                 business.getStatus().getDesc(),
-                business.getStatusDetail().getDesc()
+                business.getStatusDetail() != null ?
+                        business.getStatusDetail().getDesc() : null
         );
 
         // 실제 데이터 설정
@@ -176,7 +177,6 @@ public class BusinessListExcel {
             Cell majorTopicCountCell = row.createCell(cellCount++);
             majorTopicCountCell.setCellValue(countDataOfMajorTopic);
             majorTopicCountCell.setCellStyle(cellStyleOfFirstRowOfMajorTopicCount);
-
 
             Cell majorTopicCell = row.createCell(cellCount);
             majorTopicCell.setCellValue(materialCategory);
