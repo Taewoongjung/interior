@@ -1,10 +1,14 @@
 package com.interior.domain.business;
 
+import static com.interior.adapter.common.exception.ErrorType.INVALID_BUSINESS_NAME;
+import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_BUSINESS_NAME;
+import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_RELATED_COMPANY;
+import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_RELATED_CUSTOMER;
 import static com.interior.util.CheckUtil.check;
+import static com.interior.util.CheckUtil.require;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.interior.adapter.common.exception.ErrorType;
 import com.interior.domain.business.material.BusinessMaterial;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -62,6 +66,11 @@ public class Business {
             final String status,
             final List<BusinessMaterial> businessMaterialList
     ) {
+
+        require(o -> name == null, name, NOT_EXIST_BUSINESS_NAME);
+        require(o -> companyId == null, companyId, NOT_EXIST_RELATED_COMPANY);
+        require(o -> customerId == null, customerId, NOT_EXIST_RELATED_CUSTOMER);
+
         return new Business(id, name, companyId, customerId, status, businessMaterialList,
                 LocalDateTime.now(), LocalDateTime.now());
     }
@@ -73,12 +82,17 @@ public class Business {
             final String status,
             final List<BusinessMaterial> businessMaterialList
     ) {
+
+        require(o -> name == null, name, NOT_EXIST_BUSINESS_NAME);
+        require(o -> companyId == null, companyId, NOT_EXIST_RELATED_COMPANY);
+        require(o -> customerId == null, customerId, NOT_EXIST_RELATED_CUSTOMER);
+
         return new Business(null, name, companyId, customerId, status, businessMaterialList,
                 LocalDateTime.now(), LocalDateTime.now());
     }
 
     public void setName(final String name) {
-        check(name == null || "".equals(name.trim()), ErrorType.INVALID_BUSINESS_NAME);
+        check(name == null || "".equals(name.trim()), INVALID_BUSINESS_NAME);
 
         this.name = name;
     }
