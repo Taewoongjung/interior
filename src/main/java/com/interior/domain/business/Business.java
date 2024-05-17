@@ -74,7 +74,6 @@ public class Business {
 
         require(o -> name == null, name, EMPTY_BUSINESS_NAME);
         require(o -> companyId == null, companyId, EMPTY_RELATED_COMPANY_TO_BUSINESS);
-        require(o -> customerId == null, customerId, EMPTY_RELATED_CUSTOMER_TO_BUSINESS);
 
         return new Business(id, name, companyId, customerId, status, statusDetail, businessMaterialList,
                 LocalDateTime.now(), LocalDateTime.now());

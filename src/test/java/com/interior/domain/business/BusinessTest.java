@@ -51,18 +51,4 @@ class BusinessTest {
                 new ArrayList<>()
         ));
     }
-
-    @Test
-    @DisplayName("연관 된 고객 id 는 필수값이다.")
-    void test4() {
-        assertThatThrownBy(() -> Business.of(
-                1L,
-                "아파트 사업건",
-                10L,
-                null,
-                BusinessStatus.IN_PROGRESS,
-                null,
-                new ArrayList<>()
-        ));
-    }
 }
