@@ -172,7 +172,6 @@ public class BusinessService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     @Transactional(readOnly = true)
