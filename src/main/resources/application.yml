@@ -32,6 +32,12 @@ spring:
       port: 6379
       database: 0
 
+logging:
+  level:
+    com.interior: debug
+    org.hibernate.SQL: debug
+    org.hibernate.type: trace
+
 management:
   endpoints:
     web:
