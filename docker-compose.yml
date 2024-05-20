@@ -60,4 +60,4 @@ services:
     networks:
       - server-connection
     volumes:
-      - ./interiorAppLogs:/logs
+      - /app/logs:/logs
