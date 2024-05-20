@@ -6,11 +6,10 @@ import com.interior.adapter.inbound.business.webdto.CreateBusinessMaterial.Creat
 import com.interior.adapter.inbound.business.webdto.GetBusiness;
 import com.interior.adapter.inbound.business.webdto.ReviseBusiness;
 import com.interior.adapter.inbound.business.webdto.ReviseUsageCategoryOfMaterial;
-import com.interior.adapter.outbound.excel.BusinessMaterialExcelDownload;
-import com.interior.adapter.outbound.excel.ExcelUtils;
-import com.interior.application.businesss.BusinessService;
-import com.interior.application.businesss.dto.CreateBusinessServiceDto.CreateBusinessMaterialDto;
-import com.interior.application.businesss.dto.ReviseBusinessServiceDto;
+import com.interior.application.command.business.BusinessCommandService;
+import com.interior.application.command.business.dto.CreateBusinessServiceDto.CreateBusinessMaterialDto;
+import com.interior.application.command.business.dto.ReviseBusinessServiceDto;
+import com.interior.application.query.business.BusinessQueryService;
 import com.interior.domain.business.Business;
 import com.interior.domain.company.Company;
 import com.interior.domain.user.User;
@@ -32,8 +31,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class BusinessController {
 
-    private final ExcelUtils excelUtils;
-    private final BusinessService businessService;
+    private final BusinessQueryService businessQueryService;
+    private final BusinessCommandService businessCommandService;
 
     // 사업 추가
     @PostMapping(value = "/api/companies/{companyId}/businesses")
@@ -45,7 +44,7 @@ public class BusinessController {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new CreateBusinessResDto(
                         true,
-                        businessService.createBusiness(companyId, createBusinessReqDto)
+                        businessCommandService.createBusiness(companyId, createBusinessReqDto)
                 ));
     }
 
@@ -57,7 +56,7 @@ public class BusinessController {
     ) {
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(businessService.createBusinessMaterial(
+                .body(businessCommandService.createBusinessMaterial(
                         businessId,
                         new CreateBusinessMaterialDto(
                                 req.materialName(),
@@ -79,7 +78,7 @@ public class BusinessController {
             @PathVariable(value = "materialId") final Long materialId
     ) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(businessService.deleteBusinessMaterial(businessId, materialId));
+                .body(businessCommandService.deleteBusinessMaterial(businessId, materialId));
     }
 
     // 특정 사업의 모든 재료 조회
@@ -88,7 +87,7 @@ public class BusinessController {
             @PathVariable(value = "businessId") final Long businessId
     ) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(businessService.getBusiness(businessId));
+                .body(businessQueryService.getBusiness(businessId));
     }
 
     // 특정 사업 재료의 사업 분류 수정
@@ -98,7 +97,7 @@ public class BusinessController {
             @RequestBody final ReviseUsageCategoryOfMaterial.Req req
     ) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(businessService.reviseUsageCategoryOfMaterial(
+                .body(businessCommandService.reviseUsageCategoryOfMaterial(
                         businessId,
                         req.subDataIds(),
                         req.usageCategoryName()
@@ -112,7 +111,7 @@ public class BusinessController {
     ) {
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(businessService.getAllBusinessesByUser(
+                .body(businessQueryService.getAllBusinessesByUser(
                         user.getCompanyList().stream()
                                 .map(Company::getId)
                                 .toList()));
@@ -124,7 +123,7 @@ public class BusinessController {
             @PathVariable(value = "companyId") final Long companyId
     ) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(businessService.getBusinessesByCompanyId(companyId));
+                .body(businessQueryService.getBusinessesByCompanyId(companyId));
     }
 
     // 사업 삭제
@@ -134,7 +133,7 @@ public class BusinessController {
             @PathVariable(value = "businessId") final Long businessId
     ) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(businessService.deleteBusiness(companyId, businessId));
+                .body(businessCommandService.deleteBusiness(companyId, businessId));
     }
 
     // 사업 수정
@@ -145,7 +144,7 @@ public class BusinessController {
             @RequestBody final ReviseBusiness.WebReqV1 req
     ) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(businessService.reviseBusiness(
+                .body(businessCommandService.reviseBusiness(
                         companyId,
                         businessId,
                         new ReviseBusinessServiceDto.Req(
@@ -162,18 +161,6 @@ public class BusinessController {
             HttpServletResponse response
     ) {
 
-        businessService.getExcelOfBusinessMaterialList(companyId, businessId, response);
-    }
-
-    // 회사의 사업 리스트 엑셀 다운로드
-    @GetMapping(value = "/api/excels/v2/companies/{companyId}/businesses")
-    public void getExcelOfBusinessMaterialListV2(
-            @PathVariable(value = "companyId") final Long companyId,
-            HttpServletResponse response
-    ) {
-
-        List<BusinessMaterialExcelDownload> result = businessService.getExcelOfBusinessMaterialListV2(companyId);
-
-        excelUtils.download(BusinessMaterialExcelDownload.class, result, "재료리스트", response);
+        businessQueryService.getExcelOfBusinessMaterialList(companyId, businessId, response);
     }
 }

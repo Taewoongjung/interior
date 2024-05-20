@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.interior.adapter.outbound.jpa.entity.BaseEntity;
 import com.interior.adapter.outbound.jpa.entity.business.BusinessEntity;
 import com.interior.adapter.outbound.jpa.entity.user.UserEntity;
-import com.interior.application.businesss.dto.ReviseBusinessServiceDto;
+import com.interior.application.command.business.dto.ReviseBusinessServiceDto;
 import com.interior.domain.company.Company;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -65,14 +65,14 @@ public class CompanyEntity extends BaseEntity {
     private UserEntity user;
 
     public CompanyEntity(
-        final Long id,
-        final String name,
-        final String zipCode,
-        final Long ownerId,
-        final String address,
-        final String subAddress,
-        final String buildingNumber,
-        final String tel
+            final Long id,
+            final String name,
+            final String zipCode,
+            final Long ownerId,
+            final String address,
+            final String subAddress,
+            final String buildingNumber,
+            final String tel
     ) {
         super(LocalDateTime.now(), LocalDateTime.now());
 
@@ -95,7 +95,8 @@ public class CompanyEntity extends BaseEntity {
             final String buildingNumber,
             final String tel
     ) {
-        return new CompanyEntity(null, name, zipCode, ownerId, address, subAddress, buildingNumber, tel);
+        return new CompanyEntity(null, name, zipCode, ownerId, address, subAddress, buildingNumber,
+                tel);
     }
 
     public Company toPojo() {

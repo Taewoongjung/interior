@@ -1,13 +1,12 @@
-package com.interior.application.company;
+package com.interior.application.command.company;
 
 import static com.interior.adapter.common.exception.ErrorType.LIMIT_OF_COMPANY_COUNT_IS_FIVE;
 import static com.interior.util.CheckUtil.check;
 
-import com.interior.application.company.dto.CreateCompanyServiceDto;
+import com.interior.application.command.company.dto.CreateCompanyServiceDto;
 import com.interior.domain.company.Company;
 import com.interior.domain.company.repository.CompanyRepository;
 import com.interior.domain.user.User;
-import com.interior.domain.user.repository.UserRepository;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,20 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CompanyService {
+public class CompanyCommandService {
 
-    private final UserRepository userRepository;
     private final CompanyRepository companyRepository;
-
-    @Transactional(readOnly = true)
-    public Company getCompany(final String userEmail, final Long companyId) {
-
-        User user = userRepository.findByEmail(userEmail);
-
-        return user.getCompanyList().stream()
-                .filter(f -> companyId.equals(f.getId()))
-                .findFirst().orElse(null);
-    }
 
     @Transactional
     public boolean createCompany(

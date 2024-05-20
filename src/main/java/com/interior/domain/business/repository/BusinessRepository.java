@@ -1,6 +1,6 @@
 package com.interior.domain.business.repository;
 
-import com.interior.application.businesss.dto.ReviseBusinessServiceDto;
+import com.interior.application.command.business.dto.ReviseBusinessServiceDto;
 import com.interior.domain.business.Business;
 import com.interior.domain.business.log.BusinessMaterialLog;
 import com.interior.domain.business.repository.dto.CreateBusiness;

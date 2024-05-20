@@ -5,9 +5,8 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.interior.application.company.CompanyService;
+import com.interior.application.query.company.CompanyQueryService;
 import com.interior.domain.company.Company;
-import com.interior.domain.company.repository.CompanyRepository;
 import com.interior.domain.user.User;
 import com.interior.domain.user.UserRole;
 import com.interior.domain.user.repository.UserRepository;
@@ -18,8 +17,8 @@ import org.junit.jupiter.api.Test;
 class CompanyServiceTest {
 
     private final UserRepository userRepository = mock(UserRepository.class);
-    private final CompanyRepository companyRepository = mock(CompanyRepository.class);
-    private final CompanyService sut = new CompanyService(userRepository, companyRepository);
+
+    private final CompanyQueryService sut = new CompanyQueryService(userRepository);
 
     @Test
     @DisplayName("사업체 정보를 찾을 수 있다.")

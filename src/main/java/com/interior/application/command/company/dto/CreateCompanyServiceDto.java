@@ -1,4 +1,4 @@
-package com.interior.application.company.dto;
+package com.interior.application.command.company.dto;
 
 public class CreateCompanyServiceDto {
 
@@ -9,5 +9,7 @@ public class CreateCompanyServiceDto {
             String subAddress,
             String bdgNumber,
             String tel
-    ) { }
+    ) {
+
+    }
 }
