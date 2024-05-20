@@ -32,6 +32,7 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
     private final BusinessMaterialJpaRepository businessMaterialJpaRepository;
 
     @Override
+//    @Transactional(readOnly = true)
     public Business findById(final Long businessId) {
 
         BusinessEntity businessEntities = businessJpaRepository.findById(businessId)

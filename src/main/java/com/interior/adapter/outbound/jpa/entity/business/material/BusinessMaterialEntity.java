@@ -4,10 +4,9 @@ import static com.interior.adapter.common.exception.ErrorType.EMPTY_USAGE_CATEGO
 import static com.interior.util.CheckUtil.check;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.interior.adapter.outbound.jpa.entity.business.BusinessEntity;
 import com.interior.adapter.outbound.jpa.entity.BaseEntity;
+import com.interior.adapter.outbound.jpa.entity.business.BusinessEntity;
 import com.interior.adapter.outbound.jpa.entity.business.expense.BusinessMaterialExpenseEntity;
-import com.interior.adapter.outbound.jpa.entity.business.material.log.BusinessMaterialLogEntity;
 import com.interior.domain.business.material.BusinessMaterial;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -18,13 +17,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -58,9 +54,6 @@ public class BusinessMaterialEntity extends BaseEntity {
 
     @OneToOne(mappedBy = "businessMaterial", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private BusinessMaterialExpenseEntity businessMaterialExpense;
-
-    @OneToMany(mappedBy = "businessMaterial", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BusinessMaterialLogEntity> businessMaterialLogEntityList;
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
@@ -106,7 +99,6 @@ public class BusinessMaterialEntity extends BaseEntity {
     }
 
     public BusinessMaterial toPojo() {
-//        BusinessMaterialExpenseEntity businessMaterialExpenseEntity = getBusinessMaterialExpense();
 
         return BusinessMaterial.of(
                 getId(),
@@ -118,17 +110,13 @@ public class BusinessMaterialEntity extends BaseEntity {
                 getUnit(),
                 getMemo(),
                 businessMaterialExpense != null ?
-                        businessMaterialExpense.toPojo() : null,
-                businessMaterialLogEntityList != null ?
-                        businessMaterialLogEntityList.stream().map(
-                                BusinessMaterialLogEntity::toPojo)
-                                .collect(Collectors.toList()) : null
+                        businessMaterialExpense.toPojo() : null
         );
         /**
-            getBusinessMaterialExpense() 삼항연산자를 이용한 이유는
-            business를 조회를 할 때 businessMaterial 도 같이 조회 하는데 이 과정에서
-            businessMaterialExpense 도 같이 조회되는데, 해당 객체가 필요 없을 때 null 일 수도
-            있기 때문에 사용 함.
+         getBusinessMaterialExpense() 삼항연산자를 이용한 이유는
+         business를 조회를 할 때 businessMaterial 도 같이 조회 하는데 이 과정에서
+         businessMaterialExpense 도 같이 조회되는데, 해당 객체가 필요 없을 때 null 일 수도
+         있기 때문에 사용 함.
          * */
     }
 

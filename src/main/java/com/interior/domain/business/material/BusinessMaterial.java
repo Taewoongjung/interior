@@ -10,11 +10,9 @@ import static com.interior.util.CheckUtil.require;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.interior.domain.business.expense.BusinessMaterialExpense;
-import com.interior.domain.business.log.BusinessMaterialLog;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
-import java.util.List;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -41,8 +39,6 @@ public class BusinessMaterial {
 
     private BusinessMaterialExpense businessMaterialExpense;
 
-    private List<BusinessMaterialLog> businessMaterialLogList;
-
     private String allMaterialCostPerUnit;
 
     private String allLaborCostPerUnit;
@@ -68,7 +64,6 @@ public class BusinessMaterial {
             final String unit,
             final String memo,
             final BusinessMaterialExpense businessMaterialExpense,
-            final List<BusinessMaterialLog> businessMaterialLogList,
             final String allMaterialCostPerUnit,
             final String allLaborCostPerUnit,
             final String totalUnitPrice,
@@ -85,7 +80,6 @@ public class BusinessMaterial {
         this.unit = unit;
         this.memo = memo;
         this.businessMaterialExpense = businessMaterialExpense;
-        this.businessMaterialLogList = businessMaterialLogList;
         this.allMaterialCostPerUnit = allMaterialCostPerUnit;
         this.allLaborCostPerUnit = allLaborCostPerUnit;
         this.totalUnitPrice = totalUnitPrice;
@@ -103,9 +97,8 @@ public class BusinessMaterial {
             final BigDecimal amount,
             final String unit,
             final String memo,
-            final BusinessMaterialExpense businessMaterialExpense,
-            final List<BusinessMaterialLog> businessMaterialLogList
-        ) {
+            final BusinessMaterialExpense businessMaterialExpense
+    ) {
 
         require(o -> businessId == null, businessId, EMPTY_RELATED_BUSINESS_TO_BUSINESS_MATERIAL);
         require(o -> name == null, name, EMPTY_BUSINESS_MATERIAL_NAME);
@@ -113,7 +106,6 @@ public class BusinessMaterial {
                 usageCategory, EMPTY_USAGE_CATEGORY_INVALID);
         require(o -> category == null, category, EMPTY_BUSINESS_MATERIAL_CATEGORY);
         require(o -> amount == null, amount, EMPTY_BUSINESS_MATERIAL_AMOUNT);
-
 
         String allMaterialCostPerUnit = null;
         String allLaborCostPerUnit = null;
@@ -126,13 +118,15 @@ public class BusinessMaterial {
                     businessMaterialExpense.getMaterialCostPerUnit());
 
             // 총 재료비 단가
-            allMaterialCostPerUnit = setAllAmountOfSpecificExpense(amount, materialCostPerUnit).toPlainString();
+            allMaterialCostPerUnit = setAllAmountOfSpecificExpense(amount,
+                    materialCostPerUnit).toPlainString();
 
             BigDecimal laborCostPerUnit = new BigDecimal(
                     businessMaterialExpense.getLaborCostPerUnit());
 
             // 총 노무비 단가
-            allLaborCostPerUnit = setAllAmountOfSpecificExpense(amount, laborCostPerUnit).toPlainString();
+            allLaborCostPerUnit = setAllAmountOfSpecificExpense(amount,
+                    laborCostPerUnit).toPlainString();
 
             // 총 단가
             BigDecimal totalUnitPriceBigDecimal = materialCostPerUnit.add(laborCostPerUnit);
@@ -152,7 +146,6 @@ public class BusinessMaterial {
                 unit,
                 memo,
                 businessMaterialExpense,
-                businessMaterialLogList,
                 allMaterialCostPerUnit, allLaborCostPerUnit,
                 totalUnitPrice, totalPrice,
                 LocalDateTime.now(), LocalDateTime.now());
@@ -204,9 +197,9 @@ public class BusinessMaterial {
                 amount,
                 unit,
                 memo,
+                null,
                 null, null,
                 null, null,
-                null,null,
                 LocalDateTime.now(), LocalDateTime.now());
     }
 }

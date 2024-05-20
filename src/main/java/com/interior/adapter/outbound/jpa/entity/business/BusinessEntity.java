@@ -60,7 +60,7 @@ public class BusinessEntity extends BaseEntity {
     @Column(columnDefinition = "varchar(50)")
     private BusinessStatusDetail statusDetail;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "business", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "business", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BusinessMaterialEntity> businessMaterialList = new ArrayList<>();
 
     @JsonBackReference
@@ -105,7 +105,8 @@ public class BusinessEntity extends BaseEntity {
             final BusinessStatusDetail statusDetail,
             final List<BusinessMaterialEntity> businessMaterialList
     ) {
-        return new BusinessEntity(null, name, companyId, customerId, status, statusDetail, businessMaterialList);
+        return new BusinessEntity(null, name, companyId, customerId, status, statusDetail,
+                businessMaterialList);
     }
 
     public Business toPojo() {
