@@ -3,8 +3,8 @@ package com.interior.adapter.inbound.user;
 import com.interior.adapter.inbound.user.webdto.LoadUserDto.LoadUserResDto;
 import com.interior.adapter.inbound.user.webdto.SignUpDto;
 import com.interior.adapter.inbound.user.webdto.SignUpDto.SignUpResDto;
-import com.interior.application.security.UserDetailService;
-import com.interior.application.user.UserService;
+import com.interior.application.command.user.UserCommandService;
+import com.interior.application.query.user.UserQueryService;
 import com.interior.domain.user.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -22,19 +22,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserService userService;
-    private final UserDetailService userDetailService;
+    private final UserQueryService userQueryService;
+    private final UserCommandService userCommandService;
 
     @PostMapping(value = "/api/signup")
     public ResponseEntity<SignUpResDto> signup(final @Valid @RequestBody SignUpDto.SignUpReqDto req) {
 
-        return ResponseEntity.status(HttpStatus.OK).body(userService.signUp(req));
+        return ResponseEntity.status(HttpStatus.OK).body(userCommandService.signUp(req));
     }
 
     @GetMapping(value = "/api/me")
     public ResponseEntity<LoadUserResDto> validationUser(final HttpServletRequest request) {
 
-        User foundUser = userDetailService.loadUserByToken(request.getHeader("authorization"));
+        User foundUser = userQueryService.loadUserByToken(request.getHeader("authorization"));
 
         String authorities = foundUser.getAuthorities().stream().map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(", "));
