@@ -12,7 +12,7 @@ import com.interior.adapter.outbound.jpa.repository.company.CompanyJpaRepository
 import com.interior.application.businesss.dto.ReviseBusinessServiceDto;
 import com.interior.domain.business.Business;
 import com.interior.domain.business.BusinessStatus;
-import com.interior.domain.business.expense.BusinessMaterialExpense;
+import com.interior.domain.business.log.BusinessMaterialLog;
 import com.interior.domain.business.material.BusinessMaterial;
 import com.interior.domain.business.repository.BusinessRepository;
 import com.interior.domain.business.repository.dto.CreateBusiness;
@@ -32,7 +32,7 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
     private final BusinessMaterialJpaRepository businessMaterialJpaRepository;
 
     @Override
-    public Business findById(Long businessId) {
+    public Business findById(final Long businessId) {
 
         BusinessEntity businessEntities = businessJpaRepository.findById(businessId)
                 .orElseThrow(() -> new NoSuchElementException(NOT_EXIST_BUSINESS.getMessage()));
@@ -43,7 +43,8 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
     @Override
     public List<Business> findBusinessByCompanyId(final Long companyId) {
 
-        List<BusinessEntity> businessEntities = businessJpaRepository.findBusinessesEntityByCompanyId(companyId);
+        List<BusinessEntity> businessEntities = businessJpaRepository.findBusinessesEntityByCompanyId(
+                companyId);
 
         return businessEntities.stream()
                 .map(BusinessEntity::toPojo)
@@ -54,7 +55,8 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
     public Business findBusinessByCompanyIdAndBusinessId(final Long companyId,
             final Long businessId) {
 
-        BusinessEntity businessEntities = businessJpaRepository.findBusinessEntityByCompanyIdAndId(companyId, businessId);
+        BusinessEntity businessEntities = businessJpaRepository.findBusinessEntityByCompanyIdAndId(
+                companyId, businessId);
 
         return businessEntities.toPojo();
     }
@@ -86,23 +88,24 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
     @Override
     public boolean save(final CreateBusinessMaterial createBusinessMaterial) {
 
-        BusinessMaterialEntity businessMaterialEntity = businessMaterialJpaRepository.save(businessMaterialToEntity(BusinessMaterial.of(
-                createBusinessMaterial.businessId(),
-                createBusinessMaterial.name(),
-                createBusinessMaterial.usageCategory(),
-                createBusinessMaterial.category(),
-                createBusinessMaterial.amount(),
-                createBusinessMaterial.unit(),
-                createBusinessMaterial.memo()
-            )
-        ));
+        BusinessMaterialEntity businessMaterialEntity = businessMaterialJpaRepository.save(
+                businessMaterialToEntity(BusinessMaterial.of(
+                                createBusinessMaterial.businessId(),
+                                createBusinessMaterial.name(),
+                                createBusinessMaterial.usageCategory(),
+                                createBusinessMaterial.category(),
+                                createBusinessMaterial.amount(),
+                                createBusinessMaterial.unit(),
+                                createBusinessMaterial.memo()
+                        )
+                ));
 
         businessMaterialEntity.setBusinessMaterialExpense(
                 BusinessMaterialExpenseEntity.of(
-                    businessMaterialEntity.getId(),
-                    createBusinessMaterial.materialCostPerUnit(),
-                    createBusinessMaterial.laborCostPerUnit()
-            )
+                        businessMaterialEntity.getId(),
+                        createBusinessMaterial.materialCostPerUnit(),
+                        createBusinessMaterial.laborCostPerUnit()
+                )
         );
 
         businessMaterialJpaRepository.save(businessMaterialEntity);
@@ -133,7 +136,8 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
     }
 
     @Override
-    public boolean reviseBusiness(final Long companyId, final Long businessId, final ReviseBusinessServiceDto.Req req) {
+    public boolean reviseBusiness(final Long companyId, final Long businessId,
+            final ReviseBusinessServiceDto.Req req) {
 
         CompanyEntity company = companyJpaRepository.findById(companyId)
                 .orElseThrow(() -> new NoSuchElementException(NOT_EXIST_COMPANY.getMessage()));
@@ -149,8 +153,7 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
     public boolean reviseUsageCategoryOfMaterial(
             final Long businessId,
             final List<Long> targetList,
-            final String usageCategoryName)
-    {
+            final String usageCategoryName) {
 
         BusinessEntity business = businessJpaRepository.findById(businessId)
                 .orElseThrow(() -> new NoSuchElementException(NOT_EXIST_BUSINESS.getMessage()));
@@ -162,5 +165,10 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
         businessJpaRepository.save(business);
 
         return true;
+    }
+
+    @Override
+    public boolean createMaterialUpdateLog(final BusinessMaterialLog businessMaterialLog) {
+        return false;
     }
 }

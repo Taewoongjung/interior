@@ -10,16 +10,21 @@ import com.interior.adapter.outbound.jpa.querydsl.BusinessDao;
 import com.interior.application.businesss.dto.CreateBusinessServiceDto.CreateBusinessMaterialDto;
 import com.interior.application.businesss.dto.ReviseBusinessServiceDto;
 import com.interior.domain.business.Business;
+import com.interior.domain.business.log.BusinessMaterialChangeFieldType;
+import com.interior.domain.business.log.BusinessMaterialLog;
 import com.interior.domain.business.material.BusinessMaterial;
 import com.interior.domain.business.repository.BusinessRepository;
 import com.interior.domain.business.repository.dto.CreateBusiness;
 import com.interior.domain.business.repository.dto.CreateBusinessMaterial;
 import com.interior.domain.company.Company;
 import com.interior.domain.company.repository.CompanyRepository;
+import com.interior.domain.user.User;
+import com.interior.domain.user.repository.UserRepository;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class BusinessService {
 
     private final BusinessDao businessDao;
+    private final UserRepository userRepository;
     private final CompanyRepository companyRepository;
     private final BusinessRepository businessRepository;
 
@@ -50,8 +56,8 @@ public class BusinessService {
 
             businessMaterials =
                     (HashMap<String, List<BusinessMaterial>>)
-                    business.getBusinessMaterialList().stream()
-                    .collect(groupingBy(BusinessMaterial::getUsageCategory));
+                            business.getBusinessMaterialList().stream()
+                                    .collect(groupingBy(BusinessMaterial::getUsageCategory));
 
             count = business.getBusinessMaterialList().size();
         }
@@ -80,16 +86,17 @@ public class BusinessService {
     public Long createBusiness(final Long companyId, final CreateBusinessReqDto req) {
 
         return businessRepository.save(new CreateBusiness(
-                req.businessName(),
-                companyId,
-                null,
-                "진행중"
+                        req.businessName(),
+                        companyId,
+                        null,
+                        "진행중"
                 )
         );
     }
 
     @Transactional
-    public boolean createBusinessMaterial(final Long businessId, final CreateBusinessMaterialDto req) {
+    public boolean createBusinessMaterial(final Long businessId,
+            final CreateBusinessMaterialDto req) {
 
         businessRepository.save(new CreateBusinessMaterial(
                 businessId,
@@ -156,8 +163,10 @@ public class BusinessService {
 
         try (XSSFWorkbook workbook = new XSSFWorkbook()) {
 
-            response.setHeader("Content-Disposition", "attachment; filename=\"" + URLEncoder.encode("재료 리스트.xlsx", "UTF-8") + "\"");
-            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            response.setHeader("Content-Disposition",
+                    "attachment; filename=\"" + URLEncoder.encode("재료 리스트.xlsx", "UTF-8") + "\"");
+            response.setContentType(
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 
             businessListExcel = BusinessListExcel.of(workbook);
 
@@ -175,8 +184,34 @@ public class BusinessService {
     }
 
     @Transactional(readOnly = true)
-    public List<BusinessMaterialExcelDownload> getExcelOfBusinessMaterialListV2(final Long companyId) {
+    public List<BusinessMaterialExcelDownload> getExcelOfBusinessMaterialListV2(
+            final Long companyId) {
 
         return businessDao.getBusinessMaterialList(companyId);
+    }
+
+
+    // 재료 업데이트 시 로그 생성
+    public boolean createLogOfChangeMaterials(
+            final Long businessMaterialId,
+            final String changeField,
+            final String beforeData,
+            final String afterData,
+            final Long updaterId
+    ) {
+
+        User user = userRepository.findById(updaterId);
+
+        return businessRepository.createMaterialUpdateLog(
+                BusinessMaterialLog.of(
+                        businessMaterialId,
+                        BusinessMaterialChangeFieldType.from(changeField),
+                        beforeData,
+                        afterData,
+                        updaterId,
+                        user.getName(),
+                        LocalDateTime.now()
+                )
+        );
     }
 }

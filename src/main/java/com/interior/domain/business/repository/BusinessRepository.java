@@ -2,6 +2,7 @@ package com.interior.domain.business.repository;
 
 import com.interior.application.businesss.dto.ReviseBusinessServiceDto;
 import com.interior.domain.business.Business;
+import com.interior.domain.business.log.BusinessMaterialLog;
 import com.interior.domain.business.repository.dto.CreateBusiness;
 import com.interior.domain.business.repository.dto.CreateBusinessMaterial;
 import java.util.List;
@@ -31,4 +32,6 @@ public interface BusinessRepository {
             final Long businessId,
             final List<Long> targetList,
             final String usageCategoryName);
+
+    boolean createMaterialUpdateLog(final BusinessMaterialLog businessMaterialLog);
 }

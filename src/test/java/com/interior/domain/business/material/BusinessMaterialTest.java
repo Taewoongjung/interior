@@ -36,7 +36,8 @@ class BusinessMaterialTest {
                 BigDecimal.valueOf(300),
                 "ea",
                 "석고보드 천정 공사 재료",
-                BusinessMaterialExpense.of(12L, "1000", "500")
+                BusinessMaterialExpense.of(12L, "1000", "500"),
+                null
         ));
     }
 

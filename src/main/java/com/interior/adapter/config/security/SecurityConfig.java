@@ -3,7 +3,7 @@ package com.interior.adapter.config.security;
 import com.interior.adapter.config.security.jwt.JWTFilter;
 import com.interior.adapter.config.security.jwt.JWTUtil;
 import com.interior.adapter.config.security.jwt.LoginFilter;
-import com.interior.application.security.UserDetailService;
+import com.interior.application.query.user.UserQueryService;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.Collections;
@@ -29,81 +29,85 @@ import org.springframework.web.cors.CorsConfigurationSource;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-//	private final RedisTemplate<String,String> redisTemplate;
-	private final UserDetailService userDetailService;
-	private final AuthenticationConfiguration authenticationConfiguration;
-	private final JWTUtil jwtUtil;
+    //	private final RedisTemplate<String,String> redisTemplate;
+    private final UserQueryService userQueryService;
+    private final AuthenticationConfiguration authenticationConfiguration;
+    private final JWTUtil jwtUtil;
 
-	@Value("${server.front.origin-url}")
-	private String frontOriginUrl;
+    @Value("${server.front.origin-url}")
+    private String frontOriginUrl;
 
-	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-		http
-			.csrf(AbstractHttpConfigurer::disable)
-			.cors((corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
-			@Override
-			public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+        http
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors((corsCustomizer -> corsCustomizer.configurationSource(
+                        new CorsConfigurationSource() {
+                            @Override
+                            public CorsConfiguration getCorsConfiguration(
+                                    HttpServletRequest request) {
 
-				CorsConfiguration configuration = new CorsConfiguration();
+                                CorsConfiguration configuration = new CorsConfiguration();
 
-				configuration.setAllowedOrigins(Arrays.asList(frontOriginUrl));
-				configuration.setAllowedMethods(Collections.singletonList("*"));
-				configuration.setAllowCredentials(true);
-				configuration.setAllowedHeaders(Collections.singletonList("*"));
-				configuration.setMaxAge(3600L);
+                                configuration.setAllowedOrigins(Arrays.asList(frontOriginUrl));
+                                configuration.setAllowedMethods(Collections.singletonList("*"));
+                                configuration.setAllowCredentials(true);
+                                configuration.setAllowedHeaders(Collections.singletonList("*"));
+                                configuration.setMaxAge(3600L);
 
-				return configuration;
-			}
-		})));
+                                return configuration;
+                            }
+                        })));
 
-		http.httpBasic(AbstractHttpConfigurer::disable);
-		
-		http.authorizeHttpRequests((auth) -> auth
-				.requestMatchers(HttpMethod.GET,
-						"/actuator/health"
-						, "/api/me"
-						, "/api/companies"
-						, "/api/businesses/{businessId}"
-						, "/api/companies/{companyId}/businesses"
-				).permitAll()
-				.requestMatchers(HttpMethod.POST,
-						"/api/login"
-						,"/api/signup"
-						,"/api/companies"
-						,"/api/businesses"
-						,"/api/companies/{companyId}/businesses"
-				).permitAll()
-				.requestMatchers(HttpMethod.PATCH,
-						 "/api/businesses/{businessId}"
-				).permitAll()
-				.requestMatchers("/admin").hasRole("CUSTOMER")
-				.requestMatchers("/login").permitAll()
-				.anyRequest().authenticated())
-				.addFilterBefore(new JWTFilter(jwtUtil, userDetailService), LoginFilter.class)
-				
-				// 로그인 필터 앞에서 JWTFilter 검증
-				.addFilterAt(
-					new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil),
-					UsernamePasswordAuthenticationFilter.class
-				)
-				.sessionManagement((session) -> session
-					.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        http.httpBasic(AbstractHttpConfigurer::disable);
 
-		return http.build();
-	}
+        http.authorizeHttpRequests((auth) -> auth
+                        .requestMatchers(HttpMethod.GET,
+                                "/actuator/health"
+                                , "/api/me"
+                                , "/api/companies"
+                                , "/api/businesses/{businessId}"
+                                , "/api/companies/{companyId}/businesses"
+                        ).permitAll()
+                        .requestMatchers(HttpMethod.POST,
+                                "/api/login"
+                                , "/api/signup"
+                                , "/api/companies"
+                                , "/api/businesses"
+                                , "/api/companies/{companyId}/businesses"
+                        ).permitAll()
+                        .requestMatchers(HttpMethod.PATCH,
+                                "/api/businesses/{businessId}"
+                        ).permitAll()
+                        .requestMatchers("/admin").hasRole("CUSTOMER")
+                        .requestMatchers("/login").permitAll()
+                        .anyRequest().authenticated())
+                .addFilterBefore(new JWTFilter(jwtUtil, userQueryService), LoginFilter.class)
 
-	@Bean
-	public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-		return configuration.getAuthenticationManager();
-	}
+                // 로그인 필터 앞에서 JWTFilter 검증
+                .addFilterAt(
+                        new LoginFilter(authenticationManager(authenticationConfiguration),
+                                jwtUtil),
+                        UsernamePasswordAuthenticationFilter.class
+                )
+                .sessionManagement((session) -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-	/**
-	 * 비밀번호 평문 저장을 방지하기 위한 인코더 빈등록
-	 * */
-	@Bean
-	public BCryptPasswordEncoder bCryptPasswordEncoder(){
-		return new BCryptPasswordEncoder();
-	}
+        return http.build();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration)
+            throws Exception {
+        return configuration.getAuthenticationManager();
+    }
+
+    /**
+     * 비밀번호 평문 저장을 방지하기 위한 인코더 빈등록
+     */
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }
