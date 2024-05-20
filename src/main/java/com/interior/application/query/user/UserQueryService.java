@@ -27,6 +27,7 @@ public class UserQueryService implements UserDetailsService {
         User user = userRepository.findByEmail(email);
 
         if (user != null) {
+            log.info("찾을 수 없는 {} 이메일입니다.", email);
             return user;
         }
         return null;
