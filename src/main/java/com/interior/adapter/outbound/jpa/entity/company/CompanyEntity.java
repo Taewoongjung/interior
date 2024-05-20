@@ -56,7 +56,7 @@ public class CompanyEntity extends BaseEntity {
 
     private String tel;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BusinessEntity> businessEntityList = new ArrayList<>();
 
     @JsonBackReference
@@ -100,6 +100,21 @@ public class CompanyEntity extends BaseEntity {
     }
 
     public Company toPojo() {
+        return Company.of(
+                getId(),
+                getName(),
+                getZipCode(),
+                getOwnerId(),
+                getAddress(),
+                getSubAddress(),
+                getBuildingNumber(),
+                getTel(),
+                getLastModified(),
+                getCreatedAt()
+        );
+    }
+
+    public Company toPojoWithRelations() {
         return Company.of(
                 getId(),
                 getName(),

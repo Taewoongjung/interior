@@ -11,9 +11,9 @@ import com.interior.adapter.outbound.jpa.repository.user.UserJpaRepository;
 import com.interior.domain.company.Company;
 import com.interior.domain.company.repository.CompanyRepository;
 import java.util.NoSuchElementException;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @RequiredArgsConstructor
@@ -23,16 +23,18 @@ public class CompanyRepositoryAdapter implements CompanyRepository {
     private final CompanyJpaRepository companyJpaRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public Company findById(final Long companyId) {
 
         CompanyEntity company = companyJpaRepository.findById(companyId)
                 .orElseThrow(() -> new NoSuchElementException(
                         ErrorType.NOT_EXIST_COMPANY.getMessage()));
 
-        return company.toPojo();
+        return company.toPojoWithRelations();
     }
 
     @Override
+    @Transactional
     public boolean save(final String userEmail, final Company addingCompany) {
         UserEntity user = userJpaRepository.findByEmail(userEmail);
 
@@ -44,6 +46,7 @@ public class CompanyRepositoryAdapter implements CompanyRepository {
     }
 
     @Override
+    @Transactional
     public boolean delete(final Long userId, final Long companyId) {
 
         UserEntity user = userJpaRepository.findById(userId)
