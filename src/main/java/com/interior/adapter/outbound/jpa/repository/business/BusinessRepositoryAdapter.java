@@ -22,6 +22,7 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @RequiredArgsConstructor
@@ -32,16 +33,17 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
     private final BusinessMaterialJpaRepository businessMaterialJpaRepository;
 
     @Override
-//    @Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     public Business findById(final Long businessId) {
 
         BusinessEntity businessEntities = businessJpaRepository.findById(businessId)
                 .orElseThrow(() -> new NoSuchElementException(NOT_EXIST_BUSINESS.getMessage()));
 
-        return businessEntities.toPojo();
+        return businessEntities.toPojoWithRelations();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Business> findBusinessByCompanyId(final Long companyId) {
 
         List<BusinessEntity> businessEntities = businessJpaRepository.findBusinessesEntityByCompanyId(
@@ -53,27 +55,30 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Business findBusinessByCompanyIdAndBusinessId(final Long companyId,
             final Long businessId) {
 
         BusinessEntity businessEntities = businessJpaRepository.findBusinessEntityByCompanyIdAndId(
                 companyId, businessId);
 
-        return businessEntities.toPojo();
+        return businessEntities.toPojoWithRelations();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Business> findAllByCompanyIdIn(final List<Long> companyIdList) {
 
         List<BusinessEntity> businessEntities = businessJpaRepository.findBusinessEntitiesByCompanyIdIn(
                 companyIdList);
 
         return businessEntities.stream()
-                .map(BusinessEntity::toPojo)
+                .map(BusinessEntity::toPojoWithRelations)
                 .collect(Collectors.toList());
     }
 
     @Override
+    @Transactional
     public Long save(final CreateBusiness createBusiness) {
 
         BusinessEntity business = businessJpaRepository.save(BusinessEntity.of(
@@ -87,6 +92,7 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
     }
 
     @Override
+    @Transactional
     public boolean save(final CreateBusinessMaterial createBusinessMaterial) {
 
         BusinessMaterialEntity businessMaterialEntity = businessMaterialJpaRepository.save(
@@ -115,6 +121,7 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
     }
 
     @Override
+    @Transactional
     public boolean deleteBusinessMaterial(final Long businessId, final Long materialId) {
 
         BusinessEntity business = businessJpaRepository.findById(businessId)
@@ -126,6 +133,7 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
     }
 
     @Override
+    @Transactional
     public boolean deleteBusiness(final Long companyId, final Long businessId) {
 
         CompanyEntity company = companyJpaRepository.findById(companyId)
@@ -137,6 +145,7 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
     }
 
     @Override
+    @Transactional
     public boolean reviseBusiness(final Long companyId, final Long businessId,
             final ReviseBusinessServiceDto.Req req) {
 
@@ -169,6 +178,7 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
     }
 
     @Override
+    @Transactional
     public boolean createMaterialUpdateLog(final BusinessMaterialLog businessMaterialLog) {
         return false;
     }

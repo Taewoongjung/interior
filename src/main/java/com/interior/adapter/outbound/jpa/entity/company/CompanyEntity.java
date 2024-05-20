@@ -111,7 +111,7 @@ public class CompanyEntity extends BaseEntity {
                 getTel(),
                 getLastModified(),
                 getCreatedAt(),
-                getBusinessEntityList().stream().map(BusinessEntity::toPojo)
+                getBusinessEntityList().stream().map(BusinessEntity::toPojoWithRelations)
                         .collect(Collectors.toList())
         );
     }

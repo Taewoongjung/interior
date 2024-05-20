@@ -32,7 +32,6 @@ public enum ErrorType {
     DUPLICATE_BUSINESS_NAME(1102, "이미 해당 사업이 존재합니다.\n다시 입력해주세요."),
     EMPTY_BUSINESS_NAME(1103, "사업명이 존재하지 않습니다"),
     EMPTY_RELATED_COMPANY_TO_BUSINESS(1104, "연관 된 회사 정보는 필수값입니다."),
-    EMPTY_RELATED_CUSTOMER_TO_BUSINESS(1105, "연관 된 고객 정보는 필수값입니다."),
 
     NOT_EXIST_BUSINESS_MATERIAL(1200, "사업재료가 존재하지 않습니다."),
     EMPTY_USAGE_CATEGORY_INVALID(1201, "재료의 공사 구분에 빈 값은 허용하지 않습니다."),
@@ -43,8 +42,7 @@ public enum ErrorType {
 
     INVALID_SIGNUP_REQUEST_DUPLICATE_EMAIL(1100, "이미 존재하는 이메일 입니다."),
 
-    LIMIT_OF_COMPANY_COUNT_IS_FIVE(1201, "유저당 최고 5개의 회사만 등록 가능합니다.")
-    ;
+    LIMIT_OF_COMPANY_COUNT_IS_FIVE(1201, "유저당 최고 5개의 회사만 등록 가능합니다.");
 
     private final int code;
     private final String message;

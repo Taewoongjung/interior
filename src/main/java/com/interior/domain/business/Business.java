@@ -2,7 +2,6 @@ package com.interior.domain.business;
 
 import static com.interior.adapter.common.exception.ErrorType.EMPTY_BUSINESS_NAME;
 import static com.interior.adapter.common.exception.ErrorType.EMPTY_RELATED_COMPANY_TO_BUSINESS;
-import static com.interior.adapter.common.exception.ErrorType.EMPTY_RELATED_CUSTOMER_TO_BUSINESS;
 import static com.interior.adapter.common.exception.ErrorType.INVALID_BUSINESS_NAME;
 import static com.interior.util.CheckUtil.check;
 import static com.interior.util.CheckUtil.require;
@@ -75,8 +74,8 @@ public class Business {
         require(o -> name == null, name, EMPTY_BUSINESS_NAME);
         require(o -> companyId == null, companyId, EMPTY_RELATED_COMPANY_TO_BUSINESS);
 
-        return new Business(id, name, companyId, customerId, status, statusDetail, businessMaterialList,
-                LocalDateTime.now(), LocalDateTime.now());
+        return new Business(id, name, companyId, customerId, status, statusDetail,
+                businessMaterialList, LocalDateTime.now(), LocalDateTime.now());
     }
 
     public static Business of(
@@ -90,9 +89,24 @@ public class Business {
 
         require(o -> name == null, name, EMPTY_BUSINESS_NAME);
         require(o -> companyId == null, companyId, EMPTY_RELATED_COMPANY_TO_BUSINESS);
-        require(o -> customerId == null, customerId, EMPTY_RELATED_CUSTOMER_TO_BUSINESS);
 
-        return new Business(null, name, companyId, customerId, status, statusDetail, businessMaterialList,
+        return new Business(null, name, companyId, customerId, status, statusDetail,
+                businessMaterialList, LocalDateTime.now(), LocalDateTime.now());
+    }
+
+    public static Business of(
+            final Long id,
+            final String name,
+            final Long companyId,
+            final Long customerId,
+            final BusinessStatus status,
+            final BusinessStatusDetail statusDetail
+    ) {
+
+        require(o -> name == null, name, EMPTY_BUSINESS_NAME);
+        require(o -> companyId == null, companyId, EMPTY_RELATED_COMPANY_TO_BUSINESS);
+
+        return new Business(id, name, companyId, customerId, status, statusDetail, null,
                 LocalDateTime.now(), LocalDateTime.now());
     }
 

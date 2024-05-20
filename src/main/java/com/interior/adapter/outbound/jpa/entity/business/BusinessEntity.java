@@ -116,6 +116,17 @@ public class BusinessEntity extends BaseEntity {
                 getCompanyId(),
                 getCustomerId(),
                 getStatus(),
+                getStatusDetail()
+        );
+    }
+
+    public Business toPojoWithRelations() {
+        return Business.of(
+                getId(),
+                getName(),
+                getCompanyId(),
+                getCustomerId(),
+                getStatus(),
                 getStatusDetail(),
                 getBusinessMaterialList().stream()
                         .map(BusinessMaterialEntity::toPojo)
