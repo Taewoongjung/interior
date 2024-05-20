@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class UserController {
@@ -26,7 +28,8 @@ public class UserController {
     private final UserCommandService userCommandService;
 
     @PostMapping(value = "/api/signup")
-    public ResponseEntity<SignUpResDto> signup(final @Valid @RequestBody SignUpDto.SignUpReqDto req) {
+    public ResponseEntity<SignUpResDto> signup(
+            final @Valid @RequestBody SignUpDto.SignUpReqDto req) {
 
         return ResponseEntity.status(HttpStatus.OK).body(userCommandService.signUp(req));
     }
@@ -35,6 +38,9 @@ public class UserController {
     public ResponseEntity<LoadUserResDto> validationUser(final HttpServletRequest request) {
 
         User foundUser = userQueryService.loadUserByToken(request.getHeader("authorization"));
+
+        log.info("{} 고객님 접속 중", foundUser.getName());
+        log.debug("{} 고객님 접속 중(debug)", foundUser.getName());
 
         String authorities = foundUser.getAuthorities().stream().map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(", "));
