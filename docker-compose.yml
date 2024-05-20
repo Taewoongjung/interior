@@ -60,4 +60,10 @@ services:
     networks:
       - server-connection
     volumes:
-      - ./app/logs:/logs
+      - type: volume
+        source: dev-log
+        target: /interior-app/log
+
+volumes:
+  dev-log:
+    external: true
