@@ -62,7 +62,7 @@ services:
     volumes:
       - type: volume
         source: dev-log
-        target: /interior-app/log
+        target: /home/twj/interior-app/logs:/var/log
 
 volumes:
   dev-log:
