@@ -62,9 +62,9 @@ services:
       - JWT_SECRET_KEY=${JWT_SECRET_KEY}
     networks:
       - server-connection
-    user: root
     volumes:
       - /home/twj/interior-app/logs:/app/logs
+    user: root
 
 volumes:
   dev-log:
