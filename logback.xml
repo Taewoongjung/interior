@@ -9,7 +9,7 @@
         <file>/app/logs/server.log</file>
         <append>true</append>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>/app/logs/server-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>/app/logs/server-%d{yyyy-MM-dd_HH, ${logback.timezone:-Asia/Seoul}}.%i.log</fileNamePattern>
             <maxHistory>3</maxHistory>
             <totalSizeCap>3GB</totalSizeCap>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
@@ -24,6 +24,6 @@
         </encoder>
     </appender>
     <shutdownHook class="ch.qos.logback.core.hook.DefaultShutdownHook"/>
-    <timestamp key="timestamp" datePattern="yyyyMMddHHmmssSSS"/>
-    <timestamp key="byDatetime" datePattern="yyyy-MM-dd HH.mm.ss"/>
+
+    <timestamp key="timestamp" datePattern="yyyy-MM-dd HH:mm:ss" timeZone="Asia/Seoul"/>
 </configuration>
