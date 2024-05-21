@@ -60,9 +60,7 @@ services:
     networks:
       - server-connection
     volumes:
-      - type: volume
-        source: dev-log
-        target: /home/twj/interior-app/logs:/var/log
+      - /home/twj/interior-app/logs:/var/log
 
 volumes:
   dev-log:
