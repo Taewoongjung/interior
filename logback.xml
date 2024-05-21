@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- console log -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} | %p | %logger{0}[%method:%line] - %m%n</pattern>
+        </layout>
+    </appender>
+
+    <!-- SERVER 로그 설정 -->
+    <appender name="SERVER_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>app/interior-app/server.log</file>
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>app/interior-app/server-%d{yyyy-MM-dd}.%i.log
+            </fileNamePattern>
+            <maxHistory>3</maxHistory>
+            <totalSizeCap>3GB</totalSizeCap>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>1024MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <!-- 'SELECT 1'쿼리를 로그에서는 제외한다. -->
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator>
+                <expression>return message.contains("SELECT 1");</expression>
+            </evaluator>
+            <OnMismatch>NEUTRAL</OnMismatch>
+            <OnMatch>DENY</OnMatch>
+        </filter>
+        <encoder>
+            <pattern>{"server_name":"${PROJECT_SERVER_NAME}", "date":"%d{yyyy-MM-dd HH:mm:ss.SSS ZZZ}", "level":"%p", "message":"%m", "dd.trace_id":"%X{dd.trace_id}", "dd.span_id":"%X{dd.span_id}"}%n</pattern>
+        </encoder>
+    </appender>
+
+    <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
+
+    <!-- Timestamp used into the Log Stream Name -->
+    <timestamp key="timestamp" datePattern="yyyyMMddHHmmssSSS"/>
+    <timestamp key="byDatetime" datePattern="yyyy-MM-dd HH.mm.ss"/>
+
+</configuration>
