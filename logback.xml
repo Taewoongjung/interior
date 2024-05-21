@@ -10,11 +10,10 @@
 
     <!-- SERVER 로그 설정 -->
     <appender name="SERVER_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>app/interior-app/server.log</file>
+        <file>/var/log/server.log</file>
         <append>true</append>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>app/interior-app/server-%d{yyyy-MM-dd}.%i.log
-            </fileNamePattern>
+            <fileNamePattern>/var/log/interior-app/server-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <maxHistory>3</maxHistory>
             <totalSizeCap>3GB</totalSizeCap>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
