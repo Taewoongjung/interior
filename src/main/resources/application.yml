@@ -33,11 +33,22 @@ spring:
       database: 0
 
 logging:
+  pattern:
+    console: "[%d{HH:mm:ss.SSS}][%-5level][%logger.%method:line%line] - %msg%n"
+    file: "[%d{yyyy-MM-dd HH:mm:ss.SSS}][%-5level][%logger.%method:line%line] - %msg%n"
+  level:
+    root: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
   file:
     path: /app/logs
     name: server.log
-  level:
-    root: INFO
+  appenders:
+    file:
+      type: ch.qos.logback.core.FileAppender
+      file: ${logging.file.path}/${logging.file.name}
+      encoder:
+        pattern: ${logging.pattern.file}
 
 management:
   endpoints:
