@@ -10,10 +10,10 @@
 
     <!-- SERVER 로그 설정 -->
     <appender name="SERVER_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>/var/local/server.log</file>
+        <file>/var/log/server.log</file>
         <append>true</append>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>/var/local/server-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>/var/log/server-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <maxHistory>3</maxHistory>
             <totalSizeCap>3GB</totalSizeCap>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
@@ -23,20 +23,12 @@
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>INFO</level>
         </filter>
-        <!-- 'SELECT 1'쿼리를 로그에서는 제외한다. -->
-        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
-            <evaluator>
-                <expression>return message.contains("SELECT 1");</expression>
-            </evaluator>
-            <OnMismatch>NEUTRAL</OnMismatch>
-            <OnMatch>DENY</OnMatch>
-        </filter>
         <encoder>
             <pattern>{"server_name":"interior-app", "date":"%d{yyyy-MM-dd HH:mm:ss.SSS ZZZ}", "level":"%p", "message":"%m", "dd.trace_id":"%X{dd.trace_id}", "dd.span_id":"%X{dd.span_id}"}%n</pattern>
         </encoder>
     </appender>
 
-    <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
+    <shutdownHook class="ch.qos.logback.core.hook.DefaultShutdownHook"/>
 
     <!-- Timestamp used into the Log Stream Name -->
     <timestamp key="timestamp" datePattern="yyyyMMddHHmmssSSS"/>
