@@ -41,14 +41,20 @@ logging:
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
   file:
-    path: /app/logs/
-    name: server.log
+    name: /app/logs/server.log
+  rollingpolicy:
+    max-file-size: 10MB
+    max-history: 7
+    total-size-cap: 50MB
   appenders:
     file:
       type: ch.qos.logback.core.FileAppender
       file: ${logging.file.path}/${logging.file.name}
       encoder:
         pattern: ${logging.pattern.file}
+  logback:
+    rollingpolicy:
+      file-name-pattern: "/app/logs/server.%d{yyyy-MM-dd}.%i.log"
 
 management:
   endpoints:
