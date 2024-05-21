@@ -32,25 +32,25 @@ spring:
       port: 6379
       database: 0
 
-#logging:
-#  pattern:
-#    console: "[%d{HH:mm:ss.SSS}][%-5level][%logger.%method:line%line] - %msg%n"
-#    file: "[%d{yyyy-MM-dd HH:mm:ss.SSS}][%-5level][%logger.%method:line%line] - %msg%n"
-#  level:
-#    com.example.log: debug
-#  logback:
-#    rollingpolicy:
-#      max-file-size: 10MB
-#      max-history: 7
-#      file-name-pattern: /var/log/server-%d{yyyy-MM-dd}.log
-#  file:
-#    name: /var/log/server.log
-#  appenders:
-#    file:
-#      type: ch.qos.logback.core.FileAppender
-#      file: ${logging.file.name}
-#      encoder:
-#        pattern: ${logging.pattern.file}
+logging:
+  pattern:
+    console: "[%d{HH:mm:ss.SSS}][%-5level][%logger.%method:line%line] - %msg%n"
+    file: "[%d{yyyy-MM-dd HH:mm:ss.SSS}][%-5level][%logger.%method:line%line] - %msg%n"
+  level:
+    com.interior: debug
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 7
+      file-name-pattern: /app/logs/server-%d{yyyy-MM-dd}.log
+  file:
+    name: /app/logs/server.log
+  appenders:
+    file:
+      type: ch.qos.logback.core.FileAppender
+      file: ${logging.file.name}
+      encoder:
+        pattern: ${logging.pattern.file}
 
 management:
   endpoints:
