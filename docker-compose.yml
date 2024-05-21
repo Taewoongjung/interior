@@ -60,6 +60,7 @@ services:
     environment:
       - FRONT_ORIGIN_URL=${FRONT_ORIGIN_URL}
       - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - TZ=Asia/Seoul
     networks:
       - server-connection
     volumes:

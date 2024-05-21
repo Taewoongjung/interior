@@ -41,7 +41,7 @@ logging:
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
   file:
-    path: /app/logs
+    path: /app/logs/
     name: server.log
   appenders:
     file:
