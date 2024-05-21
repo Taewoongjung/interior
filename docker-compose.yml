@@ -53,7 +53,10 @@ services:
       - "7070"
     depends_on:
       - database
-    command: ./gradlew bootRun
+    command:
+      - ./gradlew bootRun
+      - chmod 777 /app/logs
+      - chown root:root /app/logs
     environment:
       - FRONT_ORIGIN_URL=${FRONT_ORIGIN_URL}
       - JWT_SECRET_KEY=${JWT_SECRET_KEY}
@@ -62,3 +65,7 @@ services:
     user: root
     volumes:
       - /home/twj/interior-app/logs:/app/logs
+
+volumes:
+  dev-log:
+    external: true

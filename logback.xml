@@ -13,7 +13,7 @@
         <file>/app/logs/server.log</file>
         <append>true</append>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>/app/logs/server.log</fileNamePattern>
+            <fileNamePattern>/app/logs/server-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <maxHistory>3</maxHistory>
             <totalSizeCap>3GB</totalSizeCap>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
