@@ -37,7 +37,8 @@ logging:
     console: "[%d{HH:mm:ss.SSS}][%-5level][%logger.%method:line%line] - %msg%n"
     file: "[%d{yyyy-MM-dd HH:mm:ss.SSS}][%-5level][%logger.%method:line%line] - %msg%n"
   level:
-    com.interior: debug
+    com.interior.InteriorApplication: debug, info
+    com.interior.adapter.inbound.user: debug, info
   logback:
     rollingpolicy:
       max-file-size: 10MB
