@@ -61,4 +61,4 @@ services:
       - server-connection
     user: root
     volumes:
-      - /home/twj/interior-app/logs:/var/log
+      - /home/twj/interior-app/logs:/app/logs
