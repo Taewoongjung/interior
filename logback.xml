@@ -10,10 +10,10 @@
 
     <!-- SERVER 로그 설정 -->
     <appender name="SERVER_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>/var/logs/server.log</file>
+        <file>/var/local/server.log</file>
         <append>true</append>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>/var/logs/server-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>/var/local/server-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <maxHistory>3</maxHistory>
             <totalSizeCap>3GB</totalSizeCap>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
@@ -32,7 +32,7 @@
             <OnMatch>DENY</OnMatch>
         </filter>
         <encoder>
-            <pattern>{"server_name":"${PROJECT_SERVER_NAME}", "date":"%d{yyyy-MM-dd HH:mm:ss.SSS ZZZ}", "level":"%p", "message":"%m", "dd.trace_id":"%X{dd.trace_id}", "dd.span_id":"%X{dd.span_id}"}%n</pattern>
+            <pattern>{"server_name":"interior-app", "date":"%d{yyyy-MM-dd HH:mm:ss.SSS ZZZ}", "level":"%p", "message":"%m", "dd.trace_id":"%X{dd.trace_id}", "dd.span_id":"%X{dd.span_id}"}%n</pattern>
         </encoder>
     </appender>
 
