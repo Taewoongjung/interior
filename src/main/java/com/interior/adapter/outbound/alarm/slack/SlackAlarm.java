@@ -55,7 +55,7 @@ public class SlackAlarm implements AlarmService {
                     .channel(errorAlarmChanel)
                     .blocks(asBlocks(
                             header(header -> header.text(
-                                    plainText("❗️" + methodName))),
+                                    plainText("⚠️ " + methodName))),
                             divider(),
                             section(section -> section.fields(textObjects)
                             ))).build();
