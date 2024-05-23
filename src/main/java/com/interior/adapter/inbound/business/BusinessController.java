@@ -38,13 +38,14 @@ public class BusinessController {
     @PostMapping(value = "/api/companies/{companyId}/businesses")
     public ResponseEntity<CreateBusinessResDto> createBusiness(
             @PathVariable(value = "companyId") final Long companyId,
-            @RequestBody final CreateBusinessReqDto createBusinessReqDto
+            @RequestBody final CreateBusinessReqDto createBusinessReqDto,
+            @AuthenticationPrincipal final User user
     ) {
 
         return ResponseEntity.status(HttpStatus.OK).body(
                 new CreateBusinessResDto(
                         true,
-                        businessCommandService.createBusiness(companyId, createBusinessReqDto)
+                        businessCommandService.createBusiness(companyId, createBusinessReqDto, user)
                 ));
     }
 

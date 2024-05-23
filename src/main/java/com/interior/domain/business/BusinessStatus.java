@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum BusinessStatus {
 
-    CREATED("생성"),
+    CREATED("생성됨"),
     IN_PROGRESS("진행중"),
     INSPECTION("검수중"),
     COMPLETED("완료"),

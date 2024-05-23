@@ -1,6 +1,7 @@
 package com.interior.application.command.business;
 
 import com.interior.adapter.inbound.business.webdto.CreateBusiness.CreateBusinessReqDto;
+import com.interior.adapter.outbound.alarm.AlarmService;
 import com.interior.application.command.business.dto.CreateBusinessServiceDto.CreateBusinessMaterialDto;
 import com.interior.application.command.business.dto.ReviseBusinessServiceDto;
 import com.interior.domain.business.log.BusinessMaterialChangeFieldType;
@@ -12,38 +13,57 @@ import com.interior.domain.company.Company;
 import com.interior.domain.company.repository.CompanyRepository;
 import com.interior.domain.user.User;
 import com.interior.domain.user.repository.UserRepository;
-import java.time.LocalDateTime;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class BusinessCommandService {
 
+    private final AlarmService alarmService;
     private final UserRepository userRepository;
     private final CompanyRepository companyRepository;
     private final BusinessRepository businessRepository;
 
     @Transactional
-    public Long createBusiness(final Long companyId, final CreateBusinessReqDto req) {
+    public Long createBusiness(final Long companyId, final CreateBusinessReqDto req, final User user) {
 
-        return businessRepository.save(
+        final Long createdBusinessId = businessRepository.save(
                 new CreateBusiness(
                         req.businessName(),
                         companyId,
                         null,
-                        "진행중"
+                        "생성됨"
                 )
         );
+
+        String companyName = user.getCompanyList()
+                .stream()
+                .filter(f -> companyId.equals(f.getId()))
+                .findFirst().map(Company::getName)
+                .orElseThrow(() -> new NoSuchElementException("사업체를 찾을 수 없습니다."));
+
+        alarmService.sendNewBusinessAlarm(
+                req.businessName(),
+                companyName,
+                user.getName(),
+                user.getEmail(),
+                user.getTel()
+        );
+
+        return createdBusinessId;
     }
 
     @Transactional
     public boolean createBusinessMaterial(final Long businessId,
-            final CreateBusinessMaterialDto req) {
+                                          final CreateBusinessMaterialDto req) {
 
         businessRepository.save(new CreateBusinessMaterial(
                 businessId,
