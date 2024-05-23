@@ -39,7 +39,7 @@ public class CompanyController {
     public ResponseEntity<Boolean> createCompany(
             @Valid @RequestBody final CreateCompanyDto.CreateCompanyReqDto req,
             @AuthenticationPrincipal final User user
-    ) throws Exception {
+    ) {
         return ResponseEntity.status(HttpStatus.OK).body(
                 companyCommandService.createCompany(
                         user,

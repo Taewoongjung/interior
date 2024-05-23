@@ -1,25 +1,27 @@
 package com.interior.adapter.outbound.alarm.slack;
 
+import static com.slack.api.model.block.Blocks.asBlocks;
+import static com.slack.api.model.block.Blocks.divider;
+import static com.slack.api.model.block.Blocks.header;
+import static com.slack.api.model.block.Blocks.section;
+import static com.slack.api.model.block.composition.BlockCompositions.markdownText;
+import static com.slack.api.model.block.composition.BlockCompositions.plainText;
+
 import com.interior.adapter.outbound.alarm.AlarmService;
 import com.slack.api.Slack;
 import com.slack.api.methods.MethodsClient;
 import com.slack.api.methods.SlackApiException;
 import com.slack.api.methods.request.chat.ChatPostMessageRequest;
 import com.slack.api.model.block.composition.TextObject;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.slack.api.model.block.Blocks.*;
-import static com.slack.api.model.block.composition.BlockCompositions.markdownText;
-import static com.slack.api.model.block.composition.BlockCompositions.plainText;
 
 @Slf4j
 @Getter
@@ -69,6 +71,7 @@ public class SlackAlarm implements AlarmService {
 
     @Async
     public void sendNewUserAlarm(final String newUserName, final String email, final String tel) {
+
         try {
             List<TextObject> textObjects = new ArrayList<>();
             textObjects.add(markdownText("*이메일:*\n" + email));
@@ -133,8 +136,6 @@ public class SlackAlarm implements AlarmService {
             final String email,
             final String tel
     ) {
-
-        System.out.println("??? = " + newBusinessAlarmChanel);
 
         try {
             List<TextObject> textObjects = new ArrayList<>();

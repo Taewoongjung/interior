@@ -61,7 +61,7 @@ logging:
       file-name-pattern: "/app/logs/server.%d{yyyy-MM-dd}.%i.log"
 
 slack:
-  token: "xoxb-7151204555443-7156584994162-8O2SpNSRNFXjIXW41ed42fiD"
+  token: ${SLACK_BOT_TOKEN}
   channel:
     monitor:
       error: '#dev-백앤드-알림'
@@ -143,7 +143,7 @@ logging:
       file-name-pattern: "/app/logs/server.%d{yyyy-MM-dd}.%i.log"
 
 slack:
-  token: "xoxb-7151204555443-7156584994162-8O2SpNSRNFXjIXW41ed42fiD"
+  token: ${SLACK_BOT_TOKEN}
   channel:
     monitor:
       error: '#백앤드-알림'
