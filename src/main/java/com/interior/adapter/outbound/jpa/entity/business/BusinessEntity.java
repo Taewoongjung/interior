@@ -10,6 +10,7 @@ import com.interior.adapter.outbound.jpa.entity.company.CompanyEntity;
 import com.interior.domain.business.Business;
 import com.interior.domain.business.BusinessStatus;
 import com.interior.domain.business.BusinessStatusDetail;
+import com.interior.domain.util.BoolType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -134,6 +135,10 @@ public class BusinessEntity extends BaseEntity {
         );
     }
 
+    public void getOnlyNotDeletedMaterials() {
+        this.getBusinessMaterialList().removeIf(e -> BoolType.T.equals(e.getIsDeleted()));
+    }
+
     public void setName(final String name) {
         check(name == null || "".equals(name.trim()), ErrorType.INVALID_BUSINESS_NAME);
 
@@ -149,6 +154,11 @@ public class BusinessEntity extends BaseEntity {
                 .orElseThrow(() -> new NoSuchElementException(
                         ErrorType.NOT_EXIST_BUSINESS_MATERIAL.getMessage()));
 
-        this.businessMaterialList.removeIf(e -> materialId.equals(e.getId()));
+//        this.businessMaterialList.removeIf(e -> materialId.equals(e.getId()));
+        this.businessMaterialList.stream()
+                .filter(f -> materialId.equals(f.getId()))
+                .forEach(e -> e.setDeleted(BoolType.T));
     }
+
+
 }

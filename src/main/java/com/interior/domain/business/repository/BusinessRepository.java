@@ -3,6 +3,7 @@ package com.interior.domain.business.repository;
 import com.interior.application.command.business.dto.ReviseBusinessServiceDto;
 import com.interior.domain.business.Business;
 import com.interior.domain.business.log.BusinessMaterialLog;
+import com.interior.domain.business.material.BusinessMaterial;
 import com.interior.domain.business.repository.dto.CreateBusiness;
 import com.interior.domain.business.repository.dto.CreateBusinessMaterial;
 import java.util.List;
@@ -19,7 +20,7 @@ public interface BusinessRepository {
 
     Long save(final CreateBusiness createBusiness);
 
-    boolean save(final CreateBusinessMaterial createBusinessMaterial);
+    BusinessMaterial save(final CreateBusinessMaterial createBusinessMaterial);
 
     boolean deleteBusinessMaterial(final Long businessId, final Long materialId);
 
@@ -34,4 +35,6 @@ public interface BusinessRepository {
             final String usageCategoryName);
 
     boolean createMaterialUpdateLog(final BusinessMaterialLog businessMaterialLog);
+
+    BusinessMaterial findBusinessMaterialByMaterialId(final Long materialId);
 }

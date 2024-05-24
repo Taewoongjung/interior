@@ -23,7 +23,8 @@ public class BusinessEntityConverter {
         );
     }
 
-    public static BusinessMaterialEntity businessMaterialToEntity(final BusinessMaterial businessMaterial) {
+    public static BusinessMaterialEntity businessMaterialToEntity(
+            final BusinessMaterial businessMaterial) {
         return BusinessMaterialEntity.of(
                 businessMaterial.getBusinessId(),
                 businessMaterial.getName(),
@@ -32,8 +33,10 @@ public class BusinessEntityConverter {
                 businessMaterial.getAmount(),
                 businessMaterial.getUnit(),
                 businessMaterial.getMemo(),
+                businessMaterial.getIsDeleted(),
                 businessMaterial.getBusinessMaterialExpense() != null ?
-                    BusinessMaterialExpenseToEntity(businessMaterial.getBusinessMaterialExpense()) : null
+                        BusinessMaterialExpenseToEntity(
+                                businessMaterial.getBusinessMaterialExpense()) : null
         );
     }
 

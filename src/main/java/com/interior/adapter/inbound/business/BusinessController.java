@@ -53,7 +53,8 @@ public class BusinessController {
     @PostMapping(value = "/api/businesses/{businessId}/materials")
     public ResponseEntity<Boolean> createBusinessMaterial(
             @PathVariable(value = "businessId") final Long businessId,
-            @RequestBody final CreateBusinessMaterialReqDto req
+            @RequestBody final CreateBusinessMaterialReqDto req,
+            @AuthenticationPrincipal final User user
     ) {
 
         return ResponseEntity.status(HttpStatus.OK)
@@ -68,7 +69,8 @@ public class BusinessController {
                                 req.materialMemo(),
                                 req.materialCostPerUnit(),
                                 req.laborCostPerUnit()
-                        )
+                        ),
+                        user
                 ));
     }
 
@@ -76,10 +78,11 @@ public class BusinessController {
     @DeleteMapping(value = "/api/businesses/{businessId}/materials/{materialId}")
     public ResponseEntity<Boolean> deleteBusinessMaterial(
             @PathVariable(value = "businessId") final Long businessId,
-            @PathVariable(value = "materialId") final Long materialId
+            @PathVariable(value = "materialId") final Long materialId,
+            @AuthenticationPrincipal final User user
     ) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(businessCommandService.deleteBusinessMaterial(businessId, materialId));
+                .body(businessCommandService.deleteBusinessMaterial(businessId, materialId, user));
     }
 
     // 특정 사업의 모든 재료 조회

@@ -8,9 +8,12 @@ import com.interior.adapter.outbound.jpa.entity.BaseEntity;
 import com.interior.adapter.outbound.jpa.entity.business.BusinessEntity;
 import com.interior.adapter.outbound.jpa.entity.business.expense.BusinessMaterialExpenseEntity;
 import com.interior.domain.business.material.BusinessMaterial;
+import com.interior.domain.util.BoolType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -52,6 +55,10 @@ public class BusinessMaterialEntity extends BaseEntity {
 
     private String memo;
 
+    @Column(name = "is_deleted", columnDefinition = "varchar(1)")
+    @Enumerated(value = EnumType.STRING)
+    private BoolType isDeleted;
+
     @OneToOne(mappedBy = "businessMaterial", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private BusinessMaterialExpenseEntity businessMaterialExpense;
 
@@ -69,6 +76,7 @@ public class BusinessMaterialEntity extends BaseEntity {
             final BigDecimal amount,
             final String unit,
             final String memo,
+            final BoolType isDeleted,
             final BusinessMaterialExpenseEntity businessMaterialExpense
     ) {
         super(LocalDateTime.now(), LocalDateTime.now());
@@ -81,6 +89,7 @@ public class BusinessMaterialEntity extends BaseEntity {
         this.amount = amount;
         this.unit = unit;
         this.memo = memo;
+        this.isDeleted = isDeleted;
         this.businessMaterialExpense = businessMaterialExpense;
     }
 
@@ -92,10 +101,11 @@ public class BusinessMaterialEntity extends BaseEntity {
             final BigDecimal amount,
             final String unit,
             final String memo,
+            final BoolType isDeleted,
             final BusinessMaterialExpenseEntity businessMaterialExpense
     ) {
         return new BusinessMaterialEntity(null, businessId, name, usageCategory, category, amount,
-                unit, memo, businessMaterialExpense);
+                unit, memo, isDeleted, businessMaterialExpense);
     }
 
     public BusinessMaterial toPojo() {
@@ -129,5 +139,9 @@ public class BusinessMaterialEntity extends BaseEntity {
     public void setBusinessMaterialExpense(
             final BusinessMaterialExpenseEntity businessMaterialExpense) {
         this.businessMaterialExpense = businessMaterialExpense;
+    }
+
+    public void setDeleted(final BoolType deleted) {
+        isDeleted = deleted;
     }
 }

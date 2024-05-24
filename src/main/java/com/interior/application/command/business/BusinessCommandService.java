@@ -4,23 +4,20 @@ import com.interior.adapter.inbound.business.webdto.CreateBusiness.CreateBusines
 import com.interior.adapter.outbound.alarm.AlarmService;
 import com.interior.application.command.business.dto.CreateBusinessServiceDto.CreateBusinessMaterialDto;
 import com.interior.application.command.business.dto.ReviseBusinessServiceDto;
-import com.interior.domain.business.log.BusinessMaterialChangeFieldType;
-import com.interior.domain.business.log.BusinessMaterialLog;
+import com.interior.application.command.log.business.BusinessLogService;
+import com.interior.domain.business.material.BusinessMaterial;
 import com.interior.domain.business.repository.BusinessRepository;
 import com.interior.domain.business.repository.dto.CreateBusiness;
 import com.interior.domain.business.repository.dto.CreateBusinessMaterial;
 import com.interior.domain.company.Company;
 import com.interior.domain.company.repository.CompanyRepository;
 import com.interior.domain.user.User;
-import com.interior.domain.user.repository.UserRepository;
+import java.util.List;
+import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.NoSuchElementException;
 
 @Slf4j
 @Service
@@ -28,12 +25,13 @@ import java.util.NoSuchElementException;
 public class BusinessCommandService {
 
     private final AlarmService alarmService;
-    private final UserRepository userRepository;
     private final CompanyRepository companyRepository;
     private final BusinessRepository businessRepository;
+    private final BusinessLogService businessLogService;
 
     @Transactional
-    public Long createBusiness(final Long companyId, final CreateBusinessReqDto req, final User user) {
+    public Long createBusiness(final Long companyId, final CreateBusinessReqDto req,
+            final User user) {
 
         final Long createdBusinessId = businessRepository.save(
                 new CreateBusiness(
@@ -62,10 +60,14 @@ public class BusinessCommandService {
     }
 
     @Transactional
-    public boolean createBusinessMaterial(final Long businessId,
-                                          final CreateBusinessMaterialDto req) {
+    public boolean createBusinessMaterial(
+            final Long businessId,
+            final CreateBusinessMaterialDto req,
+            final User user
+    ) {
 
-        businessRepository.save(new CreateBusinessMaterial(
+        // 재료 생성
+        BusinessMaterial businessMaterial = businessRepository.save(new CreateBusinessMaterial(
                 businessId,
                 req.name(),
                 req.usageCategory(),
@@ -77,13 +79,26 @@ public class BusinessCommandService {
                 req.laborCostPerUnit()
         ));
 
+        // 재료 생성에 대한 로그
+        businessLogService.createLogForCreatingBusinessMaterial(
+                businessMaterial.getId(),
+                user.getId(),
+                req.name()
+        );
+
         return true;
     }
 
     @Transactional
-    public boolean deleteBusinessMaterial(final Long businessId, final Long materialId) {
+    public boolean deleteBusinessMaterial(final Long businessId, final Long materialId,
+            final User user) {
 
-        return businessRepository.deleteBusinessMaterial(businessId, materialId);
+        if (businessRepository.deleteBusinessMaterial(businessId, materialId)) {
+
+            businessLogService.createLogForDeletingBusinessMaterial(materialId, user.getId());
+        }
+
+        return true;
     }
 
     @Transactional
@@ -115,29 +130,5 @@ public class BusinessCommandService {
 
         return businessRepository.reviseUsageCategoryOfMaterial(
                 businessId, targetList, usageCategoryName);
-    }
-
-    // 재료 업데이트 시 로그 생성
-    public boolean createLogOfChangeMaterials(
-            final Long businessMaterialId,
-            final String changeField,
-            final String beforeData,
-            final String afterData,
-            final Long updaterId
-    ) {
-
-        User user = userRepository.findById(updaterId);
-
-        return businessRepository.createMaterialUpdateLog(
-                BusinessMaterialLog.of(
-                        businessMaterialId,
-                        BusinessMaterialChangeFieldType.from(changeField),
-                        beforeData,
-                        afterData,
-                        updaterId,
-                        user.getName(),
-                        LocalDateTime.now()
-                )
-        );
     }
 }

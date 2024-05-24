@@ -10,6 +10,7 @@ import static com.interior.util.CheckUtil.require;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.interior.domain.business.expense.BusinessMaterialExpense;
+import com.interior.domain.util.BoolType;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
@@ -37,6 +38,8 @@ public class BusinessMaterial {
 
     private String memo;
 
+    private BoolType isDeleted;
+
     private BusinessMaterialExpense businessMaterialExpense;
 
     private String allMaterialCostPerUnit;
@@ -63,6 +66,7 @@ public class BusinessMaterial {
             final BigDecimal amount,
             final String unit,
             final String memo,
+            final BoolType isDeleted,
             final BusinessMaterialExpense businessMaterialExpense,
             final String allMaterialCostPerUnit,
             final String allLaborCostPerUnit,
@@ -79,6 +83,7 @@ public class BusinessMaterial {
         this.amount = amount;
         this.unit = unit;
         this.memo = memo;
+        this.isDeleted = isDeleted;
         this.businessMaterialExpense = businessMaterialExpense;
         this.allMaterialCostPerUnit = allMaterialCostPerUnit;
         this.allLaborCostPerUnit = allLaborCostPerUnit;
@@ -88,6 +93,7 @@ public class BusinessMaterial {
         this.createdAt = createdAt;
     }
 
+    // 조회 용
     public static BusinessMaterial of(
             final Long id,
             final Long businessId,
@@ -145,6 +151,7 @@ public class BusinessMaterial {
                 amount,
                 unit,
                 memo,
+                null,
                 businessMaterialExpense,
                 allMaterialCostPerUnit, allLaborCostPerUnit,
                 totalUnitPrice, totalPrice,
@@ -171,6 +178,7 @@ public class BusinessMaterial {
         return response;
     }
 
+    // 생성 용
     public static BusinessMaterial of(
             final Long businessId,
             final String name,
@@ -197,6 +205,7 @@ public class BusinessMaterial {
                 amount,
                 unit,
                 memo,
+                null,
                 null,
                 null, null,
                 null, null,

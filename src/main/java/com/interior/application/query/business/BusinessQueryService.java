@@ -32,7 +32,7 @@ public class BusinessQueryService {
     @Transactional(readOnly = true)
     public GetBusiness.Response getBusiness(final Long businessId) {
 
-        Business business = businessRepository.findById(businessId);
+        Business business = getBusinessByBusinessId(businessId);
 
         int count = 0;
 
@@ -49,6 +49,10 @@ public class BusinessQueryService {
         }
 
         return new GetBusiness.Response(business.getName(), businessMaterials, count);
+    }
+
+    private Business getBusinessByBusinessId(final Long businessId) {
+        return businessRepository.findById(businessId);
     }
 
     @Transactional(readOnly = true)

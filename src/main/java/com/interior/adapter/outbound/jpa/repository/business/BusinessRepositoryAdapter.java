@@ -1,6 +1,7 @@
 package com.interior.adapter.outbound.jpa.repository.business;
 
 import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_BUSINESS;
+import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_BUSINESS_MATERIAL;
 import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_COMPANY;
 import static com.interior.util.converter.jpa.business.BusinessEntityConverter.businessMaterialToEntity;
 
@@ -21,9 +22,11 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class BusinessRepositoryAdapter implements BusinessRepository {
@@ -38,6 +41,9 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
 
         BusinessEntity businessEntities = businessJpaRepository.findById(businessId)
                 .orElseThrow(() -> new NoSuchElementException(NOT_EXIST_BUSINESS.getMessage()));
+
+        // 삭제된 재료들 제외
+        businessEntities.getOnlyNotDeletedMaterials();
 
         return businessEntities.toPojoWithRelations();
     }
@@ -61,6 +67,9 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
 
         BusinessEntity businessEntities = businessJpaRepository.findBusinessEntityByCompanyIdAndId(
                 companyId, businessId);
+
+        // 삭제된 재료들 제외
+        businessEntities.getOnlyNotDeletedMaterials();
 
         return businessEntities.toPojoWithRelations();
     }
@@ -93,7 +102,7 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
 
     @Override
     @Transactional
-    public boolean save(final CreateBusinessMaterial createBusinessMaterial) {
+    public BusinessMaterial save(final CreateBusinessMaterial createBusinessMaterial) {
 
         BusinessMaterialEntity businessMaterialEntity = businessMaterialJpaRepository.save(
                 businessMaterialToEntity(BusinessMaterial.of(
@@ -117,7 +126,7 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
 
         businessMaterialJpaRepository.save(businessMaterialEntity);
 
-        return true;
+        return businessMaterialEntity.toPojo();
     }
 
     @Override
@@ -180,6 +189,19 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
     @Override
     @Transactional
     public boolean createMaterialUpdateLog(final BusinessMaterialLog businessMaterialLog) {
+
+        log.info("로그생성 됨");
+
         return false;
+    }
+
+    @Override
+    public BusinessMaterial findBusinessMaterialByMaterialId(final Long materialId) {
+
+        BusinessMaterialEntity entity = businessMaterialJpaRepository.findById(materialId)
+                .orElseThrow(
+                        () -> new NoSuchElementException(NOT_EXIST_BUSINESS_MATERIAL.getMessage()));
+
+        return entity.toPojo();
     }
 }
