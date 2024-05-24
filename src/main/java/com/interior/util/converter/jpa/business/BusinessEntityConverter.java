@@ -3,8 +3,10 @@ package com.interior.util.converter.jpa.business;
 import com.interior.adapter.outbound.jpa.entity.business.BusinessEntity;
 import com.interior.adapter.outbound.jpa.entity.business.expense.BusinessMaterialExpenseEntity;
 import com.interior.adapter.outbound.jpa.entity.business.material.BusinessMaterialEntity;
+import com.interior.adapter.outbound.jpa.entity.business.material.log.BusinessMaterialLogEntity;
 import com.interior.domain.business.Business;
 import com.interior.domain.business.expense.BusinessMaterialExpense;
+import com.interior.domain.business.log.BusinessMaterialLog;
 import com.interior.domain.business.material.BusinessMaterial;
 import java.util.stream.Collectors;
 
@@ -35,18 +37,31 @@ public class BusinessEntityConverter {
                 businessMaterial.getMemo(),
                 businessMaterial.getIsDeleted(),
                 businessMaterial.getBusinessMaterialExpense() != null ?
-                        BusinessMaterialExpenseToEntity(
+                        businessMaterialExpenseToEntity(
                                 businessMaterial.getBusinessMaterialExpense()) : null
         );
     }
 
-    private static BusinessMaterialExpenseEntity BusinessMaterialExpenseToEntity(
+    private static BusinessMaterialExpenseEntity businessMaterialExpenseToEntity(
             final BusinessMaterialExpense businessMaterialExpense) {
 
         return BusinessMaterialExpenseEntity.of(
                 businessMaterialExpense.getBusinessMaterialId(),
                 businessMaterialExpense.getMaterialCostPerUnit(),
                 businessMaterialExpense.getLaborCostPerUnit()
+        );
+    }
+
+    public static BusinessMaterialLogEntity businessMaterialLogToEntity(
+            final BusinessMaterialLog businessMaterialLog) {
+
+        return BusinessMaterialLogEntity.of(
+                businessMaterialLog.getBusinessMaterialId(),
+                businessMaterialLog.getChangeField(),
+                businessMaterialLog.getBeforeData(),
+                businessMaterialLog.getAfterData(),
+                businessMaterialLog.getUpdater(),
+                businessMaterialLog.getUpdaterName()
         );
     }
 }

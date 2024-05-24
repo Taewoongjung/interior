@@ -2,7 +2,9 @@ package com.interior.domain.business.log;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
+import lombok.Getter;
 
+@Getter
 public class BusinessMaterialLog {
 
     private Long id;

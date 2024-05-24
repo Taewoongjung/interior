@@ -1,5 +1,6 @@
 package com.interior.adapter.outbound.jpa.entity.business;
 
+import static com.interior.adapter.common.exception.ErrorType.INVALID_BUSINESS_NAME;
 import static com.interior.util.CheckUtil.check;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -95,6 +96,10 @@ public class BusinessEntity extends BaseEntity {
             final Long customerId,
             final BusinessStatus status
     ) {
+
+        check(name == null || "".equals(name.trim()), INVALID_BUSINESS_NAME);
+        check(name.toCharArray().length < 1, INVALID_BUSINESS_NAME); // 사업명은 2 글자 이상
+
         return new BusinessEntity(null, name, companyId, customerId, status, null, null);
     }
 
@@ -106,6 +111,10 @@ public class BusinessEntity extends BaseEntity {
             final BusinessStatusDetail statusDetail,
             final List<BusinessMaterialEntity> businessMaterialList
     ) {
+
+        check(name == null || "".equals(name.trim()), INVALID_BUSINESS_NAME);
+        check(name.toCharArray().length < 1, INVALID_BUSINESS_NAME);
+
         return new BusinessEntity(null, name, companyId, customerId, status, statusDetail,
                 businessMaterialList);
     }
@@ -141,6 +150,7 @@ public class BusinessEntity extends BaseEntity {
 
     public void setName(final String name) {
         check(name == null || "".equals(name.trim()), ErrorType.INVALID_BUSINESS_NAME);
+        check(name.toCharArray().length < 1, INVALID_BUSINESS_NAME);
 
         this.name = name;
     }
@@ -154,7 +164,6 @@ public class BusinessEntity extends BaseEntity {
                 .orElseThrow(() -> new NoSuchElementException(
                         ErrorType.NOT_EXIST_BUSINESS_MATERIAL.getMessage()));
 
-//        this.businessMaterialList.removeIf(e -> materialId.equals(e.getId()));
         this.businessMaterialList.stream()
                 .filter(f -> materialId.equals(f.getId()))
                 .forEach(e -> e.setDeleted(BoolType.T));

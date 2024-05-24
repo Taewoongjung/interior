@@ -67,17 +67,18 @@ public class BusinessCommandService {
     ) {
 
         // 재료 생성
-        BusinessMaterial businessMaterial = businessRepository.save(new CreateBusinessMaterial(
-                businessId,
-                req.name(),
-                req.usageCategory(),
-                req.category(),
-                req.amount(),
-                req.unit(),
-                req.memo(),
-                req.materialCostPerUnit(),
-                req.laborCostPerUnit()
-        ));
+        BusinessMaterial businessMaterial = businessRepository.save(
+                new CreateBusinessMaterial(
+                        businessId,
+                        req.name(),
+                        req.usageCategory(),
+                        req.category(),
+                        req.amount(),
+                        req.unit(),
+                        req.memo(),
+                        req.materialCostPerUnit(),
+                        req.laborCostPerUnit()
+                ));
 
         // 재료 생성에 대한 로그
         businessLogService.createLogForCreatingBusinessMaterial(

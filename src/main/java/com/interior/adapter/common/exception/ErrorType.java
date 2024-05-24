@@ -11,8 +11,10 @@ public enum ErrorType {
 
     INAPPROPRIATE_REQUEST(1, "부적절한 요청 입니다."),
 
-    LOGIN_FAIL(0010, "로그인 실패, 아이디 또는 비밀번호를 확인해주세요."),
-    EXPIRED_ACCESS_TOKEN(0100, "만료 된 토큰입니다."),
+    LOGIN_FAIL(100, "로그인 실패, 아이디 또는 비밀번호를 확인해주세요."),
+    EXPIRED_ACCESS_TOKEN(101, "만료 된 토큰입니다."),
+    INVALID_SIGNUP_REQUEST_DUPLICATE_EMAIL(102, "이미 존재하는 이메일 입니다."),
+    LIMIT_OF_COMPANY_COUNT_IS_FIVE(103, "유저당 최고 5개의 회사만 등록 가능합니다."),
 
     NOT_EXIST_CUSTOMER(1000, "유저가 존재하지 않습니다."),
     INVALID_CUSTOMER_NAME(1001, "올바르지 않은 이름입니다."),
@@ -40,9 +42,12 @@ public enum ErrorType {
     EMPTY_BUSINESS_MATERIAL_CATEGORY(1204, "재료의 카테고리는 필수값입니다."),
     EMPTY_BUSINESS_MATERIAL_AMOUNT(1205, "재료의 수량은 필수값입니다."),
 
-    INVALID_SIGNUP_REQUEST_DUPLICATE_EMAIL(1100, "이미 존재하는 이메일 입니다."),
+    EMPTY_BUSINESS_MATERIAL_ID(1300, "사업 재료의 id는 필수값 입니다."),
+    EMPTY_CHANGE_FIELD(1301, "변경된 값은 필수값 입니다."),
+    EMPTY_UPDATER_ID(1302, "업데이터의 id는 필수값 입니다."),
+    EMPTY_UPDATER_NAME(1303, "업데이터의 이름은 필수값 입니다."),
+    ;
 
-    LIMIT_OF_COMPANY_COUNT_IS_FIVE(1201, "유저당 최고 5개의 회사만 등록 가능합니다.");
 
     private final int code;
     private final String message;

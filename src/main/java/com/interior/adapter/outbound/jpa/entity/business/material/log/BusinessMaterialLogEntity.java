@@ -1,5 +1,11 @@
 package com.interior.adapter.outbound.jpa.entity.business.material.log;
 
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_BUSINESS_MATERIAL_ID;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_CHANGE_FIELD;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_UPDATER_ID;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_UPDATER_NAME;
+import static com.interior.util.CheckUtil.require;
+
 import com.interior.domain.business.log.BusinessMaterialChangeFieldType;
 import com.interior.domain.business.log.BusinessMaterialLog;
 import jakarta.persistence.Column;
@@ -64,6 +70,24 @@ public class BusinessMaterialLogEntity {
         this.updater = updater;
         this.updaterName = updaterName;
         this.createdAt = LocalDateTime.now();
+    }
+
+    public static BusinessMaterialLogEntity of(
+            final Long businessMaterialId,
+            final BusinessMaterialChangeFieldType changeField,
+            final String beforeData,
+            final String afterData,
+            final Long updater,
+            final String updaterName
+    ) {
+
+        require(o -> businessMaterialId == null, businessMaterialId, EMPTY_BUSINESS_MATERIAL_ID);
+        require(o -> changeField == null, changeField, EMPTY_CHANGE_FIELD);
+        require(o -> updater == null, updater, EMPTY_UPDATER_ID);
+        require(o -> updaterName == null, updaterName, EMPTY_UPDATER_NAME);
+
+        return new BusinessMaterialLogEntity(null, businessMaterialId, changeField, beforeData,
+                afterData, updater, updaterName);
     }
 
     public BusinessMaterialLog toPojo() {

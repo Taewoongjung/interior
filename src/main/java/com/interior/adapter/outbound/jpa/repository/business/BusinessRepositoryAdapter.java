@@ -3,6 +3,7 @@ package com.interior.adapter.outbound.jpa.repository.business;
 import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_BUSINESS;
 import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_BUSINESS_MATERIAL;
 import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_COMPANY;
+import static com.interior.util.converter.jpa.business.BusinessEntityConverter.businessMaterialLogToEntity;
 import static com.interior.util.converter.jpa.business.BusinessEntityConverter.businessMaterialToEntity;
 
 import com.interior.adapter.outbound.jpa.entity.business.BusinessEntity;
@@ -34,6 +35,7 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
     private final CompanyJpaRepository companyJpaRepository;
     private final BusinessJpaRepository businessJpaRepository;
     private final BusinessMaterialJpaRepository businessMaterialJpaRepository;
+    private final BusinessMaterialLogJpaRepository businessMaterialLogJpaRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -190,9 +192,9 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
     @Transactional
     public boolean createMaterialUpdateLog(final BusinessMaterialLog businessMaterialLog) {
 
-        log.info("로그생성 됨");
+        businessMaterialLogJpaRepository.save(businessMaterialLogToEntity(businessMaterialLog));
 
-        return false;
+        return true;
     }
 
     @Override

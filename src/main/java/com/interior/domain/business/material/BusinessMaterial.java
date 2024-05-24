@@ -93,7 +93,7 @@ public class BusinessMaterial {
         this.createdAt = createdAt;
     }
 
-    // 조회 용
+    // 조회 전용
     public static BusinessMaterial of(
             final Long id,
             final Long businessId,
@@ -178,7 +178,7 @@ public class BusinessMaterial {
         return response;
     }
 
-    // 생성 용
+    // 생성 전용
     public static BusinessMaterial of(
             final Long businessId,
             final String name,
@@ -205,7 +205,7 @@ public class BusinessMaterial {
                 amount,
                 unit,
                 memo,
-                null,
+                BoolType.F,
                 null,
                 null, null,
                 null, null,
