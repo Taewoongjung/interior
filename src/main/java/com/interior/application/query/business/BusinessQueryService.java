@@ -7,14 +7,17 @@ import com.interior.adapter.outbound.excel.BusinessListExcel;
 import com.interior.adapter.outbound.excel.BusinessMaterialExcelDownload;
 import com.interior.adapter.outbound.jpa.querydsl.BusinessDao;
 import com.interior.domain.business.Business;
+import com.interior.domain.business.log.BusinessMaterialLog;
 import com.interior.domain.business.material.BusinessMaterial;
 import com.interior.domain.business.repository.BusinessRepository;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -110,5 +113,16 @@ public class BusinessQueryService {
             final Long companyId) {
 
         return businessDao.getBusinessMaterialList(companyId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<BusinessMaterialLog> getBusinessMaterialLog(final Long materialId) {
+
+        List<BusinessMaterialLog> businessMaterialLogList = businessRepository.findBusinessMaterialLogByMaterialId(
+                materialId);
+
+        return businessMaterialLogList.stream()
+                .sorted(Comparator.comparing(BusinessMaterialLog::getCreatedAt).reversed())
+                .collect(Collectors.toList());
     }
 }

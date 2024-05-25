@@ -92,6 +92,7 @@ public class BusinessMaterialLogEntity {
 
     public BusinessMaterialLog toPojo() {
         return BusinessMaterialLog.of(
+                getId(),
                 getBusinessMaterialId(),
                 getChangeField(),
                 getBeforeData(),

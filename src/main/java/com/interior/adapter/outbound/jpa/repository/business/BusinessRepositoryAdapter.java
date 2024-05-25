@@ -9,6 +9,7 @@ import static com.interior.util.converter.jpa.business.BusinessEntityConverter.b
 import com.interior.adapter.outbound.jpa.entity.business.BusinessEntity;
 import com.interior.adapter.outbound.jpa.entity.business.expense.BusinessMaterialExpenseEntity;
 import com.interior.adapter.outbound.jpa.entity.business.material.BusinessMaterialEntity;
+import com.interior.adapter.outbound.jpa.entity.business.material.log.BusinessMaterialLogEntity;
 import com.interior.adapter.outbound.jpa.entity.company.CompanyEntity;
 import com.interior.adapter.outbound.jpa.repository.company.CompanyJpaRepository;
 import com.interior.application.command.business.dto.ReviseBusinessServiceDto;
@@ -19,6 +20,7 @@ import com.interior.domain.business.material.BusinessMaterial;
 import com.interior.domain.business.repository.BusinessRepository;
 import com.interior.domain.business.repository.dto.CreateBusiness;
 import com.interior.domain.business.repository.dto.CreateBusinessMaterial;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -57,6 +59,10 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
         List<BusinessEntity> businessEntities = businessJpaRepository.findBusinessesEntityByCompanyId(
                 companyId);
 
+        if (businessEntities == null || businessEntities.size() == 0) {
+            return new ArrayList<>();
+        }
+
         return businessEntities.stream()
                 .map(BusinessEntity::toPojo)
                 .collect(Collectors.toList());
@@ -82,6 +88,10 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
 
         List<BusinessEntity> businessEntities = businessJpaRepository.findBusinessEntitiesByCompanyIdIn(
                 companyIdList);
+
+        if (businessEntities == null || businessEntities.size() == 0) {
+            return new ArrayList<>();
+        }
 
         return businessEntities.stream()
                 .map(BusinessEntity::toPojoWithRelations)
@@ -205,5 +215,21 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
                         () -> new NoSuchElementException(NOT_EXIST_BUSINESS_MATERIAL.getMessage()));
 
         return entity.toPojo();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<BusinessMaterialLog> findBusinessMaterialLogByMaterialId(Long materialId) {
+
+        List<BusinessMaterialLogEntity> materialLogList = businessMaterialLogJpaRepository.findAllByBusinessMaterialId(
+                materialId);
+
+        if (materialLogList == null || materialLogList.size() == 0) {
+            return new ArrayList<>();
+        }
+
+        return materialLogList.stream()
+                .map(BusinessMaterialLogEntity::toPojo)
+                .collect(Collectors.toList());
     }
 }

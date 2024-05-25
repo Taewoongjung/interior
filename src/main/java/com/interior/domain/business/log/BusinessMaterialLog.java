@@ -44,6 +44,22 @@ public class BusinessMaterialLog {
         this.createdAt = createdAt;
     }
 
+    // 조회 전용
+    public static BusinessMaterialLog of(
+            final Long id,
+            final Long businessMaterialId,
+            final BusinessMaterialChangeFieldType changeField,
+            final String beforeData,
+            final String afterData,
+            final Long updaterId,
+            final String updaterName,
+            final LocalDateTime createdAt
+    ) {
+        return new BusinessMaterialLog(id, businessMaterialId, changeField, beforeData, afterData,
+                updaterId, updaterName, createdAt);
+    }
+
+    // 생성 전용
     public static BusinessMaterialLog of(
             final Long businessMaterialId,
             final BusinessMaterialChangeFieldType changeField,

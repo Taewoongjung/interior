@@ -37,4 +37,6 @@ public interface BusinessRepository {
     boolean createMaterialUpdateLog(final BusinessMaterialLog businessMaterialLog);
 
     BusinessMaterial findBusinessMaterialByMaterialId(final Long materialId);
+
+    List<BusinessMaterialLog> findBusinessMaterialLogByMaterialId(final Long materialId);
 }

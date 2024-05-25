@@ -11,6 +11,7 @@ import com.interior.application.command.business.dto.CreateBusinessServiceDto.Cr
 import com.interior.application.command.business.dto.ReviseBusinessServiceDto;
 import com.interior.application.query.business.BusinessQueryService;
 import com.interior.domain.business.Business;
+import com.interior.domain.business.log.BusinessMaterialLog;
 import com.interior.domain.company.Company;
 import com.interior.domain.user.User;
 import jakarta.servlet.http.HttpServletResponse;
@@ -164,7 +165,15 @@ public class BusinessController {
             @PathVariable(value = "businessId") final Long businessId,
             HttpServletResponse response
     ) {
-
         businessQueryService.getExcelOfBusinessMaterialList(companyId, businessId, response);
+    }
+
+    // 재료 변경 로그 조회
+    @GetMapping(value = "/api/materials/{materialId}/logs")
+    public ResponseEntity<List<BusinessMaterialLog>> getBusinessMaterialLogs(
+            @PathVariable(value = "materialId") final Long materialId) {
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(businessQueryService.getBusinessMaterialLog(materialId));
     }
 }
