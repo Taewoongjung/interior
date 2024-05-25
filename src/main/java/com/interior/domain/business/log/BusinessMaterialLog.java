@@ -1,5 +1,8 @@
 package com.interior.domain.business.log;
 
+import static com.interior.domain.business.log.BusinessMaterialChangeFieldType.CREATE_NEW_MATERIAL;
+import static com.interior.domain.business.log.BusinessMaterialChangeFieldType.DELETE_NEW_MATERIAL;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 import lombok.Getter;
@@ -71,5 +74,18 @@ public class BusinessMaterialLog {
     ) {
         return new BusinessMaterialLog(null, businessMaterialId, changeField, beforeData, afterData,
                 updaterId, updaterName, createdAt);
+    }
+
+    public String getChangeDetail() {
+
+        if (changeField.equals(CREATE_NEW_MATERIAL)) {
+            return getAfterData() + " (생성)";
+        }
+
+        if (changeField.equals(DELETE_NEW_MATERIAL)) {
+            return getBeforeData() + " (삭제)";
+        }
+
+        return getBeforeData() + " → " + getAfterData();
     }
 }

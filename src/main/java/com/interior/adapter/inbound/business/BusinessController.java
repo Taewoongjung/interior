@@ -10,12 +10,14 @@ import com.interior.application.command.business.BusinessCommandService;
 import com.interior.application.command.business.dto.CreateBusinessServiceDto.CreateBusinessMaterialDto;
 import com.interior.application.command.business.dto.ReviseBusinessServiceDto;
 import com.interior.application.query.business.BusinessQueryService;
+import com.interior.application.query.business.dto.GetBusinessMaterialLogs;
 import com.interior.domain.business.Business;
 import com.interior.domain.business.log.BusinessMaterialLog;
 import com.interior.domain.company.Company;
 import com.interior.domain.user.User;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -170,10 +172,21 @@ public class BusinessController {
 
     // 재료 변경 로그 조회
     @GetMapping(value = "/api/materials/{materialId}/logs")
-    public ResponseEntity<List<BusinessMaterialLog>> getBusinessMaterialLogs(
+    public ResponseEntity<List<GetBusinessMaterialLogs.Res>> getBusinessMaterialLogs(
             @PathVariable(value = "materialId") final Long materialId) {
 
+        List<BusinessMaterialLog> logList = businessQueryService.getBusinessMaterialLog(materialId);
+
         return ResponseEntity.status(HttpStatus.OK)
-                .body(businessQueryService.getBusinessMaterialLog(materialId));
+                .body(logList.stream()
+                        .map(e ->
+                                new GetBusinessMaterialLogs.Res(
+                                        e.getUpdaterName(),
+                                        e.getChangeField().getDesc(),
+                                        e.getChangeDetail(),
+                                        e.getCreatedAt()
+                                )
+
+                        ).collect(Collectors.toList()));
     }
 }
