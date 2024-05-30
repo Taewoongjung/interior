@@ -1,4 +1,4 @@
-package com.interior.application.unittest.company;
+package com.interior.application.unittest.query.company;
 
 import static company.CompanyFixture.COMPANY_LIST;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class CompanyServiceTest {
+class CompanyQueryServiceTest {
 
     private final UserRepository userRepository = mock(UserRepository.class);
 

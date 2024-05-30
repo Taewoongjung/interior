@@ -1,6 +1,7 @@
 package company;
 
 import com.interior.domain.company.Company;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +17,8 @@ public class CompanyFixture {
             "809호",
             "0132104912908451209",
             "01012345678",
-            LocalDateTime.of(2024,5,19, 23, 30),
-            LocalDateTime.of(2024,5,19, 23, 30)
+            LocalDateTime.of(2024, 5, 19, 23, 30),
+            LocalDateTime.of(2024, 5, 19, 23, 30)
     );
 
     public static Company COMPANY_2 = Company.of(
@@ -29,13 +30,26 @@ public class CompanyFixture {
             "809호",
             "0132104912908451209",
             "01012345678",
-            LocalDateTime.of(2024,5,19, 23, 30),
-            LocalDateTime.of(2024,5,19, 23, 30)
+            LocalDateTime.of(2024, 5, 19, 23, 30),
+            LocalDateTime.of(2024, 5, 19, 23, 30)
     );
 
     public static List<Company> COMPANY_LIST() {
 
         List<Company> list = new ArrayList<>();
+        list.add(COMPANY_1);
+        list.add(COMPANY_2);
+
+        return list;
+    }
+
+    public static List<Company> COMPANY_LIST_OVER_5() {
+
+        List<Company> list = new ArrayList<>();
+        list.add(COMPANY_1);
+        list.add(COMPANY_2);
+        list.add(COMPANY_1);
+        list.add(COMPANY_2);
         list.add(COMPANY_1);
         list.add(COMPANY_2);
 
