@@ -1,6 +1,6 @@
 package com.interior.application.command.business;
 
-import com.interior.adapter.inbound.business.webdto.CreateBusiness.CreateBusinessReqDto;
+import com.interior.adapter.inbound.business.webdto.CreateBusinessWebDtoV1;
 import com.interior.adapter.outbound.alarm.AlarmService;
 import com.interior.application.command.business.dto.CreateBusinessServiceDto.CreateBusinessMaterialDto;
 import com.interior.application.command.business.dto.ReviseBusinessServiceDto;
@@ -30,7 +30,8 @@ public class BusinessCommandService {
     private final BusinessLogService businessLogService;
 
     @Transactional
-    public Long createBusiness(final Long companyId, final CreateBusinessReqDto req,
+    public Long createBusiness(final Long companyId,
+            final CreateBusinessWebDtoV1.Req req,
             final User user) {
 
         final Long createdBusinessId = businessRepository.save(
@@ -82,6 +83,7 @@ public class BusinessCommandService {
 
         // 재료 생성에 대한 로그
         businessLogService.createLogForCreatingBusinessMaterial(
+                businessId,
                 businessMaterial.getId(),
                 user.getId(),
                 req.name()
@@ -96,7 +98,8 @@ public class BusinessCommandService {
 
         if (businessRepository.deleteBusinessMaterial(businessId, materialId)) {
 
-            businessLogService.createLogForDeletingBusinessMaterial(materialId, user.getId());
+            businessLogService.createLogForDeletingBusinessMaterial(businessId, materialId,
+                    user.getId());
         }
 
         return true;
