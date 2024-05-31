@@ -148,8 +148,8 @@ slack:
     monitor:
       error: '#백앤드-알림'
       new-user: '#신규-고객-등록'
-      new-company: '#신규-사업-등록'
-      new-business: '#신규-사업체-등록'
+      new-company: '#신규-사업체-등록'
+      new-business: '#신규-사업-등록'
 
 management:
   endpoints:
