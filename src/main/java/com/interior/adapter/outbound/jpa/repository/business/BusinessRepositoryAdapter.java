@@ -219,9 +219,9 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
 
     @Override
     @Transactional(readOnly = true)
-    public List<BusinessMaterialLog> findBusinessMaterialLogByMaterialId(Long materialId) {
+    public List<BusinessMaterialLog> findBusinessMaterialLogByBusinessId(Long materialId) {
 
-        List<BusinessMaterialLogEntity> materialLogList = businessMaterialLogJpaRepository.findAllByBusinessMaterialId(
+        List<BusinessMaterialLogEntity> materialLogList = businessMaterialLogJpaRepository.findAllByBusinessId(
                 materialId);
 
         if (materialLogList == null || materialLogList.size() == 0) {

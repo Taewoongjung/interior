@@ -38,5 +38,5 @@ public interface BusinessRepository {
 
     BusinessMaterial findBusinessMaterialByMaterialId(final Long materialId);
 
-    List<BusinessMaterialLog> findBusinessMaterialLogByMaterialId(final Long materialId);
+    List<BusinessMaterialLog> findBusinessMaterialLogByBusinessId(final Long businessId);
 }

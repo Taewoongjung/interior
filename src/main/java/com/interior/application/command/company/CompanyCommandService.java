@@ -1,19 +1,18 @@
 package com.interior.application.command.company;
 
+import static com.interior.adapter.common.exception.ErrorType.LIMIT_OF_COMPANY_COUNT_IS_FIVE;
+import static com.interior.util.CheckUtil.check;
+
 import com.interior.adapter.outbound.alarm.AlarmService;
 import com.interior.application.command.company.dto.CreateCompanyServiceDto;
 import com.interior.domain.company.Company;
 import com.interior.domain.company.repository.CompanyRepository;
 import com.interior.domain.user.User;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-
-import static com.interior.adapter.common.exception.ErrorType.LIMIT_OF_COMPANY_COUNT_IS_FIVE;
-import static com.interior.util.CheckUtil.check;
 
 @Slf4j
 @Service
@@ -25,7 +24,7 @@ public class CompanyCommandService {
 
     @Transactional
     public boolean createCompany(
-            User user,
+            final User user,
             final CreateCompanyServiceDto.CreateCompanyDto reqDto
     ) {
 

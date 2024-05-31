@@ -12,6 +12,8 @@ public class BusinessMaterialLog {
 
     private Long id;
 
+    private Long businessId;
+
     private Long businessMaterialId;
 
     private BusinessMaterialChangeFieldType changeField;
@@ -29,6 +31,7 @@ public class BusinessMaterialLog {
 
     public BusinessMaterialLog(
             final Long id,
+            final Long businessId,
             final Long businessMaterialId,
             final BusinessMaterialChangeFieldType changeField,
             final String beforeData,
@@ -38,6 +41,7 @@ public class BusinessMaterialLog {
             final LocalDateTime createdAt
     ) {
         this.id = id;
+        this.businessId = businessId;
         this.businessMaterialId = businessMaterialId;
         this.changeField = changeField;
         this.beforeData = beforeData;
@@ -50,6 +54,7 @@ public class BusinessMaterialLog {
     // 조회 전용
     public static BusinessMaterialLog of(
             final Long id,
+            final Long businessId,
             final Long businessMaterialId,
             final BusinessMaterialChangeFieldType changeField,
             final String beforeData,
@@ -58,12 +63,13 @@ public class BusinessMaterialLog {
             final String updaterName,
             final LocalDateTime createdAt
     ) {
-        return new BusinessMaterialLog(id, businessMaterialId, changeField, beforeData, afterData,
-                updaterId, updaterName, createdAt);
+        return new BusinessMaterialLog(id, businessId, businessMaterialId, changeField, beforeData,
+                afterData, updaterId, updaterName, createdAt);
     }
 
     // 생성 전용
     public static BusinessMaterialLog of(
+            final Long businessId,
             final Long businessMaterialId,
             final BusinessMaterialChangeFieldType changeField,
             final String beforeData,
@@ -72,8 +78,8 @@ public class BusinessMaterialLog {
             final String updaterName,
             final LocalDateTime createdAt
     ) {
-        return new BusinessMaterialLog(null, businessMaterialId, changeField, beforeData, afterData,
-                updaterId, updaterName, createdAt);
+        return new BusinessMaterialLog(null, businessId, businessMaterialId, changeField,
+                beforeData, afterData, updaterId, updaterName, createdAt);
     }
 
     public String getChangeDetail() {

@@ -1,19 +1,20 @@
 package com.interior.adapter.outbound.jpa.repository.company;
 
-import static com.interior.adapter.common.exception.ErrorType.COMPANY_NOT_EXIST_IN_THE_USER;
-import static com.interior.util.CheckUtil.check;
-import static com.interior.util.converter.jpa.company.CompanyEntityConverter.companyToEntity;
-
 import com.interior.adapter.common.exception.ErrorType;
 import com.interior.adapter.outbound.jpa.entity.company.CompanyEntity;
 import com.interior.adapter.outbound.jpa.entity.user.UserEntity;
 import com.interior.adapter.outbound.jpa.repository.user.UserJpaRepository;
 import com.interior.domain.company.Company;
 import com.interior.domain.company.repository.CompanyRepository;
-import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.NoSuchElementException;
+
+import static com.interior.adapter.common.exception.ErrorType.COMPANY_NOT_EXIST_IN_THE_USER;
+import static com.interior.util.CheckUtil.check;
+import static com.interior.util.converter.jpa.company.CompanyEntityConverter.companyToEntity;
 
 @Repository
 @RequiredArgsConstructor

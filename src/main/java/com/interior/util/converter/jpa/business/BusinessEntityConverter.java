@@ -56,6 +56,7 @@ public class BusinessEntityConverter {
             final BusinessMaterialLog businessMaterialLog) {
 
         return BusinessMaterialLogEntity.of(
+                businessMaterialLog.getBusinessId(),
                 businessMaterialLog.getBusinessMaterialId(),
                 businessMaterialLog.getChangeField(),
                 businessMaterialLog.getBeforeData(),

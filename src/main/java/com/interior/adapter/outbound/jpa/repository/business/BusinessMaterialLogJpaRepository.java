@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface BusinessMaterialLogJpaRepository extends
         JpaRepository<BusinessMaterialLogEntity, Long> {
 
-    List<BusinessMaterialLogEntity> findAllByBusinessMaterialId(final Long businessMaterialId);
+    List<BusinessMaterialLogEntity> findAllByBusinessId(final Long businessId);
 }

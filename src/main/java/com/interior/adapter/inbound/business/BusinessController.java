@@ -1,8 +1,7 @@
 package com.interior.adapter.inbound.business;
 
-import com.interior.adapter.inbound.business.webdto.CreateBusiness.CreateBusinessReqDto;
-import com.interior.adapter.inbound.business.webdto.CreateBusiness.CreateBusinessResDto;
 import com.interior.adapter.inbound.business.webdto.CreateBusinessMaterial.CreateBusinessMaterialReqDto;
+import com.interior.adapter.inbound.business.webdto.CreateBusinessWebDtoV1;
 import com.interior.adapter.inbound.business.webdto.GetBusiness;
 import com.interior.adapter.inbound.business.webdto.ReviseBusiness;
 import com.interior.adapter.inbound.business.webdto.ReviseUsageCategoryOfMaterial;
@@ -39,16 +38,16 @@ public class BusinessController {
 
     // 사업 추가
     @PostMapping(value = "/api/companies/{companyId}/businesses")
-    public ResponseEntity<CreateBusinessResDto> createBusiness(
+    public ResponseEntity<CreateBusinessWebDtoV1.Res> createBusiness(
             @PathVariable(value = "companyId") final Long companyId,
-            @RequestBody final CreateBusinessReqDto createBusinessReqDto,
+            @RequestBody final CreateBusinessWebDtoV1.Req req,
             @AuthenticationPrincipal final User user
     ) {
 
         return ResponseEntity.status(HttpStatus.OK).body(
-                new CreateBusinessResDto(
+                new CreateBusinessWebDtoV1.Res(
                         true,
-                        businessCommandService.createBusiness(companyId, createBusinessReqDto, user)
+                        businessCommandService.createBusiness(companyId, req, user)
                 ));
     }
 
@@ -171,11 +170,11 @@ public class BusinessController {
     }
 
     // 재료 변경 로그 조회
-    @GetMapping(value = "/api/materials/{materialId}/logs")
+    @GetMapping(value = "/api/businesses/{businessId}/logs")
     public ResponseEntity<List<GetBusinessMaterialLogs.Res>> getBusinessMaterialLogs(
-            @PathVariable(value = "materialId") final Long materialId) {
+            @PathVariable(value = "businessId") final Long businessId) {
 
-        List<BusinessMaterialLog> logList = businessQueryService.getBusinessMaterialLog(materialId);
+        List<BusinessMaterialLog> logList = businessQueryService.getBusinessMaterialLog(businessId);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(logList.stream()
@@ -186,7 +185,6 @@ public class BusinessController {
                                         e.getChangeDetail(),
                                         e.getCreatedAt()
                                 )
-
                         ).collect(Collectors.toList()));
     }
 }

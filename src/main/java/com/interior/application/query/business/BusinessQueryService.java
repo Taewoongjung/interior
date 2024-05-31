@@ -116,10 +116,10 @@ public class BusinessQueryService {
     }
 
     @Transactional(readOnly = true)
-    public List<BusinessMaterialLog> getBusinessMaterialLog(final Long materialId) {
+    public List<BusinessMaterialLog> getBusinessMaterialLog(final Long businessId) {
 
-        List<BusinessMaterialLog> businessMaterialLogList = businessRepository.findBusinessMaterialLogByMaterialId(
-                materialId);
+        List<BusinessMaterialLog> businessMaterialLogList = businessRepository.findBusinessMaterialLogByBusinessId(
+                businessId);
 
         return businessMaterialLogList.stream()
                 .sorted(Comparator.comparing(BusinessMaterialLog::getCreatedAt).reversed())

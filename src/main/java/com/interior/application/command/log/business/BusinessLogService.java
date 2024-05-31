@@ -29,12 +29,14 @@ public class BusinessLogService {
 
 
     // 재료 삭제에 대한 로그
-    public void createLogForDeletingBusinessMaterial(final Long materialId, final Long updaterId) {
+    public void createLogForDeletingBusinessMaterial(final Long businessId, final Long materialId,
+            final Long updaterId) {
 
         BusinessMaterial originalBusinessMaterial =
                 businessRepository.findBusinessMaterialByMaterialId(materialId);
 
         createLogOfChangeMaterials(
+                businessId,
                 materialId,
                 BusinessMaterialChangeFieldType.DELETE_NEW_MATERIAL,
                 originalBusinessMaterial.getName(),
@@ -45,12 +47,14 @@ public class BusinessLogService {
 
     // 재료 생성에 대한 로그
     public void createLogForCreatingBusinessMaterial(
+            final Long businessId,
             final Long businessMaterialId,
             final Long updaterId,
             final String afterData
     ) {
 
         createLogOfChangeMaterials(
+                businessId,
                 businessMaterialId,
                 BusinessMaterialChangeFieldType.CREATE_NEW_MATERIAL,
                 null,
@@ -61,6 +65,7 @@ public class BusinessLogService {
 
     // 재료 업데이트 시 로그 생성
     private boolean createLogOfChangeMaterials(
+            final Long businessId,
             final Long businessMaterialId,
             final BusinessMaterialChangeFieldType changeField,
             final String beforeData,
@@ -72,6 +77,7 @@ public class BusinessLogService {
 
         return businessRepository.createMaterialUpdateLog(
                 BusinessMaterialLog.of(
+                        businessId,
                         businessMaterialId,
                         changeField,
                         beforeData,

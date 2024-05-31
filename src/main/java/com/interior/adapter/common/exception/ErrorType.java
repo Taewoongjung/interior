@@ -42,10 +42,11 @@ public enum ErrorType {
     EMPTY_BUSINESS_MATERIAL_CATEGORY(1204, "재료의 카테고리는 필수값입니다."),
     EMPTY_BUSINESS_MATERIAL_AMOUNT(1205, "재료의 수량은 필수값입니다."),
 
-    EMPTY_BUSINESS_MATERIAL_ID(1300, "사업 재료의 id는 필수값 입니다."),
-    EMPTY_CHANGE_FIELD(1301, "변경된 값은 필수값 입니다."),
-    EMPTY_UPDATER_ID(1302, "업데이터의 id는 필수값 입니다."),
-    EMPTY_UPDATER_NAME(1303, "업데이터의 이름은 필수값 입니다."),
+    EMPTY_BUSINESS_ID(1300, "사업의 id는 필수값 입니다."),
+    EMPTY_BUSINESS_MATERIAL_ID(1301, "사업 재료의 id는 필수값 입니다."),
+    EMPTY_CHANGE_FIELD(1302, "변경된 값은 필수값 입니다."),
+    EMPTY_UPDATER_ID(1303, "업데이터의 id는 필수값 입니다."),
+    EMPTY_UPDATER_NAME(1304, "업데이터의 이름은 필수값 입니다."),
     ;
 
 

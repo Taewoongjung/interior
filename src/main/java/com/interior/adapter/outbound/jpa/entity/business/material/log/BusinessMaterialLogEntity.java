@@ -1,5 +1,6 @@
 package com.interior.adapter.outbound.jpa.entity.business.material.log;
 
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_BUSINESS_ID;
 import static com.interior.adapter.common.exception.ErrorType.EMPTY_BUSINESS_MATERIAL_ID;
 import static com.interior.adapter.common.exception.ErrorType.EMPTY_CHANGE_FIELD;
 import static com.interior.adapter.common.exception.ErrorType.EMPTY_UPDATER_ID;
@@ -34,6 +35,9 @@ public class BusinessMaterialLogEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "business_id", nullable = false, columnDefinition = "bigint")
+    private Long businessId;
+
     @Column(name = "business_material_id", nullable = false, columnDefinition = "bigint")
     private Long businessMaterialId;
 
@@ -55,6 +59,7 @@ public class BusinessMaterialLogEntity {
 
     private BusinessMaterialLogEntity(
             final Long id,
+            final Long businessId,
             final Long businessMaterialId,
             final BusinessMaterialChangeFieldType changeField,
             final String beforeData,
@@ -63,6 +68,7 @@ public class BusinessMaterialLogEntity {
             final String updaterName
     ) {
         this.id = id;
+        this.businessId = businessId;
         this.businessMaterialId = businessMaterialId;
         this.changeField = changeField;
         this.beforeData = beforeData;
@@ -73,6 +79,7 @@ public class BusinessMaterialLogEntity {
     }
 
     public static BusinessMaterialLogEntity of(
+            final Long businessId,
             final Long businessMaterialId,
             final BusinessMaterialChangeFieldType changeField,
             final String beforeData,
@@ -81,13 +88,14 @@ public class BusinessMaterialLogEntity {
             final String updaterName
     ) {
 
+        require(o -> businessId == null, businessId, EMPTY_BUSINESS_ID);
         require(o -> businessMaterialId == null, businessMaterialId, EMPTY_BUSINESS_MATERIAL_ID);
         require(o -> changeField == null, changeField, EMPTY_CHANGE_FIELD);
         require(o -> updater == null, updater, EMPTY_UPDATER_ID);
         require(o -> updaterName == null, updaterName, EMPTY_UPDATER_NAME);
 
-        return new BusinessMaterialLogEntity(null, businessMaterialId, changeField, beforeData,
-                afterData, updater, updaterName);
+        return new BusinessMaterialLogEntity(null, businessId, businessMaterialId, changeField,
+                beforeData, afterData, updater, updaterName);
     }
 
     public BusinessMaterialLog toPojo() {
