@@ -6,7 +6,7 @@ public interface UserRepository {
 
     User findByEmail(final String email);
 
-    public void checkIfExistUserByEmail(final String email);
+    void checkIfExistUserByEmail(final String email);
 
     User save(final User user);
 

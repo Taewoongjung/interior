@@ -19,6 +19,10 @@ spring:
         show_sql: true
         format_sql: true
         use_sql_comments: true
+        default_batch_fetch_size: 5
+        event:
+          merge:
+            entity_copy_observer: allow
     database: mysql
   datasource:
     url: jdbc:mysql://localhost:3306/interior?useSSL=false&allowPublicKeyRetrieval=true
@@ -78,6 +82,7 @@ management:
 
 jwt:
   secret-key: ${JWT_SECRET_KEY}
+
 ---
 
 server:
@@ -101,6 +106,7 @@ spring:
         show_sql: true
         format_sql: true
         use_sql_comments: true
+        default_batch_fetch_size: 5
     database: mysql
   datasource:
     url: jdbc:mysql://database:3306/interior?useSSL=false&allowPublicKeyRetrieval=true
@@ -160,3 +166,5 @@ management:
 
 jwt:
   secret-key: ${JWT_SECRET_KEY}
+
+---

@@ -3,6 +3,7 @@ package com.interior.application.query.business;
 import static java.util.stream.Collectors.groupingBy;
 
 import com.interior.adapter.inbound.business.webdto.GetBusiness;
+import com.interior.adapter.outbound.cache.redis.excel.CacheExcelRedisRepository;
 import com.interior.adapter.outbound.excel.BusinessListExcel;
 import com.interior.adapter.outbound.excel.BusinessMaterialExcelDownload;
 import com.interior.adapter.outbound.jpa.querydsl.BusinessDao;
@@ -10,6 +11,7 @@ import com.interior.domain.business.Business;
 import com.interior.domain.business.log.BusinessMaterialLog;
 import com.interior.domain.business.material.BusinessMaterial;
 import com.interior.domain.business.repository.BusinessRepository;
+import com.interior.domain.excel.ExcelProgressInfo;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -17,6 +19,7 @@ import java.net.URLEncoder;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +34,7 @@ public class BusinessQueryService {
 
     private final BusinessDao businessDao;
     private final BusinessRepository businessRepository;
+    private final CacheExcelRedisRepository cacheExcelRedisRepository;
 
     @Transactional(readOnly = true)
     public GetBusiness.Response getBusiness(final Long businessId) {
@@ -106,6 +110,15 @@ public class BusinessQueryService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public ExcelProgressInfo getExcelProgressInfo(final String taskId) {
+
+//        cacheExcelRedisRepository.makeBucketByKey(taskId, 111);
+
+        Map<String, String> progressInfo = cacheExcelRedisRepository.getBucketByKey(taskId);
+
+        return ExcelProgressInfo.of(progressInfo);
     }
 
     @Transactional(readOnly = true)

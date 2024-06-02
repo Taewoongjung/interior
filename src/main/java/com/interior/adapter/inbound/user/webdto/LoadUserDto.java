@@ -1,7 +1,7 @@
 package com.interior.adapter.inbound.user.webdto;
 
 import com.interior.domain.company.Company;
-import java.util.List;
+import java.util.Set;
 
 public class LoadUserDto {
 
@@ -10,6 +10,8 @@ public class LoadUserDto {
             String tel,
             String name,
             String role,
-            List<Company> companyList
-    ) { }
+            Set<Company> companyList
+    ) {
+
+    }
 }

@@ -19,7 +19,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
     private final JWTUtil jwtUtil;
-    
+
     public LoginFilter(
             final AuthenticationManager authenticationManager,
             final JWTUtil jwtUtil
@@ -29,7 +29,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         setFilterProcessesUrl("/api/login");
     }
-    
+
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request,
             HttpServletResponse response) throws AuthenticationException {
@@ -38,14 +38,14 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String email = obtainUsername(request);
         String password = obtainPassword(request);
 
-        log.info("email = "+email);
-        log.info("password = "+password);
+        log.info("email = " + email);
+        log.info("password = " + password);
 
         // 스프링 시큐리티에서 username과 password를 검증하기 위해서는 token에 담아야 함.
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                 email, password, null);
 
-        System.out.println("token = "+ authToken);
+        System.out.println("token = " + authToken);
 
         return authenticationManager.authenticate(authToken);
     }
@@ -68,14 +68,15 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         String token = jwtUtil.createJwt(email, role, 2L * 60 * 60 * 1000);
 
-        System.out.println("token = "+ token);
+        log.info("token = " + token);
 
         response.addHeader("Authorization", "Bearer " + token);
     }
 
     @Override
     protected void unsuccessfulAuthentication(
-            HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
+            HttpServletRequest request, HttpServletResponse response,
+            AuthenticationException failed) {
 
         System.out.println("fail login");
 

@@ -13,6 +13,7 @@ import com.interior.application.query.business.dto.GetBusinessMaterialLogs;
 import com.interior.domain.business.Business;
 import com.interior.domain.business.log.BusinessMaterialLog;
 import com.interior.domain.company.Company;
+import com.interior.domain.excel.ExcelProgressInfo;
 import com.interior.domain.user.User;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -167,6 +168,15 @@ public class BusinessController {
             HttpServletResponse response
     ) {
         businessQueryService.getExcelOfBusinessMaterialList(companyId, businessId, response);
+    }
+
+    // 회사의 사업 리스트 엑셀 다운로드
+    @GetMapping(value = "/api/excels/tasks/{taskId}")
+    public ResponseEntity<ExcelProgressInfo> getExcelOfBusinessMaterialListProgressInfo(
+            @PathVariable(value = "taskId") final String taskId
+    ) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(businessQueryService.getExcelProgressInfo(taskId));
     }
 
     // 재료 변경 로그 조회

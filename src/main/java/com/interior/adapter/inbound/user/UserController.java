@@ -35,7 +35,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/api/me")
-    public ResponseEntity<LoadUserResDto> validationUser(final HttpServletRequest request) {
+    public ResponseEntity<LoadUserResDto> validateUser(final HttpServletRequest request) {
 
         User foundUser = userQueryService.loadUserByToken(request.getHeader("authorization"));
 

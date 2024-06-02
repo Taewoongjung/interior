@@ -31,11 +31,13 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web:3.2.2'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc:3.2.2'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.projectlombok:lombok:1.18.26'
 
     // lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+
+    // h2
+//    testImplementation 'com.h2database:h2'
 
     // actuator
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
@@ -82,9 +84,6 @@ dependencies {
     implementation 'com.slack.api:bolt:1.18.0'
     implementation 'com.slack.api:bolt-servlet:1.18.0'
     implementation 'com.slack.api:bolt-jetty:1.18.0'
-
-    // h2
-    testRuntimeOnly 'com.h2database:h2'
 }
 
 tasks.named('test') {
