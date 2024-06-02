@@ -5,9 +5,11 @@ import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_CUSTOMER
 import static com.interior.util.CheckUtil.check;
 import static com.interior.util.converter.jpa.user.UserEntityConverter.userToEntity;
 
+import com.interior.adapter.outbound.jpa.entity.company.CompanyEntity;
 import com.interior.adapter.outbound.jpa.entity.user.UserEntity;
 import com.interior.domain.user.User;
 import com.interior.domain.user.repository.UserRepository;
+import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -24,7 +26,8 @@ public class UserRepositoryAdapter implements UserRepository {
     @Transactional(readOnly = true)
     public User findByEmail(final String email) {
         UserEntity entity = userJpaRepository.findByEmail(email);
-        return entity.toPojo();
+        List<CompanyEntity> companyEntityList = entity.getCompanyEntityList();
+        return entity.toPojo(companyEntityList);
     }
 
     @Override

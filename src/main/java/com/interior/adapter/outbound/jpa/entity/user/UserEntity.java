@@ -18,7 +18,6 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -115,7 +114,7 @@ public class UserEntity extends BaseEntity {
     }
 
     // 지연로딩으로 불러 오는 연관관계와 매핑 된 POJO 객체 리턴
-    public User toPojo(final Set<CompanyEntity> companyEntityList) {
+    public User toPojo(final List<CompanyEntity> companyEntityList) {
         return User.of(
                 getId(),
                 getName(),
