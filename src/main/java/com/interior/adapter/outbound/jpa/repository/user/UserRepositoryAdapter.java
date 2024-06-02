@@ -34,7 +34,7 @@ public class UserRepositoryAdapter implements UserRepository {
     @Transactional(readOnly = true)
     public void checkIfExistUserByEmail(final String email) {
 
-        check(!userJpaRepository.existsByEmail(email), INVALID_SIGNUP_REQUEST_DUPLICATE_EMAIL);
+        check(userJpaRepository.existsByEmail(email), INVALID_SIGNUP_REQUEST_DUPLICATE_EMAIL);
     }
 
     @Override
