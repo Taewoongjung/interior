@@ -17,7 +17,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import java.time.LocalDateTime;
-import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
@@ -56,7 +56,7 @@ public class UserEntity extends BaseEntity {
     private UserRole role;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<CompanyEntity> companyEntityList = new LinkedHashSet<>();
+    private List<CompanyEntity> companyEntityList;
 
     private UserEntity(
             final Long id,
@@ -65,7 +65,7 @@ public class UserEntity extends BaseEntity {
             final String password,
             final String tel,
             final UserRole role,
-            final Set<CompanyEntity> companyEntityList
+            final List<CompanyEntity> companyEntityList
     ) {
         super(LocalDateTime.now(), LocalDateTime.now());
 
@@ -95,7 +95,7 @@ public class UserEntity extends BaseEntity {
             final String password,
             final String tel,
             final UserRole userRole,
-            final Set<CompanyEntity> companyEntityList
+            final List<CompanyEntity> companyEntityList
     ) {
         return new UserEntity(null, name, email, password, tel, userRole, companyEntityList);
     }
@@ -126,7 +126,7 @@ public class UserEntity extends BaseEntity {
                 getLastModified(),
                 getCreatedAt(),
                 companyEntityList.stream().map(CompanyEntity::toPojo)
-                        .collect(Collectors.toSet())
+                        .collect(Collectors.toList())
         );
     }
 
@@ -142,7 +142,7 @@ public class UserEntity extends BaseEntity {
                 getLastModified(),
                 getCreatedAt(),
                 getCompanyEntityList().stream().map(CompanyEntity::toPojo)
-                        .collect(Collectors.toSet())
+                        .collect(Collectors.toList())
         );
     }
 }

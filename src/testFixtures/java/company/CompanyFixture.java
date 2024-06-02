@@ -2,8 +2,8 @@ package company;
 
 import com.interior.domain.company.Company;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CompanyFixture {
 
@@ -85,18 +85,18 @@ public class CompanyFixture {
             LocalDateTime.of(2024, 5, 19, 23, 30)
     );
 
-    public static Set<Company> COMPANY_LIST() {
+    public static List<Company> COMPANY_LIST() {
 
-        Set<Company> list = new HashSet<>();
+        List<Company> list = new ArrayList<>();
         list.add(COMPANY_1);
         list.add(COMPANY_2);
 
         return list;
     }
 
-    public static Set<Company> COMPANY_LIST_OVER_5() {
+    public static List<Company> COMPANY_LIST_OVER_5() {
 
-        Set<Company> list = new HashSet<>();
+        List<Company> list = new ArrayList<>();
         list.add(COMPANY_1);
         list.add(COMPANY_2);
         list.add(COMPANY_3);

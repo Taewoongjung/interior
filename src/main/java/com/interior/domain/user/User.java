@@ -13,7 +13,6 @@ import com.interior.domain.company.Company;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import lombok.Getter;
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
@@ -38,7 +37,7 @@ public class User extends Throwable implements UserDetails {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdAt;
 
-    private Set<Company> companyList;
+    private List<Company> companyList;
 
     private User(
             final Long id,
@@ -49,7 +48,7 @@ public class User extends Throwable implements UserDetails {
             final UserRole userRole,
             final LocalDateTime lastModified,
             final LocalDateTime createdAt,
-            final Set<Company> companyList
+            final List<Company> companyList
     ) {
         this.id = id;
         this.name = name;
@@ -110,7 +109,7 @@ public class User extends Throwable implements UserDetails {
             final UserRole userRole,
             final LocalDateTime lastModified,
             final LocalDateTime createdAt,
-            final Set<Company> companyList
+            final List<Company> companyList
     ) {
 
         require(o -> name == null, name, INVALID_CUSTOMER_NAME);
