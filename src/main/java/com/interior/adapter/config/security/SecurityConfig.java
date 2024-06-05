@@ -29,7 +29,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    //	private final RedisTemplate<String,String> redisTemplate;
     private final UserQueryService userQueryService;
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTUtil jwtUtil;
@@ -78,10 +77,14 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST,
                                 "/api/login"
                                 , "/api/signup"
+                        ).permitAll()
+                        .requestMatchers(HttpMethod.POST,
+                                "/api/login"
+                                , "/api/signup"
                                 , "/api/companies"
                                 , "/api/businesses"
                                 , "/api/companies/{companyId}/businesses"
-                        ).permitAll()
+                        ).authenticated()
                         .requestMatchers(HttpMethod.PATCH,
                                 "/api/businesses/{businessId}"
                         ).authenticated()

@@ -20,6 +20,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +41,7 @@ public class BusinessQueryService {
     private final BusinessRepository businessRepository;
     private final CacheExcelRedisRepository cacheExcelRedisRepository;
 
-    private Long DEFAULT_TIMEOUT = 60L * 1000L * 60L;
+    private static final long DEFAULT_TIMEOUT = 30_000L; // 30 seconds
 
 
     @Transactional(readOnly = true)
@@ -128,16 +130,29 @@ public class BusinessQueryService {
     }
 
     public SseEmitter getExcelProgressInfo(final String taskId) throws IOException {
+        SseEmitter emitter = new SseEmitter(DEFAULT_TIMEOUT);
+        emitterRepository.save(taskId, emitter);
 
-        SseEmitter emitter = emitterRepository.save(taskId, new SseEmitter(DEFAULT_TIMEOUT));
         emitter.onCompletion(() -> emitterRepository.deleteById(taskId));
-        emitter.onTimeout(() -> emitterRepository.deleteById(taskId));
+        emitter.onTimeout(() -> {
+            emitterRepository.deleteById(taskId);
+            try {
+                emitter.send(SseEmitter.event().id(taskId).data("Connection timed out"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
 
-        Map<String, String> progressInfo = cacheExcelRedisRepository.getBucketByKey(taskId);
-
-        emitter.send(SseEmitter.event()
-                .id(taskId)
-                .data(progressInfo));
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            try {
+                Map<String, String> progressInfo = cacheExcelRedisRepository.getBucketByKey(taskId);
+                emitter.send(SseEmitter.event().id(taskId).data(progressInfo));
+                emitter.complete();
+            } catch (Exception e) {
+                emitter.completeWithError(e);
+            }
+        });
 
         return emitter;
     }
