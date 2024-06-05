@@ -77,7 +77,7 @@ public class SecurityConfig {
                                 , "/api/companies"
                                 , "/api/businesses"
                                 , "/api/companies/{companyId}/businesses"
-                        ).authenticated()
+                        ).permitAll()
                         .requestMatchers(HttpMethod.PATCH,
                                 "/api/businesses/{businessId}"
                         ).authenticated()
