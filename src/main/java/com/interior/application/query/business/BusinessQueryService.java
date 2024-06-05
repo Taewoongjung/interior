@@ -108,9 +108,8 @@ public class BusinessQueryService {
             businessListExcel = BusinessListExcel.of(workbook);
 
             int dataSize = business.getBusinessMaterialList().size();
-            System.out.println("레디스 전");
+
             cacheExcelRedisRepository.makeBucketByKey(taskId, dataSize);
-            System.out.println("레디스 후");
 
             // 데이터 세팅
             businessListExcel.setData(business, cacheExcelRedisRepository, taskId,

@@ -43,6 +43,14 @@ services:
     networks:
       - server-connection
 
+  redis:
+    image: redis:latest
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - server-connection
+
   app:
     build:
       context: ./
@@ -53,6 +61,7 @@ services:
       - "7070"
     depends_on:
       - database
+      - redis
     command:
       - ./gradlew bootRun
       - chmod 777 /app/logs
@@ -67,14 +76,6 @@ services:
     volumes:
       - /home/twj/interior-app/logs:/app/logs
     user: root
-
-  redis:
-    image: redis:latest
-    restart: unless-stopped
-    ports:
-      - "6379:6379"
-    networks:
-      - server-connection
 
 volumes:
   dev-log:
