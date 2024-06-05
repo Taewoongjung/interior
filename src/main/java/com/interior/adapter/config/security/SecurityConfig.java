@@ -64,6 +64,10 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests((auth) -> auth
                         .requestMatchers(HttpMethod.GET,
+                                "/api/excels/tasks/{taskId}"
+                        ).permitAll().anyRequest().authenticated()
+
+                        .requestMatchers(HttpMethod.GET,
                                 "/actuator/health"
                                 , "/api/me"
                                 , "/api/companies"
@@ -83,7 +87,6 @@ public class SecurityConfig {
                         ).authenticated()
                         .requestMatchers("/admin").hasRole("CUSTOMER")
                         .requestMatchers("/login").permitAll()
-                        .requestMatchers("/api/excels/tasks/{taskId}").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(new JWTFilter(jwtUtil, userQueryService), LoginFilter.class)
 
