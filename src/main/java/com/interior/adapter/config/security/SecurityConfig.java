@@ -65,7 +65,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests((auth) -> auth
                         .requestMatchers(HttpMethod.GET,
                                 "/api/excels/tasks/{taskId}"
-                        ).permitAll().anyRequest().authenticated()
+                        ).permitAll()
 
                         .requestMatchers(HttpMethod.GET,
                                 "/actuator/health"
