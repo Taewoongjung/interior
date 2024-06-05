@@ -13,6 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 @Slf4j
@@ -22,9 +23,18 @@ public class JWTFilter extends OncePerRequestFilter {
     private final JWTUtil jwtUtil;
     private final UserQueryService userQueryService;
 
+    private static final AntPathMatcher antPathMatcher = new AntPathMatcher();
+    private static final String EXCLUDED_PATH = "/api/excels/tasks/**";
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
+
+        if (antPathMatcher.match(EXCLUDED_PATH, request.getServletPath())) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         // request 에서 Authorization 헤더를 찾음
         String authorization = request.getHeader("Authorization");
 
@@ -36,7 +46,6 @@ public class JWTFilter extends OncePerRequestFilter {
             // 이 조건에 해당되면 메소드 종료
             return;
         }
-
 
         String token = jwtUtil.getTokenWithoutBearer(authorization);
 
