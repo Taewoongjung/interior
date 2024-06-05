@@ -4,6 +4,7 @@ import static java.util.stream.Collectors.groupingBy;
 
 import com.interior.adapter.inbound.business.webdto.GetBusiness;
 import com.interior.adapter.outbound.cache.redis.excel.CacheExcelRedisRepository;
+import com.interior.adapter.outbound.emitter.EmitterRepository;
 import com.interior.adapter.outbound.excel.BusinessListExcel;
 import com.interior.adapter.outbound.excel.BusinessMaterialExcelDownload;
 import com.interior.adapter.outbound.jpa.querydsl.BusinessDao;
@@ -11,7 +12,6 @@ import com.interior.domain.business.Business;
 import com.interior.domain.business.log.BusinessMaterialLog;
 import com.interior.domain.business.material.BusinessMaterial;
 import com.interior.domain.business.repository.BusinessRepository;
-import com.interior.domain.excel.ExcelProgressInfo;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -24,8 +24,10 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @Slf4j
 @Service
@@ -33,8 +35,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class BusinessQueryService {
 
     private final BusinessDao businessDao;
+    private final EmitterRepository emitterRepository;
     private final BusinessRepository businessRepository;
     private final CacheExcelRedisRepository cacheExcelRedisRepository;
+
+    private Long DEFAULT_TIMEOUT = 60L * 1000L * 60L;
+
 
     @Transactional(readOnly = true)
     public GetBusiness.Response getBusiness(final Long businessId) {
@@ -79,10 +85,12 @@ public class BusinessQueryService {
         return businessRepository.findBusinessByCompanyIdAndBusinessId(companyId, businessId);
     }
 
+    @Async
     @Transactional(readOnly = true)
     public void getExcelOfBusinessMaterialList(
             final Long companyId,
             final Long businessId,
+            final String taskId,
             HttpServletResponse response
     ) {
 
@@ -99,8 +107,13 @@ public class BusinessQueryService {
 
             businessListExcel = BusinessListExcel.of(workbook);
 
+            int dataSize = business.getBusinessMaterialList().size();
+
+            cacheExcelRedisRepository.makeBucketByKey(taskId, dataSize);
+
             // 데이터 세팅
-            businessListExcel.setData(business);
+            businessListExcel.setData(business, cacheExcelRedisRepository, taskId,
+                    emitterRepository);
 
             ServletOutputStream outputStream = response.getOutputStream();
             businessListExcel.getWorkbook().write(outputStream);
@@ -109,16 +122,24 @@ public class BusinessQueryService {
 
         } catch (IOException e) {
             throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public ExcelProgressInfo getExcelProgressInfo(final String taskId) {
+    public SseEmitter getExcelProgressInfo(final String taskId) throws IOException {
 
-//        cacheExcelRedisRepository.makeBucketByKey(taskId, 111);
+        SseEmitter emitter = emitterRepository.save(taskId, new SseEmitter(DEFAULT_TIMEOUT));
+        emitter.onCompletion(() -> emitterRepository.deleteById(taskId));
+        emitter.onTimeout(() -> emitterRepository.deleteById(taskId));
 
         Map<String, String> progressInfo = cacheExcelRedisRepository.getBucketByKey(taskId);
 
-        return ExcelProgressInfo.of(progressInfo);
+        emitter.send(SseEmitter.event()
+                .id(taskId)
+                .data(progressInfo));
+
+        return emitter;
     }
 
     @Transactional(readOnly = true)

@@ -25,6 +25,24 @@ public class CacheExcelRedisRepository {
         stringStringValueOperations.set(key, map);
     }
 
+    public void setCountByKey(final String key) {
+        // Redis에서 key에 해당하는 값을 가져옵니다.
+        ValueOperations<String, Map<String, String>> valueOps = redisTemplate.opsForValue();
+        Map<String, String> valueMap = valueOps.get(key);
+
+        if (valueMap != null) {
+            // "completeCount"의 값을 증가시킵니다.
+            int completeCount = Integer.parseInt(valueMap.get("completeCount")) + 1;
+            valueMap.put("completeCount", String.valueOf(completeCount));
+
+            // 변경된 값을 Redis에 다시 저장합니다.
+            valueOps.set(key, valueMap);
+        } else {
+            // valueMap이 null인 경우, 로그를 출력하거나 예외를 던질 수 있습니다.
+            System.out.println("No value found for key: " + key);
+        }
+    }
+
     public Map<String, String> getBucketByKey(final String key) {
         ValueOperations<String, Map<String, String>> valueOps = redisTemplate.opsForValue();
         return valueOps.get(key);

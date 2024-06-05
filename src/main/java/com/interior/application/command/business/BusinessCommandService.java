@@ -115,14 +115,19 @@ public class BusinessCommandService {
     public boolean reviseBusiness(
             final Long companyId,
             final Long businessId,
-            final ReviseBusinessServiceDto.Req req
+            final ReviseBusinessServiceDto.Req req,
+            final User user
     ) {
 
         Company company = companyRepository.findById(companyId);
 
         company.validateDuplicateName(req.changeBusinessName());
 
-        return businessRepository.reviseBusiness(companyId, businessId, req);
+        businessRepository.reviseBusiness(companyId, businessId, req);
+
+        // 사업명 수정 로그
+
+        return true;
     }
 
     @Transactional

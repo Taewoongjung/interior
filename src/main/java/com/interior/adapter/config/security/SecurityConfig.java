@@ -69,19 +69,21 @@ public class SecurityConfig {
                                 , "/api/companies"
                                 , "/api/businesses/{businessId}"
                                 , "/api/companies/{companyId}/businesses"
-                        ).permitAll()
+                                , "/api/excels/companies/{companyId}/businesses/{businessId}"
+                        ).authenticated()
                         .requestMatchers(HttpMethod.POST,
                                 "/api/login"
                                 , "/api/signup"
                                 , "/api/companies"
                                 , "/api/businesses"
                                 , "/api/companies/{companyId}/businesses"
-                        ).permitAll()
+                        ).authenticated()
                         .requestMatchers(HttpMethod.PATCH,
                                 "/api/businesses/{businessId}"
-                        ).permitAll()
+                        ).authenticated()
                         .requestMatchers("/admin").hasRole("CUSTOMER")
                         .requestMatchers("/login").permitAll()
+                        .requestMatchers("/api/excels/tasks/{taskId}").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(new JWTFilter(jwtUtil, userQueryService), LoginFilter.class)
 

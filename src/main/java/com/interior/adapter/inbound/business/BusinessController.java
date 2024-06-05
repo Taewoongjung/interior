@@ -13,9 +13,9 @@ import com.interior.application.query.business.dto.GetBusinessMaterialLogs;
 import com.interior.domain.business.Business;
 import com.interior.domain.business.log.BusinessMaterialLog;
 import com.interior.domain.company.Company;
-import com.interior.domain.excel.ExcelProgressInfo;
 import com.interior.domain.user.User;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,9 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @RestController
 @RequiredArgsConstructor
@@ -148,7 +150,8 @@ public class BusinessController {
     public ResponseEntity<Boolean> reviseBusiness(
             @PathVariable(value = "companyId") final Long companyId,
             @PathVariable(value = "businessId") final Long businessId,
-            @RequestBody final ReviseBusiness.WebReqV1 req
+            @RequestBody final ReviseBusiness.WebReqV1 req,
+            @AuthenticationPrincipal final User user
     ) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(businessCommandService.reviseBusiness(
@@ -156,7 +159,8 @@ public class BusinessController {
                         businessId,
                         new ReviseBusinessServiceDto.Req(
                                 req.changeBusinessName()
-                        )
+                        ),
+                        user
                 ));
     }
 
@@ -165,18 +169,19 @@ public class BusinessController {
     public void getExcelOfBusinessMaterialList(
             @PathVariable(value = "companyId") final Long companyId,
             @PathVariable(value = "businessId") final Long businessId,
+            @RequestParam("taskId") final String taskId,
             HttpServletResponse response
     ) {
-        businessQueryService.getExcelOfBusinessMaterialList(companyId, businessId, response);
+        businessQueryService.getExcelOfBusinessMaterialList(companyId, businessId, taskId,
+                response);
     }
 
-    // 회사의 사업 리스트 엑셀 다운로드
+    // 회사의 사업 리스트 엑셀 다운로드 프로그레스 조회
     @GetMapping(value = "/api/excels/tasks/{taskId}")
-    public ResponseEntity<ExcelProgressInfo> getExcelOfBusinessMaterialListProgressInfo(
+    public SseEmitter getExcelOfBusinessMaterialListProgressInfo(
             @PathVariable(value = "taskId") final String taskId
-    ) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(businessQueryService.getExcelProgressInfo(taskId));
+    ) throws IOException {
+        return businessQueryService.getExcelProgressInfo(taskId);
     }
 
     // 재료 변경 로그 조회

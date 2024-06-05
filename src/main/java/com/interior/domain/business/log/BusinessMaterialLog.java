@@ -85,11 +85,11 @@ public class BusinessMaterialLog {
     public String getChangeDetail() {
 
         if (changeField.equals(CREATE_NEW_MATERIAL)) {
-            return getAfterData() + " (생성)";
+            return getAfterData();
         }
 
         if (changeField.equals(DELETE_NEW_MATERIAL)) {
-            return getBeforeData() + " (삭제)";
+            return getBeforeData();
         }
 
         return getBeforeData() + " → " + getAfterData();

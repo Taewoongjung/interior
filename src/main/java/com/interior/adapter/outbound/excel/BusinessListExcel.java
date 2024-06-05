@@ -2,8 +2,11 @@ package com.interior.adapter.outbound.excel;
 
 import static java.util.stream.Collectors.groupingBy;
 
+import com.interior.adapter.outbound.cache.redis.excel.CacheExcelRedisRepository;
+import com.interior.adapter.outbound.emitter.EmitterRepository;
 import com.interior.domain.business.Business;
 import com.interior.domain.business.material.BusinessMaterial;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +23,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @Getter
 public class BusinessListExcel {
@@ -107,7 +111,10 @@ public class BusinessListExcel {
         return cellStyle;
     }
 
-    public void setData(final Business business) {
+    public void setData(final Business business,
+            final CacheExcelRedisRepository cacheExcelRedisRepository, final String taskId,
+            final EmitterRepository emitterRepository)
+            throws InterruptedException {
 
         // 사업명 설정 (첫 번째)
         setTitle(
@@ -118,11 +125,18 @@ public class BusinessListExcel {
         );
 
         // 실제 데이터 설정
-        setRealData(business.getBusinessMaterialList().stream()
-                .collect(groupingBy(BusinessMaterial::getUsageCategory)));
+        setRealData(
+                business.getBusinessMaterialList().stream()
+                        .collect(groupingBy(BusinessMaterial::getUsageCategory)),
+                cacheExcelRedisRepository,
+                taskId,
+                emitterRepository
+        );
     }
 
-    private void setTitle(final String businessName, final String status, final String statusDetail) {
+    private void setTitle(final String businessName, final String status,
+            final String statusDetail) {
+
         Row titleRow = sheet.createRow(0);
 
         // 첫 번째 row 병합
@@ -139,7 +153,7 @@ public class BusinessListExcel {
         titleStyle.setFont(font);
 
         String titleStr = statusDetail != null ?
-                "■ " + businessName + " (" + status + " - " + statusDetail+ ")" :
+                "■ " + businessName + " (" + status + " - " + statusDetail + ")" :
                 "■ " + businessName + " (" + status + ")";
 
         title.setCellValue(titleStr);
@@ -151,7 +165,10 @@ public class BusinessListExcel {
     }
 
     private void setRealData(
-            final Map<String, List<BusinessMaterial>> businessMaterialMap) {
+            final Map<String, List<BusinessMaterial>> businessMaterialMap,
+            final CacheExcelRedisRepository cacheExcelRedisRepository,
+            final String taskId, final EmitterRepository emitterRepository)
+            throws InterruptedException {
 
         int countDataOfMajorTopic = 1;
 
@@ -194,7 +211,8 @@ public class BusinessListExcel {
             for (BusinessMaterial businessMaterial : businessMaterialMap.get(materialCategory)) {
 
                 if (businessMaterial.getAllMaterialCostPerUnit() != null) {
-                    materialAllCost += Integer.parseInt(businessMaterial.getAllMaterialCostPerUnit());
+                    materialAllCost += Integer.parseInt(
+                            businessMaterial.getAllMaterialCostPerUnit());
                 }
 
                 if (businessMaterial.getAllLaborCostPerUnit() != null) {
@@ -219,6 +237,20 @@ public class BusinessListExcel {
                 }
 
                 rowCount++;
+                cacheExcelRedisRepository.setCountByKey(taskId);
+
+                Map<String, SseEmitter> emitters = emitterRepository.findAllEmitterStartWithByMemberId(
+                        taskId);
+
+                Map<String, String> progressInfo = cacheExcelRedisRepository.getBucketByKey(
+                        taskId);
+
+                emitters.forEach(
+                        (key, emitter) -> {
+                            emitterRepository.saveEventCache(key, progressInfo);
+                            sendProgressInfo(emitter, taskId, key, progressInfo, emitterRepository);
+                        }
+                );
             }
 
             // 소계
@@ -231,6 +263,18 @@ public class BusinessListExcel {
         }
     }
 
+    private void sendProgressInfo(SseEmitter emitter, String taskId, String emitterId, Object data,
+            final EmitterRepository emitterRepository) {
+        try {
+            emitter.send(SseEmitter.event()
+                    .id(taskId)
+                    .data(data));
+        } catch (IOException exception) {
+            System.out.println("emitter 삭제 실행");
+            emitterRepository.deleteById(emitterId);
+        }
+    }
+
     private List<ExcelCellInfo> asExcelDataList(final BusinessMaterial businessMaterial) {
 
         List<ExcelCellInfo> excelCellInfos = new ArrayList<>();
@@ -239,22 +283,27 @@ public class BusinessListExcel {
 
             excelCellInfos.add(new ExcelCellInfo(businessMaterial.getCategory(), null, null));
             excelCellInfos.add(new ExcelCellInfo(businessMaterial.getName(), null, null));
-            excelCellInfos.add(new ExcelCellInfo(businessMaterial.getAmount().toString(), null, null));
+            excelCellInfos.add(
+                    new ExcelCellInfo(businessMaterial.getAmount().toString(), null, null));
             excelCellInfos.add(new ExcelCellInfo(businessMaterial.getUnit(), null, null));
 
             excelCellInfos.add(new ExcelCellInfo(
                     businessMaterial.getBusinessMaterialExpense() != null ?
-                        businessMaterial.getBusinessMaterialExpense().getMaterialCostPerUnit() : null,
+                            businessMaterial.getBusinessMaterialExpense().getMaterialCostPerUnit()
+                            : null,
                     null, null));
 
-            excelCellInfos.add(new ExcelCellInfo(businessMaterial.getAllMaterialCostPerUnit(), null, null));
+            excelCellInfos.add(
+                    new ExcelCellInfo(businessMaterial.getAllMaterialCostPerUnit(), null, null));
 
             excelCellInfos.add(new ExcelCellInfo(
                     businessMaterial.getBusinessMaterialExpense() != null ?
-                            businessMaterial.getBusinessMaterialExpense().getLaborCostPerUnit() : null,
+                            businessMaterial.getBusinessMaterialExpense().getLaborCostPerUnit()
+                            : null,
                     null, null));
 
-            excelCellInfos.add(new ExcelCellInfo(businessMaterial.getAllLaborCostPerUnit(), null, null));
+            excelCellInfos.add(
+                    new ExcelCellInfo(businessMaterial.getAllLaborCostPerUnit(), null, null));
             excelCellInfos.add(new ExcelCellInfo(businessMaterial.getTotalUnitPrice(), null, null));
             excelCellInfos.add(new ExcelCellInfo(businessMaterial.getTotalPrice(), null, null));
             excelCellInfos.add(new ExcelCellInfo(businessMaterial.getMemo(), null, null));

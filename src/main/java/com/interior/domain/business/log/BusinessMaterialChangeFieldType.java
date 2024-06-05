@@ -8,9 +8,9 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum BusinessMaterialChangeFieldType {
-
-    CREATE_NEW_MATERIAL("재료생성"),
-    DELETE_NEW_MATERIAL("재료삭제"),
+    BUSINESS_NAME("사업명"),
+    CREATE_NEW_MATERIAL("생성"), // 재료생성
+    DELETE_NEW_MATERIAL("삭제"), // 재료삭제
     NAME("이름"),
     CATEGORY("카테고리");
 
