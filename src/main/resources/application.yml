@@ -120,7 +120,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   data:
     redis:
-      host: redis
+      host: localhost
       port: 6379
       password: 1234567
       database: 0
