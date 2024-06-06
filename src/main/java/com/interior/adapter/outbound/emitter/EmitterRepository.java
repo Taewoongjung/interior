@@ -21,15 +21,15 @@ public class EmitterRepository {
         eventCache.put(eventCacheId, event);
     }
 
-    public Map<String, SseEmitter> findAllEmitterStartWithByMemberId(String memberId) {
+    public Map<String, SseEmitter> findAllEmitterStartWithByTaskId(final String taskId) {
         return emitters.entrySet().stream()
-                .filter(entry -> entry.getKey().startsWith(memberId))
+                .filter(entry -> entry.getKey().startsWith(taskId))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
-    public Map<String, Object> findAllEventCacheStartWithByMemberId(String memberId) {
+    public Map<String, Object> findAllEventCacheStartWithByTaskId(final String taskId) {
         return eventCache.entrySet().stream()
-                .filter(entry -> entry.getKey().startsWith(memberId))
+                .filter(entry -> entry.getKey().startsWith(taskId))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
@@ -37,20 +37,20 @@ public class EmitterRepository {
         emitters.remove(id);
     }
 
-    public void deleteAllEmitterStartWithId(String memberId) {
+    public void deleteAllEmitterStartWithId(final String taskId) {
         emitters.forEach(
                 (key, emitter) -> {
-                    if (key.startsWith(memberId)) {
+                    if (key.startsWith(taskId)) {
                         emitters.remove(key);
                     }
                 }
         );
     }
 
-    public void deleteAllEventCacheStartWithId(String memberId) {
+    public void deleteAllEventCacheStartTaskId(final String taskId) {
         eventCache.forEach(
                 (key, emitter) -> {
-                    if (key.startsWith(memberId)) {
+                    if (key.startsWith(taskId)) {
                         eventCache.remove(key);
                     }
                 }

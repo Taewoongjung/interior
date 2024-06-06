@@ -41,7 +41,7 @@ public class BusinessQueryService {
     private final BusinessRepository businessRepository;
     private final CacheExcelRedisRepository cacheExcelRedisRepository;
 
-    private static final long DEFAULT_TIMEOUT = 30_000L; // 30 seconds
+    private static final long DEFAULT_TIMEOUT = 86400000;
 
 
     @Transactional(readOnly = true)

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -25,6 +26,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+@Slf4j
 @Getter
 public class BusinessListExcel {
 
@@ -167,8 +169,7 @@ public class BusinessListExcel {
     private void setRealData(
             final Map<String, List<BusinessMaterial>> businessMaterialMap,
             final CacheExcelRedisRepository cacheExcelRedisRepository,
-            final String taskId, final EmitterRepository emitterRepository)
-            throws InterruptedException {
+            final String taskId, final EmitterRepository emitterRepository) {
 
         int countDataOfMajorTopic = 1;
 
@@ -237,9 +238,10 @@ public class BusinessListExcel {
                 }
 
                 rowCount++;
+
                 cacheExcelRedisRepository.setCountByKey(taskId);
 
-                Map<String, SseEmitter> emitters = emitterRepository.findAllEmitterStartWithByMemberId(
+                Map<String, SseEmitter> emitters = emitterRepository.findAllEmitterStartWithByTaskId(
                         taskId);
 
                 Map<String, String> progressInfo = cacheExcelRedisRepository.getBucketByKey(
@@ -263,14 +265,15 @@ public class BusinessListExcel {
         }
     }
 
-    private void sendProgressInfo(SseEmitter emitter, String taskId, String emitterId, Object data,
-            final EmitterRepository emitterRepository) {
+    private void sendProgressInfo(final SseEmitter emitter, final String taskId,
+            final String emitterId, final Object data, final EmitterRepository emitterRepository) {
+
         try {
             emitter.send(SseEmitter.event()
                     .id(taskId)
                     .data(data));
         } catch (IOException exception) {
-            System.out.println("emitter 삭제 실행");
+            log.info("emitter 삭제 실행");
             emitterRepository.deleteById(emitterId);
         }
     }
