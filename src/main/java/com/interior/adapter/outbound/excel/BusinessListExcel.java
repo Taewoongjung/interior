@@ -169,7 +169,8 @@ public class BusinessListExcel {
     private void setRealData(
             final Map<String, List<BusinessMaterial>> businessMaterialMap,
             final CacheExcelRedisRepository cacheExcelRedisRepository,
-            final String taskId, final EmitterRepository emitterRepository) {
+            final String taskId, final EmitterRepository emitterRepository)
+            throws InterruptedException {
 
         int countDataOfMajorTopic = 1;
 
@@ -208,6 +209,8 @@ public class BusinessListExcel {
             int laborAllCost = 0; // 소계 - 노무비 금액의 합
             int allTotalCost = 0; // 소계 - 합계 금액의 합
 
+            Map<String, SseEmitter> emitters = emitterRepository.findEmitterByTaskId(taskId);
+
             // 소 주제
             for (BusinessMaterial businessMaterial : businessMaterialMap.get(materialCategory)) {
 
@@ -241,9 +244,6 @@ public class BusinessListExcel {
 
                 cacheExcelRedisRepository.setCountByKey(taskId);
 
-                Map<String, SseEmitter> emitters = emitterRepository.findAllEmitterStartWithByTaskId(
-                        taskId);
-
                 Map<String, String> progressInfo = cacheExcelRedisRepository.getBucketByKey(
                         taskId);
 
@@ -253,6 +253,8 @@ public class BusinessListExcel {
                             sendProgressInfo(emitter, taskId, key, progressInfo, emitterRepository);
                         }
                 );
+
+                Thread.sleep(2000);
             }
 
             // 소계

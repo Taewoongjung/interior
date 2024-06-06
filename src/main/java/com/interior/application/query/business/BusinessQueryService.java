@@ -20,8 +20,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -113,6 +111,8 @@ public class BusinessQueryService {
 
             cacheExcelRedisRepository.makeBucketByKey(taskId, dataSize);
 
+            emitterRepository.save(taskId, new SseEmitter(DEFAULT_TIMEOUT));
+
             // 데이터 세팅
             businessListExcel.setData(business, cacheExcelRedisRepository, taskId,
                     emitterRepository);
@@ -129,12 +129,18 @@ public class BusinessQueryService {
         }
     }
 
-    public SseEmitter getExcelProgressInfo(final String taskId) throws IOException {
+    public SseEmitter getExcelProgressInfo(final String taskId) {
+        log.info("Starting SSE stream for taskId: " + taskId);
         SseEmitter emitter = new SseEmitter(DEFAULT_TIMEOUT);
         emitterRepository.save(taskId, emitter);
 
-        emitter.onCompletion(() -> emitterRepository.deleteById(taskId));
+        emitter.onCompletion(() -> {
+            log.info("Emitter completed for taskId: " + taskId);
+            emitterRepository.deleteById(taskId);
+        });
+
         emitter.onTimeout(() -> {
+            log.warn("Emitter timed out for taskId: " + taskId);
             emitterRepository.deleteById(taskId);
             try {
                 emitter.send(SseEmitter.event().id(taskId).data("Connection timed out"));
@@ -143,16 +149,12 @@ public class BusinessQueryService {
             }
         });
 
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(() -> {
-            try {
-                Map<String, String> progressInfo = cacheExcelRedisRepository.getBucketByKey(taskId);
-                emitter.send(SseEmitter.event().id(taskId).data(progressInfo));
-                emitter.complete();
-            } catch (Exception e) {
-                emitter.completeWithError(e);
-            }
-        });
+        try {
+            Map<String, String> progressInfo = cacheExcelRedisRepository.getBucketByKey(taskId);
+            emitter.send(SseEmitter.event().id(taskId).data(progressInfo));
+        } catch (Exception e) {
+            emitter.completeWithError(e);
+        }
 
         return emitter;
     }

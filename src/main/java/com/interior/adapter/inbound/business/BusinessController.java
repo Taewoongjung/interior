@@ -15,7 +15,6 @@ import com.interior.domain.business.log.BusinessMaterialLog;
 import com.interior.domain.company.Company;
 import com.interior.domain.user.User;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -180,7 +179,7 @@ public class BusinessController {
     @GetMapping(value = "/api/excels/tasks/{taskId}")
     public SseEmitter getExcelOfBusinessMaterialListProgressInfo(
             @PathVariable(value = "taskId") final String taskId
-    ) throws IOException {
+    ) {
         return businessQueryService.getExcelProgressInfo(taskId);
     }
 

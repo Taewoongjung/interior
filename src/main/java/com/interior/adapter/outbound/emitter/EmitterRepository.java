@@ -21,6 +21,12 @@ public class EmitterRepository {
         eventCache.put(eventCacheId, event);
     }
 
+    public Map<String, SseEmitter> findEmitterByTaskId(final String taskId) {
+        return emitters.entrySet().stream()
+                .filter(entry -> taskId.equals(entry.getKey()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
     public Map<String, SseEmitter> findAllEmitterStartWithByTaskId(final String taskId) {
         return emitters.entrySet().stream()
                 .filter(entry -> entry.getKey().startsWith(taskId))
