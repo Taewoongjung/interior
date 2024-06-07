@@ -69,9 +69,27 @@ public class CacheExcelRedisRepository {
 
     public Map<String, String> getBucketByKey(final String key,
             final EmitterRepository emitterRepository) {
+
         ValueOperations<String, Map<String, String>> valueOps = redisTemplate.opsForValue();
 
         Map<String, String> result = valueOps.get(key);
+        if (result == null) {
+            for (int i = 0; i < 3; i++) {
+
+                result = valueOps.get(key);
+
+                if (result != null) {
+                    break;
+                }
+
+                try {
+                    Thread.sleep(1000);
+                } catch (Exception ignored) {
+
+                }
+            }
+        }
+
         if (result != null) {
 
             if (result.get("totalCount").equals(result.get("completeCount"))) {
