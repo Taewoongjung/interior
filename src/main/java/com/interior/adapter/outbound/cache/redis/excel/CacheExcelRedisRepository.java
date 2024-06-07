@@ -81,12 +81,6 @@ public class CacheExcelRedisRepository {
                 if (result != null) {
                     break;
                 }
-
-                try {
-                    Thread.sleep(1000);
-                } catch (Exception ignored) {
-
-                }
             }
         }
 
