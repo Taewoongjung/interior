@@ -2,6 +2,7 @@ package com.interior.adapter.common.exception;
 
 import com.interior.adapter.outbound.alarm.AlarmService;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -9,8 +10,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
-import java.util.HashMap;
 
 @Slf4j
 @RestControllerAdvice
@@ -23,7 +22,8 @@ public class GlobalControllerAdvice {
     public ResponseEntity<ErrorResponse> handleException(final Exception e) {
 
         HashMap<String, String> info = getRequestContextInfo();
-
+        log.info("error occured = {}", e.toString());
+        log.info("error occured = {}", e.getMessage());
         String httpMethod = info.get("httpMethod");
         String apiPath = info.get("apiPath");
 
@@ -33,7 +33,10 @@ public class GlobalControllerAdvice {
     }
 
     private HashMap<String, String> getRequestContextInfo() {
+        log.info("error ~!");
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+
+        log.info("error = {} ", attributes);
 
         String httpMethod = "null";
         String apiPath = "null";

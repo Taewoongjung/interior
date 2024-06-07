@@ -4,6 +4,7 @@ import static java.util.stream.Collectors.groupingBy;
 
 import com.interior.adapter.outbound.cache.redis.excel.CacheExcelRedisRepository;
 import com.interior.adapter.outbound.emitter.EmitterRepository;
+import com.interior.application.query.utill.sse.SseService;
 import com.interior.domain.business.Business;
 import com.interior.domain.business.material.BusinessMaterial;
 import java.io.IOException;
@@ -115,7 +116,7 @@ public class BusinessListExcel {
 
     public void setData(final Business business,
             final CacheExcelRedisRepository cacheExcelRedisRepository, final String taskId,
-            final EmitterRepository emitterRepository)
+            final SseService sseService)
             throws InterruptedException {
 
         // 사업명 설정 (첫 번째)
@@ -132,7 +133,7 @@ public class BusinessListExcel {
                         .collect(groupingBy(BusinessMaterial::getUsageCategory)),
                 cacheExcelRedisRepository,
                 taskId,
-                emitterRepository
+                sseService
         );
     }
 
@@ -169,7 +170,7 @@ public class BusinessListExcel {
     private void setRealData(
             final Map<String, List<BusinessMaterial>> businessMaterialMap,
             final CacheExcelRedisRepository cacheExcelRedisRepository,
-            final String taskId, final EmitterRepository emitterRepository)
+            final String taskId, final SseService sseService)
             throws InterruptedException {
 
         int countDataOfMajorTopic = 1;
@@ -209,7 +210,7 @@ public class BusinessListExcel {
             int laborAllCost = 0; // 소계 - 노무비 금액의 합
             int allTotalCost = 0; // 소계 - 합계 금액의 합
 
-            Map<String, SseEmitter> emitters = emitterRepository.findEmitterByTaskId(taskId);
+            SseEmitter emitter = sseService.findById(taskId);
 
             // 소 주제
             for (BusinessMaterial businessMaterial : businessMaterialMap.get(materialCategory)) {
@@ -244,17 +245,7 @@ public class BusinessListExcel {
 
                 cacheExcelRedisRepository.setCountByKey(taskId);
 
-                Map<String, String> progressInfo = cacheExcelRedisRepository.getBucketByKey(
-                        taskId);
-
-                emitters.forEach(
-                        (key, emitter) -> {
-                            emitterRepository.saveEventCache(key, progressInfo);
-                            sendProgressInfo(emitter, taskId, key, progressInfo, emitterRepository);
-                        }
-                );
-
-                Thread.sleep(2000);
+                sseService.streamData(taskId);
             }
 
             // 소계

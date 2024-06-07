@@ -9,11 +9,11 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 @Repository
 public class EmitterRepository {
 
-    private final Map<String, SseEmitter> emitters = new ConcurrentHashMap<>();
+    private final Map<String, SseEmitter> emitterList = new ConcurrentHashMap<>();
     private final Map<String, Object> eventCache = new ConcurrentHashMap<>();
 
-    public SseEmitter save(String emitterId, SseEmitter sseEmitter) {
-        emitters.put(emitterId, sseEmitter);
+    public SseEmitter add(String emitterId, SseEmitter sseEmitter) {
+        emitterList.put(emitterId, sseEmitter);
         return sseEmitter;
     }
 
@@ -22,13 +22,13 @@ public class EmitterRepository {
     }
 
     public Map<String, SseEmitter> findEmitterByTaskId(final String taskId) {
-        return emitters.entrySet().stream()
+        return emitterList.entrySet().stream()
                 .filter(entry -> taskId.equals(entry.getKey()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     public Map<String, SseEmitter> findAllEmitterStartWithByTaskId(final String taskId) {
-        return emitters.entrySet().stream()
+        return emitterList.entrySet().stream()
                 .filter(entry -> entry.getKey().startsWith(taskId))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
@@ -40,14 +40,14 @@ public class EmitterRepository {
     }
 
     public void deleteById(String id) {
-        emitters.remove(id);
+        emitterList.remove(id);
     }
 
     public void deleteAllEmitterStartWithId(final String taskId) {
-        emitters.forEach(
+        emitterList.forEach(
                 (key, emitter) -> {
                     if (key.startsWith(taskId)) {
-                        emitters.remove(key);
+                        emitterList.remove(key);
                     }
                 }
         );

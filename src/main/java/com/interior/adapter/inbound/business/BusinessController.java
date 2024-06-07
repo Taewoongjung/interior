@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -176,7 +177,7 @@ public class BusinessController {
     }
 
     // 회사의 사업 리스트 엑셀 다운로드 프로그레스 조회
-    @GetMapping(value = "/api/excels/tasks/{taskId}")
+    @GetMapping(value = "/api/excels/tasks/{taskId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter getExcelOfBusinessMaterialListProgressInfo(
             @PathVariable(value = "taskId") final String taskId
     ) {

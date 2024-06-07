@@ -4,10 +4,10 @@ import static java.util.stream.Collectors.groupingBy;
 
 import com.interior.adapter.inbound.business.webdto.GetBusiness;
 import com.interior.adapter.outbound.cache.redis.excel.CacheExcelRedisRepository;
-import com.interior.adapter.outbound.emitter.EmitterRepository;
 import com.interior.adapter.outbound.excel.BusinessListExcel;
 import com.interior.adapter.outbound.excel.BusinessMaterialExcelDownload;
 import com.interior.adapter.outbound.jpa.querydsl.BusinessDao;
+import com.interior.application.query.utill.sse.SseService;
 import com.interior.domain.business.Business;
 import com.interior.domain.business.log.BusinessMaterialLog;
 import com.interior.domain.business.material.BusinessMaterial;
@@ -19,7 +19,6 @@ import java.net.URLEncoder;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,8 +33,8 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 @RequiredArgsConstructor
 public class BusinessQueryService {
 
+    private final SseService sseService;
     private final BusinessDao businessDao;
-    private final EmitterRepository emitterRepository;
     private final BusinessRepository businessRepository;
     private final CacheExcelRedisRepository cacheExcelRedisRepository;
 
@@ -111,49 +110,31 @@ public class BusinessQueryService {
 
             cacheExcelRedisRepository.makeBucketByKey(taskId, dataSize);
 
-            emitterRepository.save(taskId, new SseEmitter(DEFAULT_TIMEOUT));
+            sseService.addEmitter(taskId);
 
             // 데이터 세팅
             businessListExcel.setData(business, cacheExcelRedisRepository, taskId,
-                    emitterRepository);
+                    sseService);
 
             ServletOutputStream outputStream = response.getOutputStream();
             businessListExcel.getWorkbook().write(outputStream);
             outputStream.flush();
             outputStream.close();
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
 
     public SseEmitter getExcelProgressInfo(final String taskId) {
-        log.info("Starting SSE stream for taskId: " + taskId);
-        SseEmitter emitter = new SseEmitter(DEFAULT_TIMEOUT);
-        emitterRepository.save(taskId, emitter);
-
-        emitter.onCompletion(() -> {
-            log.info("Emitter completed for taskId: " + taskId);
-            emitterRepository.deleteById(taskId);
-        });
-
-        emitter.onTimeout(() -> {
-            log.warn("Emitter timed out for taskId: " + taskId);
-            emitterRepository.deleteById(taskId);
-            try {
-                emitter.send(SseEmitter.event().id(taskId).data("Connection timed out"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+        SseEmitter emitter = sseService.addEmitter(taskId);
 
         try {
-            Map<String, String> progressInfo = cacheExcelRedisRepository.getBucketByKey(taskId);
-            emitter.send(SseEmitter.event().id(taskId).data(progressInfo));
+            sseService.connect(taskId);
+            sseService.streamData(taskId);
         } catch (Exception e) {
             emitter.completeWithError(e);
+            throw new RuntimeException("Error during streaming data for task " + taskId, e);
         }
 
         return emitter;
