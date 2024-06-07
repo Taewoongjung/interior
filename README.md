@@ -1,5 +1,8 @@
 ## [서비스 링크](http://interiorjung.shop/)
 
+## 연관 프로젝트
+- [프론트](https://github.com/Taewoongjung/interior-front)
+
 ## 내용
 
 **인테리어 업자 사장님들과 고객님들에게 다리가 되어 주는 서비스**
