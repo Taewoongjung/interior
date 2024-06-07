@@ -91,11 +91,9 @@ public class CacheExcelRedisRepository {
                 tearDownBucketByKey(key); // 버킷 삭제
                 log.info("{} 완료 후 삭제", key);
             }
-
-            return result;
         }
 
-        return new HashMap<>();
+        return result;
     }
 
     public void tearDownBucketByKey(final String key) {

@@ -3,6 +3,7 @@ package com.interior.application.query.utill.sse;
 import com.interior.adapter.outbound.cache.redis.excel.CacheExcelRedisRepository;
 import com.interior.adapter.outbound.emitter.EmitterRepository;
 import java.io.IOException;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -48,9 +49,15 @@ public class SseService {
         SseEmitter emitter = findById(taskId);
 
         try {
+
+            Map<String, String> data = cacheExcelRedisRepository.getBucketByKey(taskId,
+                    emitterRepository);
+
+            log.info("sse 데이터 보내기 = {}", data);
+
             emitter.send(SseEmitter.event()
                     .name(taskId)
-                    .data(cacheExcelRedisRepository.getBucketByKey(taskId, emitterRepository)));
+                    .data(data));
         } catch (IOException e) {
             log.error("Error while streaming data for taskId: " + taskId, e);
             throw new RuntimeException(e);
