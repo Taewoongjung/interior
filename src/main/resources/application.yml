@@ -29,6 +29,12 @@ spring:
     username: root
     password: 1234567
     driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 20
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
   flyway:
     user: root
     password: 1234567
@@ -45,6 +51,11 @@ logging:
     console: "[%d{HH:mm:ss.SSS}][%-5level][%logger.%method:line%line] - %msg%n"
     file: "[%d{yyyy-MM-dd HH:mm:ss.SSS}][%-5level][%logger.%method:line%line] - %msg%n"
   level:
+    com:
+      zaxxer:
+        hikari: debug
+        HikariConfig: debug
+        HikariDataSource: debug
     root: INFO
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
@@ -113,6 +124,11 @@ spring:
     username: root
     password: 1234567
     driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 20
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
   flyway:
     user: root
     password: 1234567

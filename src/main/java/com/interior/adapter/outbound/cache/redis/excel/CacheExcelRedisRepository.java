@@ -89,7 +89,6 @@ public class CacheExcelRedisRepository {
         if (result != null) {
 
             if (result.get("totalCount").equals(result.get("completeCount"))) {
-                emitterRepository.deleteById(key); // emitter 삭제
                 tearDownBucketByKey(key); // 버킷 삭제
                 log.info("{} 완료 후 삭제", key);
             }
