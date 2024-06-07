@@ -74,14 +74,16 @@ public class CacheExcelRedisRepository {
 
         Map<String, String> result = valueOps.get(key);
         if (result == null) {
-            for (int i = 0; i < 3; i++) {
+            int count = 0;
+            do {
+                if (count == 100) {
+                    break;
+                }
 
                 result = valueOps.get(key);
 
-                if (result != null) {
-                    break;
-                }
-            }
+                count++;
+            } while (result == null);
         }
 
         if (result != null) {
