@@ -57,9 +57,11 @@ public class SseService {
 
             log.info("sse 데이터 보내기 = {}", data);
 
-            emitter.send(SseEmitter.event()
-                    .name(taskId)
-                    .data(data));
+            if (data != null) {
+                emitter.send(SseEmitter.event()
+                        .name(taskId)
+                        .data(data));
+            }
         } catch (IOException e) {
             log.error("Error while streaming data for taskId: " + taskId, e);
             throw new RuntimeException(e);
