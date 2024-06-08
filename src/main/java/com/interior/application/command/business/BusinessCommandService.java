@@ -27,7 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(rollbackFor = Exception.class)
 public class BusinessCommandService {
 
     private final AlarmService alarmService;
@@ -35,6 +34,7 @@ public class BusinessCommandService {
     private final BusinessRepository businessRepository;
     private final ApplicationEventPublisher eventPublisher;
 
+    @Transactional(rollbackFor = Exception.class)
     public Long createBusiness(
             final Long companyId,
             final CreateBusinessWebDtoV1.Req req,
@@ -67,6 +67,7 @@ public class BusinessCommandService {
         return createdBusinessId;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public boolean createBusinessMaterial(
             final Long businessId,
             final CreateBusinessMaterialDto req,
@@ -101,6 +102,7 @@ public class BusinessCommandService {
         return true;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public boolean deleteBusinessMaterial(
             final Long businessId,
             final Long materialId,
@@ -117,6 +119,7 @@ public class BusinessCommandService {
         return true;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public boolean deleteBusiness(final Long companyId, final Long businessId, final User user) {
 
         Business business = businessRepository.findById(businessId);
@@ -131,6 +134,7 @@ public class BusinessCommandService {
         return true;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public boolean reviseBusiness(
             final Long companyId,
             final Long businessId,
@@ -155,6 +159,7 @@ public class BusinessCommandService {
         return true;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public boolean reviseUsageCategoryOfMaterial(
             final Long businessId,
             final List<Long> targetList,
