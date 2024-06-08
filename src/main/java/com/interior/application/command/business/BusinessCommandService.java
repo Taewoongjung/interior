@@ -4,7 +4,10 @@ import com.interior.adapter.inbound.business.webdto.CreateBusinessWebDtoV1;
 import com.interior.adapter.outbound.alarm.AlarmService;
 import com.interior.application.command.business.dto.CreateBusinessServiceDto.CreateBusinessMaterialDto;
 import com.interior.application.command.business.dto.ReviseBusinessServiceDto;
-import com.interior.application.command.log.business.BusinessLogService;
+import com.interior.application.command.log.business.material.BusinessMaterialLogService;
+import com.interior.application.command.log.business.material.dto.event.BusinessDeletedEvent;
+import com.interior.application.command.log.business.material.dto.event.BusinessReviseEvent;
+import com.interior.domain.business.Business;
 import com.interior.domain.business.material.BusinessMaterial;
 import com.interior.domain.business.repository.BusinessRepository;
 import com.interior.domain.business.repository.dto.CreateBusiness;
@@ -16,23 +19,27 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(rollbackFor = Exception.class)
 public class BusinessCommandService {
 
     private final AlarmService alarmService;
     private final CompanyRepository companyRepository;
     private final BusinessRepository businessRepository;
-    private final BusinessLogService businessLogService;
+    private final ApplicationEventPublisher eventPublisher;
+    private final BusinessMaterialLogService businessMaterialLogService;
 
-    @Transactional
-    public Long createBusiness(final Long companyId,
+    public Long createBusiness(
+            final Long companyId,
             final CreateBusinessWebDtoV1.Req req,
-            final User user) {
+            final User user
+    ) {
 
         final Long createdBusinessId = businessRepository.save(
                 new CreateBusiness(
@@ -60,7 +67,6 @@ public class BusinessCommandService {
         return createdBusinessId;
     }
 
-    @Transactional
     public boolean createBusinessMaterial(
             final Long businessId,
             final CreateBusinessMaterialDto req,
@@ -82,7 +88,7 @@ public class BusinessCommandService {
                 ));
 
         // 재료 생성에 대한 로그
-        businessLogService.createLogForCreatingBusinessMaterial(
+        businessMaterialLogService.createLogForCreatingBusinessMaterial(
                 businessId,
                 businessMaterial.getId(),
                 user.getId(),
@@ -92,26 +98,34 @@ public class BusinessCommandService {
         return true;
     }
 
-    @Transactional
-    public boolean deleteBusinessMaterial(final Long businessId, final Long materialId,
-            final User user) {
+    public boolean deleteBusinessMaterial(
+            final Long businessId,
+            final Long materialId,
+            final User user
+    ) {
 
         if (businessRepository.deleteBusinessMaterial(businessId, materialId)) {
 
-            businessLogService.createLogForDeletingBusinessMaterial(businessId, materialId,
+            businessMaterialLogService.createLogForDeletingBusinessMaterial(businessId, materialId,
                     user.getId());
         }
 
         return true;
     }
 
-    @Transactional
-    public boolean deleteBusiness(final Long companyId, final Long businessId) {
+    public boolean deleteBusiness(final Long companyId, final Long businessId, final User user) {
 
-        return businessRepository.deleteBusiness(companyId, businessId);
+        Business business = businessRepository.findById(businessId);
+
+        businessRepository.deleteBusiness(companyId, businessId);
+
+        // 사업 삭제 로그
+        eventPublisher.publishEvent(
+                new BusinessDeletedEvent(businessId, user.getId(), business.getName()));
+
+        return true;
     }
 
-    @Transactional
     public boolean reviseBusiness(
             final Long companyId,
             final Long businessId,
@@ -123,14 +137,18 @@ public class BusinessCommandService {
 
         company.validateDuplicateName(req.changeBusinessName());
 
+        Business business = businessRepository.findById(businessId);
+
         businessRepository.reviseBusiness(companyId, businessId, req);
 
         // 사업명 수정 로그
+        eventPublisher.publishEvent(
+                new BusinessReviseEvent(businessId, user.getId(), business.getName(),
+                        req.changeBusinessName()));
 
         return true;
     }
 
-    @Transactional
     public boolean reviseUsageCategoryOfMaterial(
             final Long businessId,
             final List<Long> targetList,

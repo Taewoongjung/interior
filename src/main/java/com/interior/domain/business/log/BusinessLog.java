@@ -1,19 +1,17 @@
-package com.interior.domain.business.material.log;
+package com.interior.domain.business.log;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 import lombok.Getter;
 
 @Getter
-public class BusinessMaterialLog {
+public class BusinessLog {
 
     private Long id;
 
     private Long businessId;
 
-    private Long businessMaterialId;
-
-    private BusinessMaterialChangeFieldType changeField;
+    private BusinessChangeFieldType changeField;
 
     private String beforeData;
 
@@ -26,11 +24,10 @@ public class BusinessMaterialLog {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdAt;
 
-    public BusinessMaterialLog(
+    public BusinessLog(
             final Long id,
             final Long businessId,
-            final Long businessMaterialId,
-            final BusinessMaterialChangeFieldType changeField,
+            final BusinessChangeFieldType changeField,
             final String beforeData,
             final String afterData,
             final Long updater,
@@ -39,7 +36,6 @@ public class BusinessMaterialLog {
     ) {
         this.id = id;
         this.businessId = businessId;
-        this.businessMaterialId = businessMaterialId;
         this.changeField = changeField;
         this.beforeData = beforeData;
         this.afterData = afterData;
@@ -49,43 +45,41 @@ public class BusinessMaterialLog {
     }
 
     // 조회 전용
-    public static BusinessMaterialLog of(
+    public static BusinessLog of(
             final Long id,
             final Long businessId,
-            final Long businessMaterialId,
-            final BusinessMaterialChangeFieldType changeField,
+            final BusinessChangeFieldType changeField,
             final String beforeData,
             final String afterData,
             final Long updaterId,
             final String updaterName,
             final LocalDateTime createdAt
     ) {
-        return new BusinessMaterialLog(id, businessId, businessMaterialId, changeField, beforeData,
-                afterData, updaterId, updaterName, createdAt);
+        return new BusinessLog(id, businessId, changeField, beforeData, afterData, updaterId,
+                updaterName, createdAt);
     }
 
     // 생성 전용
-    public static BusinessMaterialLog of(
+    public static BusinessLog of(
             final Long businessId,
-            final Long businessMaterialId,
-            final BusinessMaterialChangeFieldType changeField,
+            final BusinessChangeFieldType changeField,
             final String beforeData,
             final String afterData,
             final Long updaterId,
             final String updaterName,
             final LocalDateTime createdAt
     ) {
-        return new BusinessMaterialLog(null, businessId, businessMaterialId, changeField,
+        return new BusinessLog(null, businessId, changeField,
                 beforeData, afterData, updaterId, updaterName, createdAt);
     }
 
     public String getChangeDetail() {
 
-        if (changeField.equals(BusinessMaterialChangeFieldType.CREATE_NEW_MATERIAL)) {
+        if (changeField.equals(BusinessChangeFieldType.CREATE_NEW_BUSINESS)) {
             return getAfterData();
         }
 
-        if (changeField.equals(BusinessMaterialChangeFieldType.DELETE_MATERIAL)) {
+        if (changeField.equals(BusinessChangeFieldType.DELETE_BUSINESS)) {
             return getBeforeData();
         }
 

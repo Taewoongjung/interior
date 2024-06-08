@@ -2,10 +2,12 @@ package com.interior.util.converter.jpa.business;
 
 import com.interior.adapter.outbound.jpa.entity.business.BusinessEntity;
 import com.interior.adapter.outbound.jpa.entity.business.expense.BusinessMaterialExpenseEntity;
+import com.interior.adapter.outbound.jpa.entity.business.log.BusinessLogEntity;
 import com.interior.adapter.outbound.jpa.entity.business.material.BusinessMaterialEntity;
 import com.interior.adapter.outbound.jpa.entity.business.material.log.BusinessMaterialLogEntity;
 import com.interior.domain.business.Business;
 import com.interior.domain.business.expense.BusinessMaterialExpense;
+import com.interior.domain.business.log.BusinessLog;
 import com.interior.domain.business.material.BusinessMaterial;
 import com.interior.domain.business.material.log.BusinessMaterialLog;
 import java.util.stream.Collectors;
@@ -49,6 +51,18 @@ public class BusinessEntityConverter {
                 businessMaterialExpense.getBusinessMaterialId(),
                 businessMaterialExpense.getMaterialCostPerUnit(),
                 businessMaterialExpense.getLaborCostPerUnit()
+        );
+    }
+
+    public static BusinessLogEntity businessLogToEntity(final BusinessLog businessLog) {
+
+        return BusinessLogEntity.of(
+                businessLog.getBusinessId(),
+                businessLog.getChangeField(),
+                businessLog.getBeforeData(),
+                businessLog.getAfterData(),
+                businessLog.getUpdater(),
+                businessLog.getUpdaterName()
         );
     }
 

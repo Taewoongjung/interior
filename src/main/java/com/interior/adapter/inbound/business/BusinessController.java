@@ -139,10 +139,11 @@ public class BusinessController {
     @DeleteMapping(value = "/api/companies/{companyId}/businesses/{businessId}")
     public ResponseEntity<Boolean> deleteBusiness(
             @PathVariable(value = "companyId") final Long companyId,
-            @PathVariable(value = "businessId") final Long businessId
+            @PathVariable(value = "businessId") final Long businessId,
+            @AuthenticationPrincipal final User user
     ) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(businessCommandService.deleteBusiness(companyId, businessId));
+                .body(businessCommandService.deleteBusiness(companyId, businessId, user));
     }
 
     // 사업 수정

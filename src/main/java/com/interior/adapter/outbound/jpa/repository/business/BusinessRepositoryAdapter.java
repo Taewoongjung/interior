@@ -3,6 +3,7 @@ package com.interior.adapter.outbound.jpa.repository.business;
 import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_BUSINESS;
 import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_BUSINESS_MATERIAL;
 import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_COMPANY;
+import static com.interior.util.converter.jpa.business.BusinessEntityConverter.businessLogToEntity;
 import static com.interior.util.converter.jpa.business.BusinessEntityConverter.businessMaterialLogToEntity;
 import static com.interior.util.converter.jpa.business.BusinessEntityConverter.businessMaterialToEntity;
 
@@ -15,6 +16,7 @@ import com.interior.adapter.outbound.jpa.repository.company.CompanyJpaRepository
 import com.interior.application.command.business.dto.ReviseBusinessServiceDto;
 import com.interior.domain.business.Business;
 import com.interior.domain.business.BusinessStatus;
+import com.interior.domain.business.log.BusinessLog;
 import com.interior.domain.business.material.BusinessMaterial;
 import com.interior.domain.business.material.log.BusinessMaterialLog;
 import com.interior.domain.business.repository.BusinessRepository;
@@ -36,6 +38,7 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
 
     private final CompanyJpaRepository companyJpaRepository;
     private final BusinessJpaRepository businessJpaRepository;
+    private final BusinessLogJpaRepository businessLogJpaRepository;
     private final BusinessMaterialJpaRepository businessMaterialJpaRepository;
     private final BusinessMaterialLogJpaRepository businessMaterialLogJpaRepository;
 
@@ -200,7 +203,7 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
 
     @Override
     @Transactional
-    public boolean createMaterialUpdateLog(final BusinessMaterialLog businessMaterialLog) {
+    public boolean createBusinessMaterialUpdateLog(final BusinessMaterialLog businessMaterialLog) {
 
         businessMaterialLogJpaRepository.save(businessMaterialLogToEntity(businessMaterialLog));
 
@@ -232,4 +235,14 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
                 .map(BusinessMaterialLogEntity::toPojo)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    @Transactional
+    public boolean createBusinessUpdateLog(final BusinessLog businessLog) {
+
+        businessLogJpaRepository.save(businessLogToEntity(businessLog));
+
+        return true;
+    }
+
 }

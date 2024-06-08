@@ -2,6 +2,7 @@ package com.interior.domain.business.repository;
 
 import com.interior.application.command.business.dto.ReviseBusinessServiceDto;
 import com.interior.domain.business.Business;
+import com.interior.domain.business.log.BusinessLog;
 import com.interior.domain.business.material.BusinessMaterial;
 import com.interior.domain.business.material.log.BusinessMaterialLog;
 import com.interior.domain.business.repository.dto.CreateBusiness;
@@ -34,9 +35,11 @@ public interface BusinessRepository {
             final List<Long> targetList,
             final String usageCategoryName);
 
-    boolean createMaterialUpdateLog(final BusinessMaterialLog businessMaterialLog);
+    boolean createBusinessMaterialUpdateLog(final BusinessMaterialLog businessMaterialLog);
 
     BusinessMaterial findBusinessMaterialByMaterialId(final Long materialId);
 
     List<BusinessMaterialLog> findBusinessMaterialLogByBusinessId(final Long businessId);
+
+    boolean createBusinessUpdateLog(final BusinessLog businessLog);
 }
