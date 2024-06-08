@@ -1,4 +1,4 @@
-package com.interior.domain.business.log;
+package com.interior.domain.business.material.log;
 
 import java.util.Arrays;
 import java.util.NoSuchElementException;

@@ -1,7 +1,4 @@
-package com.interior.domain.business.log;
-
-import static com.interior.domain.business.log.BusinessMaterialChangeFieldType.CREATE_NEW_MATERIAL;
-import static com.interior.domain.business.log.BusinessMaterialChangeFieldType.DELETE_NEW_MATERIAL;
+package com.interior.domain.business.material.log;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
@@ -84,11 +81,11 @@ public class BusinessMaterialLog {
 
     public String getChangeDetail() {
 
-        if (changeField.equals(CREATE_NEW_MATERIAL)) {
+        if (changeField.equals(BusinessMaterialChangeFieldType.CREATE_NEW_MATERIAL)) {
             return getAfterData();
         }
 
-        if (changeField.equals(DELETE_NEW_MATERIAL)) {
+        if (changeField.equals(BusinessMaterialChangeFieldType.DELETE_NEW_MATERIAL)) {
             return getBeforeData();
         }
 

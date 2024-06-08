@@ -7,8 +7,8 @@ import static com.interior.adapter.common.exception.ErrorType.EMPTY_UPDATER_ID;
 import static com.interior.adapter.common.exception.ErrorType.EMPTY_UPDATER_NAME;
 import static com.interior.util.CheckUtil.require;
 
-import com.interior.domain.business.log.BusinessMaterialChangeFieldType;
-import com.interior.domain.business.log.BusinessMaterialLog;
+import com.interior.domain.business.material.log.BusinessMaterialChangeFieldType;
+import com.interior.domain.business.material.log.BusinessMaterialLog;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

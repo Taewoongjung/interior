@@ -6,8 +6,8 @@ import com.interior.adapter.outbound.jpa.entity.business.material.BusinessMateri
 import com.interior.adapter.outbound.jpa.entity.business.material.log.BusinessMaterialLogEntity;
 import com.interior.domain.business.Business;
 import com.interior.domain.business.expense.BusinessMaterialExpense;
-import com.interior.domain.business.log.BusinessMaterialLog;
 import com.interior.domain.business.material.BusinessMaterial;
+import com.interior.domain.business.material.log.BusinessMaterialLog;
 import java.util.stream.Collectors;
 
 public class BusinessEntityConverter {

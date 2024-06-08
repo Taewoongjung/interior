@@ -1,8 +1,8 @@
 package com.interior.application.command.log.business;
 
-import com.interior.domain.business.log.BusinessMaterialChangeFieldType;
-import com.interior.domain.business.log.BusinessMaterialLog;
 import com.interior.domain.business.material.BusinessMaterial;
+import com.interior.domain.business.material.log.BusinessMaterialChangeFieldType;
+import com.interior.domain.business.material.log.BusinessMaterialLog;
 import com.interior.domain.business.repository.BusinessRepository;
 import com.interior.domain.user.User;
 import com.interior.domain.user.repository.UserRepository;

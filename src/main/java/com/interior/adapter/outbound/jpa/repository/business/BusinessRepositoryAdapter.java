@@ -15,8 +15,8 @@ import com.interior.adapter.outbound.jpa.repository.company.CompanyJpaRepository
 import com.interior.application.command.business.dto.ReviseBusinessServiceDto;
 import com.interior.domain.business.Business;
 import com.interior.domain.business.BusinessStatus;
-import com.interior.domain.business.log.BusinessMaterialLog;
 import com.interior.domain.business.material.BusinessMaterial;
+import com.interior.domain.business.material.log.BusinessMaterialLog;
 import com.interior.domain.business.repository.BusinessRepository;
 import com.interior.domain.business.repository.dto.CreateBusiness;
 import com.interior.domain.business.repository.dto.CreateBusinessMaterial;
