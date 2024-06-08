@@ -1,5 +1,7 @@
 package com.interior.application.command.log.business.material;
 
+import com.interior.application.command.log.business.material.dto.event.BusinessMaterialCreateEvent;
+import com.interior.application.command.log.business.material.dto.event.BusinessMaterialDeleteEvent;
 import com.interior.domain.business.material.BusinessMaterial;
 import com.interior.domain.business.material.log.BusinessMaterialChangeFieldType;
 import com.interior.domain.business.material.log.BusinessMaterialLog;
@@ -11,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 
 /**
@@ -52,40 +56,36 @@ public class BusinessMaterialLogService {
                 )
         );
     }
-    
+
 
     // 재료 삭제에 대한 로그
-    public void createLogForDeletingBusinessMaterial(final Long businessId, final Long materialId,
-            final Long updaterId) {
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    public void createLogForDeletingBusinessMaterial(final BusinessMaterialDeleteEvent event) {
 
         BusinessMaterial originalBusinessMaterial =
-                businessRepository.findBusinessMaterialByMaterialId(materialId);
+                businessRepository.findBusinessMaterialByMaterialId(event.materialId());
 
         createLogOfChangeMaterials(
-                businessId,
-                materialId,
+                event.businessId(),
+                event.materialId(),
                 BusinessMaterialChangeFieldType.DELETE_MATERIAL,
                 originalBusinessMaterial.getName(),
                 null,
-                updaterId
+                event.updaterId()
         );
     }
 
     // 재료 생성에 대한 로그
-    public void createLogForCreatingBusinessMaterial(
-            final Long businessId,
-            final Long businessMaterialId,
-            final Long updaterId,
-            final String afterData
-    ) {
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    public void createLogForCreatingBusinessMaterial(final BusinessMaterialCreateEvent event) {
 
         createLogOfChangeMaterials(
-                businessId,
-                businessMaterialId,
+                event.businessId(),
+                event.businessMaterialId(),
                 BusinessMaterialChangeFieldType.CREATE_NEW_MATERIAL,
                 null,
-                afterData,
-                updaterId
+                event.afterData(),
+                event.updaterId()
         );
     }
 }

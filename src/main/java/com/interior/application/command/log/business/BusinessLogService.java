@@ -1,7 +1,7 @@
 package com.interior.application.command.log.business;
 
-import com.interior.application.command.log.business.material.dto.event.BusinessDeletedEvent;
-import com.interior.application.command.log.business.material.dto.event.BusinessReviseEvent;
+import com.interior.application.command.log.business.dto.event.BusinessDeleteEvent;
+import com.interior.application.command.log.business.dto.event.BusinessReviseEvent;
 import com.interior.domain.business.log.BusinessChangeFieldType;
 import com.interior.domain.business.log.BusinessLog;
 import com.interior.domain.business.repository.BusinessRepository;
@@ -60,7 +60,7 @@ public class BusinessLogService {
     }
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void createLogForDeletingBusiness(final BusinessDeletedEvent event) {
+    public void createLogForDeletingBusiness(final BusinessDeleteEvent event) {
 
         createLogOfChangeBusiness(
                 event.businessId(),

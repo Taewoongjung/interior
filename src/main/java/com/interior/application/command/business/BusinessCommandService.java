@@ -4,9 +4,10 @@ import com.interior.adapter.inbound.business.webdto.CreateBusinessWebDtoV1;
 import com.interior.adapter.outbound.alarm.AlarmService;
 import com.interior.application.command.business.dto.CreateBusinessServiceDto.CreateBusinessMaterialDto;
 import com.interior.application.command.business.dto.ReviseBusinessServiceDto;
-import com.interior.application.command.log.business.material.BusinessMaterialLogService;
-import com.interior.application.command.log.business.material.dto.event.BusinessDeletedEvent;
-import com.interior.application.command.log.business.material.dto.event.BusinessReviseEvent;
+import com.interior.application.command.log.business.dto.event.BusinessDeleteEvent;
+import com.interior.application.command.log.business.dto.event.BusinessReviseEvent;
+import com.interior.application.command.log.business.material.dto.event.BusinessMaterialCreateEvent;
+import com.interior.application.command.log.business.material.dto.event.BusinessMaterialDeleteEvent;
 import com.interior.domain.business.Business;
 import com.interior.domain.business.material.BusinessMaterial;
 import com.interior.domain.business.repository.BusinessRepository;
@@ -33,7 +34,6 @@ public class BusinessCommandService {
     private final CompanyRepository companyRepository;
     private final BusinessRepository businessRepository;
     private final ApplicationEventPublisher eventPublisher;
-    private final BusinessMaterialLogService businessMaterialLogService;
 
     public Long createBusiness(
             final Long companyId,
@@ -87,13 +87,16 @@ public class BusinessCommandService {
                         req.laborCostPerUnit()
                 ));
 
-        // 재료 생성에 대한 로그
-        businessMaterialLogService.createLogForCreatingBusinessMaterial(
-                businessId,
-                businessMaterial.getId(),
-                user.getId(),
-                req.name()
-        );
+        if (businessMaterial != null) {
+
+            // 재료 생성에 대한 로그
+            eventPublisher.publishEvent(
+                    new BusinessMaterialCreateEvent(
+                            businessId,
+                            businessMaterial.getId(),
+                            user.getId(),
+                            req.name()));
+        }
 
         return true;
     }
@@ -106,8 +109,9 @@ public class BusinessCommandService {
 
         if (businessRepository.deleteBusinessMaterial(businessId, materialId)) {
 
-            businessMaterialLogService.createLogForDeletingBusinessMaterial(businessId, materialId,
-                    user.getId());
+            // 사업 재료 삭제 로그
+            eventPublisher.publishEvent(new BusinessMaterialDeleteEvent(businessId, materialId,
+                    user.getId()));
         }
 
         return true;
@@ -117,11 +121,12 @@ public class BusinessCommandService {
 
         Business business = businessRepository.findById(businessId);
 
-        businessRepository.deleteBusiness(companyId, businessId);
+        if (businessRepository.deleteBusiness(companyId, businessId)) {
 
-        // 사업 삭제 로그
-        eventPublisher.publishEvent(
-                new BusinessDeletedEvent(businessId, user.getId(), business.getName()));
+            // 사업 삭제 로그
+            eventPublisher.publishEvent(
+                    new BusinessDeleteEvent(businessId, user.getId(), business.getName()));
+        }
 
         return true;
     }
@@ -139,12 +144,13 @@ public class BusinessCommandService {
 
         Business business = businessRepository.findById(businessId);
 
-        businessRepository.reviseBusiness(companyId, businessId, req);
+        if (businessRepository.reviseBusiness(companyId, businessId, req)) {
 
-        // 사업명 수정 로그
-        eventPublisher.publishEvent(
-                new BusinessReviseEvent(businessId, user.getId(), business.getName(),
-                        req.changeBusinessName()));
+            // 사업명 수정 로그
+            eventPublisher.publishEvent(
+                    new BusinessReviseEvent(businessId, user.getId(), business.getName(),
+                            req.changeBusinessName()));
+        }
 
         return true;
     }
