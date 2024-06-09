@@ -33,10 +33,8 @@ public class GlobalControllerAdvice {
     }
 
     private HashMap<String, String> getRequestContextInfo() {
-        log.info("error ~!");
-        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 
-        log.info("error = {} ", attributes);
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 
         String httpMethod = "null";
         String apiPath = "null";

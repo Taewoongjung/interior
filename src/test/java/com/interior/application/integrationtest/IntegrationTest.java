@@ -1,5 +1,6 @@
 package com.interior.application.integrationtest;
 
+import com.interior.application.command.util.email.EmailService;
 import com.interior.domain.user.repository.UserRepository;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -15,8 +16,16 @@ public class IntegrationTest {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private EmailService emailService;
+
     @Test
-    void test() {
+    void test1() {
         userRepository.findByEmail("a@a.com");
+    }
+
+    @Test
+    void test2() throws Exception {
+        emailService.sendEmailValidationCheck("aipooh8882@naver.com");
     }
 }
