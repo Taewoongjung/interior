@@ -4,10 +4,10 @@ import com.interior.adapter.inbound.business.webdto.CreateBusinessWebDtoV1;
 import com.interior.adapter.outbound.alarm.dto.event.NewBusinessAlarm;
 import com.interior.application.command.business.dto.CreateBusinessServiceDto.CreateBusinessMaterialDto;
 import com.interior.application.command.business.dto.ReviseBusinessServiceDto;
-import com.interior.application.command.log.business.dto.event.BusinessDeleteEvent;
-import com.interior.application.command.log.business.dto.event.BusinessReviseEvent;
-import com.interior.application.command.log.business.material.dto.event.BusinessMaterialCreateEvent;
-import com.interior.application.command.log.business.material.dto.event.BusinessMaterialDeleteEvent;
+import com.interior.application.command.log.business.dto.event.BusinessDeleteLogEvent;
+import com.interior.application.command.log.business.dto.event.BusinessReviseLogEvent;
+import com.interior.application.command.log.business.material.dto.event.BusinessMaterialCreateLogEvent;
+import com.interior.application.command.log.business.material.dto.event.BusinessMaterialDeleteLogEvent;
 import com.interior.domain.business.Business;
 import com.interior.domain.business.material.BusinessMaterial;
 import com.interior.domain.business.repository.BusinessRepository;
@@ -93,7 +93,7 @@ public class BusinessCommandService {
 
             // 재료 생성에 대한 로그
             eventPublisher.publishEvent(
-                    new BusinessMaterialCreateEvent(
+                    new BusinessMaterialCreateLogEvent(
                             businessId,
                             businessMaterial.getId(),
                             user.getId(),
@@ -113,7 +113,7 @@ public class BusinessCommandService {
         if (businessRepository.deleteBusinessMaterial(businessId, materialId)) {
 
             // 사업 재료 삭제 로그
-            eventPublisher.publishEvent(new BusinessMaterialDeleteEvent(businessId, materialId,
+            eventPublisher.publishEvent(new BusinessMaterialDeleteLogEvent(businessId, materialId,
                     user.getId()));
         }
 
@@ -129,7 +129,7 @@ public class BusinessCommandService {
 
             // 사업 삭제 로그
             eventPublisher.publishEvent(
-                    new BusinessDeleteEvent(businessId, user.getId(), business.getName()));
+                    new BusinessDeleteLogEvent(businessId, user.getId(), business.getName()));
         }
 
         return true;
@@ -153,7 +153,7 @@ public class BusinessCommandService {
 
             // 사업명 수정 로그
             eventPublisher.publishEvent(
-                    new BusinessReviseEvent(businessId, user.getId(), business.getName(),
+                    new BusinessReviseLogEvent(businessId, user.getId(), business.getName(),
                             req.changeBusinessName()));
         }
 
