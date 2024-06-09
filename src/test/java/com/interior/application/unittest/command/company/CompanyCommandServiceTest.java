@@ -1,18 +1,5 @@
 package com.interior.application.unittest.command.company;
 
-import com.interior.adapter.common.exception.InvalidInputException;
-import com.interior.adapter.outbound.alarm.AlarmService;
-import com.interior.application.command.company.CompanyCommandService;
-import com.interior.application.command.company.dto.CreateCompanyServiceDto;
-import com.interior.domain.company.Company;
-import com.interior.domain.company.repository.CompanyRepository;
-import com.interior.domain.user.User;
-import com.interior.domain.user.UserRole;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-import java.time.LocalDateTime;
-
 import static com.interior.adapter.common.exception.ErrorType.LIMIT_OF_COMPANY_COUNT_IS_FIVE;
 import static company.CompanyFixture.COMPANY_LIST;
 import static company.CompanyFixture.COMPANY_LIST_OVER_5;
@@ -23,13 +10,25 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import com.interior.adapter.common.exception.InvalidInputException;
+import com.interior.application.command.company.CompanyCommandService;
+import com.interior.application.command.company.dto.CreateCompanyServiceDto;
+import com.interior.domain.company.Company;
+import com.interior.domain.company.repository.CompanyRepository;
+import com.interior.domain.user.User;
+import com.interior.domain.user.UserRole;
+import java.time.LocalDateTime;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.context.ApplicationEventPublisher;
+
 class CompanyCommandServiceTest {
 
-    private final AlarmService alarmService = mock(AlarmService.class);
     private final CompanyRepository companyRepository = mock(CompanyRepository.class);
+    private final ApplicationEventPublisher eventPublisher = mock(ApplicationEventPublisher.class);
 
-    private final CompanyCommandService sut = new CompanyCommandService(alarmService,
-            companyRepository);
+    private final CompanyCommandService sut = new CompanyCommandService(companyRepository,
+            eventPublisher);
 
     @Test
     @DisplayName("사업체를 추가할 수 있다.")

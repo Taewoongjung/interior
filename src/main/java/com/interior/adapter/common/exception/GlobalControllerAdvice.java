@@ -1,10 +1,11 @@
 package com.interior.adapter.common.exception;
 
-import com.interior.adapter.outbound.alarm.AlarmService;
+import com.interior.adapter.outbound.alarm.dto.event.ErrorAlarm;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -16,18 +17,17 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @RequiredArgsConstructor
 public class GlobalControllerAdvice {
 
-    private final AlarmService alarmService;
+    private final ApplicationEventPublisher eventPublisher;
 
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> handleException(final Exception e) {
 
         HashMap<String, String> info = getRequestContextInfo();
-        log.info("error occured = {}", e.toString());
-        log.info("error occured = {}", e.getMessage());
         String httpMethod = info.get("httpMethod");
         String apiPath = info.get("apiPath");
 
-        alarmService.sendErrorAlarm("[ " + httpMethod + "] " + apiPath, e.getMessage());
+        eventPublisher.publishEvent(
+                new ErrorAlarm("[ " + httpMethod + "] " + apiPath, e.getMessage()));
 
         return ResponseEntity.badRequest().body(new ErrorResponse(0, e.getMessage()));
     }
