@@ -1,7 +1,7 @@
 package com.interior.application.command.business;
 
 import com.interior.adapter.inbound.business.webdto.CreateBusinessWebDtoV1;
-import com.interior.adapter.outbound.alarm.AlarmService;
+import com.interior.adapter.outbound.alarm.dto.event.NewBusinessAlarm;
 import com.interior.application.command.business.dto.CreateBusinessServiceDto.CreateBusinessMaterialDto;
 import com.interior.application.command.business.dto.ReviseBusinessServiceDto;
 import com.interior.application.command.log.business.dto.event.BusinessDeleteEvent;
@@ -29,7 +29,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class BusinessCommandService {
 
-    private final AlarmService alarmService;
     private final CompanyRepository companyRepository;
     private final BusinessRepository businessRepository;
     private final ApplicationEventPublisher eventPublisher;
@@ -56,12 +55,14 @@ public class BusinessCommandService {
                 .findFirst().map(Company::getName)
                 .orElseThrow(() -> new NoSuchElementException("사업체를 찾을 수 없습니다."));
 
-        alarmService.sendNewBusinessAlarm(
-                req.businessName(),
-                companyName,
-                user.getName(),
-                user.getEmail(),
-                user.getTel()
+        // 새로운 사업 생성 시 알람 발송
+        eventPublisher.publishEvent(
+                new NewBusinessAlarm(req.businessName(),
+                        companyName,
+                        user.getName(),
+                        user.getEmail(),
+                        user.getTel()
+                )
         );
 
         return createdBusinessId;
