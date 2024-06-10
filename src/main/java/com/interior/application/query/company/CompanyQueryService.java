@@ -23,7 +23,7 @@ public class CompanyQueryService {
 
         return user.getCompanyList().stream()
                 .filter(f -> companyId.equals(f.getId()))
-                .filter(f -> f.getIsDeleted() == BoolType.T)
+                .filter(f -> f.getIsDeleted() == BoolType.F)
                 .findFirst().orElse(null);
     }
 }
