@@ -13,7 +13,8 @@ public class CompanyEntityConverter {
                 company.getAddress(),
                 company.getSubAddress(),
                 company.getBuildingNumber(),
-                company.getTel()
+                company.getTel(),
+                company.getIsDeleted()
         );
     }
 }

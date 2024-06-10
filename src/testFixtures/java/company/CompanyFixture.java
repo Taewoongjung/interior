@@ -1,6 +1,7 @@
 package company;
 
 import com.interior.domain.company.Company;
+import com.interior.domain.util.BoolType;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ public class CompanyFixture {
             "809호",
             "0132104912908451209",
             "01012345678",
+            BoolType.F,
             LocalDateTime.of(2024, 5, 19, 23, 30),
             LocalDateTime.of(2024, 5, 19, 23, 30)
     );
@@ -29,6 +31,7 @@ public class CompanyFixture {
             "809호",
             "0132104912908451209",
             "01012345678",
+            BoolType.F,
             LocalDateTime.of(2024, 5, 19, 23, 30),
             LocalDateTime.of(2024, 5, 19, 23, 30)
     );
@@ -42,6 +45,7 @@ public class CompanyFixture {
             "809호",
             "0132104912908451209",
             "01012345678",
+            BoolType.F,
             LocalDateTime.of(2024, 5, 19, 23, 30),
             LocalDateTime.of(2024, 5, 19, 23, 30)
     );
@@ -55,6 +59,7 @@ public class CompanyFixture {
             "809호",
             "0132104912908451209",
             "01012345678",
+            BoolType.F,
             LocalDateTime.of(2024, 5, 19, 23, 30),
             LocalDateTime.of(2024, 5, 19, 23, 30)
     );
@@ -68,6 +73,7 @@ public class CompanyFixture {
             "809호",
             "0132104912908451209",
             "01012345678",
+            BoolType.F,
             LocalDateTime.of(2024, 5, 19, 23, 30),
             LocalDateTime.of(2024, 5, 19, 23, 30)
     );
@@ -81,6 +87,7 @@ public class CompanyFixture {
             "809호",
             "0132104912908451209",
             "01012345678",
+            BoolType.F,
             LocalDateTime.of(2024, 5, 19, 23, 30),
             LocalDateTime.of(2024, 5, 19, 23, 30)
     );

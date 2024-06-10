@@ -8,9 +8,12 @@ import com.interior.adapter.outbound.jpa.entity.business.BusinessEntity;
 import com.interior.adapter.outbound.jpa.entity.user.UserEntity;
 import com.interior.application.command.business.dto.ReviseBusinessServiceDto;
 import com.interior.domain.company.Company;
+import com.interior.domain.util.BoolType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -56,6 +59,10 @@ public class CompanyEntity extends BaseEntity {
 
     private String tel;
 
+    @Column(name = "is_deleted", columnDefinition = "varchar(1)")
+    @Enumerated(value = EnumType.STRING)
+    private BoolType isDeleted;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BusinessEntity> businessEntityList = new ArrayList<>();
 
@@ -72,7 +79,8 @@ public class CompanyEntity extends BaseEntity {
             final String address,
             final String subAddress,
             final String buildingNumber,
-            final String tel
+            final String tel,
+            final BoolType isDeleted
     ) {
         super(LocalDateTime.now(), LocalDateTime.now());
 
@@ -84,6 +92,7 @@ public class CompanyEntity extends BaseEntity {
         this.subAddress = subAddress;
         this.buildingNumber = buildingNumber;
         this.tel = tel;
+        this.isDeleted = isDeleted;
     }
 
     public static CompanyEntity of(
@@ -93,10 +102,11 @@ public class CompanyEntity extends BaseEntity {
             final String address,
             final String subAddress,
             final String buildingNumber,
-            final String tel
+            final String tel,
+            final BoolType isDeleted
     ) {
         return new CompanyEntity(null, name, zipCode, ownerId, address, subAddress, buildingNumber,
-                tel);
+                tel, isDeleted);
     }
 
     public Company toPojo() {
@@ -109,6 +119,7 @@ public class CompanyEntity extends BaseEntity {
                 getSubAddress(),
                 getBuildingNumber(),
                 getTel(),
+                getIsDeleted(),
                 getLastModified(),
                 getCreatedAt()
         );
@@ -124,6 +135,7 @@ public class CompanyEntity extends BaseEntity {
                 getSubAddress(),
                 getBuildingNumber(),
                 getTel(),
+                getIsDeleted(),
                 getLastModified(),
                 getCreatedAt(),
                 getBusinessEntityList().stream().map(BusinessEntity::toPojoWithRelations)
@@ -146,5 +158,9 @@ public class CompanyEntity extends BaseEntity {
                 .orElseThrow(() -> new NoSuchElementException(NOT_EXIST_BUSINESS.getMessage()));
 
         business.setName(req.changeBusinessName());
+    }
+
+    public void delete() {
+        this.isDeleted = BoolType.T;
     }
 }

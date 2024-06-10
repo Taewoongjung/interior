@@ -8,6 +8,7 @@ import com.interior.application.command.company.dto.CreateCompanyServiceDto;
 import com.interior.domain.company.Company;
 import com.interior.domain.company.repository.CompanyRepository;
 import com.interior.domain.user.User;
+import com.interior.domain.util.BoolType;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +40,7 @@ public class CompanyCommandService {
                 reqDto.subAddress(),
                 reqDto.bdgNumber(),
                 reqDto.tel(),
+                BoolType.F,
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
