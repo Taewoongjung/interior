@@ -50,8 +50,7 @@ public class SseService {
 
         try {
 
-            Map<String, String> data = cacheExcelRedisRepository.getBucketByKey(taskId,
-                    emitterRepository);
+            Map<String, String> data = cacheExcelRedisRepository.getBucketByKey(taskId);
 
             log.info("sse 데이터 보내기 = {}", data);
 
