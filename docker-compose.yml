@@ -70,6 +70,8 @@ services:
       - FRONT_ORIGIN_URL=${FRONT_ORIGIN_URL}
       - JWT_SECRET_KEY=${JWT_SECRET_KEY}
       - SLACK_BOT_TOKEN=${SLACK_BOT_TOKEN}
+      - EMAIL_USERNAME=${EMAIL_USERNAME}
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
       - TZ=Asia/Seoul
     networks:
       - server-connection
