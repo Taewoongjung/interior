@@ -1,6 +1,6 @@
 package com.interior.application.command.util.email;
 
-import com.interior.adapter.outbound.cache.redis.excel.CacheEmailValidationRedisRepository;
+import com.interior.adapter.outbound.cache.redis.email.CacheEmailValidationRedisRepository;
 import com.interior.adapter.outbound.email.MailSender;
 import com.interior.application.command.util.email.template.EmailValidationCheckMail;
 import jakarta.mail.internet.MimeMessage;
