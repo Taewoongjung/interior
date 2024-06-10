@@ -1,6 +1,7 @@
 package com.interior.application.query.user;
 
 import static com.interior.adapter.common.exception.ErrorType.EXPIRED_ACCESS_TOKEN;
+import static com.interior.adapter.common.exception.ErrorType.EXPIRED_EMAIL_CHECK_REQUEST;
 import static com.interior.adapter.common.exception.ErrorType.INVALID_EMAIL_CHECK_NUMBER;
 import static com.interior.util.CheckUtil.check;
 
@@ -59,7 +60,8 @@ public class UserQueryService implements UserDetailsService {
     }
 
     @Transactional(readOnly = true)
-    public boolean validationCheckOfEmail(final String targetEmail, final String compTargetNumber) {
+    public boolean validationCheckOfEmail(final String targetEmail, final String compTargetNumber)
+            throws Exception {
 
         Map<String, String> data = cacheEmailValidationRedisRepository.getBucketByKey(targetEmail);
 
@@ -69,6 +71,7 @@ public class UserQueryService implements UserDetailsService {
 
         if (diffInMinutes > 3) { // 3분이 지나면 버킷 삭제 (만료 처리)
             cacheEmailValidationRedisRepository.tearDownBucketByKey(targetEmail);
+            throw new Exception(EXPIRED_EMAIL_CHECK_REQUEST.getMessage());
         }
 
         String dataCompNumber = data.get("number").trim();

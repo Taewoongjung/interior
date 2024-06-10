@@ -18,6 +18,7 @@ public enum ErrorType {
 
     UNABLE_TO_SEND_EMAIL(200, "이메일 보내기에 실패했습니다."),
     INVALID_EMAIL_CHECK_NUMBER(201, "캐시에 설정 된 이메일 번호가 잘못됐습니다."),
+    EXPIRED_EMAIL_CHECK_REQUEST(202, "이메일 확인 시간이 지났습니다."),
 
     NOT_EXIST_CUSTOMER(1000, "유저가 존재하지 않습니다."),
     INVALID_CUSTOMER_NAME(1001, "올바르지 않은 이름입니다."),
