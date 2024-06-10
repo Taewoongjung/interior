@@ -1,8 +1,13 @@
 package com.interior.application.command.user;
 
+import static com.interior.adapter.common.exception.ErrorType.NOT_VERIFIED_EMAIL;
+import static com.interior.util.CheckUtil.check;
+
 import com.interior.adapter.inbound.user.webdto.SignUpDto.SignUpReqDto;
 import com.interior.adapter.inbound.user.webdto.SignUpDto.SignUpResDto;
 import com.interior.adapter.outbound.alarm.dto.event.NewUserAlarm;
+import com.interior.adapter.outbound.cache.redis.dto.common.TearDownBucketByKey;
+import com.interior.adapter.outbound.cache.redis.email.CacheEmailValidationRedisRepository;
 import com.interior.domain.user.User;
 import com.interior.domain.user.repository.UserRepository;
 import java.time.LocalDateTime;
@@ -21,6 +26,7 @@ public class UserCommandService {
     private final UserRepository userRepository;
     private final ApplicationEventPublisher eventPublisher;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final CacheEmailValidationRedisRepository cacheEmailValidationRedisRepository;
 
     @Transactional(rollbackFor = Exception.class)
     public SignUpResDto signUp(final SignUpReqDto req) {
@@ -35,6 +41,13 @@ public class UserCommandService {
         User newUser = userRepository.save(user);
 
         if (newUser != null) {
+
+            check(!cacheEmailValidationRedisRepository.getIsVerifiedByKey(req.email()),
+                    NOT_VERIFIED_EMAIL);
+
+            // 회원가입 후 캐시 버킷 삭제 (이메일 검증 버킷)
+            eventPublisher.publishEvent(new TearDownBucketByKey(req.email()));
+
             // 새로운 유저 등록 시 알람 발송
             eventPublisher.publishEvent(new NewUserAlarm(req.name(), req.email(), req.tel()));
 

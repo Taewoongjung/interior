@@ -1,6 +1,7 @@
 package com.interior.application.integrationtest;
 
-import com.interior.adapter.outbound.cache.redis.excel.CacheEmailValidationRedisRepository;
+import com.interior.adapter.outbound.cache.redis.dto.common.TearDownBucketByKey;
+import com.interior.adapter.outbound.cache.redis.email.CacheEmailValidationRedisRepository;
 import com.interior.application.command.util.email.EmailService;
 import com.interior.domain.user.repository.UserRepository;
 import java.time.Duration;
@@ -48,7 +49,13 @@ public class IntegrationTest {
         long diffInMinutes = duration.toMinutes();
 
         if (diffInMinutes >= 3) {
-            cacheEmailValidationRedisRepository.tearDownBucketByKey("aipooh8882@naver.com");
+            cacheEmailValidationRedisRepository.tearDownBucketByKey(
+                    new TearDownBucketByKey("aipooh8882@naver.com"));
         }
+    }
+
+    @Test
+    void test4() {
+        cacheEmailValidationRedisRepository.makeBucketByKey("aipooh8882@naver.com", 111);
     }
 }

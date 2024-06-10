@@ -6,7 +6,7 @@ import static com.interior.adapter.common.exception.ErrorType.INVALID_EMAIL_CHEC
 import static com.interior.util.CheckUtil.check;
 
 import com.interior.adapter.config.security.jwt.JWTUtil;
-import com.interior.adapter.outbound.cache.redis.excel.CacheEmailValidationRedisRepository;
+import com.interior.adapter.outbound.cache.redis.email.CacheEmailValidationRedisRepository;
 import com.interior.domain.user.User;
 import com.interior.domain.user.repository.UserRepository;
 import java.time.Duration;
@@ -70,7 +70,6 @@ public class UserQueryService implements UserDetailsService {
         long diffInMinutes = duration.toMinutes();
 
         if (diffInMinutes > 3) { // 3분이 지나면 버킷 삭제 (만료 처리)
-            cacheEmailValidationRedisRepository.tearDownBucketByKey(targetEmail);
             throw new Exception(EXPIRED_EMAIL_CHECK_REQUEST.getMessage());
         }
 
@@ -79,6 +78,14 @@ public class UserQueryService implements UserDetailsService {
         check("".equals(dataCompNumber), INVALID_EMAIL_CHECK_NUMBER); // 빈 값이면 에러
         check(dataCompNumber.matches("\\d{6}"), INVALID_EMAIL_CHECK_NUMBER); // 여섯자리 숫자가 아니면 에러
 
-        return data.get("number").equals(compTargetNumber);
+        if (data.get("number").equals(compTargetNumber)) {
+
+            // 인증번호가 같으면 isVerified = true 로 수정
+            cacheEmailValidationRedisRepository.setIsVerifiedByKey(targetEmail);
+
+            return true;
+        }
+
+        return false;
     }
 }
