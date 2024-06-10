@@ -1,5 +1,7 @@
 package com.interior.adapter.outbound.email;
 
+import static com.interior.adapter.common.exception.ErrorType.UNABLE_TO_SEND_EMAIL;
+
 import com.interior.application.command.util.email.template.EmailTemplate;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -17,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MailSender {
 
     private final JavaMailSender javaMailSender;
-    
+
     @Value("${spring.mail.username}")
     private String username;
 
@@ -28,7 +30,7 @@ public class MailSender {
         } catch (RuntimeException e) {
             log.info("MailService.sendEmail exception occur toEmail: " +
                     "title: {}, text: {}", mail.getSubject(), mail.getContent());
-            throw new Exception("UNABLE_TO_SEND_EMAIL");
+            throw new Exception(UNABLE_TO_SEND_EMAIL.getMessage());
         }
     }
 
