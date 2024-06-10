@@ -1,5 +1,6 @@
 package com.interior.adapter.outbound.cache.redis.excel;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,19 @@ public class CacheEmailValidationRedisRepository {
 
         HashMap<String, String> map = new HashMap<>();
         map.put("number", String.valueOf(number));
+        map.put("createdAt", LocalDateTime.now().toString());
 
         stringStringValueOperations.set(key, map);
+    }
+
+    public Map<String, String> getBucketByKey(final String key) {
+
+        ValueOperations<String, Map<String, String>> valueOps = redisTemplate.opsForValue();
+
+        return valueOps.get(key);
+    }
+
+    public void tearDownBucketByKey(final String key) {
+        redisTemplate.delete(key);
     }
 }

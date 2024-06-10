@@ -6,18 +6,20 @@ import com.interior.application.command.util.email.template.EmailValidationCheck
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Async
 @Slf4j
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class EmailService {
 
     private final MailSender mailSender;
     private final CacheEmailValidationRedisRepository cacheEmailValidationRedisRepository;
 
+    @Transactional
     public void sendEmailValidationCheck(final String toEmail) throws Exception {
 
         int validationNumber = createNumber();
