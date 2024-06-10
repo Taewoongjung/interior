@@ -62,6 +62,10 @@ public class BusinessEntity extends BaseEntity {
     @Column(columnDefinition = "varchar(50)")
     private BusinessStatusDetail statusDetail;
 
+    @Column(name = "is_deleted", columnDefinition = "varchar(1)")
+    @Enumerated(value = EnumType.STRING)
+    private BoolType isDeleted;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "business", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BusinessMaterialEntity> businessMaterialList = new ArrayList<>();
 
@@ -77,6 +81,7 @@ public class BusinessEntity extends BaseEntity {
             final Long customerId,
             final BusinessStatus status,
             final BusinessStatusDetail statusDetail,
+            final BoolType isDeleted,
             final List<BusinessMaterialEntity> businessMaterialList
     ) {
         super(LocalDateTime.now(), LocalDateTime.now());
@@ -87,6 +92,7 @@ public class BusinessEntity extends BaseEntity {
         this.customerId = customerId;
         this.status = status;
         this.statusDetail = statusDetail;
+        this.isDeleted = isDeleted;
         this.businessMaterialList = businessMaterialList;
     }
 
@@ -100,7 +106,8 @@ public class BusinessEntity extends BaseEntity {
         check(name == null || "".equals(name.trim()), INVALID_BUSINESS_NAME);
         check(name.toCharArray().length < 1, INVALID_BUSINESS_NAME); // 사업명은 2 글자 이상
 
-        return new BusinessEntity(null, name, companyId, customerId, status, null, null);
+        return new BusinessEntity(null, name, companyId, customerId, status, null, BoolType.F,
+                null);
     }
 
     public static BusinessEntity of(
@@ -109,6 +116,7 @@ public class BusinessEntity extends BaseEntity {
             final Long customerId,
             final BusinessStatus status,
             final BusinessStatusDetail statusDetail,
+            final BoolType isDeleted,
             final List<BusinessMaterialEntity> businessMaterialList
     ) {
 
@@ -116,7 +124,7 @@ public class BusinessEntity extends BaseEntity {
         check(name.toCharArray().length < 1, INVALID_BUSINESS_NAME);
 
         return new BusinessEntity(null, name, companyId, customerId, status, statusDetail,
-                businessMaterialList);
+                isDeleted, businessMaterialList);
     }
 
     public Business toPojo() {
@@ -126,7 +134,8 @@ public class BusinessEntity extends BaseEntity {
                 getCompanyId(),
                 getCustomerId(),
                 getStatus(),
-                getStatusDetail()
+                getStatusDetail(),
+                getIsDeleted()
         );
     }
 
@@ -138,6 +147,7 @@ public class BusinessEntity extends BaseEntity {
                 getCustomerId(),
                 getStatus(),
                 getStatusDetail(),
+                getIsDeleted(),
                 getBusinessMaterialList().stream()
                         .map(BusinessMaterialEntity::toPojo)
                         .collect(Collectors.toList())
@@ -169,5 +179,7 @@ public class BusinessEntity extends BaseEntity {
                 .forEach(e -> e.setDeleted(BoolType.T));
     }
 
-
+    public void delete() {
+        this.isDeleted = BoolType.T;
+    }
 }

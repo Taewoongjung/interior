@@ -148,13 +148,16 @@ public class CompanyEntity extends BaseEntity {
                 .filter(f -> businessId.equals(f.getId())).findFirst()
                 .orElseThrow(() -> new NoSuchElementException(NOT_EXIST_BUSINESS.getMessage()));
 
-        this.businessEntityList.removeIf(f -> businessId.equals(f.getId()));
+        this.businessEntityList.stream()
+                .filter(f -> businessId.equals(f.getId()))
+                .forEach(BusinessEntity::delete);
     }
 
     public void reviseBusiness(final Long businessId, final ReviseBusinessServiceDto.Req req) {
 
         BusinessEntity business = this.businessEntityList.stream()
                 .filter(f -> businessId.equals(f.getId())).findFirst()
+                .filter(f -> f.getIsDeleted() == BoolType.F)
                 .orElseThrow(() -> new NoSuchElementException(NOT_EXIST_BUSINESS.getMessage()));
 
         business.setName(req.changeBusinessName());
