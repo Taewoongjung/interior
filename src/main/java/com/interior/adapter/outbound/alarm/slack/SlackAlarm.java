@@ -103,7 +103,8 @@ public class SlackAlarm implements AlarmService {
         }
     }
 
-    @Async
+    @EventListener
+    @Transactional
     public void sendNewCompanyAlarm(final NewCompanyAlarm event) {
 
         try {
