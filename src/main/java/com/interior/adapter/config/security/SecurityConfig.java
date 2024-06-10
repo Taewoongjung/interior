@@ -64,6 +64,11 @@ public class SecurityConfig {
         http.authorizeHttpRequests((auth) -> auth
                         .requestMatchers(HttpMethod.GET,
                                 "/api/excels/tasks/{taskId}"
+                                , "/api/emails/validations"
+                        ).permitAll()
+
+                        .requestMatchers(HttpMethod.POST,
+                                "/api/emails/validations"
                         ).permitAll()
 
                         .requestMatchers(HttpMethod.GET,

@@ -1,14 +1,17 @@
 package com.interior.application.query.user;
 
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_VERIFY_NUMBER;
 import static com.interior.adapter.common.exception.ErrorType.EXPIRED_ACCESS_TOKEN;
 import static com.interior.adapter.common.exception.ErrorType.EXPIRED_EMAIL_CHECK_REQUEST;
 import static com.interior.adapter.common.exception.ErrorType.INVALID_EMAIL_CHECK_NUMBER;
+import static com.interior.adapter.common.exception.ErrorType.NOT_6DIGIT_VERIFY_NUMBER;
 import static com.interior.util.CheckUtil.check;
 
 import com.interior.adapter.config.security.jwt.JWTUtil;
 import com.interior.adapter.outbound.cache.redis.email.CacheEmailValidationRedisRepository;
 import com.interior.domain.user.User;
 import com.interior.domain.user.repository.UserRepository;
+import jakarta.validation.ValidationException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -75,8 +78,8 @@ public class UserQueryService implements UserDetailsService {
 
         String dataCompNumber = data.get("number").trim();
 
-        check("".equals(dataCompNumber), INVALID_EMAIL_CHECK_NUMBER); // 빈 값이면 에러
-        check(dataCompNumber.matches("\\d{6}"), INVALID_EMAIL_CHECK_NUMBER); // 여섯자리 숫자가 아니면 에러
+        check("".equals(dataCompNumber), EMPTY_VERIFY_NUMBER); // 빈 값이면 에러
+        check(!dataCompNumber.matches("\\d{6}"), NOT_6DIGIT_VERIFY_NUMBER); // 여섯자리 숫자가 아니면 에러
 
         if (data.get("number").equals(compTargetNumber)) {
 
@@ -84,8 +87,9 @@ public class UserQueryService implements UserDetailsService {
             cacheEmailValidationRedisRepository.setIsVerifiedByKey(targetEmail);
 
             return true;
-        }
 
-        return false;
+        } else {
+            throw new ValidationException(INVALID_EMAIL_CHECK_NUMBER.getMessage());
+        }
     }
 }

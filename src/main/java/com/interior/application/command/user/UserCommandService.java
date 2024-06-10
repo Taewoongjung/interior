@@ -8,6 +8,7 @@ import com.interior.adapter.inbound.user.webdto.SignUpDto.SignUpResDto;
 import com.interior.adapter.outbound.alarm.dto.event.NewUserAlarm;
 import com.interior.adapter.outbound.cache.redis.dto.common.TearDownBucketByKey;
 import com.interior.adapter.outbound.cache.redis.email.CacheEmailValidationRedisRepository;
+import com.interior.application.command.util.email.EmailService;
 import com.interior.domain.user.User;
 import com.interior.domain.user.repository.UserRepository;
 import java.time.LocalDateTime;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserCommandService {
 
+    private final EmailService emailService;
     private final UserRepository userRepository;
     private final ApplicationEventPublisher eventPublisher;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -55,5 +57,13 @@ public class UserCommandService {
         }
 
         return new SignUpResDto(false, null);
+    }
+
+    public void sendEmailValidationMail(final String targetEmail) throws Exception {
+
+        // 존재하는 이메일인지 검증
+        userRepository.checkIfExistUserByEmail(targetEmail);
+
+        emailService.sendEmailValidationCheck(targetEmail);
     }
 }

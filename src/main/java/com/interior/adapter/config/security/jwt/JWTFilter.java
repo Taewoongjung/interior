@@ -24,15 +24,20 @@ public class JWTFilter extends OncePerRequestFilter {
     private final UserQueryService userQueryService;
 
     private static final AntPathMatcher antPathMatcher = new AntPathMatcher();
-    private static final String EXCLUDED_PATH = "/api/excels/tasks/**";
+    private static final String[] EXCLUDED_PATH = {
+            "/api/excels/tasks/**",
+            "/api/emails/validations"
+    };
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
 
-        if (antPathMatcher.match(EXCLUDED_PATH, request.getServletPath())) {
-            filterChain.doFilter(request, response);
-            return;
+        for (String pattern : EXCLUDED_PATH) {
+            if (antPathMatcher.match(pattern, request.getServletPath())) {
+                filterChain.doFilter(request, response);
+                return;
+            }
         }
 
         // request 에서 Authorization 헤더를 찾음
