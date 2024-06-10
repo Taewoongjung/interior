@@ -3,6 +3,7 @@ package com.interior.application.query.company;
 import com.interior.domain.company.Company;
 import com.interior.domain.user.User;
 import com.interior.domain.user.repository.UserRepository;
+import com.interior.domain.util.BoolType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ public class CompanyQueryService {
 
         return user.getCompanyList().stream()
                 .filter(f -> companyId.equals(f.getId()))
+                .filter(f -> f.getIsDeleted() == BoolType.T)
                 .findFirst().orElse(null);
     }
 }

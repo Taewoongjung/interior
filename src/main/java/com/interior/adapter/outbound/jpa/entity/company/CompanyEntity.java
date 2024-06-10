@@ -159,4 +159,8 @@ public class CompanyEntity extends BaseEntity {
 
         business.setName(req.changeBusinessName());
     }
+
+    public void delete() {
+        this.isDeleted = BoolType.T;
+    }
 }

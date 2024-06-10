@@ -1,20 +1,21 @@
 package com.interior.adapter.outbound.jpa.repository.company;
 
+import static com.interior.adapter.common.exception.ErrorType.COMPANY_NOT_EXIST_IN_THE_USER;
+import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_COMPANY;
+import static com.interior.domain.util.BoolType.F;
+import static com.interior.util.CheckUtil.check;
+import static com.interior.util.converter.jpa.company.CompanyEntityConverter.companyToEntity;
+
 import com.interior.adapter.common.exception.ErrorType;
 import com.interior.adapter.outbound.jpa.entity.company.CompanyEntity;
 import com.interior.adapter.outbound.jpa.entity.user.UserEntity;
 import com.interior.adapter.outbound.jpa.repository.user.UserJpaRepository;
 import com.interior.domain.company.Company;
 import com.interior.domain.company.repository.CompanyRepository;
+import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.NoSuchElementException;
-
-import static com.interior.adapter.common.exception.ErrorType.COMPANY_NOT_EXIST_IN_THE_USER;
-import static com.interior.util.CheckUtil.check;
-import static com.interior.util.converter.jpa.company.CompanyEntityConverter.companyToEntity;
 
 @Repository
 @RequiredArgsConstructor
@@ -29,7 +30,9 @@ public class CompanyRepositoryAdapter implements CompanyRepository {
 
         CompanyEntity company = companyJpaRepository.findById(companyId)
                 .orElseThrow(() -> new NoSuchElementException(
-                        ErrorType.NOT_EXIST_COMPANY.getMessage()));
+                        NOT_EXIST_COMPANY.getMessage()));
+
+        check(F == company.getIsDeleted(), NOT_EXIST_COMPANY);
 
         return company.toPojoWithRelations();
     }
@@ -54,9 +57,11 @@ public class CompanyRepositoryAdapter implements CompanyRepository {
                 .orElseThrow(() -> new NoSuchElementException(
                         ErrorType.NOT_EXIST_CUSTOMER.getMessage()));
 
-        boolean isDeleted = user.getCompanyEntityList().removeIf(f -> companyId.equals(f.getId()));
+        check(user.getCompanyEntityList().stream().noneMatch(f -> companyId.equals(f.getId())),
+                COMPANY_NOT_EXIST_IN_THE_USER);
 
-        check(!isDeleted, COMPANY_NOT_EXIST_IN_THE_USER);
+        user.getCompanyEntityList().stream().filter(f -> companyId.equals(f.getId()))
+                .forEach(CompanyEntity::delete);
 
         return true;
     }

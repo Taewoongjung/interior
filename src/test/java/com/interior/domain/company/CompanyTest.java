@@ -1,8 +1,9 @@
 package com.interior.domain.company;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
+import com.interior.domain.util.BoolType;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,6 +23,7 @@ class CompanyTest {
                 "서브 주소",
                 "빌딩번호",
                 "01088257754",
+                BoolType.F,
                 LocalDateTime.of(2024, 3, 22, 15, 10),
                 LocalDateTime.of(2024, 3, 22, 15, 10)
         ));
@@ -39,6 +41,7 @@ class CompanyTest {
                 "서브 주소",
                 "빌딩번호",
                 "01088257754",
+                BoolType.F,
                 LocalDateTime.of(2024, 3, 22, 15, 10),
                 LocalDateTime.of(2024, 3, 22, 15, 10)
         ));
@@ -56,6 +59,7 @@ class CompanyTest {
                 "서브 주소",
                 "빌딩번호",
                 "01088257754",
+                BoolType.F,
                 LocalDateTime.of(2024, 3, 22, 15, 10),
                 LocalDateTime.of(2024, 3, 22, 15, 10)
         ));
@@ -73,6 +77,7 @@ class CompanyTest {
                 "서브 주소",
                 "빌딩번호",
                 null,
+                BoolType.F,
                 LocalDateTime.of(2024, 3, 22, 15, 10),
                 LocalDateTime.of(2024, 3, 22, 15, 10)
         ));
