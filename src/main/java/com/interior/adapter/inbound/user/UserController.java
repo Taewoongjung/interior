@@ -7,6 +7,7 @@ import com.interior.adapter.inbound.user.webdto.SignUpDto.SignUpResDto;
 import com.interior.application.command.user.UserCommandService;
 import com.interior.application.query.user.UserQueryService;
 import com.interior.domain.user.User;
+import com.interior.domain.util.BoolType;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import java.util.stream.Collectors;
@@ -42,7 +43,6 @@ public class UserController {
         User foundUser = userQueryService.loadUserByToken(request.getHeader("authorization"));
 
         log.info("{} 고객님 접속 중", foundUser.getName());
-        log.debug("{} 고객님 접속 중(debug)", foundUser.getName());
 
         String authorities = foundUser.getAuthorities().stream().map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(", "));
@@ -53,7 +53,10 @@ public class UserController {
                         foundUser.getTel(),
                         foundUser.getName(),
                         authorities,
-                        foundUser.getCompanyList()));
+                        foundUser.getCompanyList().stream()
+                                .filter(f -> f.getIsDeleted() == BoolType.F)
+                                .collect(Collectors.toList())
+                ));
     }
 
     @PostMapping(value = "/api/emails/validations")
