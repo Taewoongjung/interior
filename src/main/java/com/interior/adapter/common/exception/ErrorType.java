@@ -26,6 +26,7 @@ public enum ErrorType {
     INVALID_CUSTOMER_TEL(1003, "올바르지 않은 전화번호입니다."),
     INVALID_CUSTOMER_PASSWORD(1004, "올바르지 않은 비밀번호입니다."),
     INVALID_CUSTOMER_USER_ROLE(1005, "올바르지 않은 유저역할입니다."),
+    NOT_VERIFIED_EMAIL(1006, "이메일 검증이 선행 되어야 합니다."),
 
     NOT_EXIST_COMPANY(1050, "사업체가 존재하지 않습니다."),
     INVALID_COMPANY_NAME(1051, "올바르지 않은 사업체 명 입니다."),

@@ -1,5 +1,6 @@
 package com.interior.adapter.outbound.cache.redis.excel;
 
+import com.interior.adapter.outbound.cache.redis.dto.common.TearDownBucketByKey;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -28,20 +29,19 @@ public class CacheExcelRedisRepository {
     }
 
     public void setCountByKey(final String key) {
-        // Redis에서 key에 해당하는 값을 가져옵니다.
+        // Redis에서 key에 해당하는 값을 가져옴.
         ValueOperations<String, Map<String, String>> valueOps = redisTemplate.opsForValue();
         Map<String, String> valueMap = valueOps.get(key);
 
         if (valueMap != null) {
-            // "completeCount"의 값을 증가시킵니다.
+            // "completeCount"의 값을 증가.
             int completeCount = Integer.parseInt(valueMap.get("completeCount")) + 1;
             valueMap.put("completeCount", String.valueOf(completeCount));
 
-            // 변경된 값을 Redis에 다시 저장합니다.
+            // 변경된 값을 Redis에 다시 저장.
             valueOps.set(key, valueMap);
         } else {
-            // valueMap이 null인 경우, 로그를 출력하거나 예외를 던질 수 있습니다.
-            System.out.println("No value found for key: " + key);
+            log.error("[Redis] No value found for key: " + key);
         }
     }
 
@@ -66,7 +66,7 @@ public class CacheExcelRedisRepository {
         if (result != null) {
 
             if (result.get("totalCount").equals(result.get("completeCount"))) {
-                tearDownBucketByKey(key); // 버킷 삭제
+                tearDownBucketByKey(new TearDownBucketByKey(key)); // 버킷 삭제
                 log.info("{} 완료 후 삭제", key);
             }
         }
@@ -74,7 +74,7 @@ public class CacheExcelRedisRepository {
         return result;
     }
 
-    public void tearDownBucketByKey(final String key) {
-        redisTemplate.delete(key);
+    private void tearDownBucketByKey(final TearDownBucketByKey req) {
+        redisTemplate.delete(req.key());
     }
 }
