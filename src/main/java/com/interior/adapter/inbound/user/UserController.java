@@ -56,7 +56,7 @@ public class UserController {
     }
 
     @GetMapping("/api/email/validations")
-    public ResponseEntity<Boolean> validateEmail(final ValidateEmail.Req req) {
+    public ResponseEntity<Boolean> validateEmail(final ValidateEmail.Req req) throws Exception {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(userQueryService.validationCheckOfEmail(req.targetEmail(), req.compNumber()));
