@@ -1,6 +1,6 @@
 package com.interior.adapter.outbound.cache.redis.excel;
 
-import com.interior.adapter.outbound.emitter.EmitterRepository;
+import com.interior.adapter.outbound.cache.redis.dto.common.TearDownBucketByKey;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -29,46 +29,23 @@ public class CacheExcelRedisRepository {
     }
 
     public void setCountByKey(final String key) {
-        // Redis에서 key에 해당하는 값을 가져옵니다.
+        // Redis에서 key에 해당하는 값을 가져옴.
         ValueOperations<String, Map<String, String>> valueOps = redisTemplate.opsForValue();
         Map<String, String> valueMap = valueOps.get(key);
 
         if (valueMap != null) {
-            // "completeCount"의 값을 증가시킵니다.
+            // "completeCount"의 값을 증가.
             int completeCount = Integer.parseInt(valueMap.get("completeCount")) + 1;
             valueMap.put("completeCount", String.valueOf(completeCount));
 
-            // 변경된 값을 Redis에 다시 저장합니다.
+            // 변경된 값을 Redis에 다시 저장.
             valueOps.set(key, valueMap);
         } else {
-            // valueMap이 null인 경우, 로그를 출력하거나 예외를 던질 수 있습니다.
-            System.out.println("No value found for key: " + key);
+            log.error("[Redis] No value found for key: " + key);
         }
     }
 
     public Map<String, String> getBucketByKey(final String key) {
-        ValueOperations<String, Map<String, String>> valueOps = redisTemplate.opsForValue();
-
-        long startTime = System.currentTimeMillis();
-
-        while (System.currentTimeMillis() - startTime < 3) {
-            Map<String, String> result = valueOps.get(key);
-            if (result != null) {
-                return result;
-            }
-            try {
-                Thread.sleep(100); // 100ms 간격으로 조회 시도
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt(); // 현재 스레드의 인터럽트 상태를 복원
-            }
-        }
-
-        // 3초 내에 값을 찾지 못하면 빈 맵 반환
-        return new HashMap<>();
-    }
-
-    public Map<String, String> getBucketByKey(final String key,
-            final EmitterRepository emitterRepository) {
 
         ValueOperations<String, Map<String, String>> valueOps = redisTemplate.opsForValue();
 
@@ -89,7 +66,7 @@ public class CacheExcelRedisRepository {
         if (result != null) {
 
             if (result.get("totalCount").equals(result.get("completeCount"))) {
-                tearDownBucketByKey(key); // 버킷 삭제
+                tearDownBucketByKey(new TearDownBucketByKey(key)); // 버킷 삭제
                 log.info("{} 완료 후 삭제", key);
             }
         }
@@ -97,7 +74,7 @@ public class CacheExcelRedisRepository {
         return result;
     }
 
-    public void tearDownBucketByKey(final String key) {
-        redisTemplate.delete(key);
+    private void tearDownBucketByKey(final TearDownBucketByKey req) {
+        redisTemplate.delete(req.key());
     }
 }

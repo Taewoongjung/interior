@@ -16,12 +16,17 @@ public enum ErrorType {
     INVALID_SIGNUP_REQUEST_DUPLICATE_EMAIL(102, "이미 존재하는 이메일 입니다."),
     LIMIT_OF_COMPANY_COUNT_IS_FIVE(103, "유저당 최고 5개의 회사만 등록 가능합니다."),
 
+    UNABLE_TO_SEND_EMAIL(200, "이메일 보내기에 실패했습니다."),
+    INVALID_EMAIL_CHECK_NUMBER(201, "캐시에 설정 된 이메일 번호가 잘못됐습니다."),
+    EXPIRED_EMAIL_CHECK_REQUEST(202, "이메일 확인 시간이 지났습니다."),
+
     NOT_EXIST_CUSTOMER(1000, "유저가 존재하지 않습니다."),
     INVALID_CUSTOMER_NAME(1001, "올바르지 않은 이름입니다."),
     INVALID_CUSTOMER_EMAIL(1002, "올바르지 않은 이메일입니다."),
     INVALID_CUSTOMER_TEL(1003, "올바르지 않은 전화번호입니다."),
     INVALID_CUSTOMER_PASSWORD(1004, "올바르지 않은 비밀번호입니다."),
     INVALID_CUSTOMER_USER_ROLE(1005, "올바르지 않은 유저역할입니다."),
+    NOT_VERIFIED_EMAIL(1006, "이메일 검증이 선행 되어야 합니다."),
 
     NOT_EXIST_COMPANY(1050, "사업체가 존재하지 않습니다."),
     INVALID_COMPANY_NAME(1051, "올바르지 않은 사업체 명 입니다."),

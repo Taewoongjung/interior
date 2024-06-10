@@ -3,6 +3,7 @@ package com.interior.adapter.inbound.user;
 import com.interior.adapter.inbound.user.webdto.LoadUserDto.LoadUserResDto;
 import com.interior.adapter.inbound.user.webdto.SignUpDto;
 import com.interior.adapter.inbound.user.webdto.SignUpDto.SignUpResDto;
+import com.interior.adapter.inbound.user.webdto.ValidateEmail;
 import com.interior.application.command.user.UserCommandService;
 import com.interior.application.query.user.UserQueryService;
 import com.interior.domain.user.User;
@@ -52,5 +53,12 @@ public class UserController {
                         foundUser.getName(),
                         authorities,
                         foundUser.getCompanyList()));
+    }
+
+    @GetMapping("/api/email/validations")
+    public ResponseEntity<Boolean> validateEmail(final ValidateEmail.Req req) throws Exception {
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(userQueryService.validationCheckOfEmail(req.targetEmail(), req.compNumber()));
     }
 }
