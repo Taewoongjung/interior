@@ -3,6 +3,7 @@ package com.interior.domain.business;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
+import com.interior.domain.util.BoolType;
 import java.util.ArrayList;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,7 @@ class BusinessTest {
                 12L,
                 BusinessStatus.IN_PROGRESS,
                 BusinessStatusDetail.CONSTRUCTING,
+                BoolType.F,
                 new ArrayList<>()
         ));
     }
@@ -34,6 +36,7 @@ class BusinessTest {
                 12L,
                 BusinessStatus.IN_PROGRESS,
                 null,
+                BoolType.F,
                 new ArrayList<>()
         ));
     }
@@ -48,6 +51,7 @@ class BusinessTest {
                 12L,
                 BusinessStatus.IN_PROGRESS,
                 null,
+                BoolType.F,
                 new ArrayList<>()
         ));
     }

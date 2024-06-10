@@ -3,6 +3,7 @@ package com.interior.adapter.outbound.jpa.repository.business;
 import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_BUSINESS;
 import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_BUSINESS_MATERIAL;
 import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_COMPANY;
+import static com.interior.util.CheckUtil.check;
 import static com.interior.util.converter.jpa.business.BusinessEntityConverter.businessLogToEntity;
 import static com.interior.util.converter.jpa.business.BusinessEntityConverter.businessMaterialLogToEntity;
 import static com.interior.util.converter.jpa.business.BusinessEntityConverter.businessMaterialToEntity;
@@ -22,6 +23,7 @@ import com.interior.domain.business.material.log.BusinessMaterialLog;
 import com.interior.domain.business.repository.BusinessRepository;
 import com.interior.domain.business.repository.dto.CreateBusiness;
 import com.interior.domain.business.repository.dto.CreateBusinessMaterial;
+import com.interior.domain.util.BoolType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -49,6 +51,8 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
         BusinessEntity businessEntities = businessJpaRepository.findById(businessId)
                 .orElseThrow(() -> new NoSuchElementException(NOT_EXIST_BUSINESS.getMessage()));
 
+        check(businessEntities.getIsDeleted() == BoolType.T, NOT_EXIST_BUSINESS);
+
         // 삭제된 재료들 제외
         businessEntities.getOnlyNotDeletedMaterials();
 
@@ -67,6 +71,7 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
         }
 
         return businessEntities.stream()
+                .filter(f -> f.getIsDeleted() == BoolType.F)
                 .map(BusinessEntity::toPojo)
                 .collect(Collectors.toList());
     }
@@ -78,6 +83,8 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
 
         BusinessEntity businessEntities = businessJpaRepository.findBusinessEntityByCompanyIdAndId(
                 companyId, businessId);
+
+        check(businessEntities.getIsDeleted() == BoolType.T, NOT_EXIST_BUSINESS);
 
         // 삭제된 재료들 제외
         businessEntities.getOnlyNotDeletedMaterials();
@@ -97,6 +104,7 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
         }
 
         return businessEntities.stream()
+                .filter(f -> f.getIsDeleted() == BoolType.F)
                 .map(BusinessEntity::toPojoWithRelations)
                 .collect(Collectors.toList());
     }
@@ -211,6 +219,7 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public BusinessMaterial findBusinessMaterialByMaterialId(final Long materialId) {
 
         BusinessMaterialEntity entity = businessMaterialJpaRepository.findById(materialId)
