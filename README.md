@@ -1,7 +1,7 @@
 ## [서비스 링크](http://interiorjung.shop/)
 
 ## 연관 프로젝트
-- [프론트](https://github.com/Taewoongjung/interior-front)
+- [Front-end](https://github.com/Taewoongjung/interior-front)
 
 ## 내용
 
@@ -31,3 +31,7 @@
 1. [최종안](https://github.com/Taewoongjung/interior/wiki/Infrastructure#%EC%B5%9C%EC%A2%85)
 2. [인프라 V1](https://github.com/Taewoongjung/interior/assets/70272679/1f8eb412-7da5-4eee-a3ef-3705397b1d10)
 3. [인프라 V2](https://github.com/Taewoongjung/interior/assets/70272679/1f8eb412-7da5-4eee-a3ef-3705397b1d10)
+
+<br/>
+
+## [비즈니스 플로우](https://github.com/Taewoongjung/interior/wiki/%ED%94%8C%EB%A1%9C%EC%9A%B0-%EB%8B%A4%EC%9D%B4%EC%96%B4%EA%B7%B8%EB%9E%A8)
