@@ -1,5 +1,6 @@
 package com.interior.domain.business.repository;
 
+import com.interior.adapter.inbound.business.enumtypes.QueryType;
 import com.interior.application.command.business.dto.ReviseBusinessServiceDto;
 import com.interior.domain.business.Business;
 import com.interior.domain.business.log.BusinessLog;
@@ -13,7 +14,7 @@ public interface BusinessRepository {
 
     Business findById(final Long businessId);
 
-    List<Business> findBusinessByCompanyId(final Long companyId);
+    List<Business> findBusinessByCompanyId(final Long companyId, final QueryType queryType);
 
     Business findBusinessByCompanyIdAndBusinessId(final Long companyId, final Long businessId);
 

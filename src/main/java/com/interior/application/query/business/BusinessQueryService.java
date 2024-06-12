@@ -2,6 +2,7 @@ package com.interior.application.query.business;
 
 import static java.util.stream.Collectors.groupingBy;
 
+import com.interior.adapter.inbound.business.enumtypes.QueryType;
 import com.interior.adapter.inbound.business.webdto.GetBusiness;
 import com.interior.adapter.outbound.cache.redis.excel.CacheExcelRedisRepository;
 import com.interior.adapter.outbound.excel.BusinessListExcel;
@@ -73,8 +74,11 @@ public class BusinessQueryService {
     }
 
     @Transactional(readOnly = true)
-    public List<Business> getBusinessesByCompanyId(final Long companyId) {
-        return businessRepository.findBusinessByCompanyId(companyId);
+    public List<Business> getBusinessesByCompanyId(
+            final Long companyId,
+            final QueryType queryType
+    ) {
+        return businessRepository.findBusinessByCompanyId(companyId, queryType);
     }
 
     @Transactional(readOnly = true)
