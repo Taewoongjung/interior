@@ -22,6 +22,10 @@ class BusinessTest {
                 BusinessStatus.IN_PROGRESS,
                 BusinessStatusDetail.CONSTRUCTING,
                 BoolType.F,
+                "02830",
+                "서울 성북구 아리랑로3",
+                "101동 101호",
+                "2635010500115140000000001",
                 new ArrayList<>()
         ));
     }
@@ -37,6 +41,10 @@ class BusinessTest {
                 BusinessStatus.IN_PROGRESS,
                 null,
                 BoolType.F,
+                "02830",
+                "서울 성북구 아리랑로3",
+                "101동 101호",
+                "2635010500115140000000001",
                 new ArrayList<>()
         ));
     }
@@ -52,6 +60,10 @@ class BusinessTest {
                 BusinessStatus.IN_PROGRESS,
                 null,
                 BoolType.F,
+                "02830",
+                "서울 성북구 아리랑로3",
+                "101동 101호",
+                "2635010500115140000000001",
                 new ArrayList<>()
         ));
     }

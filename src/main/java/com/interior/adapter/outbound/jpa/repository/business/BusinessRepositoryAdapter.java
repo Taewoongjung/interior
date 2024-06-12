@@ -128,7 +128,11 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
                 createBusiness.businessName(),
                 createBusiness.companyId(),
                 createBusiness.customerId(),
-                BusinessStatus.from(createBusiness.status())
+                BusinessStatus.from(createBusiness.status()),
+                createBusiness.zipCode(),
+                createBusiness.mainAddress(),
+                createBusiness.subAddress(),
+                createBusiness.bdgNumber()
         ));
 
         return business.getId();
