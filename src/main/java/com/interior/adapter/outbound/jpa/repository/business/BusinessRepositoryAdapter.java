@@ -8,6 +8,7 @@ import static com.interior.util.converter.jpa.business.BusinessEntityConverter.b
 import static com.interior.util.converter.jpa.business.BusinessEntityConverter.businessMaterialLogToEntity;
 import static com.interior.util.converter.jpa.business.BusinessEntityConverter.businessMaterialToEntity;
 
+import com.interior.adapter.inbound.business.enumtypes.QueryType;
 import com.interior.adapter.outbound.jpa.entity.business.BusinessEntity;
 import com.interior.adapter.outbound.jpa.entity.business.expense.BusinessMaterialExpenseEntity;
 import com.interior.adapter.outbound.jpa.entity.business.material.BusinessMaterialEntity;
@@ -61,13 +62,23 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Business> findBusinessByCompanyId(final Long companyId) {
+    public List<Business> findBusinessByCompanyId(final Long companyId, final QueryType queryType) {
 
         List<BusinessEntity> businessEntities = businessJpaRepository.findBusinessesEntityByCompanyId(
                 companyId);
 
         if (businessEntities == null || businessEntities.size() == 0) {
             return new ArrayList<>();
+        }
+
+        if (queryType != null) {
+            // queryType 이 "사업관리" 면 businessList 도 함께 조회
+            if ("사업관리".equals(queryType.getType())) {
+                return businessEntities.stream()
+                        .filter(f -> f.getIsDeleted() == BoolType.F)
+                        .map(BusinessEntity::toPojoWithRelations)
+                        .collect(Collectors.toList());
+            }
         }
 
         return businessEntities.stream()

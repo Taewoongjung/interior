@@ -1,5 +1,6 @@
 package com.interior.adapter.inbound.business;
 
+import com.interior.adapter.inbound.business.enumtypes.QueryType;
 import com.interior.adapter.inbound.business.webdto.CreateBusinessMaterial.CreateBusinessMaterialReqDto;
 import com.interior.adapter.inbound.business.webdto.CreateBusinessWebDtoV1;
 import com.interior.adapter.inbound.business.webdto.GetBusiness;
@@ -129,10 +130,11 @@ public class BusinessController {
     // 회사의 사업들 조회
     @GetMapping(value = "/api/companies/{companyId}/businesses")
     public ResponseEntity<List<Business>> getBusinessByCompanyId(
-            @PathVariable(value = "companyId") final Long companyId
+            @PathVariable(value = "companyId") final Long companyId,
+            @RequestParam(value = "queryType", defaultValue = "none") final QueryType queryType
     ) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(businessQueryService.getBusinessesByCompanyId(companyId));
+                .body(businessQueryService.getBusinessesByCompanyId(companyId, queryType));
     }
 
     // 사업 삭제
