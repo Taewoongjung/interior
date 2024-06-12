@@ -34,6 +34,14 @@ public class Business {
 
     private BoolType isDeleted;
 
+    private String zipCode;
+
+    private String address;
+
+    private String subAddress;
+
+    private String buildingNumber;
+
     private List<BusinessMaterial> businessMaterialList;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
@@ -50,6 +58,10 @@ public class Business {
             final BusinessStatus status,
             final BusinessStatusDetail statusDetail,
             final BoolType isDeleted,
+            final String zipCode,
+            final String address,
+            final String subAddress,
+            final String buildingNumber,
             final List<BusinessMaterial> businessMaterialList,
             final LocalDateTime lastModified,
             final LocalDateTime createdAt
@@ -61,6 +73,10 @@ public class Business {
         this.status = status;
         this.statusDetail = statusDetail;
         this.isDeleted = isDeleted;
+        this.zipCode = zipCode;
+        this.address = address;
+        this.subAddress = subAddress;
+        this.buildingNumber = buildingNumber;
         this.businessMaterialList = businessMaterialList;
         this.lastModified = lastModified;
         this.createdAt = createdAt;
@@ -74,6 +90,10 @@ public class Business {
             final BusinessStatus status,
             final BusinessStatusDetail statusDetail,
             final BoolType isDeleted,
+            final String zipCode,
+            final String address,
+            final String subAddress,
+            final String buildingNumber,
             final List<BusinessMaterial> businessMaterialList
     ) {
 
@@ -81,7 +101,8 @@ public class Business {
         require(o -> companyId == null, companyId, EMPTY_RELATED_COMPANY_TO_BUSINESS);
 
         return new Business(id, name, companyId, customerId, status, statusDetail, isDeleted,
-                businessMaterialList, LocalDateTime.now(), LocalDateTime.now());
+                zipCode, address, subAddress, buildingNumber, businessMaterialList,
+                LocalDateTime.now(), LocalDateTime.now());
     }
 
     public static Business of(
@@ -91,6 +112,10 @@ public class Business {
             final BusinessStatus status,
             final BusinessStatusDetail statusDetail,
             final BoolType isDeleted,
+            final String zipCode,
+            final String address,
+            final String subAddress,
+            final String buildingNumber,
             final List<BusinessMaterial> businessMaterialList
     ) {
 
@@ -98,7 +123,8 @@ public class Business {
         require(o -> companyId == null, companyId, EMPTY_RELATED_COMPANY_TO_BUSINESS);
 
         return new Business(null, name, companyId, customerId, status, statusDetail, isDeleted,
-                businessMaterialList, LocalDateTime.now(), LocalDateTime.now());
+                zipCode, address, subAddress, buildingNumber, businessMaterialList,
+                LocalDateTime.now(), LocalDateTime.now());
     }
 
     public static Business of(
@@ -108,14 +134,19 @@ public class Business {
             final Long customerId,
             final BusinessStatus status,
             final BusinessStatusDetail statusDetail,
-            final BoolType isDeleted
+            final BoolType isDeleted,
+            final String zipCode,
+            final String address,
+            final String subAddress,
+            final String buildingNumber
     ) {
 
         require(o -> name == null, name, EMPTY_BUSINESS_NAME);
         require(o -> companyId == null, companyId, EMPTY_RELATED_COMPANY_TO_BUSINESS);
 
-        return new Business(id, name, companyId, customerId, status, statusDetail, isDeleted, null,
-                LocalDateTime.now(), LocalDateTime.now());
+        return new Business(id, name, companyId, customerId, status, statusDetail, isDeleted,
+                zipCode, address, subAddress, buildingNumber, null, LocalDateTime.now(),
+                LocalDateTime.now());
     }
 
     public void setName(final String name) {

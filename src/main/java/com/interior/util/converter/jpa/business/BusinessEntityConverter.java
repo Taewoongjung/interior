@@ -22,6 +22,10 @@ public class BusinessEntityConverter {
                 business.getStatus(),
                 business.getStatusDetail(),
                 business.getIsDeleted(),
+                business.getZipCode(),
+                business.getAddress(),
+                business.getSubAddress(),
+                business.getBuildingNumber(),
                 business.getBusinessMaterialList().stream()
                         .map(BusinessEntityConverter::businessMaterialToEntity)
                         .collect(Collectors.toList())

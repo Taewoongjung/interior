@@ -45,7 +45,11 @@ public class BusinessCommandService {
                         req.businessName(),
                         companyId,
                         null,
-                        "생성됨"
+                        "생성됨",
+                        req.zipCode(),
+                        req.mainAddress(),
+                        req.subAddress(),
+                        req.bdgNumber()
                 )
         );
 

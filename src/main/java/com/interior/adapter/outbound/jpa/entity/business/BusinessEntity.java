@@ -66,6 +66,15 @@ public class BusinessEntity extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private BoolType isDeleted;
 
+    @Column(name = "zipcode", nullable = false, columnDefinition = "varchar")
+    private String zipCode;
+
+    private String address;
+
+    private String subAddress;
+
+    private String buildingNumber;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "business", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BusinessMaterialEntity> businessMaterialList = new ArrayList<>();
 
@@ -82,6 +91,10 @@ public class BusinessEntity extends BaseEntity {
             final BusinessStatus status,
             final BusinessStatusDetail statusDetail,
             final BoolType isDeleted,
+            final String zipCode,
+            final String address,
+            final String subAddress,
+            final String buildingNumber,
             final List<BusinessMaterialEntity> businessMaterialList
     ) {
         super(LocalDateTime.now(), LocalDateTime.now());
@@ -93,6 +106,10 @@ public class BusinessEntity extends BaseEntity {
         this.status = status;
         this.statusDetail = statusDetail;
         this.isDeleted = isDeleted;
+        this.zipCode = zipCode;
+        this.address = address;
+        this.subAddress = subAddress;
+        this.buildingNumber = buildingNumber;
         this.businessMaterialList = businessMaterialList;
     }
 
@@ -100,14 +117,18 @@ public class BusinessEntity extends BaseEntity {
             final String name,
             final Long companyId,
             final Long customerId,
-            final BusinessStatus status
+            final BusinessStatus status,
+            final String zipCode,
+            final String address,
+            final String subAddress,
+            final String buildingNumber
     ) {
 
         check(name == null || "".equals(name.trim()), INVALID_BUSINESS_NAME);
         check(name.toCharArray().length < 1, INVALID_BUSINESS_NAME); // 사업명은 2 글자 이상
 
         return new BusinessEntity(null, name, companyId, customerId, status, null, BoolType.F,
-                null);
+                zipCode, address, subAddress, buildingNumber, null);
     }
 
     public static BusinessEntity of(
@@ -117,6 +138,10 @@ public class BusinessEntity extends BaseEntity {
             final BusinessStatus status,
             final BusinessStatusDetail statusDetail,
             final BoolType isDeleted,
+            final String zipCode,
+            final String address,
+            final String subAddress,
+            final String buildingNumber,
             final List<BusinessMaterialEntity> businessMaterialList
     ) {
 
@@ -124,7 +149,7 @@ public class BusinessEntity extends BaseEntity {
         check(name.toCharArray().length < 1, INVALID_BUSINESS_NAME);
 
         return new BusinessEntity(null, name, companyId, customerId, status, statusDetail,
-                isDeleted, businessMaterialList);
+                isDeleted, zipCode, address, subAddress, buildingNumber, businessMaterialList);
     }
 
     public Business toPojo() {
@@ -135,7 +160,11 @@ public class BusinessEntity extends BaseEntity {
                 getCustomerId(),
                 getStatus(),
                 getStatusDetail(),
-                getIsDeleted()
+                getIsDeleted(),
+                getZipCode(),
+                getAddress(),
+                getSubAddress(),
+                getBuildingNumber()
         );
     }
 
@@ -148,6 +177,10 @@ public class BusinessEntity extends BaseEntity {
                 getStatus(),
                 getStatusDetail(),
                 getIsDeleted(),
+                getZipCode(),
+                getAddress(),
+                getSubAddress(),
+                getBuildingNumber(),
                 getBusinessMaterialList().stream()
                         .map(BusinessMaterialEntity::toPojo)
                         .collect(Collectors.toList())
