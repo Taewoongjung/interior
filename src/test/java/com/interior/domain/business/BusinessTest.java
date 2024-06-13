@@ -4,6 +4,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import com.interior.domain.util.BoolType;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,8 @@ class BusinessTest {
                 "서울 성북구 아리랑로3",
                 "101동 101호",
                 "2635010500115140000000001",
+                LocalDateTime.now(),
+                LocalDateTime.now(),
                 new ArrayList<>()
         ));
     }
@@ -45,6 +48,8 @@ class BusinessTest {
                 "서울 성북구 아리랑로3",
                 "101동 101호",
                 "2635010500115140000000001",
+                LocalDateTime.now(),
+                LocalDateTime.now(),
                 new ArrayList<>()
         ));
     }
@@ -64,6 +69,8 @@ class BusinessTest {
                 "서울 성북구 아리랑로3",
                 "101동 101호",
                 "2635010500115140000000001",
+                LocalDateTime.now(),
+                LocalDateTime.now(),
                 new ArrayList<>()
         ));
     }

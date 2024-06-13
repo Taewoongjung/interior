@@ -164,7 +164,9 @@ public class BusinessEntity extends BaseEntity {
                 getZipCode(),
                 getAddress(),
                 getSubAddress(),
-                getBuildingNumber()
+                getBuildingNumber(),
+                getCreatedAt(),
+                getLastModified()
         );
     }
 
@@ -181,6 +183,8 @@ public class BusinessEntity extends BaseEntity {
                 getAddress(),
                 getSubAddress(),
                 getBuildingNumber(),
+                getCreatedAt(),
+                getLastModified(),
                 getBusinessMaterialList().stream()
                         .map(BusinessMaterialEntity::toPojo)
                         .collect(Collectors.toList())

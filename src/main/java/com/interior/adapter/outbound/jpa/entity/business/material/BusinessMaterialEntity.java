@@ -119,6 +119,8 @@ public class BusinessMaterialEntity extends BaseEntity {
                 getAmount(),
                 getUnit(),
                 getMemo(),
+                getLastModified(),
+                getCreatedAt(),
                 businessMaterialExpense != null ?
                         businessMaterialExpense.toPojo() : null
         );
