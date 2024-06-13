@@ -142,14 +142,17 @@ public class SlackAlarm implements AlarmService {
             textObjects.add(markdownText("*오너* : " + event.ownerName()));
             textObjects.add(markdownText("*이메일* : " + event.email()));
             textObjects.add(markdownText("*전화번호* : " + event.tel()));
+            textObjects.add(markdownText("*사업지 주소* : " + event.businessAddress()));
+            textObjects.add(markdownText("*사업지 건물 번호* : " + event.bdgNumber()));
+
+            TextObject title = markdownText("*[ " + event.businessName() + " ]*");
 
             MethodsClient methods = Slack.getInstance().methods(token);
             ChatPostMessageRequest request = ChatPostMessageRequest.builder()
                     .channel(newBusinessAlarmChanel)
                     .blocks(asBlocks(
                             header(header -> header.text(
-                                    plainText(
-                                            "[ " + event.businessName() + " ] 새로운 사업이 등록 되었습니다."))),
+                                    plainText(title + "새로운 사업이 등록 되었습니다."))),
                             divider(),
                             section(section -> section.fields(textObjects)
                             ))).build();

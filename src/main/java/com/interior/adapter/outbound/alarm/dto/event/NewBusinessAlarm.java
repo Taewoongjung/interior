@@ -4,6 +4,8 @@ public record NewBusinessAlarm(String businessName,
                                String companyName,
                                String ownerName,
                                String email,
-                               String tel) {
+                               String tel,
+                               String businessAddress,
+                               String bdgNumber) {
 
 }
