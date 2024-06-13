@@ -39,8 +39,6 @@ public class BusinessQueryService {
     private final BusinessRepository businessRepository;
     private final CacheExcelRedisRepository cacheExcelRedisRepository;
 
-    private static final long DEFAULT_TIMEOUT = 86400000;
-
 
     @Transactional(readOnly = true)
     public GetBusiness.Response getBusiness(final Long businessId) {
@@ -61,7 +59,8 @@ public class BusinessQueryService {
             count = business.getBusinessMaterialList().size();
         }
 
-        return new GetBusiness.Response(business.getName(), businessMaterials, count);
+        return new GetBusiness.Response(business.getName(), business.getCreatedAt(),
+                businessMaterials, count);
     }
 
     private Business getBusinessByBusinessId(final Long businessId) {
