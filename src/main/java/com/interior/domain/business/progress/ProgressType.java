@@ -1,4 +1,4 @@
-package com.interior.adapter.outbound.jpa.entity.business.progress;
+package com.interior.domain.business.progress;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

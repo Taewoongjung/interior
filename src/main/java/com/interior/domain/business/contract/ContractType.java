@@ -1,4 +1,4 @@
-package com.interior.adapter.outbound.jpa.entity.business.contract;
+package com.interior.domain.business.contract;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

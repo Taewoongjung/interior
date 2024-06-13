@@ -1,5 +1,6 @@
 package com.interior.adapter.outbound.jpa.entity.business.contract;
 
+import com.interior.domain.business.contract.ContractType;
 import com.interior.domain.util.BoolType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
