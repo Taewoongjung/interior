@@ -28,10 +28,6 @@ public class Business {
 
     private Long customerId;
 
-    private BusinessStatus status;
-
-    private BusinessStatusDetail statusDetail;
-
     private BoolType isDeleted;
 
     private String zipCode;
@@ -55,8 +51,6 @@ public class Business {
             final String name,
             final Long companyId,
             final Long customerId,
-            final BusinessStatus status,
-            final BusinessStatusDetail statusDetail,
             final BoolType isDeleted,
             final String zipCode,
             final String address,
@@ -70,8 +64,6 @@ public class Business {
         this.name = name;
         this.companyId = companyId;
         this.customerId = customerId;
-        this.status = status;
-        this.statusDetail = statusDetail;
         this.isDeleted = isDeleted;
         this.zipCode = zipCode;
         this.address = address;
@@ -87,8 +79,6 @@ public class Business {
             final String name,
             final Long companyId,
             final Long customerId,
-            final BusinessStatus status,
-            final BusinessStatusDetail statusDetail,
             final BoolType isDeleted,
             final String zipCode,
             final String address,
@@ -102,17 +92,14 @@ public class Business {
         require(o -> name == null, name, EMPTY_BUSINESS_NAME);
         require(o -> companyId == null, companyId, EMPTY_RELATED_COMPANY_TO_BUSINESS);
 
-        return new Business(id, name, companyId, customerId, status, statusDetail, isDeleted,
-                zipCode, address, subAddress, buildingNumber, businessMaterialList,
-                lastModified, createdAt);
+        return new Business(id, name, companyId, customerId, isDeleted, zipCode, address,
+                subAddress, buildingNumber, businessMaterialList, lastModified, createdAt));
     }
 
     public static Business of(
             final String name,
             final Long companyId,
             final Long customerId,
-            final BusinessStatus status,
-            final BusinessStatusDetail statusDetail,
             final BoolType isDeleted,
             final String zipCode,
             final String address,
@@ -124,9 +111,9 @@ public class Business {
         require(o -> name == null, name, EMPTY_BUSINESS_NAME);
         require(o -> companyId == null, companyId, EMPTY_RELATED_COMPANY_TO_BUSINESS);
 
-        return new Business(null, name, companyId, customerId, status, statusDetail, isDeleted,
-                zipCode, address, subAddress, buildingNumber, businessMaterialList,
-                LocalDateTime.now(), LocalDateTime.now());
+        return new Business(null, name, companyId, customerId, isDeleted, zipCode, address,
+                subAddress, buildingNumber, businessMaterialList, LocalDateTime.now(),
+                LocalDateTime.now());
     }
 
     public static Business of(
@@ -134,8 +121,6 @@ public class Business {
             final String name,
             final Long companyId,
             final Long customerId,
-            final BusinessStatus status,
-            final BusinessStatusDetail statusDetail,
             final BoolType isDeleted,
             final String zipCode,
             final String address,
@@ -148,9 +133,8 @@ public class Business {
         require(o -> name == null, name, EMPTY_BUSINESS_NAME);
         require(o -> companyId == null, companyId, EMPTY_RELATED_COMPANY_TO_BUSINESS);
 
-        return new Business(id, name, companyId, customerId, status, statusDetail, isDeleted,
-                zipCode, address, subAddress, buildingNumber, null, lastModified,
-                createdAt);
+        return new Business(id, name, companyId, customerId, isDeleted, zipCode, address,
+                subAddress, buildingNumber, null, lastModified, createdAt);
     }
 
     public void setName(final String name) {

@@ -9,8 +9,6 @@ import com.interior.adapter.outbound.jpa.entity.BaseEntity;
 import com.interior.adapter.outbound.jpa.entity.business.material.BusinessMaterialEntity;
 import com.interior.adapter.outbound.jpa.entity.company.CompanyEntity;
 import com.interior.domain.business.Business;
-import com.interior.domain.business.BusinessStatus;
-import com.interior.domain.business.BusinessStatusDetail;
 import com.interior.domain.util.BoolType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -54,14 +52,6 @@ public class BusinessEntity extends BaseEntity {
     @Column(name = "customer_id", nullable = false, columnDefinition = "bigint")
     private Long customerId;
 
-    @Enumerated(value = EnumType.STRING)
-    @Column(columnDefinition = "varchar(20)")
-    private BusinessStatus status;
-
-    @Enumerated(value = EnumType.STRING)
-    @Column(columnDefinition = "varchar(50)")
-    private BusinessStatusDetail statusDetail;
-
     @Column(name = "is_deleted", columnDefinition = "varchar(1)")
     @Enumerated(value = EnumType.STRING)
     private BoolType isDeleted;
@@ -88,8 +78,6 @@ public class BusinessEntity extends BaseEntity {
             final String name,
             final Long companyId,
             final Long customerId,
-            final BusinessStatus status,
-            final BusinessStatusDetail statusDetail,
             final BoolType isDeleted,
             final String zipCode,
             final String address,
@@ -103,8 +91,6 @@ public class BusinessEntity extends BaseEntity {
         this.name = name;
         this.companyId = companyId;
         this.customerId = customerId;
-        this.status = status;
-        this.statusDetail = statusDetail;
         this.isDeleted = isDeleted;
         this.zipCode = zipCode;
         this.address = address;
@@ -117,7 +103,6 @@ public class BusinessEntity extends BaseEntity {
             final String name,
             final Long companyId,
             final Long customerId,
-            final BusinessStatus status,
             final String zipCode,
             final String address,
             final String subAddress,
@@ -127,7 +112,7 @@ public class BusinessEntity extends BaseEntity {
         check(name == null || "".equals(name.trim()), INVALID_BUSINESS_NAME);
         check(name.toCharArray().length < 1, INVALID_BUSINESS_NAME); // 사업명은 2 글자 이상
 
-        return new BusinessEntity(null, name, companyId, customerId, status, null, BoolType.F,
+        return new BusinessEntity(null, name, companyId, customerId, BoolType.F,
                 zipCode, address, subAddress, buildingNumber, null);
     }
 
@@ -135,8 +120,6 @@ public class BusinessEntity extends BaseEntity {
             final String name,
             final Long companyId,
             final Long customerId,
-            final BusinessStatus status,
-            final BusinessStatusDetail statusDetail,
             final BoolType isDeleted,
             final String zipCode,
             final String address,
@@ -148,8 +131,8 @@ public class BusinessEntity extends BaseEntity {
         check(name == null || "".equals(name.trim()), INVALID_BUSINESS_NAME);
         check(name.toCharArray().length < 1, INVALID_BUSINESS_NAME);
 
-        return new BusinessEntity(null, name, companyId, customerId, status, statusDetail,
-                isDeleted, zipCode, address, subAddress, buildingNumber, businessMaterialList);
+        return new BusinessEntity(null, name, companyId, customerId, isDeleted, zipCode, address,
+                subAddress, buildingNumber, businessMaterialList);
     }
 
     public Business toPojo() {
@@ -158,8 +141,6 @@ public class BusinessEntity extends BaseEntity {
                 getName(),
                 getCompanyId(),
                 getCustomerId(),
-                getStatus(),
-                getStatusDetail(),
                 getIsDeleted(),
                 getZipCode(),
                 getAddress(),
@@ -176,8 +157,6 @@ public class BusinessEntity extends BaseEntity {
                 getName(),
                 getCompanyId(),
                 getCustomerId(),
-                getStatus(),
-                getStatusDetail(),
                 getIsDeleted(),
                 getZipCode(),
                 getAddress(),

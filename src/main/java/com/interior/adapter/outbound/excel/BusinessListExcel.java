@@ -120,12 +120,7 @@ public class BusinessListExcel {
             throws InterruptedException {
 
         // 사업명 설정 (첫 번째)
-        setTitle(
-                business.getName(),
-                business.getStatus().getDesc(),
-                business.getStatusDetail() != null ?
-                        business.getStatusDetail().getDesc() : null
-        );
+        setTitle(business.getName());
 
         // 실제 데이터 설정
         setRealData(
@@ -137,8 +132,7 @@ public class BusinessListExcel {
         );
     }
 
-    private void setTitle(final String businessName, final String status,
-            final String statusDetail) {
+    private void setTitle(final String businessName) {
 
         Row titleRow = sheet.createRow(0);
 
@@ -155,11 +149,11 @@ public class BusinessListExcel {
         font.setBold(true);
         titleStyle.setFont(font);
 
-        String titleStr = statusDetail != null ?
-                "■ " + businessName + " (" + status + " - " + statusDetail + ")" :
-                "■ " + businessName + " (" + status + ")";
+//        String titleStr = statusDetail != null ?
+//                "■ " + businessName + " (" + status + " - " + statusDetail + ")" :
+//                "■ " + businessName + " (" + status + ")";
 
-        title.setCellValue(titleStr);
+//        title.setCellValue(titleStr);
         title.setCellStyle(titleStyle);
     }
 
