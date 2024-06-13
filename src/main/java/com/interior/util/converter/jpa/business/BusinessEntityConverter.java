@@ -19,8 +19,6 @@ public class BusinessEntityConverter {
                 business.getName(),
                 business.getCompanyId(),
                 business.getCustomerId(),
-                business.getStatus(),
-                business.getStatusDetail(),
                 business.getIsDeleted(),
                 business.getZipCode(),
                 business.getAddress(),
