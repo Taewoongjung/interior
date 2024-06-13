@@ -1,7 +1,6 @@
 package com.interior.domain.business.contract;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.interior.adapter.outbound.jpa.entity.business.contract.ContractType;
 import com.interior.domain.util.BoolType;
 import java.time.LocalDateTime;
 import lombok.Getter;
