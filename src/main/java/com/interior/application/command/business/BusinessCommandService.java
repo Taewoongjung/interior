@@ -59,13 +59,18 @@ public class BusinessCommandService {
                 .findFirst().map(Company::getName)
                 .orElseThrow(() -> new NoSuchElementException("사업체를 찾을 수 없습니다."));
 
+        String businessAddress =
+                "[" + req.zipCode() + "] " + req.mainAddress() + " " + req.subAddress();
+
         // 새로운 사업 생성 시 알람 발송
         eventPublisher.publishEvent(
                 new NewBusinessAlarm(req.businessName(),
                         companyName,
                         user.getName(),
                         user.getEmail(),
-                        user.getTel()
+                        user.getTel(),
+                        businessAddress,
+                        req.bdgNumber()
                 )
         );
 
