@@ -70,7 +70,9 @@ public class BusinessMaterialExpenseEntity extends BaseEntity {
                 getId(),
                 getBusinessMaterialId(),
                 getMaterialCostPerUnit(),
-                getLaborCostPerUnit()
+                getLaborCostPerUnit(),
+                getLastModified(),
+                getCreatedAt()
         );
     }
 }

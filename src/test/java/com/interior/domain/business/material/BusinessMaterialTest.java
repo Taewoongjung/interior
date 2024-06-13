@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import com.interior.domain.business.expense.BusinessMaterialExpense;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -36,6 +37,8 @@ class BusinessMaterialTest {
                 BigDecimal.valueOf(300),
                 "ea",
                 "석고보드 천정 공사 재료",
+                LocalDateTime.now(),
+                LocalDateTime.now(),
                 BusinessMaterialExpense.of(12L, "1000", "500")
         ));
     }

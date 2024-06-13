@@ -103,6 +103,8 @@ public class BusinessMaterial {
             final BigDecimal amount,
             final String unit,
             final String memo,
+            final LocalDateTime lastModified,
+            final LocalDateTime createdAt,
             final BusinessMaterialExpense businessMaterialExpense
     ) {
 
@@ -155,7 +157,7 @@ public class BusinessMaterial {
                 businessMaterialExpense,
                 allMaterialCostPerUnit, allLaborCostPerUnit,
                 totalUnitPrice, totalPrice,
-                LocalDateTime.now(), LocalDateTime.now());
+                lastModified, createdAt);
     }
 
     private static BigDecimal setAllAmountOfSpecificExpense(final BigDecimal amount,

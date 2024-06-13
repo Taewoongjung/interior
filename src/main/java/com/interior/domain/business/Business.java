@@ -94,6 +94,8 @@ public class Business {
             final String address,
             final String subAddress,
             final String buildingNumber,
+            final LocalDateTime lastModified,
+            final LocalDateTime createdAt,
             final List<BusinessMaterial> businessMaterialList
     ) {
 
@@ -102,7 +104,7 @@ public class Business {
 
         return new Business(id, name, companyId, customerId, status, statusDetail, isDeleted,
                 zipCode, address, subAddress, buildingNumber, businessMaterialList,
-                LocalDateTime.now(), LocalDateTime.now());
+                lastModified, createdAt);
     }
 
     public static Business of(
@@ -138,15 +140,17 @@ public class Business {
             final String zipCode,
             final String address,
             final String subAddress,
-            final String buildingNumber
+            final String buildingNumber,
+            final LocalDateTime lastModified,
+            final LocalDateTime createdAt
     ) {
 
         require(o -> name == null, name, EMPTY_BUSINESS_NAME);
         require(o -> companyId == null, companyId, EMPTY_RELATED_COMPANY_TO_BUSINESS);
 
         return new Business(id, name, companyId, customerId, status, statusDetail, isDeleted,
-                zipCode, address, subAddress, buildingNumber, null, LocalDateTime.now(),
-                LocalDateTime.now());
+                zipCode, address, subAddress, buildingNumber, null, lastModified,
+                createdAt);
     }
 
     public void setName(final String name) {

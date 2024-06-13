@@ -42,14 +42,17 @@ public class BusinessMaterialExpense {
             final Long id,
             final Long businessMaterialId,
             final String materialCostPerUnit,
-            final String laborCostPerUnit
+            final String laborCostPerUnit,
+            final LocalDateTime lastModified,
+            final LocalDateTime createdAt
     ) {
         return new BusinessMaterialExpense(
                 id,
                 businessMaterialId,
                 materialCostPerUnit,
                 laborCostPerUnit,
-                LocalDateTime.now(), LocalDateTime.now());
+                lastModified,
+                createdAt);
     }
 
     public static BusinessMaterialExpense of(
