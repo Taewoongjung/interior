@@ -5,11 +5,13 @@ import com.interior.adapter.outbound.jpa.entity.business.expense.BusinessMateria
 import com.interior.adapter.outbound.jpa.entity.business.log.BusinessLogEntity;
 import com.interior.adapter.outbound.jpa.entity.business.material.BusinessMaterialEntity;
 import com.interior.adapter.outbound.jpa.entity.business.material.log.BusinessMaterialLogEntity;
+import com.interior.adapter.outbound.jpa.entity.business.progress.BusinessProgressEntity;
 import com.interior.domain.business.Business;
 import com.interior.domain.business.expense.BusinessMaterialExpense;
 import com.interior.domain.business.log.BusinessLog;
 import com.interior.domain.business.material.BusinessMaterial;
 import com.interior.domain.business.material.log.BusinessMaterialLog;
+import com.interior.domain.business.progress.BusinessProgress;
 import java.util.stream.Collectors;
 
 public class BusinessEntityConverter {
@@ -26,6 +28,9 @@ public class BusinessEntityConverter {
                 business.getBuildingNumber(),
                 business.getBusinessMaterialList().stream()
                         .map(BusinessEntityConverter::businessMaterialToEntity)
+                        .collect(Collectors.toList()),
+                business.getBusinessProgressList().stream()
+                        .map(BusinessEntityConverter::businessProgressToEntity)
                         .collect(Collectors.toList())
         );
     }
@@ -80,6 +85,17 @@ public class BusinessEntityConverter {
                 businessMaterialLog.getAfterData(),
                 businessMaterialLog.getUpdater(),
                 businessMaterialLog.getUpdaterName()
+        );
+    }
+
+    public static BusinessProgressEntity businessProgressToEntity(
+            final BusinessProgress businessProgress) {
+
+        return BusinessProgressEntity.of(
+                businessProgress.getId(),
+                businessProgress.getBusinessId(),
+                businessProgress.getProgressType(),
+                businessProgress.getIsDeleted()
         );
     }
 }

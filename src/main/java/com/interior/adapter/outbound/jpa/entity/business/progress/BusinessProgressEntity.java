@@ -1,14 +1,21 @@
 package com.interior.adapter.outbound.jpa.entity.business.progress;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.interior.adapter.outbound.jpa.entity.business.BusinessEntity;
+import com.interior.domain.business.progress.BusinessProgress;
 import com.interior.domain.business.progress.ProgressType;
 import com.interior.domain.util.BoolType;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
@@ -43,7 +50,12 @@ public class BusinessProgressEntity {
     @Column(nullable = false, updatable = false, name = "created_at")
     private LocalDateTime createdAt;
 
-    public BusinessProgressEntity(
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "business_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private BusinessEntity business;
+
+    private BusinessProgressEntity(
             final Long id,
             final Long businessId,
             final ProgressType progressType,
@@ -60,11 +72,10 @@ public class BusinessProgressEntity {
     // 생성
     public static BusinessProgressEntity of(
             final Long businessId,
-            final ProgressType progressType,
-            final BoolType isDeleted
+            final ProgressType progressType
     ) {
 
-        return new BusinessProgressEntity(null, businessId, progressType, isDeleted);
+        return new BusinessProgressEntity(null, businessId, progressType, BoolType.F);
     }
 
     // 조회
@@ -76,5 +87,15 @@ public class BusinessProgressEntity {
     ) {
 
         return new BusinessProgressEntity(id, businessId, progressType, isDeleted);
+    }
+
+    public BusinessProgress toPojo() {
+        return BusinessProgress.of(
+                getId(),
+                getBusinessId(),
+                getProgressType(),
+                getIsDeleted(),
+                getCreatedAt()
+        );
     }
 }

@@ -9,6 +9,7 @@ import static com.interior.util.CheckUtil.require;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.interior.domain.business.material.BusinessMaterial;
+import com.interior.domain.business.progress.BusinessProgress;
 import com.interior.domain.util.BoolType;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -40,6 +41,8 @@ public class Business {
 
     private List<BusinessMaterial> businessMaterialList;
 
+    private List<BusinessProgress> businessProgressList;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime lastModified;
 
@@ -57,6 +60,7 @@ public class Business {
             final String subAddress,
             final String buildingNumber,
             final List<BusinessMaterial> businessMaterialList,
+            final List<BusinessProgress> businessProgressList,
             final LocalDateTime lastModified,
             final LocalDateTime createdAt
     ) {
@@ -70,6 +74,7 @@ public class Business {
         this.subAddress = subAddress;
         this.buildingNumber = buildingNumber;
         this.businessMaterialList = businessMaterialList;
+        this.businessProgressList = businessProgressList;
         this.lastModified = lastModified;
         this.createdAt = createdAt;
     }
@@ -86,34 +91,16 @@ public class Business {
             final String buildingNumber,
             final LocalDateTime lastModified,
             final LocalDateTime createdAt,
-            final List<BusinessMaterial> businessMaterialList
+            final List<BusinessMaterial> businessMaterialList,
+            final List<BusinessProgress> businessProgressList
     ) {
 
         require(o -> name == null, name, EMPTY_BUSINESS_NAME);
         require(o -> companyId == null, companyId, EMPTY_RELATED_COMPANY_TO_BUSINESS);
 
         return new Business(id, name, companyId, customerId, isDeleted, zipCode, address,
-                subAddress, buildingNumber, businessMaterialList, lastModified, createdAt));
-    }
-
-    public static Business of(
-            final String name,
-            final Long companyId,
-            final Long customerId,
-            final BoolType isDeleted,
-            final String zipCode,
-            final String address,
-            final String subAddress,
-            final String buildingNumber,
-            final List<BusinessMaterial> businessMaterialList
-    ) {
-
-        require(o -> name == null, name, EMPTY_BUSINESS_NAME);
-        require(o -> companyId == null, companyId, EMPTY_RELATED_COMPANY_TO_BUSINESS);
-
-        return new Business(null, name, companyId, customerId, isDeleted, zipCode, address,
-                subAddress, buildingNumber, businessMaterialList, LocalDateTime.now(),
-                LocalDateTime.now());
+                subAddress, buildingNumber, businessMaterialList, businessProgressList,
+                lastModified, createdAt);
     }
 
     public static Business of(
@@ -134,7 +121,7 @@ public class Business {
         require(o -> companyId == null, companyId, EMPTY_RELATED_COMPANY_TO_BUSINESS);
 
         return new Business(id, name, companyId, customerId, isDeleted, zipCode, address,
-                subAddress, buildingNumber, null, lastModified, createdAt);
+                subAddress, buildingNumber, null, null, lastModified, createdAt);
     }
 
     public void setName(final String name) {

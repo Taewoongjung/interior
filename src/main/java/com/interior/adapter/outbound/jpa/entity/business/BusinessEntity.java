@@ -7,8 +7,10 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.interior.adapter.common.exception.ErrorType;
 import com.interior.adapter.outbound.jpa.entity.BaseEntity;
 import com.interior.adapter.outbound.jpa.entity.business.material.BusinessMaterialEntity;
+import com.interior.adapter.outbound.jpa.entity.business.progress.BusinessProgressEntity;
 import com.interior.adapter.outbound.jpa.entity.company.CompanyEntity;
 import com.interior.domain.business.Business;
+import com.interior.domain.business.progress.ProgressType;
 import com.interior.domain.util.BoolType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -68,6 +70,9 @@ public class BusinessEntity extends BaseEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "business", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BusinessMaterialEntity> businessMaterialList = new ArrayList<>();
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "business", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BusinessProgressEntity> businessProgressList = new ArrayList<>();
+
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "company_id", referencedColumnName = "id", insertable = false, updatable = false)
@@ -83,7 +88,8 @@ public class BusinessEntity extends BaseEntity {
             final String address,
             final String subAddress,
             final String buildingNumber,
-            final List<BusinessMaterialEntity> businessMaterialList
+            final List<BusinessMaterialEntity> businessMaterialList,
+            final List<BusinessProgressEntity> businessProgressList
     ) {
         super(LocalDateTime.now(), LocalDateTime.now());
 
@@ -97,8 +103,10 @@ public class BusinessEntity extends BaseEntity {
         this.subAddress = subAddress;
         this.buildingNumber = buildingNumber;
         this.businessMaterialList = businessMaterialList;
+        this.businessProgressList = businessProgressList;
     }
 
+    // 생성
     public static BusinessEntity of(
             final String name,
             final Long companyId,
@@ -113,7 +121,7 @@ public class BusinessEntity extends BaseEntity {
         check(name.toCharArray().length < 1, INVALID_BUSINESS_NAME); // 사업명은 2 글자 이상
 
         return new BusinessEntity(null, name, companyId, customerId, BoolType.F,
-                zipCode, address, subAddress, buildingNumber, null);
+                zipCode, address, subAddress, buildingNumber, new ArrayList<>(), new ArrayList<>());
     }
 
     public static BusinessEntity of(
@@ -125,14 +133,15 @@ public class BusinessEntity extends BaseEntity {
             final String address,
             final String subAddress,
             final String buildingNumber,
-            final List<BusinessMaterialEntity> businessMaterialList
+            final List<BusinessMaterialEntity> businessMaterialList,
+            final List<BusinessProgressEntity> businessProgressList
     ) {
 
         check(name == null || "".equals(name.trim()), INVALID_BUSINESS_NAME);
         check(name.toCharArray().length < 1, INVALID_BUSINESS_NAME);
 
         return new BusinessEntity(null, name, companyId, customerId, isDeleted, zipCode, address,
-                subAddress, buildingNumber, businessMaterialList);
+                subAddress, buildingNumber, businessMaterialList, businessProgressList);
     }
 
     public Business toPojo() {
@@ -166,6 +175,9 @@ public class BusinessEntity extends BaseEntity {
                 getLastModified(),
                 getBusinessMaterialList().stream()
                         .map(BusinessMaterialEntity::toPojo)
+                        .collect(Collectors.toList()),
+                getBusinessProgressList().stream()
+                        .map(BusinessProgressEntity::toPojo)
                         .collect(Collectors.toList())
         );
     }
@@ -197,5 +209,23 @@ public class BusinessEntity extends BaseEntity {
 
     public void delete() {
         this.isDeleted = BoolType.T;
+    }
+
+    public void setInitialProgress() { // 사업이 처음 생성 될 때 진행 상태값 설정
+        this.getBusinessProgressList()
+                .add(BusinessProgressEntity.of(getId(), ProgressType.CREATED));
+    }
+
+    public void setStartingMakingQuotationProgress() { // 견적서 작성 시작할 때 진행 상태값 설정
+
+        // 최초의 견적서 수정이 이루어 졌을 때만 "견적서 작성 중" 상태값 추가
+        if (this.getBusinessProgressList().stream()
+                .noneMatch(f -> ProgressType.MAKING_QUOTATION.getType()
+                        .equals(f.getProgressType().getType())
+                )
+        ) {
+            this.getBusinessProgressList()
+                    .add(BusinessProgressEntity.of(getId(), ProgressType.MAKING_QUOTATION));
+        }
     }
 }

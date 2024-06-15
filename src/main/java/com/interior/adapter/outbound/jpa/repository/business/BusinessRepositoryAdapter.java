@@ -48,8 +48,7 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
     @Transactional(readOnly = true)
     public Business findById(final Long businessId) {
 
-        BusinessEntity businessEntities = businessJpaRepository.findById(businessId)
-                .orElseThrow(() -> new NoSuchElementException(NOT_EXIST_BUSINESS.getMessage()));
+        BusinessEntity businessEntities = findBusinessById(businessId);
 
         check(businessEntities.getIsDeleted() == BoolType.T, NOT_EXIST_BUSINESS);
 
@@ -57,6 +56,11 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
         businessEntities.getOnlyNotDeletedMaterials();
 
         return businessEntities.toPojoWithRelations();
+    }
+
+    private BusinessEntity findBusinessById(final Long id) {
+        return businessJpaRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException(NOT_EXIST_BUSINESS.getMessage()));
     }
 
     @Override
@@ -133,12 +137,17 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
                 createBusiness.bdgNumber()
         ));
 
+        business.setInitialProgress();
+
         return business.getId();
     }
 
     @Override
     @Transactional
     public BusinessMaterial save(final CreateBusinessMaterial createBusinessMaterial) {
+
+        BusinessEntity businessEntities = findBusinessById(createBusinessMaterial.businessId());
+        businessEntities.setStartingMakingQuotationProgress();
 
         BusinessMaterialEntity businessMaterialEntity = businessMaterialJpaRepository.save(
                 businessMaterialToEntity(BusinessMaterial.of(
