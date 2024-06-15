@@ -1,5 +1,6 @@
 package com.interior.domain.business.progress;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.interior.domain.util.BoolType;
 import java.time.LocalDateTime;
@@ -19,6 +20,7 @@ public class BusinessProgress {
 
     private BoolType isDeleted;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdAt;
 
     private BusinessProgress(
