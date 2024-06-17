@@ -1,15 +1,15 @@
 package com.interior.domain.user;
 
+import java.util.Arrays;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import java.util.Arrays;
 
 // 유저 역할
 @Getter
 @RequiredArgsConstructor
 public enum UserRole {
     CUSTOMER("CUSTOMER"), // 고객님
+    BUSINESS_MAN("BUSINESS_MAN"), // 인테리어 업자
     ADMIN("ADMIN");// 관리자
 
     private final String desc;
