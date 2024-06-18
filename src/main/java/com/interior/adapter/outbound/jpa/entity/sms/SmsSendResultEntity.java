@@ -28,15 +28,21 @@ public class SmsSendResultEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "is_success", columnDefinition = "varchar(1)")
+    @Column(name = "is_success", columnDefinition = "char(1)")
     @Enumerated(value = EnumType.STRING)
     private BoolType isSuccess;
 
-    @Column(name = "from", columnDefinition = "varchar(11)")
-    private String from;
+    private String type;
 
-    @Column(name = "to", columnDefinition = "varchar(11)")
-    private String to;
+    private String sender;
+
+    private String receiver;
+
+    private String platformType;
+
+    private String resultCode;
+
+    private String msgId;
 
     @CreatedDate
     @Column(nullable = false, updatable = false, name = "created_at")
@@ -45,30 +51,47 @@ public class SmsSendResultEntity {
     private SmsSendResultEntity(
             final Long id,
             final BoolType isSuccess,
-            final String from,
-            final String to
+            final String type,
+            final String sender,
+            final String receiver,
+            final String platformType,
+            final String resultCode,
+            final String msgId
     ) {
         this.id = id;
         this.isSuccess = isSuccess;
-        this.from = from;
-        this.to = to;
+        this.type = type;
+        this.sender = sender;
+        this.receiver = receiver;
+        this.platformType = platformType;
+        this.resultCode = resultCode;
+        this.msgId = msgId;
         this.createdAt = LocalDateTime.now();
     }
 
     public static SmsSendResultEntity of(
             final BoolType isSuccess,
-            final String from,
-            final String to
+            final String type,
+            final String sender,
+            final String receiver,
+            final String platformType,
+            final String resultCode,
+            final String msgId
     ) {
-        return new SmsSendResultEntity(null, isSuccess, from, to);
+        return new SmsSendResultEntity(null, isSuccess, type, sender, receiver, platformType,
+                resultCode, msgId);
     }
 
     public SmsSendResult toPojo() {
         return SmsSendResult.of(
                 getId(),
                 getIsSuccess(),
-                getFrom(),
-                getTo(),
+                getType(),
+                getSender(),
+                getReceiver(),
+                getPlatformType(),
+                getResultCode(),
+                getMsgId(),
                 getCreatedAt()
         );
     }

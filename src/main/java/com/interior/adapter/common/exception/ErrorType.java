@@ -54,7 +54,8 @@ public enum ErrorType {
     EMPTY_CHANGE_FIELD(1302, "변경된 값은 필수값 입니다."),
     EMPTY_UPDATER_ID(1303, "업데이터의 id는 필수값 입니다."),
     EMPTY_UPDATER_NAME(1304, "업데이터의 이름은 필수값 입니다."),
-    ;
+
+    NOT_EXIST_SMS_SEND_RESULT(1400, "sms 발송 정보가 없습니다.");
 
 
     private final int code;
