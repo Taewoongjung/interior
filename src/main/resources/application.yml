@@ -101,6 +101,11 @@ slack:
       new-company: '#dev-백앤드-알림'
       new-business: '#dev-백앤드-알림'
 
+sms:
+  aligo:
+    key: ${ALIGO_KEY}
+    user-id: ${ALIGO_USER_ID}
+
 management:
   endpoints:
     web:

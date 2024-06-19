@@ -1,17 +1,22 @@
 package com.interior.adapter.outbound.sms.AligoSms;
 
+import static com.interior.adapter.common.exception.ErrorType.UNABLE_TO_SEND_SMS;
+
 import com.interior.adapter.outbound.sms.SmsService;
+import com.interior.adapter.template.sms.SmsTemplate;
 import com.interior.domain.sms.SmsSendResult;
 import com.interior.domain.sms.repository.SmsRepository;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Getter
 @Component
 @RequiredArgsConstructor
@@ -19,38 +24,46 @@ public class AligoSmsService implements SmsService {
 
     private final SmsRepository smsRepository;
 
+    private String senderPhoneNumber = "01088257754";
+
+
+    @Value("${sms.aligo.key}")
+    private String KEY;
+
+    @Value("${sms.aligo.user-id}")
+    private String USER_ID;
+
+
     @Async
     @Override
     public void sendSignUpVerificationSms(
-            final String from,
             final String to,
             final String verificationNumber
-    ) throws UnirestException {
+    ) throws Exception {
 
-        String msg =
-                "인테리어 정가(鄭家) 입니다.\n"
-                        + "인증번호 [" + verificationNumber + "]\n"
-                        + "\"타인 노출 금지\"";
+        SmsTemplate template = SmsTemplate.phoneValidationTemplate(verificationNumber);
 
-        HttpResponse<JsonNode> response = Unirest.post("https://apis.aligo.in/send/")
-                .field("key", "2kejb4jc0rbzxvcqfg8442nyp929ca7a")
-                .field("user_id", "aipooh8882")
-                .field("sender", from)
-                .field("receiver", to)
-                .field("msg", msg)
-                .asJson();
+        try {
+            HttpResponse<JsonNode> response = Unirest.post("https://apis.aligo.in/send/")
+                    .field("key", KEY)
+                    .field("user_id", USER_ID)
+                    .field("sender", senderPhoneNumber)
+                    .field("receiver", to)
+                    .field("msg", template.getTextMessage())
+                    .asJson();
 
-        System.out.println("response = " + response);
-        System.out.println("toString = " + response.toString());
-        System.out.println("getBody = " + response.getBody().getObject());
-        /*
-            response = com.mashape.unirest.http.HttpResponse@3c36c9f4
-            toString = com.mashape.unirest.http.HttpResponse@3c36c9f4
-            getBody = {"success_cnt":1,"msg_type":"SMS","result_code":"1","error_cnt":0,"message":"success","msg_id":"825643758"}
-            getCode = 200
-            getHeaders = {date=Tue, 18 Jun 2024 10:31:08 GMT, server=Aligo Frontend Proxy, transfer-encoding=chunked, content-type=text/html; charset=UTF-8, connection=keep-alive}
-        * */
+            smsRepository.save(
+                    SmsSendResult.of(
+                            senderPhoneNumber,
+                            to,
+                            response.getBody().getObject(),
+                            "ALIGO"
+                    )
+            );
 
-        smsRepository.save(SmsSendResult.of(from, to, response.getBody().getObject(), "ALIGO"));
+        } catch (Exception e) {
+            log.error("휴대폰 ({}) 인증 sms 발송 실패 = {}", to, e.getMessage());
+            throw new Exception(UNABLE_TO_SEND_SMS.getMessage());
+        }
     }
 }

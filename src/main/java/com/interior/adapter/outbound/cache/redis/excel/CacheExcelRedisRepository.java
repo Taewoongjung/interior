@@ -8,10 +8,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 @Slf4j
-@Service
+@Repository
 @EnableRedisRepositories
 @RequiredArgsConstructor
 public class CacheExcelRedisRepository {

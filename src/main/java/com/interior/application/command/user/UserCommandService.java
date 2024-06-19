@@ -9,6 +9,7 @@ import com.interior.adapter.outbound.alarm.dto.event.NewUserAlarm;
 import com.interior.adapter.outbound.cache.redis.dto.common.TearDownBucketByKey;
 import com.interior.adapter.outbound.cache.redis.email.CacheEmailValidationRedisRepository;
 import com.interior.application.command.util.email.EmailService;
+import com.interior.application.command.util.sms.SmsUtilService;
 import com.interior.domain.user.User;
 import com.interior.domain.user.repository.UserRepository;
 import java.time.LocalDateTime;
@@ -25,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserCommandService {
 
     private final EmailService emailService;
+    private final SmsUtilService smsUtilService;
     private final UserRepository userRepository;
     private final ApplicationEventPublisher eventPublisher;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -65,5 +67,13 @@ public class UserCommandService {
         userRepository.checkIfExistUserByEmail(targetEmail);
 
         emailService.sendEmailValidationCheck(targetEmail);
+    }
+
+    public void sendPhoneValidationSms(final String targetPhoneNumber) throws Exception {
+
+        // 존재하는 휴대폰 번호 인지 검증
+        userRepository.checkIfExistUserByPhoneNumber(targetPhoneNumber);
+
+        smsUtilService.sendPhoneValidationSms(targetPhoneNumber);
     }
 }
