@@ -1,10 +1,15 @@
 package com.interior.adapter.config.redis;
 
+import io.lettuce.core.RedisClient;
+import io.lettuce.core.api.StatefulRedisConnection;
+import java.time.Duration;
 import java.util.Map;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
+import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
@@ -25,7 +30,19 @@ public class RedisConfig {
 
     @Bean
     public LettuceConnectionFactory redisConnectionFactory() {
-        return new LettuceConnectionFactory(host, port);
+        RedisStandaloneConfiguration serverConfig = new RedisStandaloneConfiguration(host, port);
+
+        LettuceClientConfiguration clientConfig = LettuceClientConfiguration.builder()
+                .shutdownTimeout(Duration.ofMillis(100))
+                .commandTimeout(Duration.ofMillis(100))
+                .build();
+
+        LettuceConnectionFactory lettuceConnectionFactory = new LettuceConnectionFactory(
+                serverConfig, clientConfig);
+
+        lettuceConnectionFactory.setShareNativeConnection(false);
+
+        return lettuceConnectionFactory;
     }
 
     @Bean
@@ -35,5 +52,15 @@ public class RedisConfig {
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
         return redisTemplate;
+    }
+
+    @Bean
+    public RedisClient redisClient() {
+        return RedisClient.create("redis://" + host + ":" + port);
+    }
+
+    @Bean
+    public StatefulRedisConnection<String, String> connection(RedisClient redisClient) {
+        return redisClient.connect();
     }
 }

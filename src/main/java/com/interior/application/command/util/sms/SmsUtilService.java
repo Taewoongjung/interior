@@ -19,7 +19,6 @@ public class SmsUtilService {
     public void sendPhoneValidationSms(final String targetPhoneNumber) throws Exception {
 
         int validationNumber = createNumber();
-
         cacheSmsValidationRedisRepository.makeBucketByKey(targetPhoneNumber, validationNumber);
 
         smsService.sendSignUpVerificationSms(targetPhoneNumber, String.valueOf(validationNumber));

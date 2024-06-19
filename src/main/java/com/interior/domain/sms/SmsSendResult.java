@@ -5,9 +5,9 @@ import static com.interior.util.CheckUtil.check;
 
 import com.interior.domain.util.BoolType;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONObject;
 
 @Slf4j
 @Getter
@@ -71,15 +71,18 @@ public class SmsSendResult {
     public static SmsSendResult of(
             final String sender,
             final String receiver,
-            final JSONObject json,
+            final HashMap<String, String> json,
             final String platformType
     ) {
 
         SmsSendResult smsSendResult = null;
 
+        System.out.println("여기가 = " + json);
+        System.out.println("여기가 = " + platformType);
+
         try {
             if ("ALIGO".equals(platformType)) {
-                if ("success".equals(json.get("message"))) {
+                if (json != null && "success".equals(json.get("message"))) {
                     smsSendResult = SmsSendResult.of(
                             BoolType.T,
                             json.get("msg_type").toString(),
@@ -88,6 +91,16 @@ public class SmsSendResult {
                             platformType,
                             json.get("result_code").toString(),
                             json.get("msg_id").toString()
+                    );
+                } else if (json == null) {
+                    smsSendResult = SmsSendResult.of(
+                            BoolType.F,
+                            "",
+                            sender,
+                            receiver,
+                            platformType,
+                            null,
+                            ""
                     );
                 } else {
                     smsSendResult = SmsSendResult.of(
@@ -103,7 +116,7 @@ public class SmsSendResult {
             }
 
         } catch (Exception e) {
-            log.error("SmsSendResult 객체 생성 중 JSONObject 파싱 실패 : {}", e.getMessage());
+            log.error("SmsSendResult 객체 생성 중 json 파싱 실패 : {}", e.getMessage());
         }
 
         check(smsSendResult == null, NOT_EXIST_SMS_SEND_RESULT);
