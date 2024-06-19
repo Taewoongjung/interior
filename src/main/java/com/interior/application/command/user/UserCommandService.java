@@ -69,8 +69,8 @@ public class UserCommandService {
         emailService.sendEmailValidationCheck(targetEmail);
     }
 
+    @Transactional
     public void sendPhoneValidationSms(final String targetPhoneNumber) throws Exception {
-
         // 존재하는 휴대폰 번호 인지 검증
         userRepository.checkIfExistUserByPhoneNumber(targetPhoneNumber);
 

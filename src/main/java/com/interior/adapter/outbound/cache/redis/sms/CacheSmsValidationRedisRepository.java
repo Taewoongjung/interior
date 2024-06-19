@@ -12,7 +12,6 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Repository
@@ -73,7 +72,6 @@ public class CacheSmsValidationRedisRepository {
 
     @Async
     @EventListener
-    @Transactional
     public void tearDownBucketByKey(final TearDownBucketByKey req) {
         redisTemplate.delete(req.key());
     }

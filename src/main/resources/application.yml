@@ -45,6 +45,14 @@ spring:
       host: localhost
       port: 6379
       database: 0
+      timeout: 3000
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          max-wait: 1
+          min-idle: 0
+          time-between-eviction-runs: 20
 
   mail:
     host: smtp.gmail.com
@@ -161,6 +169,14 @@ spring:
       host: redis
       port: 6379
       database: 0
+      timeout: 3000
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          max-wait: 1
+          min-idle: 0
+          time-between-eviction-runs: 20
 
   mail:
     host: smtp.gmail.com
