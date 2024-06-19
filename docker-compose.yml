@@ -72,6 +72,8 @@ services:
       - SLACK_BOT_TOKEN=${SLACK_BOT_TOKEN}
       - EMAIL_USERNAME=${EMAIL_USERNAME}
       - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+      - ALIGO_KEY=${ALIGO_KEY}
+      - ALIGO_USER_ID=${ALIGO_USER_ID}
       - TZ=Asia/Seoul
     networks:
       - server-connection

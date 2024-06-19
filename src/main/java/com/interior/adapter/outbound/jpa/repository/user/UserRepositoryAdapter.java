@@ -1,6 +1,7 @@
 package com.interior.adapter.outbound.jpa.repository.user;
 
 import static com.interior.adapter.common.exception.ErrorType.INVALID_SIGNUP_REQUEST_DUPLICATE_EMAIL;
+import static com.interior.adapter.common.exception.ErrorType.INVALID_SIGNUP_REQUEST_DUPLICATE_TEL;
 import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_CUSTOMER;
 import static com.interior.util.CheckUtil.check;
 import static com.interior.util.converter.jpa.user.UserEntityConverter.userToEntity;
@@ -35,6 +36,13 @@ public class UserRepositoryAdapter implements UserRepository {
     public void checkIfExistUserByEmail(final String email) {
 
         check(userJpaRepository.existsByEmail(email), INVALID_SIGNUP_REQUEST_DUPLICATE_EMAIL);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public void checkIfExistUserByPhoneNumber(final String tel) {
+
+        check(userJpaRepository.existsByTel(tel), INVALID_SIGNUP_REQUEST_DUPLICATE_TEL);
     }
 
     @Override

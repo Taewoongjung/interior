@@ -1,7 +1,7 @@
 package com.interior.adapter.inbound.user;
 
 import com.interior.adapter.inbound.user.webdto.LoadUserDto.LoadUserResDto;
-import com.interior.adapter.inbound.user.webdto.RequestValidationEmail;
+import com.interior.adapter.inbound.user.webdto.RequestValidation;
 import com.interior.adapter.inbound.user.webdto.SignUpDto;
 import com.interior.adapter.inbound.user.webdto.SignUpDto.SignUpResDto;
 import com.interior.application.command.user.UserCommandService;
@@ -61,7 +61,7 @@ public class UserController {
 
     @PostMapping(value = "/api/emails/validations")
     public ResponseEntity<Boolean> requestValidationEmail(
-            @RequestBody final RequestValidationEmail.Req req
+            @RequestBody final RequestValidation.EmailValidationReq req
     ) throws Exception {
 
         userCommandService.sendEmailValidationMail(req.targetEmail());
@@ -77,5 +77,25 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(userQueryService.validationCheckOfEmail(targetEmail, compNumber));
+    }
+
+    @PostMapping(value = "/api/phones/validations")
+    public ResponseEntity<Boolean> requestValidationPhone(
+            @RequestBody final RequestValidation.PhoneValidationReq req
+    ) throws Exception {
+
+        userCommandService.sendPhoneValidationSms(req.targetPhoneNumber());
+
+        return ResponseEntity.status(HttpStatus.OK).body(true);
+    }
+
+    @GetMapping(value = "/api/phones/validations")
+    public ResponseEntity<Boolean> validatePhone(
+            @RequestParam("targetPhoneNumber") final String targetPhoneNumber,
+            @RequestParam("compNumber") final String compNumber
+    ) throws Exception {
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(userQueryService.validationCheckOfPhoneNumber(targetPhoneNumber, compNumber));
     }
 }

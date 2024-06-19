@@ -14,13 +14,19 @@ public enum ErrorType {
     LOGIN_FAIL(100, "로그인 실패, 아이디 또는 비밀번호를 확인해주세요."),
     EXPIRED_ACCESS_TOKEN(101, "만료 된 토큰입니다."),
     INVALID_SIGNUP_REQUEST_DUPLICATE_EMAIL(102, "이미 존재하는 이메일 입니다."),
-    LIMIT_OF_COMPANY_COUNT_IS_FIVE(103, "유저당 최고 5개의 회사만 등록 가능합니다."),
+    INVALID_SIGNUP_REQUEST_DUPLICATE_TEL(103, "이미 존재하는 휴대폰번호 입니다."),
+    LIMIT_OF_COMPANY_COUNT_IS_FIVE(104, "유저당 최고 5개의 회사만 등록 가능합니다."),
 
     UNABLE_TO_SEND_EMAIL(200, "이메일 보내기에 실패했습니다."),
-    INVALID_EMAIL_CHECK_NUMBER(201, "캐시에 설정 된 이메일 번호가 잘못됐습니다."),
-    EXPIRED_EMAIL_CHECK_REQUEST(202, "이메일 확인 시간이 지났습니다."),
+    INVALID_EMAIL_CHECK_NUMBER(201, "캐시에 설정 된 이메일에 대한 인증번호가 잘못됐습니다."),
+    EXPIRED_EMAIL_CHECK_REQUEST(202, "이메일 검증 확인 시간이 지났습니다."),
     NOT_6DIGIT_VERIFY_NUMBER(203, "6자리 인증숫자가 아닙니다."),
     EMPTY_VERIFY_NUMBER(204, "인증숫자가 빈값입니다."),
+
+    UNABLE_TO_SEND_SMS(300, "SMS 보내기에 실패했습니다."),
+    INVALID_PHONE_CHECK_NUMBER(301, "캐시에 설정 된 휴대폰에 대한 인증번호가 잘못됐습니다."),
+    EXPIRED_PHONE_CHECK_REQUEST(302, "휴대폰 검증 확인 시간이 지났습니다."),
+    EMPTY_VALIDATION_NUMBER(303, "템플릿에 인증번호는 필수입니다."),
 
     NOT_EXIST_CUSTOMER(1000, "유저가 존재하지 않습니다."),
     INVALID_CUSTOMER_NAME(1001, "올바르지 않은 이름입니다."),
@@ -54,7 +60,8 @@ public enum ErrorType {
     EMPTY_CHANGE_FIELD(1302, "변경된 값은 필수값 입니다."),
     EMPTY_UPDATER_ID(1303, "업데이터의 id는 필수값 입니다."),
     EMPTY_UPDATER_NAME(1304, "업데이터의 이름은 필수값 입니다."),
-    ;
+
+    NOT_EXIST_SMS_SEND_RESULT(1400, "sms 발송 정보가 없습니다.");
 
 
     private final int code;

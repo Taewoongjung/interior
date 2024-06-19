@@ -1,4 +1,4 @@
-package com.interior.adapter.outbound.cache.redis.email;
+package com.interior.adapter.outbound.cache.redis.sms;
 
 import com.interior.adapter.outbound.cache.redis.dto.common.TearDownBucketByKey;
 import java.time.LocalDateTime;
@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @EnableRedisRepositories
 @RequiredArgsConstructor
-public class CacheEmailValidationRedisRepository {
+public class CacheSmsValidationRedisRepository {
 
     private final RedisTemplate<String, Map<String, String>> redisTemplate;
 

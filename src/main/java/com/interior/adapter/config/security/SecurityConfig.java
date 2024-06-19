@@ -65,10 +65,12 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET,
                                 "/api/excels/tasks/{taskId}"
                                 , "/api/emails/validations"
+                                , "/api/phones/validations"
                         ).permitAll()
 
                         .requestMatchers(HttpMethod.POST,
                                 "/api/emails/validations"
+                                , "/api/phones/validations"
                         ).permitAll()
 
                         .requestMatchers(HttpMethod.GET,

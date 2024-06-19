@@ -71,7 +71,7 @@ public class CompanyEntity extends BaseEntity {
     @JoinColumn(name = "owner_id", referencedColumnName = "id", insertable = false, updatable = false)
     private UserEntity user;
 
-    public CompanyEntity(
+    private CompanyEntity(
             final Long id,
             final String name,
             final String zipCode,
