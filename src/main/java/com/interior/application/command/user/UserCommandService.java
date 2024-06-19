@@ -1,13 +1,13 @@
 package com.interior.application.command.user;
 
-import static com.interior.adapter.common.exception.ErrorType.NOT_VERIFIED_EMAIL;
+import static com.interior.adapter.common.exception.ErrorType.NOT_VERIFIED_PHONE;
 import static com.interior.util.CheckUtil.check;
 
 import com.interior.adapter.inbound.user.webdto.SignUpDto.SignUpReqDto;
 import com.interior.adapter.inbound.user.webdto.SignUpDto.SignUpResDto;
 import com.interior.adapter.outbound.alarm.dto.event.NewUserAlarm;
 import com.interior.adapter.outbound.cache.redis.dto.common.TearDownBucketByKey;
-import com.interior.adapter.outbound.cache.redis.email.CacheEmailValidationRedisRepository;
+import com.interior.adapter.outbound.cache.redis.sms.CacheSmsValidationRedisRepository;
 import com.interior.application.command.util.email.EmailService;
 import com.interior.application.command.util.sms.SmsUtilService;
 import com.interior.domain.user.User;
@@ -30,7 +30,7 @@ public class UserCommandService {
     private final UserRepository userRepository;
     private final ApplicationEventPublisher eventPublisher;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final CacheEmailValidationRedisRepository cacheEmailValidationRedisRepository;
+    private final CacheSmsValidationRedisRepository cacheSmsValidationRedisRepository;
 
     @Transactional(rollbackFor = Exception.class)
     public SignUpResDto signUp(final SignUpReqDto req) {
@@ -46,8 +46,12 @@ public class UserCommandService {
 
         if (newUser != null) {
 
-            check(!cacheEmailValidationRedisRepository.getIsVerifiedByKey(req.email()),
-                    NOT_VERIFIED_EMAIL);
+            check(!cacheSmsValidationRedisRepository.getIsVerifiedByKey(req.tel()),
+                    NOT_VERIFIED_PHONE);
+
+            // 검증 후 해당 버킷 삭제
+            cacheSmsValidationRedisRepository.tearDownBucketByKey(
+                    new TearDownBucketByKey(req.tel()));
 
             // 회원가입 후 캐시 버킷 삭제 (이메일 검증 버킷)
             eventPublisher.publishEvent(new TearDownBucketByKey(req.email()));
