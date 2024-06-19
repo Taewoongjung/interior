@@ -5,6 +5,7 @@ import com.interior.adapter.outbound.sms.SmsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -14,6 +15,7 @@ public class SmsUtilService {
     private final SmsService smsService;
     private final CacheSmsValidationRedisRepository cacheSmsValidationRedisRepository;
 
+    @Transactional
     public void sendPhoneValidationSms(final String targetPhoneNumber) throws Exception {
 
         int validationNumber = createNumber();
