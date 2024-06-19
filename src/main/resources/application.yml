@@ -212,6 +212,11 @@ slack:
       new-company: '#신규-사업체-등록'
       new-business: '#신규-사업-등록'
 
+sms:
+  aligo:
+    key: ${ALIGO_KEY}
+    user-id: ${ALIGO_USER_ID}
+
 management:
   endpoints:
     web:
