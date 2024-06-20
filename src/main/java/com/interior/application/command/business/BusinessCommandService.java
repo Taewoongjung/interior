@@ -16,13 +16,14 @@ import com.interior.domain.business.repository.dto.CreateBusinessMaterial;
 import com.interior.domain.company.Company;
 import com.interior.domain.company.repository.CompanyRepository;
 import com.interior.domain.user.User;
-import java.util.List;
-import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.NoSuchElementException;
 
 @Slf4j
 @Service
@@ -45,7 +46,6 @@ public class BusinessCommandService {
                         req.businessName(),
                         companyId,
                         null,
-                        "생성됨",
                         req.zipCode(),
                         req.mainAddress(),
                         req.subAddress(),
