@@ -7,13 +7,14 @@ import com.interior.domain.business.log.BusinessLog;
 import com.interior.domain.business.repository.BusinessRepository;
 import com.interior.domain.user.User;
 import com.interior.domain.user.repository.UserRepository;
-import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 @Async
 @Slf4j
@@ -53,7 +54,7 @@ public class BusinessLogService {
 
         createLogOfChangeBusiness(
                 event.businessId(),
-                BusinessChangeFieldType.BUSINESS_NAME,
+                event.type(),
                 event.originalBusinessName(),
                 event.changeBusinessName(),
                 event.updaterId()
@@ -66,7 +67,7 @@ public class BusinessLogService {
 
         createLogOfChangeBusiness(
                 event.businessId(),
-                BusinessChangeFieldType.BUSINESS_NAME,
+                BusinessChangeFieldType.DELETE_BUSINESS,
                 event.originalBusinessName(),
                 null,
                 event.updaterId()

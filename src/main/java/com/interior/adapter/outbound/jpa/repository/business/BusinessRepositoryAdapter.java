@@ -1,19 +1,12 @@
 package com.interior.adapter.outbound.jpa.repository.business;
 
-import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_BUSINESS;
-import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_BUSINESS_MATERIAL;
-import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_COMPANY;
-import static com.interior.util.CheckUtil.check;
-import static com.interior.util.converter.jpa.business.BusinessEntityConverter.businessLogToEntity;
-import static com.interior.util.converter.jpa.business.BusinessEntityConverter.businessMaterialLogToEntity;
-import static com.interior.util.converter.jpa.business.BusinessEntityConverter.businessMaterialToEntity;
-
 import com.interior.adapter.inbound.business.enumtypes.QueryType;
 import com.interior.adapter.outbound.jpa.entity.business.BusinessEntity;
 import com.interior.adapter.outbound.jpa.entity.business.expense.BusinessMaterialExpenseEntity;
 import com.interior.adapter.outbound.jpa.entity.business.material.BusinessMaterialEntity;
 import com.interior.adapter.outbound.jpa.entity.business.material.log.BusinessMaterialLogEntity;
 import com.interior.adapter.outbound.jpa.entity.company.CompanyEntity;
+import com.interior.adapter.outbound.jpa.repository.business.dto.ReviseBusinessMaterial;
 import com.interior.adapter.outbound.jpa.repository.company.CompanyJpaRepository;
 import com.interior.application.command.business.dto.ReviseBusinessServiceDto;
 import com.interior.domain.business.Business;
@@ -24,14 +17,19 @@ import com.interior.domain.business.repository.BusinessRepository;
 import com.interior.domain.business.repository.dto.CreateBusiness;
 import com.interior.domain.business.repository.dto.CreateBusinessMaterial;
 import com.interior.domain.util.BoolType;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
+
+import static com.interior.adapter.common.exception.ErrorType.*;
+import static com.interior.util.CheckUtil.check;
+import static com.interior.util.converter.jpa.business.BusinessEntityConverter.*;
 
 @Slf4j
 @Repository
@@ -59,6 +57,7 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
     }
 
     private BusinessEntity findBusinessById(final Long id) {
+
         return businessJpaRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException(NOT_EXIST_BUSINESS.getMessage()));
     }
@@ -93,7 +92,7 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
     @Override
     @Transactional(readOnly = true)
     public Business findBusinessByCompanyIdAndBusinessId(final Long companyId,
-            final Long businessId) {
+                                                         final Long businessId) {
 
         BusinessEntity businessEntities = businessJpaRepository.findBusinessEntityByCompanyIdAndId(
                 companyId, businessId);
@@ -201,7 +200,7 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
     @Override
     @Transactional
     public boolean reviseBusiness(final Long companyId, final Long businessId,
-            final ReviseBusinessServiceDto.Req req) {
+                                  final ReviseBusinessServiceDto.Req req) {
 
         CompanyEntity company = companyJpaRepository.findById(companyId)
                 .orElseThrow(() -> new NoSuchElementException(NOT_EXIST_COMPANY.getMessage()));
@@ -253,7 +252,7 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
 
     @Override
     @Transactional(readOnly = true)
-    public List<BusinessMaterialLog> findBusinessMaterialLogByBusinessId(Long materialId) {
+    public List<BusinessMaterialLog> findBusinessMaterialLogByBusinessId(final Long materialId) {
 
         List<BusinessMaterialLogEntity> materialLogList = businessMaterialLogJpaRepository.findAllByBusinessId(
                 materialId);
@@ -276,4 +275,58 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
         return true;
     }
 
+    @Override
+    @Transactional
+    public boolean reviseBusinessMaterial(final BusinessMaterial businessMaterial, final ReviseBusinessMaterial reviseReq) {
+
+        BusinessMaterialEntity businessMaterialEntity = businessMaterialToEntity(businessMaterial);
+
+        if (reviseReq.getMaterialName() != null) {
+            businessMaterialEntity.setBusinessMaterialName(reviseReq.getMaterialName());
+        }
+
+        if (reviseReq.getMaterialCategory() != null) {
+            businessMaterialEntity.setCategory(reviseReq.getMaterialCategory());
+        }
+
+        if (reviseReq.getMaterialAmount() != null) {
+            businessMaterialEntity.setAmount(reviseReq.getMaterialAmount());
+        }
+
+        if (reviseReq.getMaterialAmountUnit() != null) {
+            businessMaterialEntity.setUnit(reviseReq.getMaterialAmountUnit());
+        }
+
+        if (reviseReq.getMaterialMemo() != null) {
+            businessMaterialEntity.setMemo(reviseReq.getMaterialMemo());
+        }
+
+        if (businessMaterialEntity.getBusinessMaterialExpense() != null) {
+
+        } else { // 기존에 비용 정보가 없었던 재료는 새로 생성
+
+            String materialCostPerUnit = null;
+            String laborCostPerUnit = null;
+
+            if (reviseReq.getMaterialCostPerUnit() != null) {
+                materialCostPerUnit = reviseReq.getMaterialCostPerUnit();
+            }
+
+            if (reviseReq.getLaborCostPerUnit() != null) {
+                laborCostPerUnit = reviseReq.getLaborCostPerUnit();
+            }
+
+            businessMaterialEntity.setBusinessMaterialExpense(
+                    BusinessMaterialExpenseEntity.of(
+                            businessMaterialEntity.getBusinessId(),
+                            materialCostPerUnit,
+                            laborCostPerUnit
+                    )
+            );
+        }
+
+        businessMaterialJpaRepository.save(businessMaterialEntity);
+
+        return true;
+    }
 }
