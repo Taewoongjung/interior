@@ -1,5 +1,9 @@
 package com.interior.application.command.business;
 
+import static com.interior.adapter.common.exception.ErrorType.NOT_CONTAIN_MATERIAL_IN_THE_BUSINESS;
+import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_BUSINESS_MATERIAL;
+import static com.interior.util.CheckUtil.check;
+
 import com.interior.adapter.inbound.business.webdto.CreateBusinessWebDtoV1;
 import com.interior.adapter.inbound.business.webdto.ReviseBusinessMaterialWebDtoV1;
 import com.interior.adapter.outbound.alarm.dto.event.NewBusinessAlarm;
@@ -10,27 +14,24 @@ import com.interior.application.command.log.business.dto.event.BusinessDeleteLog
 import com.interior.application.command.log.business.dto.event.BusinessReviseLogEvent;
 import com.interior.application.command.log.business.material.dto.event.BusinessMaterialCreateLogEvent;
 import com.interior.application.command.log.business.material.dto.event.BusinessMaterialDeleteLogEvent;
+import com.interior.application.command.log.business.material.dto.event.BusinessReviseMaterialLogEvent;
 import com.interior.domain.business.Business;
 import com.interior.domain.business.log.BusinessChangeFieldType;
 import com.interior.domain.business.material.BusinessMaterial;
+import com.interior.domain.business.material.log.BusinessMaterialChangeFieldType;
 import com.interior.domain.business.repository.BusinessRepository;
 import com.interior.domain.business.repository.dto.CreateBusiness;
 import com.interior.domain.business.repository.dto.CreateBusinessMaterial;
 import com.interior.domain.company.Company;
 import com.interior.domain.company.repository.CompanyRepository;
 import com.interior.domain.user.User;
+import java.util.List;
+import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.NoSuchElementException;
-
-import static com.interior.adapter.common.exception.ErrorType.NOT_CONTAIN_MATERIAL_IN_THE_BUSINESS;
-import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_BUSINESS_MATERIAL;
-import static com.interior.util.CheckUtil.check;
 
 @Slf4j
 @Service
@@ -206,67 +207,75 @@ public class BusinessCommandService {
         BusinessMaterial businessMaterial = business.getBusinessMaterialList().stream()
                 .filter(f -> materialId.equals(f.getId()))
                 .findFirst()
-                .orElseThrow(() -> new NoSuchElementException(NOT_EXIST_BUSINESS_MATERIAL.getMessage()));
+                .orElseThrow(
+                        () -> new NoSuchElementException(NOT_EXIST_BUSINESS_MATERIAL.getMessage()));
 
-        check(business.getBusinessMaterialList().stream().noneMatch(e -> materialId.equals(e.getId())), NOT_CONTAIN_MATERIAL_IN_THE_BUSINESS);
+        check(business.getBusinessMaterialList().stream()
+                        .noneMatch(e -> materialId.equals(e.getId())),
+                NOT_CONTAIN_MATERIAL_IN_THE_BUSINESS);
 
         ReviseBusinessMaterial repositoryDto = ReviseBusinessMaterial.of(req, businessMaterial);
 
-        boolean isSuccessRevising = businessRepository.reviseBusinessMaterial(businessMaterial, repositoryDto);
+        boolean isSuccessRevising = businessRepository.reviseBusinessMaterial(materialId,
+                repositoryDto);
 
         // 사업명 수정 로그
         if (isSuccessRevising) {
 
             if (repositoryDto.getMaterialName() != null) {
                 eventPublisher.publishEvent(
-                        new BusinessReviseLogEvent(businessId, updaterId,
-                                BusinessChangeFieldType.REVISE_BUSINESS_MATERIAL_NAME,
+                        new BusinessReviseMaterialLogEvent(businessId, materialId, updaterId,
+                                BusinessMaterialChangeFieldType.MATERIAL_NAME,
                                 businessMaterial.getName(), req.materialName()));
             }
 
             if (repositoryDto.getMaterialCategory() != null) {
                 eventPublisher.publishEvent(
-                        new BusinessReviseLogEvent(businessId, updaterId,
-                                BusinessChangeFieldType.REVISE_BUSINESS_MATERIAL_CATEGORY,
+                        new BusinessReviseMaterialLogEvent(businessId, materialId, updaterId,
+                                BusinessMaterialChangeFieldType.MATERIAL_CATEGORY,
                                 businessMaterial.getCategory(), req.materialCategory()));
             }
 
             if (repositoryDto.getMaterialAmount() != null) {
                 eventPublisher.publishEvent(
-                        new BusinessReviseLogEvent(businessId, updaterId,
-                                BusinessChangeFieldType.REVISE_BUSINESS_MATERIAL_AMOUNT,
-                                businessMaterial.getAmount().toPlainString(), req.materialAmount().toPlainString()));
+                        new BusinessReviseMaterialLogEvent(businessId, materialId, updaterId,
+                                BusinessMaterialChangeFieldType.MATERIAL_AMOUNT,
+                                businessMaterial.getAmount().toPlainString(),
+                                req.materialAmount().toPlainString()));
             }
 
             if (repositoryDto.getMaterialAmountUnit() != null) {
                 eventPublisher.publishEvent(
-                        new BusinessReviseLogEvent(businessId, updaterId,
-                                BusinessChangeFieldType.REVISE_BUSINESS_MATERIAL_AMOUNT,
-                                businessMaterial.getAmount().toPlainString(), req.materialAmount().toPlainString()));
+                        new BusinessReviseMaterialLogEvent(businessId, materialId, updaterId,
+                                BusinessMaterialChangeFieldType.MATERIAL_UNIT,
+                                businessMaterial.getUnit(),
+                                req.materialAmountUnit()));
             }
 
             if (repositoryDto.getMaterialMemo() != null) {
                 eventPublisher.publishEvent(
-                        new BusinessReviseLogEvent(businessId, updaterId,
-                                BusinessChangeFieldType.REVISE_BUSINESS_MATERIAL_MEMO,
+                        new BusinessReviseMaterialLogEvent(businessId, materialId, updaterId,
+                                BusinessMaterialChangeFieldType.MATERIAL_MEMO,
                                 businessMaterial.getMemo(), req.materialMemo()));
             }
 
             if (repositoryDto.getMaterialCostPerUnit() != null) {
                 eventPublisher.publishEvent(
-                        new BusinessReviseLogEvent(businessId, updaterId,
-                                BusinessChangeFieldType.REVISE_BUSINESS_MATERIAL_COST_PER_UNIT,
+                        new BusinessReviseMaterialLogEvent(businessId, materialId, updaterId,
+                                BusinessMaterialChangeFieldType.MATERIAL_COST_PER_UNIT,
                                 businessMaterial.getBusinessMaterialExpense() != null ?
-                                        businessMaterial.getBusinessMaterialExpense().getMaterialCostPerUnit() : null,
+                                        businessMaterial.getBusinessMaterialExpense()
+                                                .getMaterialCostPerUnit() : null,
                                 req.materialCostPerUnit()));
             }
 
             if (repositoryDto.getLaborCostPerUnit() != null) {
                 eventPublisher.publishEvent(
-                        new BusinessReviseLogEvent(businessId, updaterId,
-                                BusinessChangeFieldType.REVISE_BUSINESS_MATERIAL_LABOR_COST_PER_UNIT,
+                        new BusinessReviseMaterialLogEvent(businessId, materialId, updaterId,
+                                BusinessMaterialChangeFieldType.MATERIAL_LABOR_COST_PER_UNIT,
                                 businessMaterial.getBusinessMaterialExpense() != null ?
-                                        businessMaterial.getBusinessMaterialExpense().getLaborCostPerUnit() : null,
+                                        businessMaterial.getBusinessMaterialExpense()
+                                                .getLaborCostPerUnit() : null,
                                 req.laborCostPerUnit()));
             }
         }

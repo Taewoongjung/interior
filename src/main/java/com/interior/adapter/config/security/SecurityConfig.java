@@ -85,6 +85,11 @@ public class SecurityConfig {
                                 "/api/login"
                                 , "/api/signup"
                         ).permitAll()
+
+                        .requestMatchers(HttpMethod.PUT,
+                                "/api/businesses/{businessId}/materials/{materialId}"
+                        ).authenticated()
+
                         .requestMatchers(HttpMethod.POST,
                                 "/api/login"
                                 , "/api/signup"

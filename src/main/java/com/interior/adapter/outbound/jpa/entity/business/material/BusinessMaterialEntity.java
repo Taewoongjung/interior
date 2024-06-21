@@ -1,22 +1,33 @@
 package com.interior.adapter.outbound.jpa.entity.business.material;
 
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_USAGE_CATEGORY_INVALID;
+import static com.interior.util.CheckUtil.check;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.interior.adapter.outbound.jpa.entity.BaseEntity;
 import com.interior.adapter.outbound.jpa.entity.business.BusinessEntity;
 import com.interior.adapter.outbound.jpa.entity.business.expense.BusinessMaterialExpenseEntity;
 import com.interior.domain.business.material.BusinessMaterial;
 import com.interior.domain.util.BoolType;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-
-import static com.interior.adapter.common.exception.ErrorType.EMPTY_USAGE_CATEGORY_INVALID;
-import static com.interior.util.CheckUtil.check;
 
 @Entity
 @Getter
@@ -127,9 +138,8 @@ public class BusinessMaterialEntity extends BaseEntity {
         this.usageCategory = usageCategory;
     }
 
-    public void setBusinessMaterialExpense(
-            final BusinessMaterialExpenseEntity businessMaterialExpense) {
-        this.businessMaterialExpense = businessMaterialExpense;
+    public void setBusinessMaterialExpense(final BusinessMaterialExpenseEntity materialExpense) {
+        this.businessMaterialExpense = materialExpense;
     }
 
     public void setDeleted(final BoolType deleted) {

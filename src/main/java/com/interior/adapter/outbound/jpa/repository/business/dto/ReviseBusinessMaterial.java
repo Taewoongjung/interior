@@ -2,9 +2,8 @@ package com.interior.adapter.outbound.jpa.repository.business.dto;
 
 import com.interior.adapter.inbound.business.webdto.ReviseBusinessMaterialWebDtoV1;
 import com.interior.domain.business.material.BusinessMaterial;
-import lombok.Getter;
-
 import java.math.BigDecimal;
+import lombok.Getter;
 
 @Getter
 public class ReviseBusinessMaterial {
@@ -57,7 +56,7 @@ public class ReviseBusinessMaterial {
             materialCategory = webReq.materialCategory();
         }
 
-        if (!businessMaterial.getAmount().equals(webReq.materialAmount())) {
+        if (!(businessMaterial.getAmount().setScale(0)).equals(webReq.materialAmount())) {
             materialAmount = webReq.materialAmount();
         }
 
@@ -72,12 +71,14 @@ public class ReviseBusinessMaterial {
         if (businessMaterial.getBusinessMaterialExpense() != null) {
 
             if (businessMaterial.getBusinessMaterialExpense().getMaterialCostPerUnit() != null &&
-                    !businessMaterial.getBusinessMaterialExpense().getMaterialCostPerUnit().equals(webReq.materialCostPerUnit())) {
+                    !businessMaterial.getBusinessMaterialExpense().getMaterialCostPerUnit()
+                            .equals(webReq.materialCostPerUnit())) {
                 materialCostPerUnit = webReq.materialCostPerUnit();
             }
 
             if (businessMaterial.getBusinessMaterialExpense().getLaborCostPerUnit() != null &&
-                    !businessMaterial.getBusinessMaterialExpense().getLaborCostPerUnit().equals(webReq.laborCostPerUnit())) {
+                    !businessMaterial.getBusinessMaterialExpense().getLaborCostPerUnit()
+                            .equals(webReq.laborCostPerUnit())) {
                 laborCostPerUnit = webReq.laborCostPerUnit();
             }
         } else {
