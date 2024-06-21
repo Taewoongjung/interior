@@ -1,4 +1,4 @@
-package com.interior.adapter.outbound.sms.AligoSms;
+package com.interior.adapter.outbound.sms.aligo;
 
 import static com.interior.adapter.common.exception.ErrorType.UNABLE_TO_SEND_SMS;
 
