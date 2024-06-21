@@ -138,12 +138,31 @@ public class BusinessMaterialEntity extends BaseEntity {
         this.usageCategory = usageCategory;
     }
 
-    public void setBusinessMaterialExpense(
-            final BusinessMaterialExpenseEntity businessMaterialExpense) {
-        this.businessMaterialExpense = businessMaterialExpense;
+    public void setBusinessMaterialExpense(final BusinessMaterialExpenseEntity materialExpense) {
+        this.businessMaterialExpense = materialExpense;
     }
 
     public void setDeleted(final BoolType deleted) {
-        isDeleted = deleted;
+        this.isDeleted = deleted;
+    }
+
+    public void setBusinessMaterialName(final String businessMaterialName) {
+        this.name = businessMaterialName;
+    }
+
+    public void setCategory(final String category) {
+        this.category = category;
+    }
+
+    public void setAmount(final BigDecimal amount) {
+        this.amount = amount;
+    }
+
+    public void setUnit(final String unit) {
+        this.unit = unit;
+    }
+
+    public void setMemo(final String memo) {
+        this.memo = memo;
     }
 }

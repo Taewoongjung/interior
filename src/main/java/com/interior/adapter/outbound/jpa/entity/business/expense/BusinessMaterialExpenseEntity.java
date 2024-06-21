@@ -3,20 +3,13 @@ package com.interior.adapter.outbound.jpa.entity.business.expense;
 import com.interior.adapter.outbound.jpa.entity.BaseEntity;
 import com.interior.adapter.outbound.jpa.entity.business.material.BusinessMaterialEntity;
 import com.interior.domain.business.expense.BusinessMaterialExpense;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
-import java.time.LocalDateTime;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -74,5 +67,13 @@ public class BusinessMaterialExpenseEntity extends BaseEntity {
                 getLastModified(),
                 getCreatedAt()
         );
+    }
+
+    public void setMaterialCostPerUnit(final String materialCostPerUnit) {
+        this.materialCostPerUnit = materialCostPerUnit;
+    }
+
+    public void setLaborCostPerUnit(final String laborCostPerUnit) {
+        this.laborCostPerUnit = laborCostPerUnit;
     }
 }

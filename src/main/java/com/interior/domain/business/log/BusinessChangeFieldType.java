@@ -8,9 +8,10 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum BusinessChangeFieldType {
-    BUSINESS_NAME("사업명"),
-    CREATE_NEW_BUSINESS("생성"),
-    DELETE_BUSINESS("삭제");
+
+    REVISE_BUSINESS_NAME("사업명 수정"),
+    CREATE_NEW_BUSINESS("사업 생성"),
+    DELETE_BUSINESS("사업 삭제");
 
     private final String desc;
 

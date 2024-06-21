@@ -14,6 +14,7 @@ import com.interior.adapter.outbound.jpa.entity.business.expense.BusinessMateria
 import com.interior.adapter.outbound.jpa.entity.business.material.BusinessMaterialEntity;
 import com.interior.adapter.outbound.jpa.entity.business.material.log.BusinessMaterialLogEntity;
 import com.interior.adapter.outbound.jpa.entity.company.CompanyEntity;
+import com.interior.adapter.outbound.jpa.repository.business.dto.ReviseBusinessMaterial;
 import com.interior.adapter.outbound.jpa.repository.company.CompanyJpaRepository;
 import com.interior.application.command.business.dto.ReviseBusinessServiceDto;
 import com.interior.domain.business.Business;
@@ -59,6 +60,7 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
     }
 
     private BusinessEntity findBusinessById(final Long id) {
+
         return businessJpaRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException(NOT_EXIST_BUSINESS.getMessage()));
     }
@@ -253,7 +255,7 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
 
     @Override
     @Transactional(readOnly = true)
-    public List<BusinessMaterialLog> findBusinessMaterialLogByBusinessId(Long materialId) {
+    public List<BusinessMaterialLog> findBusinessMaterialLogByBusinessId(final Long materialId) {
 
         List<BusinessMaterialLogEntity> materialLogList = businessMaterialLogJpaRepository.findAllByBusinessId(
                 materialId);
@@ -276,4 +278,72 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
         return true;
     }
 
+    @Override
+    @Transactional
+    public boolean reviseBusinessMaterial(
+            final Long materialId,
+            final ReviseBusinessMaterial reviseReq
+    ) {
+
+        BusinessMaterialEntity businessMaterialEntity =
+                businessMaterialJpaRepository.findById(materialId)
+                        .orElseThrow(
+                                () -> new NoSuchElementException(
+                                        NOT_EXIST_BUSINESS_MATERIAL.getMessage()));
+
+        if (reviseReq.getMaterialName() != null) {
+            businessMaterialEntity.setBusinessMaterialName(reviseReq.getMaterialName());
+        }
+
+        if (reviseReq.getMaterialCategory() != null) {
+            businessMaterialEntity.setCategory(reviseReq.getMaterialCategory());
+        }
+
+        if (reviseReq.getMaterialAmount() != null) {
+            businessMaterialEntity.setAmount(reviseReq.getMaterialAmount());
+        }
+
+        if (reviseReq.getMaterialAmountUnit() != null) {
+            businessMaterialEntity.setUnit(reviseReq.getMaterialAmountUnit());
+        }
+
+        if (reviseReq.getMaterialMemo() != null) {
+            businessMaterialEntity.setMemo(reviseReq.getMaterialMemo());
+        }
+
+        if (businessMaterialEntity.getBusinessMaterialExpense() != null) {
+            if (reviseReq.getMaterialCostPerUnit() != null) {
+                businessMaterialEntity.getBusinessMaterialExpense()
+                        .setMaterialCostPerUnit(reviseReq.getMaterialCostPerUnit());
+            }
+
+            if (reviseReq.getLaborCostPerUnit() != null) {
+                businessMaterialEntity.getBusinessMaterialExpense()
+                        .setLaborCostPerUnit(reviseReq.getLaborCostPerUnit());
+            }
+
+        } else { // 기존에 비용 정보가 없었던 재료는 새로 생성
+
+            String materialCostPerUnit = null;
+            String laborCostPerUnit = null;
+
+            if (reviseReq.getMaterialCostPerUnit() != null) {
+                materialCostPerUnit = reviseReq.getMaterialCostPerUnit();
+            }
+
+            if (reviseReq.getLaborCostPerUnit() != null) {
+                laborCostPerUnit = reviseReq.getLaborCostPerUnit();
+            }
+
+            businessMaterialEntity.setBusinessMaterialExpense(
+                    BusinessMaterialExpenseEntity.of(
+                            materialId,
+                            materialCostPerUnit,
+                            laborCostPerUnit
+                    )
+            );
+        }
+
+        return true;
+    }
 }

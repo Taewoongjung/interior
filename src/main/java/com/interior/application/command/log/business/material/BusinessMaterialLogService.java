@@ -2,6 +2,7 @@ package com.interior.application.command.log.business.material;
 
 import com.interior.application.command.log.business.material.dto.event.BusinessMaterialCreateLogEvent;
 import com.interior.application.command.log.business.material.dto.event.BusinessMaterialDeleteLogEvent;
+import com.interior.application.command.log.business.material.dto.event.BusinessReviseMaterialLogEvent;
 import com.interior.domain.business.material.BusinessMaterial;
 import com.interior.domain.business.material.log.BusinessMaterialChangeFieldType;
 import com.interior.domain.business.material.log.BusinessMaterialLog;
@@ -86,6 +87,21 @@ public class BusinessMaterialLogService {
                 event.businessMaterialId(),
                 BusinessMaterialChangeFieldType.CREATE_NEW_MATERIAL,
                 null,
+                event.afterData(),
+                event.updaterId()
+        );
+    }
+
+    // 재료 생성에 대한 로그
+    @EventListener
+    @Transactional
+    public void createLogForRevisingBusinessMaterial(final BusinessReviseMaterialLogEvent event) {
+
+        createLogOfChangeMaterials(
+                event.businessId(),
+                event.businessMaterialId(),
+                event.type(),
+                event.beforeData(),
                 event.afterData(),
                 event.updaterId()
         );

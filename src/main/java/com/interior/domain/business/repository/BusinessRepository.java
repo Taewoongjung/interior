@@ -1,6 +1,7 @@
 package com.interior.domain.business.repository;
 
 import com.interior.adapter.inbound.business.enumtypes.QueryType;
+import com.interior.adapter.outbound.jpa.repository.business.dto.ReviseBusinessMaterial;
 import com.interior.application.command.business.dto.ReviseBusinessServiceDto;
 import com.interior.domain.business.Business;
 import com.interior.domain.business.log.BusinessLog;
@@ -43,4 +44,6 @@ public interface BusinessRepository {
     List<BusinessMaterialLog> findBusinessMaterialLogByBusinessId(final Long businessId);
 
     boolean createBusinessUpdateLog(final BusinessLog businessLog);
+
+    boolean reviseBusinessMaterial(final Long materialId, final ReviseBusinessMaterial reviseReq);
 }
