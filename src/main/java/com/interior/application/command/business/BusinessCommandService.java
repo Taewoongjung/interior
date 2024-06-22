@@ -240,7 +240,7 @@ public class BusinessCommandService {
                 eventPublisher.publishEvent(
                         new BusinessReviseMaterialLogEvent(businessId, materialId, updaterId,
                                 BusinessMaterialChangeFieldType.MATERIAL_AMOUNT,
-                                businessMaterial.getAmount().toPlainString(),
+                                businessMaterial.getAmount().setScale(0).toPlainString(),
                                 req.materialAmount().toPlainString()));
             }
 
