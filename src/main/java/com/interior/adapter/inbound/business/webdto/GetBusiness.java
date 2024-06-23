@@ -2,6 +2,7 @@ package com.interior.adapter.inbound.business.webdto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.interior.domain.business.material.BusinessMaterial;
+import com.interior.domain.business.progress.BusinessProgress;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -13,7 +14,8 @@ public class GetBusiness {
             @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
             LocalDateTime businessCreatedAt,
             HashMap<String, List<BusinessMaterial>> businessMaterials,
-            int count
+            int count,
+            List<BusinessProgress> businessProgressesList
     ) {
 
     }

@@ -60,7 +60,7 @@ public class BusinessQueryService {
         }
 
         return new GetBusiness.Response(business.getName(), business.getCreatedAt(),
-                businessMaterials, count);
+                businessMaterials, count, business.getBusinessProgressList());
     }
 
     private Business getBusinessByBusinessId(final Long businessId) {

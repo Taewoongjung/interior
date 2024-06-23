@@ -9,6 +9,7 @@ public enum ProgressType {
 
     CREATED("생성 됨"),
     MAKING_QUOTATION("견적서 작성 중"),
+    COMPLETE_QUOTATION("견적서 작성 완료"),
     REQUESTED("견적서 요청 됨"),
     CONTRACTED("계약 성사 됨"),
     REQUEST_REVISING("견적서 수정 요청 됨"),
