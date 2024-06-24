@@ -103,7 +103,7 @@ public class BusinessController {
     }
 
     // 특정 사업 재료의 사업 분류 수정
-    @PatchMapping(value = "/api/businesses/{businessId}/usages/categories")
+    @PatchMapping(value = "/api/businesses/{businessId}/categories/constructions")
     public ResponseEntity<Boolean> reviseUsageCategoryOfMaterial(
             @PathVariable(value = "businessId") final Long businessId,
             @RequestBody final ReviseUsageCategoryOfMaterial.Req req
