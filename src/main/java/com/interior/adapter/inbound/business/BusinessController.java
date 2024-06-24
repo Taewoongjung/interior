@@ -221,4 +221,14 @@ public class BusinessController {
                                 )
                         ).collect(Collectors.toList()));
     }
+
+    // @TODO: 다른 사용자가 사업 단계 상태값을 악의적으로 변경할 가능성을 생각 해서 방안 찾아보기
+    // 1. 관리자가 검수한다.
+    // 2. ...
+    @PatchMapping(value = "/api/businesses/{businessId}/progresses")
+    public ResponseEntity<Void> updateBusinessProgress(
+            @PathVariable(value = "businessId") final Long businessId
+    ) {
+        return null;
+    }
 }
