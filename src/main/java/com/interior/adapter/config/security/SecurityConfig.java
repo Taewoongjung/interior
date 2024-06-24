@@ -98,7 +98,7 @@ public class SecurityConfig {
                                 , "/api/companies/{companyId}/businesses"
                         ).authenticated()
                         .requestMatchers(HttpMethod.PATCH,
-                                "/api/businesses/{businessId}"
+                                "/api/businesses/{businessId}/usages/categories"
                         ).authenticated()
                         .requestMatchers("/admin").hasRole("CUSTOMER")
                         .requestMatchers("/login").permitAll()
