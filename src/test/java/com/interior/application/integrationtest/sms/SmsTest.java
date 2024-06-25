@@ -1,4 +1,4 @@
-package com.interior.application.integrationtest;
+package com.interior.application.integrationtest.sms;
 
 import static java.lang.Thread.sleep;
 

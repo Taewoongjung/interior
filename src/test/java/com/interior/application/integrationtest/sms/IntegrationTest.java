@@ -1,4 +1,4 @@
-package com.interior.application.integrationtest;
+package com.interior.application.integrationtest.sms;
 
 import com.interior.adapter.outbound.cache.redis.dto.common.TearDownBucketByKey;
 import com.interior.adapter.outbound.cache.redis.email.CacheEmailValidationRedisRepository;
