@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.interior.adapter.outbound.sms.SmsService;
 import com.interior.adapter.template.sms.SmsTemplate;
 import com.interior.application.command.log.sms.event.SmsSendResultLogEvent;
-import com.interior.domain.sms.repository.SmsRepository;
 import java.util.HashMap;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,10 +27,9 @@ import reactor.core.publisher.Mono;
 public class AligoSmsService implements SmsService {
 
     private final WebClient webClient;
-    private final SmsRepository smsRepository;
     private final ApplicationEventPublisher eventPublisher;
 
-    private String senderPhoneNumber = "01088257754";
+    private String senderPhoneNumber = "01029143611";
 
 
     @Value("${sms.aligo.key}")

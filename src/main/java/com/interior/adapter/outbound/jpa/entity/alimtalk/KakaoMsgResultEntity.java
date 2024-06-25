@@ -1,7 +1,7 @@
 package com.interior.adapter.outbound.jpa.entity.alimtalk;
 
 import com.interior.domain.alimtalk.AlimTalkMessageType;
-import com.interior.domain.alimtalk.KakaoMsgResult;
+import com.interior.domain.alimtalk.kakaomsgresult.KakaoMsgResult;
 import com.interior.domain.util.BoolType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,7 +23,7 @@ import org.springframework.data.annotation.CreatedDate;
 @ToString
 @Table(name = "kakao_msg_result")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class KaKaoMsgResultEntity {
+public class KakaoMsgResultEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,7 +53,7 @@ public class KaKaoMsgResultEntity {
     @Column(nullable = false, updatable = false, name = "created_at")
     private LocalDateTime createdAt;
 
-    private KaKaoMsgResultEntity(
+    private KakaoMsgResultEntity(
             final Long id,
             final String templateName,
             final String templateCode,
@@ -77,7 +77,7 @@ public class KaKaoMsgResultEntity {
         this.createdAt = LocalDateTime.now();
     }
 
-    public static KaKaoMsgResultEntity of(
+    public static KakaoMsgResultEntity of(
             final String templateName,
             final String templateCode,
             final String messageSubject,
@@ -88,7 +88,7 @@ public class KaKaoMsgResultEntity {
             final BoolType isSuccess
     ) {
 
-        return new KaKaoMsgResultEntity(
+        return new KakaoMsgResultEntity(
                 null,
                 templateName,
                 templateCode,

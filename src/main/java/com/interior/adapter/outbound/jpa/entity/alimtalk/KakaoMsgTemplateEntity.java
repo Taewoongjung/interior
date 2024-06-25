@@ -1,8 +1,8 @@
 package com.interior.adapter.outbound.jpa.entity.alimtalk;
 
 import com.interior.adapter.outbound.jpa.entity.BaseEntity;
-import com.interior.domain.alimtalk.AlimTalkButtonLinkType;
-import com.interior.domain.alimtalk.KakaoMsgTemplate;
+import com.interior.domain.alimtalk.kakaomsgtemplate.AlimTalkButtonLinkType;
+import com.interior.domain.alimtalk.kakaomsgtemplate.KakaoMsgTemplate;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -22,7 +22,7 @@ import lombok.ToString;
 @ToString
 @Table(name = "kakao_msg_template")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class KaKaoMsgTemplateEntity extends BaseEntity {
+public class KakaoMsgTemplateEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +31,8 @@ public class KaKaoMsgTemplateEntity extends BaseEntity {
     private String templateName;
 
     private String templateCode;
+
+    private String messageExtra;
 
     private String messageSubject;
 
@@ -46,10 +48,11 @@ public class KaKaoMsgTemplateEntity extends BaseEntity {
     @Column(name = "button_link_type", nullable = false, columnDefinition = "char(2)")
     private AlimTalkButtonLinkType buttonLinkType;
 
-    private KaKaoMsgTemplateEntity(
+    private KakaoMsgTemplateEntity(
             final Long id,
             final String templateName,
             final String templateCode,
+            final String messageExtra,
             final String messageSubject,
             final String message,
             final String replaceMessageSubject,
@@ -63,6 +66,7 @@ public class KaKaoMsgTemplateEntity extends BaseEntity {
         this.id = id;
         this.templateName = templateName;
         this.templateCode = templateCode;
+        this.messageExtra = messageExtra;
         this.messageSubject = messageSubject;
         this.message = message;
         this.replaceMessageSubject = replaceMessageSubject;
@@ -72,10 +76,11 @@ public class KaKaoMsgTemplateEntity extends BaseEntity {
     }
 
     // 조회
-    public static KaKaoMsgTemplateEntity of(
+    public static KakaoMsgTemplateEntity of(
             final Long id,
             final String templateName,
             final String templateCode,
+            final String messageExtra,
             final String messageSubject,
             final String message,
             final String replaceMessageSubject,
@@ -84,10 +89,11 @@ public class KaKaoMsgTemplateEntity extends BaseEntity {
             final AlimTalkButtonLinkType buttonLinkType
     ) {
 
-        return new KaKaoMsgTemplateEntity(
+        return new KakaoMsgTemplateEntity(
                 id,
                 templateName,
                 templateCode,
+                messageExtra,
                 messageSubject,
                 message,
                 replaceMessageSubject,
@@ -102,6 +108,7 @@ public class KaKaoMsgTemplateEntity extends BaseEntity {
                 getId(),
                 getTemplateName(),
                 getTemplateCode(),
+                getMessageExtra(),
                 getMessageSubject(),
                 getMessage(),
                 getReplaceMessageSubject(),

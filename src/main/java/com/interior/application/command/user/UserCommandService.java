@@ -6,6 +6,8 @@ import static com.interior.util.CheckUtil.check;
 import com.interior.adapter.inbound.user.webdto.SignUpDto.SignUpReqDto;
 import com.interior.adapter.inbound.user.webdto.SignUpDto.SignUpResDto;
 import com.interior.adapter.outbound.alarm.dto.event.NewUserAlarm;
+import com.interior.adapter.outbound.alimtalk.AlimTalkService;
+import com.interior.adapter.outbound.alimtalk.dto.SendAlimTalk;
 import com.interior.adapter.outbound.cache.redis.dto.common.TearDownBucketByKey;
 import com.interior.adapter.outbound.cache.redis.sms.CacheSmsValidationRedisRepository;
 import com.interior.application.command.util.email.EmailService;
@@ -28,6 +30,7 @@ public class UserCommandService {
     private final EmailService emailService;
     private final SmsUtilService smsUtilService;
     private final UserRepository userRepository;
+    private final AlimTalkService alimTalkService;
     private final ApplicationEventPublisher eventPublisher;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final CacheSmsValidationRedisRepository cacheSmsValidationRedisRepository;
@@ -56,8 +59,11 @@ public class UserCommandService {
             // 회원가입 후 캐시 버킷 삭제 (이메일 검증 버킷)
             eventPublisher.publishEvent(new TearDownBucketByKey(req.email()));
 
-            // 새로운 유저 등록 시 알람 발송
+            // 새로운 유저 회원가입 시 알람 발송
             eventPublisher.publishEvent(new NewUserAlarm(req.name(), req.email(), req.tel()));
+
+            // 새로운 유저 회원가입 시 해당 유저에게 알림톡 발송
+            alimTalkService.send(new SendAlimTalk(req.tel(), req.name()));
 
             return new SignUpResDto(true, newUser.getName());
         }

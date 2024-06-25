@@ -1,5 +1,6 @@
-package com.interior.domain.alimtalk;
+package com.interior.domain.alimtalk.kakaomsgresult;
 
+import com.interior.domain.alimtalk.AlimTalkMessageType;
 import com.interior.domain.util.BoolType;
 import java.time.LocalDateTime;
 import lombok.Getter;
@@ -61,8 +62,7 @@ public class KakaoMsgResult {
             final AlimTalkMessageType messageType,
             final String receiverPhone,
             final String msgId,
-            final BoolType isSuccess,
-            final LocalDateTime createdAt
+            final BoolType isSuccess
     ) {
 
         return new KakaoMsgResult(
@@ -75,7 +75,7 @@ public class KakaoMsgResult {
                 receiverPhone,
                 msgId,
                 isSuccess,
-                createdAt
+                LocalDateTime.now()
         );
     }
 

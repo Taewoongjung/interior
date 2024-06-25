@@ -74,6 +74,7 @@ services:
       - EMAIL_PASSWORD=${EMAIL_PASSWORD}
       - ALIGO_KEY=${ALIGO_KEY}
       - ALIGO_USER_ID=${ALIGO_USER_ID}
+      - ALIGO_SENDER_KEY=${ALIGO_SENDER_KEY}
       - TZ=Asia/Seoul
     networks:
       - server-connection
