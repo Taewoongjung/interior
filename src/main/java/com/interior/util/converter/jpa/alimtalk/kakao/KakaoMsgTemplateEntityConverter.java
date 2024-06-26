@@ -12,12 +12,13 @@ public class KakaoMsgTemplateEntityConverter {
                 null,
                 kakaoMsgTemplate.getTemplateName(),
                 kakaoMsgTemplate.getTemplateCode(),
+                kakaoMsgTemplate.getThirdPartyType(),
                 kakaoMsgTemplate.getMessageExtra(),
                 kakaoMsgTemplate.getMessageSubject(),
                 kakaoMsgTemplate.getMessage(),
                 kakaoMsgTemplate.getReplaceMessageSubject(),
                 kakaoMsgTemplate.getReplaceMessage(),
-                kakaoMsgTemplate.getButtonName(),
+                kakaoMsgTemplate.getButtonInfo(),
                 kakaoMsgTemplate.getButtonLinkType()
         );
     }

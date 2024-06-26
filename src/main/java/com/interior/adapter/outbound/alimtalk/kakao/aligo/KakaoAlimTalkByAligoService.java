@@ -9,11 +9,15 @@ import com.interior.adapter.outbound.alimtalk.dto.SendAlimTalk;
 import com.interior.domain.alimtalk.AlimTalkMessageType;
 import com.interior.domain.alimtalk.kakaomsgresult.KakaoMsgResult;
 import com.interior.domain.alimtalk.kakaomsgresult.repository.KakaoMsgResultRepository;
+import com.interior.domain.alimtalk.kakaomsgtemplate.AlimTalkButtonLinkType;
+import com.interior.domain.alimtalk.kakaomsgtemplate.AlimTalkThirdPartyType;
 import com.interior.domain.alimtalk.kakaomsgtemplate.KakaoMsgTemplate;
 import com.interior.domain.alimtalk.kakaomsgtemplate.repository.KakaoMsgTemplateRepository;
 import com.interior.domain.util.BoolType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -49,10 +53,70 @@ public class KakaoAlimTalkByAligoService implements AlimTalkService {
     private String SENDER_KEY;
 
     @Override
+    @Transactional
+    public void syncTemplate() {
+
+        MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
+        formData.add("apikey", KEY);
+        formData.add("userid", USER_ID);
+        formData.add("senderkey", SENDER_KEY);
+
+        Mono<String> responseMono = webClient.post()
+                .uri("https://kakaoapi.aligo.in/akv10/template/list/")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .bodyValue(formData)
+                .retrieve().bodyToMono(String.class);
+
+        responseMono.subscribe(response -> {
+            List<KakaoMsgTemplate> result = new ArrayList<>();
+            List<Map<String, Object>> parsedRes = parseSuccessString(response);
+
+            for (Map<String, Object> template : parsedRes) {
+                result.add(KakaoMsgTemplate.of(
+                        null,
+                        template.get("templtName").toString(),
+                        template.get("templtCode").toString(),
+                        AlimTalkThirdPartyType.ALIGO,
+                        template.get("templateExtra").toString(),
+                        template.get("templtTitle").toString(),
+                        template.get("templtContent").toString(),
+                        template.get("templtTitle").toString(),
+                        template.get("templtContent").toString(),
+                        template.get("buttons").toString(),
+                        AlimTalkButtonLinkType.AL,
+                        null, null
+                ));
+            }
+
+            kakaoMsgTemplateRepository.syncToTemplateRegistered(result);
+
+        }, error -> {
+            System.out.println("에러 발생");
+        });
+    }
+
+    private List<Map<String, Object>> parseSuccessString(final String target) {
+
+        // Gson 인스턴스 생성
+        Gson gson = new Gson();
+
+        // JSON 문자열을 Map으로 변환
+        Type mapType = new TypeToken<Map<String, Object>>() {
+        }.getType();
+        Map<String, Object> jsonMap = gson.fromJson(target, mapType);
+
+        // 각 필드 출력
+        System.out.println("Code: " + jsonMap.get("code"));
+        System.out.println("Message: " + jsonMap.get("message"));
+
+        return (List<Map<String, Object>>) jsonMap.get("list");
+    }
+
+    @Override
     @EventListener
     @Transactional
     public void send(final SendAlimTalk sendReq) {
-        KakaoMsgTemplate template = kakaoMsgTemplateRepository.findByTemplateCode("TT_5460");
+        KakaoMsgTemplate template = kakaoMsgTemplateRepository.findByTemplateCode("TT_5653");
         template.replaceArgumentOfTemplate(sendReq.customerName());
 
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
@@ -97,13 +161,17 @@ public class KakaoAlimTalkByAligoService implements AlimTalkService {
 
         return """
                 {
-                    "button": [
+                    "button": [{
+                         "name": "채널 추가",
+                         "linkType": "AC",
+                         "linkTypeName": "채널 추가"
+                      },
                       {
                         "name": "서비스 바로가기",
                         "linkType": "AL",
                         "linkTypeName": "앱링크",
-                        "linkIos": "kakaotalk://web/openExternal?url=http://interiorjung.shop/auth",
-                        "linkAnd": "kakaotalk://web/openExternal?url=http://interiorjung.shop/auth"
+                        "linkIos": "kakaotalk://web/openExternal?url=http://interiorjung.shop",
+                        "linkAnd": "kakaotalk://web/openExternal?url=http://interiorjung.shop"
                       }
                     ]
                 }

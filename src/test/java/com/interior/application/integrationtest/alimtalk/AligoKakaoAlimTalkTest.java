@@ -7,12 +7,16 @@ import com.interior.adapter.config.gson.CustomTypeAdapter;
 import com.interior.adapter.outbound.alimtalk.dto.SendAlimTalk;
 import com.interior.adapter.outbound.jpa.repository.alimtalk.kakaomsgtemplate.KakaoMsgTemplateRepositoryAdapter;
 import com.interior.domain.alimtalk.kakaomsgtemplate.AlimTalkButtonLinkType;
+import com.interior.domain.alimtalk.kakaomsgtemplate.AlimTalkThirdPartyType;
 import com.interior.domain.alimtalk.kakaomsgtemplate.KakaoMsgTemplate;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -67,12 +71,13 @@ public class AligoKakaoAlimTalkTest {
                         null,
                         template.get("templtName").toString(),
                         template.get("templtCode").toString(),
+                        AlimTalkThirdPartyType.ALIGO,
                         template.get("templateExtra").toString(),
                         template.get("templtTitle").toString(),
                         template.get("templtContent").toString(),
                         template.get("templtTitle").toString(),
                         template.get("templtContent").toString(),
-                        "",
+                        template.get("buttons").toString(),
                         AlimTalkButtonLinkType.AL,
                         null, null
                 ));
@@ -98,6 +103,7 @@ public class AligoKakaoAlimTalkTest {
         // 각 필드 출력
         System.out.println("Code: " + jsonMap.get("code"));
         System.out.println("Message: " + jsonMap.get("message"));
+        System.out.println("@@ = " + jsonMap);
 
         return (List<Map<String, Object>>) jsonMap.get("list");
     }
@@ -107,20 +113,24 @@ public class AligoKakaoAlimTalkTest {
     @DisplayName("[알리고] 회원가입 완료 알림톡 발송 테스트")
     void sendAlimTalkTest1() {
 
-        KakaoMsgTemplate template = kakaoMsgTemplateRepositoryAdapter.findByTemplateCode("TT_5460");
+        KakaoMsgTemplate template = kakaoMsgTemplateRepositoryAdapter.findByTemplateCode("TT_5653");
 
         System.out.println("template = " + template);
         System.out.println();
 
         String buttonJson = """
                 {
-                    "button": [
+                    "button": [{
+                         "name": "채널 추가",
+                         "linkType": "AC",
+                         "linkTypeName": "채널 추가"
+                      },
                       {
                         "name": "서비스 바로가기",
                         "linkType": "AL",
                         "linkTypeName": "앱링크",
-                        "linkIos": "kakaotalk://web/openExternal?url=http://interiorjung.shop/auth",
-                        "linkAnd": "kakaotalk://web/openExternal?url=http://interiorjung.shop/auth"
+                        "linkIos": "kakaotalk://web/openExternal?url=http://interiorjung.shop",
+                        "linkAnd": "kakaotalk://web/openExternal?url=http://interiorjung.shop"
                       }
                     ]
                 }
@@ -132,12 +142,13 @@ public class AligoKakaoAlimTalkTest {
         formData.add("senderkey", "c600ad999cf3840328560d429e3f43fef8012719");
         formData.add("tpl_code", template.getTemplateCode());
         formData.add("sender", "01029143611");
-        formData.add("receiver_1", "01095599617");
+        formData.add("receiver_1", "01088257754");
         formData.add("subject_1", template.getMessageSubject());
-        formData.add("message_1", "(축하) 정호윤님! 환영합니다 (축하)\n"
+        formData.add("message_1", "(축하) 정태웅님! 환영합니다 (축하)\n"
                 + "\n"
-                + "인테리어정가 에 회원가입 해주셔서\n"
-                + "진심으로 감사드립니다.");
+                + "인테리어정가(鄭家)에 회원가입해 주셔서 진심으로 감사드립니다.\n"
+                + "\n"
+                + "인테리어 공사의 시작부터 함께 하겠습니다.");
         formData.add("button_1", buttonJson);
 //        formData.add("testMode", "Y");
 
@@ -211,30 +222,6 @@ public class AligoKakaoAlimTalkTest {
     }
 
     @Test
-    public void test12() {
-        String target = "success = {\"code\":0,\"message\":\"\\uc131\\uacf5\\uc801\\uc73c\\ub85c \\uc804\\uc1a1\\uc694\\uccad \\ud558\\uc600\\uc2b5\\ub2c8\\ub2e4.\",\"info\":{\"type\":\"AT\",\"mid\":830636753,\"current\":\"49705.6\",\"unit\":6.5,\"total\":6.5,\"scnt\":1,\"fcnt\":0}}\n";
-        // Gson 인스턴스 생성
-        Gson gson = new Gson();
-
-        // JSON 문자열을 Map으로 변환
-        Type mapType = new TypeToken<Map<String, Object>>() {
-        }.getType();
-
-        Map<String, Object> jsonMap1 = gson.fromJson(target, mapType);
-        Map<String, Object> jsonMap2 = gson.fromJson(jsonMap1.get("info").toString(), mapType);
-
-        // 각 필드 출력
-        System.out.println("Code: " + jsonMap1.get("code"));
-        System.out.println("Message: " + jsonMap1.get("message"));
-        System.out.println("Info: " + jsonMap1.get("info"));
-
-        Map<String, Object> resultMap = new HashMap<>(jsonMap1);
-        resultMap.putAll(jsonMap2);
-
-        System.out.println("info222: " + resultMap.get("mid"));
-    }
-
-    @Test
     @DisplayName("[알리고] 발송 후 결과값 파싱 테스트")
     void parsingTest() {
 //        String target = "{\"code\":0,\"message\":\"\\uc131\\uacf5\\uc801\\uc73c\\ub85c \\uc804\\uc1a1\\uc694\\uccad \\ud558\\uc600\\uc2b5\\ub2c8\\ub2e4.\",\"info\":{\"type\":\"AT\",\"mid\":830636753,\"current\":\"49705.6\",\"unit\":6.5,\"total\":6.5,\"scnt\":1,\"fcnt\":0}}\n";
@@ -267,5 +254,54 @@ public class AligoKakaoAlimTalkTest {
     @DisplayName("회원가입 완료 알림톡 전송 테스트")
     void test1() {
         eventPublisher.publishEvent(new SendAlimTalk("01088257754", "태웅정"));
+    }
+
+    @Test
+    void test2() throws JSONException {
+
+        String jsonString = "[{ordering=1, name=채널 추가, linkType=AC, linkTypeName=채널 추가, linkMo=, linkPc=, linkIos=, linkAnd=}, {ordering=2, name=서비스 바로가기, linkType=AL, linkTypeName=앱링크, linkMo=, linkPc=, linkIos=kakaotalk://web/openExternal?url=#{url}, linkAnd=kakaotalk://web/openExternal?url=#{url}}]";
+
+        // Step 1: Convert the custom format to a valid JSON format
+        jsonString = jsonString.replaceAll("=", ":");
+        jsonString = jsonString.replaceAll("(\\w+):", "\"$1\":");  // Wrap keys in quotes
+        jsonString = jsonString.replaceAll(":([\\w#:/?.]+)([,\\}\\]])",
+                ":\"$1\"$2");  // Wrap values in quotes
+
+        // Fix empty values and remove unnecessary spaces
+        jsonString = jsonString.replaceAll(":\"\"", ":\"\"");
+        jsonString = jsonString.replaceAll(",\\s*}", "}");
+        jsonString = jsonString.replaceAll(",\\s*]", "]");
+
+        // Print the intermediate JSON string for debugging
+        System.out.println("Intermediate JSON String: " + jsonString);
+
+        // Step 2: Parse the valid JSON string
+        JSONArray jsonArray = new JSONArray(jsonString);
+        JSONArray buttonsArray = new JSONArray();
+
+        // Step 3: Process each item in the JSON array
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject item = jsonArray.getJSONObject(i);
+            JSONObject button = new JSONObject();
+
+            button.put("name", item.getString("name"));
+            button.put("linkType", item.getString("linkType"));
+            button.put("linkTypeName", item.getString("linkTypeName"));
+
+            if (item.has("linkIos") && !item.getString("linkIos").isEmpty()) {
+                button.put("linkIos", item.getString("linkIos"));
+            }
+            if (item.has("linkAnd") && !item.getString("linkAnd").isEmpty()) {
+                button.put("linkAnd", item.getString("linkAnd"));
+            }
+
+            buttonsArray.put(button);
+        }
+
+        JSONObject result = new JSONObject();
+        result.put("button", buttonsArray);
+
+        // Step 4: Output the result
+        System.out.println(result.toString(4)); // Pretty print with an indent of 4
     }
 }

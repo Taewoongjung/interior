@@ -20,8 +20,14 @@ public class KakaoMsgTemplateRepositoryAdapter implements KakaoMsgTemplateReposi
     @Transactional
     public void syncToTemplateRegistered(final List<KakaoMsgTemplate> target) {
 
+        List<KakaoMsgTemplateEntity> entityList = kakaoMsgTemplateJpaRepository.findAll();
+
         for (KakaoMsgTemplate req : target) {
-            kakaoMsgTemplateJpaRepository.save(KakaoMsgTemplateToEntity(req));
+            if (entityList.stream()
+                    .noneMatch(f -> f.getTemplateCode().equals(req.getTemplateCode()))) {
+                
+                kakaoMsgTemplateJpaRepository.save(KakaoMsgTemplateToEntity(req));
+            }
         }
     }
 
