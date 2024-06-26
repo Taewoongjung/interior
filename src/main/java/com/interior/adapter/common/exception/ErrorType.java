@@ -59,8 +59,9 @@ public enum ErrorType {
     EMPTY_BUSINESS_ID(1300, "사업의 id는 필수값 입니다."),
     EMPTY_BUSINESS_MATERIAL_ID(1301, "사업 재료의 id는 필수값 입니다."),
     EMPTY_CHANGE_FIELD(1302, "변경된 값은 필수값 입니다."),
-    EMPTY_UPDATER_ID(1303, "업데이터의 id는 필수값 입니다."),
-    EMPTY_UPDATER_NAME(1304, "업데이터의 이름은 필수값 입니다."),
+    EMPTY_UPDATER_ID(1303, "변경자의 id는 필수값 입니다."),
+    EMPTY_UPDATER_NAME(1304, "변경자의 이름은 필수값 입니다."),
+    DUPLICATE_PROGRESS_VALUE(1305, "이미 해당 상태값이 존재하여 처리 된 이력이 있습니다."),
 
     NOT_EXIST_SMS_SEND_RESULT(1400, "sms 발송 정보가 없습니다.");
 

@@ -1,5 +1,6 @@
 package com.interior.adapter.outbound.jpa.entity.business;
 
+import static com.interior.adapter.common.exception.ErrorType.DUPLICATE_PROGRESS_VALUE;
 import static com.interior.adapter.common.exception.ErrorType.INVALID_BUSINESS_NAME;
 import static com.interior.util.CheckUtil.check;
 
@@ -227,5 +228,15 @@ public class BusinessEntity extends BaseEntity {
             this.getBusinessProgressList()
                     .add(BusinessProgressEntity.of(getId(), ProgressType.MAKING_QUOTATION));
         }
+    }
+
+    public void updateBusinessProgress(final ProgressType updateProgressType) {
+
+        check(this.getBusinessProgressList().stream()
+                        .anyMatch(f -> f.getProgressType().equals(updateProgressType)),
+                DUPLICATE_PROGRESS_VALUE);
+
+        this.getBusinessProgressList()
+                .add(BusinessProgressEntity.of(this.getId(), updateProgressType));
     }
 }

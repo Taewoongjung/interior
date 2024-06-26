@@ -19,6 +19,7 @@ import com.interior.domain.business.Business;
 import com.interior.domain.business.log.BusinessChangeFieldType;
 import com.interior.domain.business.material.BusinessMaterial;
 import com.interior.domain.business.material.log.BusinessMaterialChangeFieldType;
+import com.interior.domain.business.progress.ProgressType;
 import com.interior.domain.business.repository.BusinessRepository;
 import com.interior.domain.business.repository.dto.CreateBusiness;
 import com.interior.domain.business.repository.dto.CreateBusinessMaterial;
@@ -281,5 +282,10 @@ public class BusinessCommandService {
         }
 
         return true;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void updateBusinessProgress(final Long businessId, final ProgressType progressType) {
+        businessRepository.updateBusinessProgress(businessId, progressType);
     }
 }

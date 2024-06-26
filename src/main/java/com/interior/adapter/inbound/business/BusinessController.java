@@ -7,6 +7,7 @@ import com.interior.adapter.inbound.business.webdto.GetBusiness;
 import com.interior.adapter.inbound.business.webdto.ReviseBusiness;
 import com.interior.adapter.inbound.business.webdto.ReviseBusinessMaterialWebDtoV1;
 import com.interior.adapter.inbound.business.webdto.ReviseUsageCategoryOfMaterial;
+import com.interior.adapter.inbound.business.webdto.UpdateBusinessProgressWebDtoV1;
 import com.interior.application.command.business.BusinessCommandService;
 import com.interior.application.command.business.dto.CreateBusinessServiceDto.CreateBusinessMaterialDto;
 import com.interior.application.command.business.dto.ReviseBusinessServiceDto;
@@ -220,5 +221,19 @@ public class BusinessController {
                                         e.getCreatedAt()
                                 )
                         ).collect(Collectors.toList()));
+    }
+
+    // @TODO: 다른 사용자가 사업 단계 상태값을 악의적으로 변경할 가능성을 생각 해서 방안 찾아보기
+    // 1. 관리자가 검수한다.
+    // 2. ...
+    @PatchMapping(value = "/api/businesses/{businessId}/progresses")
+    public ResponseEntity<Boolean> updateBusinessProgress(
+            @PathVariable(value = "businessId") final Long businessId,
+            @RequestBody final UpdateBusinessProgressWebDtoV1.Req req
+    ) {
+
+        businessCommandService.updateBusinessProgress(businessId, req.progressType());
+
+        return ResponseEntity.status(HttpStatus.OK).body(true);
     }
 }
