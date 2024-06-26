@@ -100,9 +100,8 @@ public class KakaoMsgTemplate {
     public void replaceArgumentOfTemplate(final String customerName) {
         String finalRes = null;
 
-        if (this.templateCode.equals("TT_5460")) { // [알림톡] 회원가입 완료
-            String res = this.getMessage().replace("#{고객명}", customerName);
-            finalRes = res.replace("#{회사명}", "인테리어정가(鄭家)");
+        if (this.templateCode.equals("TT_5653")) { // [알림톡] 회원가입 완료
+            finalRes = this.getMessage().replace("#{고객명}", customerName);
         }
 
         this.message = finalRes;

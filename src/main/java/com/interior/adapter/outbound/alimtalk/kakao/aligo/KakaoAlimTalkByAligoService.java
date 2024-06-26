@@ -153,7 +153,7 @@ public class KakaoAlimTalkByAligoService implements AlimTalkService {
 
         }, error -> {
             log.error("알림톡 전송 에러 (템플릿코드: {})", template.getTemplateCode());
-            log.error("Err_msg : {}", error.getMessage());
+            log.error("Err_msg : {}", error.fillInStackTrace().toString());
         });
     }
 
