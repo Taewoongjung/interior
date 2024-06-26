@@ -7,6 +7,7 @@ import com.interior.domain.business.Business;
 import com.interior.domain.business.log.BusinessLog;
 import com.interior.domain.business.material.BusinessMaterial;
 import com.interior.domain.business.material.log.BusinessMaterialLog;
+import com.interior.domain.business.progress.ProgressType;
 import com.interior.domain.business.repository.dto.CreateBusiness;
 import com.interior.domain.business.repository.dto.CreateBusinessMaterial;
 import java.util.List;
@@ -46,4 +47,6 @@ public interface BusinessRepository {
     boolean createBusinessUpdateLog(final BusinessLog businessLog);
 
     boolean reviseBusinessMaterial(final Long materialId, final ReviseBusinessMaterial reviseReq);
+
+    boolean updateBusinessProgress(final Long businessId, final ProgressType progressType);
 }

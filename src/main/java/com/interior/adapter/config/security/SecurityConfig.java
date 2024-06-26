@@ -72,6 +72,10 @@ public class SecurityConfig {
                                 "/api/emails/validations"
                                 , "/api/phones/validations"
                         ).permitAll()
+                        .requestMatchers(HttpMethod.POST,
+                                "/api/login"
+                                , "/api/signup"
+                        ).permitAll()
 
                         .requestMatchers(HttpMethod.GET,
                                 "/actuator/health"
@@ -81,10 +85,6 @@ public class SecurityConfig {
                                 , "/api/companies/{companyId}/businesses"
                                 , "/api/excels/companies/{companyId}/businesses/{businessId}"
                         ).authenticated()
-                        .requestMatchers(HttpMethod.POST,
-                                "/api/login"
-                                , "/api/signup"
-                        ).permitAll()
 
                         .requestMatchers(HttpMethod.PUT,
                                 "/api/businesses/{businessId}/materials/{materialId}"
@@ -98,7 +98,8 @@ public class SecurityConfig {
                                 , "/api/companies/{companyId}/businesses"
                         ).authenticated()
                         .requestMatchers(HttpMethod.PATCH,
-                                "/api/businesses/{businessId}/usages/categories"
+                                "/api/businesses/{businessId}/usages/categories",
+                                "/api/businesses/{businessId}/progresses"
                         ).authenticated()
                         .requestMatchers("/admin").hasRole("CUSTOMER")
                         .requestMatchers("/login").permitAll()

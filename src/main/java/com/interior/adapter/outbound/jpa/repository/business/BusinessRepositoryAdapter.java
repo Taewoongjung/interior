@@ -21,6 +21,7 @@ import com.interior.domain.business.Business;
 import com.interior.domain.business.log.BusinessLog;
 import com.interior.domain.business.material.BusinessMaterial;
 import com.interior.domain.business.material.log.BusinessMaterialLog;
+import com.interior.domain.business.progress.ProgressType;
 import com.interior.domain.business.repository.BusinessRepository;
 import com.interior.domain.business.repository.dto.CreateBusiness;
 import com.interior.domain.business.repository.dto.CreateBusinessMaterial;
@@ -343,6 +344,16 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
                     )
             );
         }
+
+        return true;
+    }
+
+    @Override
+    @Transactional
+    public boolean updateBusinessProgress(final Long businessId, final ProgressType progressType) {
+
+        BusinessEntity businessEntities = findBusinessById(businessId);
+        businessEntities.updateBusinessProgress(progressType);
 
         return true;
     }

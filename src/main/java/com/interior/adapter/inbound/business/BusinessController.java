@@ -7,6 +7,7 @@ import com.interior.adapter.inbound.business.webdto.GetBusiness;
 import com.interior.adapter.inbound.business.webdto.ReviseBusiness;
 import com.interior.adapter.inbound.business.webdto.ReviseBusinessMaterialWebDtoV1;
 import com.interior.adapter.inbound.business.webdto.ReviseUsageCategoryOfMaterial;
+import com.interior.adapter.inbound.business.webdto.UpdateBusinessProgressWebDtoV1;
 import com.interior.application.command.business.BusinessCommandService;
 import com.interior.application.command.business.dto.CreateBusinessServiceDto.CreateBusinessMaterialDto;
 import com.interior.application.command.business.dto.ReviseBusinessServiceDto;
@@ -226,9 +227,13 @@ public class BusinessController {
     // 1. 관리자가 검수한다.
     // 2. ...
     @PatchMapping(value = "/api/businesses/{businessId}/progresses")
-    public ResponseEntity<Void> updateBusinessProgress(
-            @PathVariable(value = "businessId") final Long businessId
+    public ResponseEntity<Boolean> updateBusinessProgress(
+            @PathVariable(value = "businessId") final Long businessId,
+            @RequestBody final UpdateBusinessProgressWebDtoV1.Req req
     ) {
-        return null;
+
+        businessCommandService.updateBusinessProgress(businessId, req.progressType());
+
+        return ResponseEntity.status(HttpStatus.OK).body(true);
     }
 }
