@@ -1,9 +1,9 @@
 package com.interior.adapter.template.sms;
 
+import lombok.Getter;
+
 import static com.interior.adapter.common.exception.ErrorType.EMPTY_VALIDATION_NUMBER;
 import static com.interior.util.CheckUtil.check;
-
-import lombok.Getter;
 
 @Getter
 public class SmsTemplate {
@@ -20,8 +20,8 @@ public class SmsTemplate {
         check("".equals(verificationNumber.trim()), EMPTY_VALIDATION_NUMBER);
 
         String msg =
-                "인테리어 정가(鄭家) 입니다.\n"
-                        + "인증번호 [" + verificationNumber + "]\n"
+                "인증번호 [" + verificationNumber + "]\n"
+                        + "인테리어 정가(鄭家) 입니다.\n"
                         + "\"타인 노출 금지\"";
 
         return new SmsTemplate(msg);
