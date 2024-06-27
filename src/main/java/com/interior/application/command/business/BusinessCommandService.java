@@ -1,12 +1,9 @@
 package com.interior.application.command.business;
 
-import static com.interior.adapter.common.exception.ErrorType.NOT_CONTAIN_MATERIAL_IN_THE_BUSINESS;
-import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_BUSINESS_MATERIAL;
-import static com.interior.util.CheckUtil.check;
-
 import com.interior.adapter.inbound.business.webdto.CreateBusinessWebDtoV1;
 import com.interior.adapter.inbound.business.webdto.ReviseBusinessMaterialWebDtoV1;
 import com.interior.adapter.outbound.alarm.dto.event.NewBusinessAlarm;
+import com.interior.adapter.outbound.alimtalk.dto.SendAlimTalk;
 import com.interior.adapter.outbound.jpa.repository.business.dto.ReviseBusinessMaterial;
 import com.interior.application.command.business.dto.CreateBusinessServiceDto.CreateBusinessMaterialDto;
 import com.interior.application.command.business.dto.ReviseBusinessServiceDto;
@@ -15,6 +12,7 @@ import com.interior.application.command.log.business.dto.event.BusinessReviseLog
 import com.interior.application.command.log.business.material.dto.event.BusinessMaterialCreateLogEvent;
 import com.interior.application.command.log.business.material.dto.event.BusinessMaterialDeleteLogEvent;
 import com.interior.application.command.log.business.material.dto.event.BusinessReviseMaterialLogEvent;
+import com.interior.domain.alimtalk.kakaomsgtemplate.KakaoMsgTemplateType;
 import com.interior.domain.business.Business;
 import com.interior.domain.business.log.BusinessChangeFieldType;
 import com.interior.domain.business.material.BusinessMaterial;
@@ -26,19 +24,26 @@ import com.interior.domain.business.repository.dto.CreateBusinessMaterial;
 import com.interior.domain.company.Company;
 import com.interior.domain.company.repository.CompanyRepository;
 import com.interior.domain.user.User;
-import java.util.List;
-import java.util.NoSuchElementException;
+import com.interior.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.NoSuchElementException;
+
+import static com.interior.adapter.common.exception.ErrorType.NOT_CONTAIN_MATERIAL_IN_THE_BUSINESS;
+import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_BUSINESS_MATERIAL;
+import static com.interior.util.CheckUtil.check;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class BusinessCommandService {
 
+    private final UserRepository userRepository;
     private final CompanyRepository companyRepository;
     private final BusinessRepository businessRepository;
     private final ApplicationEventPublisher eventPublisher;
@@ -285,7 +290,25 @@ public class BusinessCommandService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void updateBusinessProgress(final Long businessId, final ProgressType progressType) {
-        businessRepository.updateBusinessProgress(businessId, progressType);
+    public Business updateBusinessProgress(final Long businessId, final ProgressType progressType) {
+
+        return businessRepository.updateBusinessProgress(businessId, progressType);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void sendQuotationDraftToClient(final Long businessId, final String receiverPhoneNumber) {
+
+        Business business = updateBusinessProgress(businessId, ProgressType.QUOTATION_REQUESTED);
+        Company company = companyRepository.findById(business.getCompanyId());
+        User user = userRepository.findById(company.getOwnerId());
+
+        // 알림톡 발송
+        eventPublisher.publishEvent(new SendAlimTalk(
+                KakaoMsgTemplateType.REQUEST_QUOTATION_DRAFT,
+                receiverPhoneNumber,
+                null,
+                business,
+                company,
+                user));
     }
 }
