@@ -14,11 +14,6 @@ import com.interior.domain.alimtalk.kakaomsgtemplate.AlimTalkThirdPartyType;
 import com.interior.domain.alimtalk.kakaomsgtemplate.KakaoMsgTemplate;
 import com.interior.domain.alimtalk.kakaomsgtemplate.repository.KakaoMsgTemplateRepository;
 import com.interior.domain.util.BoolType;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +25,14 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.interior.domain.alimtalk.kakaomsgtemplate.KakaoMsgTemplateType.REQUEST_QUOTATION_DRAFT;
 
 @Slf4j
 @Component
@@ -91,7 +94,8 @@ public class KakaoAlimTalkByAligoService implements AlimTalkService {
             kakaoMsgTemplateRepository.syncToTemplateRegistered(result);
 
         }, error -> {
-            System.out.println("에러 발생");
+            log.error("알림톡 템플릿 싱크 맞추는 중 에러");
+            log.error("Err_msg : {}", error.toString());
         });
     }
 
@@ -105,10 +109,6 @@ public class KakaoAlimTalkByAligoService implements AlimTalkService {
         }.getType();
         Map<String, Object> jsonMap = gson.fromJson(target, mapType);
 
-        // 각 필드 출력
-        System.out.println("Code: " + jsonMap.get("code"));
-        System.out.println("Message: " + jsonMap.get("message"));
-
         return (List<Map<String, Object>>) jsonMap.get("list");
     }
 
@@ -116,8 +116,9 @@ public class KakaoAlimTalkByAligoService implements AlimTalkService {
     @EventListener
     @Transactional
     public void send(final SendAlimTalk sendReq) {
-        KakaoMsgTemplate template = kakaoMsgTemplateRepository.findByTemplateCode("TT_5653");
-        template.replaceArgumentOfTemplate(sendReq.customerName());
+        KakaoMsgTemplate template = kakaoMsgTemplateRepository.findByTemplateCode(sendReq.template().getTemplateCode());
+
+        template.replaceArgumentOfTemplate(sendReq.customerName(), sendReq.company(), sendReq.user());
 
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
         formData.add("apikey", KEY);
@@ -127,8 +128,13 @@ public class KakaoAlimTalkByAligoService implements AlimTalkService {
         formData.add("sender", senderPhoneNumber);
         formData.add("receiver_1", sendReq.receiverPhoneNumber());
         formData.add("subject_1", template.getMessageSubject());
+
+        if (REQUEST_QUOTATION_DRAFT.getTemplateCode().equals(sendReq.template().getTemplateCode())) {
+            formData.add("emtitle_1", "[" + sendReq.business().getName() + "]");
+        }
+
         formData.add("message_1", template.getMessage());
-        formData.add("button_1", getButtonJson());
+        formData.add("button_1", template.getButtonInfo());
 
         Mono<String> responseMono = webClient.post()
                 .uri("https://kakaoapi.aligo.in/akv10/alimtalk/send/")
@@ -138,7 +144,7 @@ public class KakaoAlimTalkByAligoService implements AlimTalkService {
 
         responseMono.subscribe(response -> {
 
-            Map<String, String> res = parseResult(response);
+            Map<String, String> res = parseSendResult(response);
 
             kakaoMsgResultRepository.save(KakaoMsgResult.of(
                     template.getTemplateName(),
@@ -153,32 +159,11 @@ public class KakaoAlimTalkByAligoService implements AlimTalkService {
 
         }, error -> {
             log.error("알림톡 전송 에러 (템플릿코드: {})", template.getTemplateCode());
-            log.error("Err_msg : {}", error.fillInStackTrace().toString());
+            log.error("Err_msg : {}", error.toString());
         });
     }
 
-    private String getButtonJson() {
-
-        return """
-                {
-                    "button": [{
-                         "name": "채널 추가",
-                         "linkType": "AC",
-                         "linkTypeName": "채널 추가"
-                      },
-                      {
-                        "name": "서비스 바로가기",
-                        "linkType": "AL",
-                        "linkTypeName": "앱링크",
-                        "linkIos": "kakaotalk://web/openExternal?url=http://interiorjung.shop",
-                        "linkAnd": "kakaotalk://web/openExternal?url=http://interiorjung.shop"
-                      }
-                    ]
-                }
-                """;
-    }
-
-    private Map<String, String> parseResult(final String target) {
+    private Map<String, String> parseSendResult(final String target) {
 
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(new TypeToken<Map<String, String>>() {

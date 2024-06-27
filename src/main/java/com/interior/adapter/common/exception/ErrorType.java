@@ -63,8 +63,9 @@ public enum ErrorType {
     EMPTY_UPDATER_NAME(1304, "변경자의 이름은 필수값 입니다."),
     DUPLICATE_PROGRESS_VALUE(1305, "이미 해당 상태값이 존재하여 처리 된 이력이 있습니다."),
 
-    NOT_EXIST_SMS_SEND_RESULT(1400, "sms 발송 정보가 없습니다.");
+    NOT_EXIST_SMS_SEND_RESULT(1400, "sms 발송 정보가 없습니다."),
 
+    NO_ALIMTALK_TEMPLATE(1500, "템플릿이 없습니다");
 
     private final int code;
     private final String message;

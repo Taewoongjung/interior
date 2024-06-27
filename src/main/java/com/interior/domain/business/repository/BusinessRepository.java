@@ -10,6 +10,7 @@ import com.interior.domain.business.material.log.BusinessMaterialLog;
 import com.interior.domain.business.progress.ProgressType;
 import com.interior.domain.business.repository.dto.CreateBusiness;
 import com.interior.domain.business.repository.dto.CreateBusinessMaterial;
+
 import java.util.List;
 
 public interface BusinessRepository {
@@ -31,7 +32,7 @@ public interface BusinessRepository {
     boolean deleteBusiness(final Long companyId, final Long businessId);
 
     boolean reviseBusiness(final Long userId, final Long businessId,
-            final ReviseBusinessServiceDto.Req req);
+                           final ReviseBusinessServiceDto.Req req);
 
     boolean reviseUsageCategoryOfMaterial(
             final Long businessId,
@@ -48,5 +49,5 @@ public interface BusinessRepository {
 
     boolean reviseBusinessMaterial(final Long materialId, final ReviseBusinessMaterial reviseReq);
 
-    boolean updateBusinessProgress(final Long businessId, final ProgressType progressType);
+    Business updateBusinessProgress(final Long businessId, final ProgressType progressType);
 }
