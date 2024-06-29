@@ -1,5 +1,7 @@
 package com.interior.adapter.outbound.alimtalk.kakao.aligo;
 
+import static com.interior.domain.alimtalk.kakaomsgtemplate.KakaoMsgTemplateType.REQUEST_QUOTATION_DRAFT;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -13,7 +15,13 @@ import com.interior.domain.alimtalk.kakaomsgtemplate.AlimTalkButtonLinkType;
 import com.interior.domain.alimtalk.kakaomsgtemplate.AlimTalkThirdPartyType;
 import com.interior.domain.alimtalk.kakaomsgtemplate.KakaoMsgTemplate;
 import com.interior.domain.alimtalk.kakaomsgtemplate.repository.KakaoMsgTemplateRepository;
+import com.interior.domain.business.thirdpartymessage.BusinessThirdPartyMessage;
 import com.interior.domain.util.BoolType;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,14 +33,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static com.interior.domain.alimtalk.kakaomsgtemplate.KakaoMsgTemplateType.REQUEST_QUOTATION_DRAFT;
 
 @Slf4j
 @Component
@@ -116,9 +116,11 @@ public class KakaoAlimTalkByAligoService implements AlimTalkService {
     @EventListener
     @Transactional
     public void send(final SendAlimTalk sendReq) {
-        KakaoMsgTemplate template = kakaoMsgTemplateRepository.findByTemplateCode(sendReq.template().getTemplateCode());
+        KakaoMsgTemplate template = kakaoMsgTemplateRepository.findByTemplateCode(
+                sendReq.template().getTemplateCode());
 
-        template.replaceArgumentOfTemplate(sendReq.customerName(), sendReq.company(), sendReq.user());
+        template.replaceArgumentOfTemplate(sendReq.customerName(), sendReq.company(),
+                sendReq.user());
 
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
         formData.add("apikey", KEY);
@@ -129,7 +131,8 @@ public class KakaoAlimTalkByAligoService implements AlimTalkService {
         formData.add("receiver_1", sendReq.receiverPhoneNumber());
         formData.add("subject_1", template.getMessageSubject());
 
-        if (REQUEST_QUOTATION_DRAFT.getTemplateCode().equals(sendReq.template().getTemplateCode())) {
+        if (REQUEST_QUOTATION_DRAFT.getTemplateCode()
+                .equals(sendReq.template().getTemplateCode())) {
             formData.add("emtitle_1", "[" + sendReq.business().getName() + "]");
         }
 
@@ -146,7 +149,7 @@ public class KakaoAlimTalkByAligoService implements AlimTalkService {
 
             Map<String, String> res = parseSendResult(response);
 
-            kakaoMsgResultRepository.save(KakaoMsgResult.of(
+            Long createdResultId = kakaoMsgResultRepository.save(KakaoMsgResult.of(
                     template.getTemplateName(),
                     template.getTemplateCode(),
                     template.getMessageSubject(),
@@ -156,6 +159,16 @@ public class KakaoAlimTalkByAligoService implements AlimTalkService {
                     "0".equals(res.get("code")) ? res.get("mid") : null,
                     "0".equals(res.get("code")) ? BoolType.T : BoolType.F
             ));
+
+            if (sendReq.business() != null && sendReq.user() != null) {
+
+                kakaoMsgResultRepository.createThirdPartyMessageSendLog(
+                        BusinessThirdPartyMessage.of(
+                                sendReq.business().getId(),
+                                sendReq.user().getId(),
+                                createdResultId
+                        ));
+            }
 
         }, error -> {
             log.error("알림톡 전송 에러 (템플릿코드: {})", template.getTemplateCode());
