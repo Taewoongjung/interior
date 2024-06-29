@@ -1,6 +1,7 @@
 package com.interior.util.converter.jpa.business;
 
 import com.interior.adapter.outbound.jpa.entity.business.BusinessEntity;
+import com.interior.adapter.outbound.jpa.entity.business.businessthirdpartymessage.BusinessThirdPartyMessageEntity;
 import com.interior.adapter.outbound.jpa.entity.business.expense.BusinessMaterialExpenseEntity;
 import com.interior.adapter.outbound.jpa.entity.business.log.BusinessLogEntity;
 import com.interior.adapter.outbound.jpa.entity.business.material.BusinessMaterialEntity;
@@ -12,6 +13,7 @@ import com.interior.domain.business.log.BusinessLog;
 import com.interior.domain.business.material.BusinessMaterial;
 import com.interior.domain.business.material.log.BusinessMaterialLog;
 import com.interior.domain.business.progress.BusinessProgress;
+import com.interior.domain.business.thirdpartymessage.BusinessThirdPartyMessage;
 import java.util.stream.Collectors;
 
 public class BusinessEntityConverter {
@@ -96,6 +98,17 @@ public class BusinessEntityConverter {
                 businessProgress.getBusinessId(),
                 businessProgress.getProgressType(),
                 businessProgress.getIsDeleted()
+        );
+    }
+
+    public static BusinessThirdPartyMessageEntity businessThirdPartyMessageToEntity(
+            final BusinessThirdPartyMessage businessThirdPartyMessage) {
+
+        return BusinessThirdPartyMessageEntity.of(
+                businessThirdPartyMessage.getId(),
+                businessThirdPartyMessage.getBusinessId(),
+                businessThirdPartyMessage.getSenderId(),
+                businessThirdPartyMessage.getKakaoMsgResultId()
         );
     }
 }
