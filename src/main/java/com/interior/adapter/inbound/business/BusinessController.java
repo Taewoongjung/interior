@@ -27,8 +27,8 @@ import com.interior.application.command.business.handlers.ReviseMaterialCommandH
 import com.interior.application.command.business.handlers.ReviseUsageCategoryOfMaterialCommandHandler;
 import com.interior.application.command.business.handlers.SendQuotationDraftToClientCommandHandler;
 import com.interior.application.command.business.handlers.UpdateBusinessProgressCommandHandler;
-import com.interior.application.readmodel.queries.business.dto.GetBusinessMaterialLogs;
-import com.interior.application.readmodel.queries.business.temp.BusinessQueryService;
+import com.interior.application.readmodel.business.dto.GetBusinessMaterialLogs;
+import com.interior.application.readmodel.business.temp.BusinessQueryService;
 import com.interior.domain.business.Business;
 import com.interior.domain.business.material.log.BusinessMaterialLog;
 import com.interior.domain.company.Company;

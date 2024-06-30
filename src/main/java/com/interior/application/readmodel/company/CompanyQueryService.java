@@ -1,4 +1,4 @@
-package com.interior.application.readmodel.queries.company;
+package com.interior.application.readmodel.company;
 
 import com.interior.domain.company.Company;
 import com.interior.domain.user.User;

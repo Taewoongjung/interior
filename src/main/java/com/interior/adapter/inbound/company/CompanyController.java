@@ -4,7 +4,7 @@ import com.interior.adapter.inbound.company.webdto.CreateCompanyDto;
 import com.interior.adapter.inbound.company.webdto.GetCompanyDto.GetCompanyResDto;
 import com.interior.application.command.company.CompanyCommandService;
 import com.interior.application.command.company.dto.CreateCompanyServiceDto;
-import com.interior.application.readmodel.queries.company.CompanyQueryService;
+import com.interior.application.readmodel.company.CompanyQueryService;
 import com.interior.domain.user.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
