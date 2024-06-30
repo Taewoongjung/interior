@@ -1,10 +1,11 @@
 package com.interior.adapter.inbound.user.query;
 
 import com.interior.adapter.inbound.user.webdto.LoadUserDto.LoadUserResDto;
-import com.interior.application.readmodel.user.UserQueryService;
 import com.interior.application.readmodel.user.handlers.LoadUserByTokenCommandHandler;
 import com.interior.application.readmodel.user.handlers.ValidationCheckOfEmailQueryHandler;
+import com.interior.application.readmodel.user.handlers.ValidationCheckOfPhoneNumberQueryHandler;
 import com.interior.application.readmodel.user.queries.ValidationCheckOfEmailQuery;
+import com.interior.application.readmodel.user.queries.ValidationCheckOfPhoneNumberQuery;
 import com.interior.domain.user.User;
 import com.interior.domain.util.BoolType;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,10 +24,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserQueryController {
 
-    private final UserQueryService userQueryService;
-
     private final LoadUserByTokenCommandHandler loadUserByTokenCommandHandler;
     private final ValidationCheckOfEmailQueryHandler validationCheckOfEmailQueryHandler;
+    private final ValidationCheckOfPhoneNumberQueryHandler validationCheckOfPhoneNumberQueryHandler;
 
     @GetMapping(value = "/api/me")
     public ResponseEntity<LoadUserResDto> validateUser(final HttpServletRequest request) {
@@ -65,9 +65,10 @@ public class UserQueryController {
     public ResponseEntity<Boolean> validatePhone(
             @RequestParam("targetPhoneNumber") final String targetPhoneNumber,
             @RequestParam("compNumber") final String compNumber
-    ) throws Exception {
+    ) {
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(userQueryService.validationCheckOfPhoneNumber(targetPhoneNumber, compNumber));
+                .body(validationCheckOfPhoneNumberQueryHandler.handle(
+                        new ValidationCheckOfPhoneNumberQuery(targetPhoneNumber, compNumber)));
     }
 }

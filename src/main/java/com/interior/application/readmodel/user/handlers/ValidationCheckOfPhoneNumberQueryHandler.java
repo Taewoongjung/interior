@@ -2,13 +2,13 @@ package com.interior.application.readmodel.user.handlers;
 
 import static com.interior.adapter.common.exception.ErrorType.EMPTY_VERIFY_NUMBER;
 import static com.interior.adapter.common.exception.ErrorType.EXPIRED_EMAIL_CHECK_REQUEST;
-import static com.interior.adapter.common.exception.ErrorType.INVALID_EMAIL_CHECK_NUMBER;
+import static com.interior.adapter.common.exception.ErrorType.INVALID_PHONE_CHECK_NUMBER;
 import static com.interior.adapter.common.exception.ErrorType.NOT_6DIGIT_VERIFY_NUMBER;
 import static com.interior.util.CheckUtil.check;
 
 import com.interior.abstraction.domain.IQueryHandler;
-import com.interior.adapter.outbound.cache.redis.email.CacheEmailValidationRedisRepository;
-import com.interior.application.readmodel.user.queries.ValidationCheckOfEmailQuery;
+import com.interior.adapter.outbound.cache.redis.sms.CacheSmsValidationRedisRepository;
+import com.interior.application.readmodel.user.queries.ValidationCheckOfPhoneNumberQuery;
 import jakarta.validation.ValidationException;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -21,21 +21,22 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ValidationCheckOfEmailQueryHandler implements
-        IQueryHandler<ValidationCheckOfEmailQuery, Boolean> {
+public class ValidationCheckOfPhoneNumberQueryHandler implements
+        IQueryHandler<ValidationCheckOfPhoneNumberQuery, Boolean> {
 
-    private final CacheEmailValidationRedisRepository cacheEmailValidationRedisRepository;
+    private final CacheSmsValidationRedisRepository cacheSmsValidationRedisRepository;
 
     @Override
     public boolean isQueryHandler() {
-        return true;
+        return false;
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Boolean handle(final ValidationCheckOfEmailQuery query) {
-        Map<String, String> data = cacheEmailValidationRedisRepository.getBucketByKey(
-                query.targetEmail());
+    public Boolean handle(final ValidationCheckOfPhoneNumberQuery query) {
+
+        Map<String, String> data = cacheSmsValidationRedisRepository.getBucketByKey(
+                query.targetPhoneNumber());
 
         LocalDateTime createdAt = LocalDateTime.parse(data.get("createdAt"));
         validateIfOverDurationOfValidation(createdAt);
@@ -47,18 +48,17 @@ public class ValidationCheckOfEmailQueryHandler implements
 
         if (data.get("number").equals(query.compTargetNumber())) {
 
-            // 인증번호가 같으면 isVerified = true 로 수정
-            cacheEmailValidationRedisRepository.setIsVerifiedByKey(query.targetEmail());
+            cacheSmsValidationRedisRepository.setIsVerifiedByKey(query.targetPhoneNumber());
 
             return true;
 
         } else {
-            throw new ValidationException(INVALID_EMAIL_CHECK_NUMBER.getMessage());
+            throw new ValidationException(INVALID_PHONE_CHECK_NUMBER.getMessage());
         }
     }
 
     private void validateIfOverDurationOfValidation(final LocalDateTime target) {
-        
+
         Duration duration = Duration.between(target, LocalDateTime.now());
         long diffInMinutes = duration.toMinutes();
 
