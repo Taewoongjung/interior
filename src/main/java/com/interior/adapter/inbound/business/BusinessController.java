@@ -16,6 +16,8 @@ import com.interior.application.commands.business.DeleteBusinessMaterialCommandH
 import com.interior.application.commands.business.ReviseBusinessCommandHandler;
 import com.interior.application.commands.business.ReviseMaterialCommandHandler;
 import com.interior.application.commands.business.ReviseUsageCategoryOfMaterialCommandHandler;
+import com.interior.application.commands.business.SendQuotationDraftToClientCommandHandler;
+import com.interior.application.commands.business.UpdateBusinessProgressCommandHandler;
 import com.interior.application.commands.business.dto.CreateBusinessCommand;
 import com.interior.application.commands.business.dto.CreateBusinessMaterialCommand;
 import com.interior.application.commands.business.dto.CreateBusinessServiceDto.CreateBusinessMaterialDto;
@@ -25,6 +27,8 @@ import com.interior.application.commands.business.dto.ReviseBusinessCommand;
 import com.interior.application.commands.business.dto.ReviseBusinessServiceDto;
 import com.interior.application.commands.business.dto.ReviseMaterialCommand;
 import com.interior.application.commands.business.dto.ReviseUsageCategoryOfMaterialCommand;
+import com.interior.application.commands.business.dto.SendQuotationDraftToClientCommand;
+import com.interior.application.commands.business.dto.UpdateBusinessProgressCommand;
 import com.interior.application.commands.business.temp.BusinessCommandService;
 import com.interior.application.readmodel.queries.business.BusinessQueryService;
 import com.interior.application.readmodel.queries.business.dto.GetBusinessMaterialLogs;
@@ -65,6 +69,8 @@ public class BusinessController {
     private final ReviseBusinessCommandHandler reviseBusinessCommandHandler;
     private final ReviseUsageCategoryOfMaterialCommandHandler reviseUsageCategoryOfMaterialCommandHandler;
     private final ReviseMaterialCommandHandler reviseMaterialCommandHandler;
+    private final UpdateBusinessProgressCommandHandler updateBusinessProgressCommandHandler;
+    private final SendQuotationDraftToClientCommandHandler sendQuotationDraftToClientCommandHandler;
 
     // 사업 추가
     @PostMapping(value = "/api/companies/{companyId}/businesses")
@@ -266,7 +272,8 @@ public class BusinessController {
             @RequestBody final UpdateBusinessProgressWebDtoV1.Req req
     ) {
 
-        businessCommandService.updateBusinessProgress(businessId, req.progressType());
+        updateBusinessProgressCommandHandler.handle(
+                new UpdateBusinessProgressCommand(businessId, req.progressType()));
 
         return ResponseEntity.status(HttpStatus.OK).body(true);
     }
@@ -277,7 +284,8 @@ public class BusinessController {
             @RequestBody SendQuotationDraftToClient.Req req
     ) {
 
-        businessCommandService.sendQuotationDraftToClient(businessId, req.receiverPhoneNumber());
+        sendQuotationDraftToClientCommandHandler.handle(
+                new SendQuotationDraftToClientCommand(businessId, req.receiverPhoneNumber()));
 
         return ResponseEntity.status(HttpStatus.OK).body(true);
     }
