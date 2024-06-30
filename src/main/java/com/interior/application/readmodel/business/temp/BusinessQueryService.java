@@ -1,16 +1,11 @@
 package com.interior.application.readmodel.business.temp;
 
-import static java.util.stream.Collectors.groupingBy;
-
-import com.interior.adapter.inbound.business.enumtypes.QueryType;
-import com.interior.adapter.inbound.business.webdto.GetBusiness;
 import com.interior.adapter.outbound.cache.redis.excel.CacheExcelRedisRepository;
 import com.interior.adapter.outbound.excel.BusinessListExcel;
 import com.interior.adapter.outbound.excel.BusinessMaterialExcelDownload;
 import com.interior.adapter.outbound.jpa.querydsl.BusinessDao;
 import com.interior.application.readmodel.utill.sse.SseService;
 import com.interior.domain.business.Business;
-import com.interior.domain.business.material.BusinessMaterial;
 import com.interior.domain.business.material.log.BusinessMaterialLog;
 import com.interior.domain.business.repository.BusinessRepository;
 import jakarta.servlet.ServletOutputStream;
@@ -18,7 +13,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -39,46 +33,6 @@ public class BusinessQueryService {
     private final BusinessRepository businessRepository;
     private final CacheExcelRedisRepository cacheExcelRedisRepository;
 
-
-    @Transactional(readOnly = true)
-    public GetBusiness.Response getBusiness(final Long businessId) {
-
-        Business business = getBusinessByBusinessId(businessId);
-
-        int count = 0;
-
-        HashMap<String, List<BusinessMaterial>> businessMaterials = new HashMap<>();
-
-        if (business.getBusinessMaterialList() != null) {
-
-            businessMaterials =
-                    (HashMap<String, List<BusinessMaterial>>)
-                            business.getBusinessMaterialList().stream()
-                                    .collect(groupingBy(BusinessMaterial::getUsageCategory));
-
-            count = business.getBusinessMaterialList().size();
-        }
-
-        return new GetBusiness.Response(business.getName(), business.getCreatedAt(),
-                businessMaterials, count, business.getBusinessProgressList());
-    }
-
-    private Business getBusinessByBusinessId(final Long businessId) {
-        return businessRepository.findById(businessId);
-    }
-
-    @Transactional(readOnly = true)
-    public List<Business> getAllBusinessesByUser(final List<Long> companyIdList) {
-        return businessRepository.findAllByCompanyIdIn(companyIdList);
-    }
-
-    @Transactional(readOnly = true)
-    public List<Business> getBusinessesByCompanyId(
-            final Long companyId,
-            final QueryType queryType
-    ) {
-        return businessRepository.findBusinessByCompanyId(companyId, queryType);
-    }
 
     @Transactional(readOnly = true)
     public Business getBusinessByCompanyIdAndBusinessId(final Long companyId,
