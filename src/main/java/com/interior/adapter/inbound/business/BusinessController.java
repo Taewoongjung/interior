@@ -14,6 +14,7 @@ import com.interior.application.commands.business.CreateBusinessMaterialCommandH
 import com.interior.application.commands.business.DeleteBusinessCommandHandler;
 import com.interior.application.commands.business.DeleteBusinessMaterialCommandHandler;
 import com.interior.application.commands.business.ReviseBusinessCommandHandler;
+import com.interior.application.commands.business.ReviseMaterialCommandHandler;
 import com.interior.application.commands.business.ReviseUsageCategoryOfMaterialCommandHandler;
 import com.interior.application.commands.business.dto.CreateBusinessCommand;
 import com.interior.application.commands.business.dto.CreateBusinessMaterialCommand;
@@ -22,6 +23,7 @@ import com.interior.application.commands.business.dto.DeleteBusinessCommand;
 import com.interior.application.commands.business.dto.DeleteBusinessMaterialCommand;
 import com.interior.application.commands.business.dto.ReviseBusinessCommand;
 import com.interior.application.commands.business.dto.ReviseBusinessServiceDto;
+import com.interior.application.commands.business.dto.ReviseMaterialCommand;
 import com.interior.application.commands.business.dto.ReviseUsageCategoryOfMaterialCommand;
 import com.interior.application.commands.business.temp.BusinessCommandService;
 import com.interior.application.readmodel.queries.business.BusinessQueryService;
@@ -62,6 +64,7 @@ public class BusinessController {
     private final DeleteBusinessCommandHandler deleteBusinessCommandHandler;
     private final ReviseBusinessCommandHandler reviseBusinessCommandHandler;
     private final ReviseUsageCategoryOfMaterialCommandHandler reviseUsageCategoryOfMaterialCommandHandler;
+    private final ReviseMaterialCommandHandler reviseMaterialCommandHandler;
 
     // 사업 추가
     @PostMapping(value = "/api/companies/{companyId}/businesses")
@@ -153,8 +156,10 @@ public class BusinessController {
     ) {
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(businessCommandService.reviseMaterial(businessId, materialId, req,
-                        user.getId()));
+                .body(reviseMaterialCommandHandler.handle(
+                        new ReviseMaterialCommand(businessId, materialId, req,
+                                user.getId()))
+                );
     }
 
     // 유저의 모든 사업들 조회
