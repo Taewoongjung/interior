@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class BusinessLogService {
+public class BusinessLogEventListener {
 
     private final UserRepository userRepository;
     private final BusinessRepository businessRepository;

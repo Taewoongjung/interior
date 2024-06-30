@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class SmsSendResultLogService {
+public class SmsSendResultLogEventListener {
 
     private final SmsRepository smsRepository;
 
