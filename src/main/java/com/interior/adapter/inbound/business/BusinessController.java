@@ -12,8 +12,8 @@ import com.interior.adapter.inbound.business.webdto.UpdateBusinessProgressWebDto
 import com.interior.application.commands.business.BusinessCommandService;
 import com.interior.application.commands.business.dto.CreateBusinessServiceDto.CreateBusinessMaterialDto;
 import com.interior.application.commands.business.dto.ReviseBusinessServiceDto;
-import com.interior.application.query.business.BusinessQueryService;
-import com.interior.application.query.business.dto.GetBusinessMaterialLogs;
+import com.interior.application.queries.business.BusinessQueryService;
+import com.interior.application.queries.business.dto.GetBusinessMaterialLogs;
 import com.interior.domain.business.Business;
 import com.interior.domain.business.material.log.BusinessMaterialLog;
 import com.interior.domain.company.Company;

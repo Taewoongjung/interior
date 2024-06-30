@@ -1,4 +1,4 @@
-package com.interior.application.query.utill.sse;
+package com.interior.application.queries.utill.sse;
 
 import com.interior.adapter.outbound.cache.redis.excel.CacheExcelRedisRepository;
 import com.interior.adapter.outbound.emitter.EmitterRepository;

@@ -4,7 +4,7 @@ import static java.util.stream.Collectors.groupingBy;
 
 import com.interior.adapter.outbound.cache.redis.excel.CacheExcelRedisRepository;
 import com.interior.adapter.outbound.emitter.EmitterRepository;
-import com.interior.application.query.utill.sse.SseService;
+import com.interior.application.queries.utill.sse.SseService;
 import com.interior.domain.business.Business;
 import com.interior.domain.business.material.BusinessMaterial;
 import java.io.IOException;

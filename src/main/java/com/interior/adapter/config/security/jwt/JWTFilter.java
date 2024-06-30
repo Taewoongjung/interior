@@ -1,6 +1,6 @@
 package com.interior.adapter.config.security.jwt;
 
-import com.interior.application.query.user.UserQueryService;
+import com.interior.application.queries.user.UserQueryService;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
