@@ -11,10 +11,12 @@ import com.interior.adapter.inbound.business.webdto.SendQuotationDraftToClient;
 import com.interior.adapter.inbound.business.webdto.UpdateBusinessProgressWebDtoV1;
 import com.interior.application.commands.business.CreateBusinessCommandHandler;
 import com.interior.application.commands.business.CreateBusinessMaterialCommandHandler;
+import com.interior.application.commands.business.DeleteBusinessCommandHandler;
 import com.interior.application.commands.business.DeleteBusinessMaterialCommandHandler;
 import com.interior.application.commands.business.dto.CreateBusinessCommand;
 import com.interior.application.commands.business.dto.CreateBusinessMaterialCommand;
 import com.interior.application.commands.business.dto.CreateBusinessServiceDto.CreateBusinessMaterialDto;
+import com.interior.application.commands.business.dto.DeleteBusinessCommand;
 import com.interior.application.commands.business.dto.DeleteBusinessMaterialCommand;
 import com.interior.application.commands.business.dto.ReviseBusinessServiceDto;
 import com.interior.application.commands.business.temp.BusinessCommandService;
@@ -53,6 +55,7 @@ public class BusinessController {
     private final CreateBusinessCommandHandler createBusinessCommandHandler;
     private final CreateBusinessMaterialCommandHandler createBusinessMaterialCommandHandler;
     private final DeleteBusinessMaterialCommandHandler deleteBusinessMaterialCommandHandler;
+    private final DeleteBusinessCommandHandler deleteBusinessCommandHandler;
 
     // 사업 추가
     @PostMapping(value = "/api/companies/{companyId}/businesses")
@@ -177,7 +180,8 @@ public class BusinessController {
             @AuthenticationPrincipal final User user
     ) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(businessCommandService.deleteBusiness(companyId, businessId, user));
+                .body(deleteBusinessCommandHandler.handle(
+                        new DeleteBusinessCommand(companyId, businessId, user)));
     }
 
     // 사업 수정
