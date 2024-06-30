@@ -1,8 +1,10 @@
 package com.interior.adapter.inbound.company.command;
 
 import com.interior.adapter.inbound.company.webdto.CreateCompanyWebDtoV1;
-import com.interior.application.command.company.CompanyCommandService;
-import com.interior.application.command.company.dto.CreateCompanyServiceDto;
+import com.interior.application.command.company.commands.CreateCompanyCommand;
+import com.interior.application.command.company.commands.DeleteCompanyCommand;
+import com.interior.application.command.company.handlers.CreateCompanyCommandHandler;
+import com.interior.application.command.company.handlers.DeleteCompanyCommandHandler;
 import com.interior.domain.user.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class CompanyCommandController {
 
-    private final CompanyCommandService companyCommandService;
-
+    private final CreateCompanyCommandHandler createCompanyCommandHandler;
+    private final DeleteCompanyCommandHandler deleteCompanyCommandHandler;
 
     // 사업체 추가
     @PostMapping(value = "/api/companies")
@@ -29,18 +31,15 @@ public class CompanyCommandController {
             @AuthenticationPrincipal final User user
     ) {
         return ResponseEntity.status(HttpStatus.OK).body(
-                companyCommandService.createCompany(
+                createCompanyCommandHandler.handle(new CreateCompanyCommand(
                         user,
-                        new CreateCompanyServiceDto.CreateCompanyDto(
-                                req.companyName(),
-                                req.zipCode(),
-                                req.mainAddress(),
-                                req.subAddress(),
-                                req.bdgNumber(),
-                                req.tel()
-                        )
-                )
-        );
+                        req.companyName(),
+                        req.zipCode(),
+                        req.mainAddress(),
+                        req.subAddress(),
+                        req.bdgNumber(),
+                        req.tel()
+                )));
     }
 
     // 특정 사업체 삭제
@@ -50,7 +49,8 @@ public class CompanyCommandController {
             @AuthenticationPrincipal final User user
     ) {
         return ResponseEntity.status(HttpStatus.OK).body(
-                companyCommandService.deleteCompany(user.getId(), companyId)
+                deleteCompanyCommandHandler.handle(
+                        new DeleteCompanyCommand(user.getId(), companyId))
         );
     }
 }

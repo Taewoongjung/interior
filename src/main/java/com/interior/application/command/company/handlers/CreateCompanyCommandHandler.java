@@ -1,13 +1,13 @@
-package com.interior.application.command.company;
+package com.interior.application.command.company.handlers;
 
 import static com.interior.adapter.common.exception.ErrorType.LIMIT_OF_COMPANY_COUNT_IS_FIVE;
 import static com.interior.util.CheckUtil.check;
 
+import com.interior.abstraction.domain.ICommandHandler;
 import com.interior.adapter.outbound.alarm.dto.event.NewCompanyAlarm;
-import com.interior.application.command.company.dto.CreateCompanyServiceDto;
+import com.interior.application.command.company.commands.CreateCompanyCommand;
 import com.interior.domain.company.Company;
 import com.interior.domain.company.repository.CompanyRepository;
-import com.interior.domain.user.User;
 import com.interior.domain.util.BoolType;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
@@ -19,55 +19,53 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CompanyCommandService {
+public class CreateCompanyCommandHandler implements ICommandHandler<CreateCompanyCommand, Boolean> {
 
     private final CompanyRepository companyRepository;
     private final ApplicationEventPublisher eventPublisher;
 
-    @Transactional(rollbackFor = Exception.class)
-    public boolean createCompany(
-            final User user,
-            final CreateCompanyServiceDto.CreateCompanyDto reqDto
-    ) {
+    @Override
+    public boolean isCommandHandler() {
+        return true;
+    }
 
-        check(user.getCompanyList().size() >= 5, LIMIT_OF_COMPANY_COUNT_IS_FIVE);
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean handle(final CreateCompanyCommand command) {
+        log.info("execute CreateCompanyCommand");
+
+        check(command.user().getCompanyList().size() >= 5, LIMIT_OF_COMPANY_COUNT_IS_FIVE);
 
         Company company = Company.of(
-                reqDto.companyName(),
-                reqDto.zipCode(),
-                user.getId(),
-                reqDto.mainAddress(),
-                reqDto.subAddress(),
-                reqDto.bdgNumber(),
-                reqDto.tel(),
+                command.companyName(),
+                command.zipCode(),
+                command.user().getId(),
+                command.mainAddress(),
+                command.subAddress(),
+                command.bdgNumber(),
+                command.tel(),
                 BoolType.F,
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
 
-        if (companyRepository.save(user.getEmail(), company)) {
+        if (companyRepository.save(command.user().getEmail(), company)) {
 
             // 새로운 사업체 생성 시 알람 발송
             eventPublisher.publishEvent(
                     new NewCompanyAlarm(company.getName(),
-                            user.getName(),
-                            user.getEmail(),
+                            command.user().getName(),
+                            command.user().getEmail(),
                             company.getTel(),
                             company.getAddress() + " " + company.getSubAddress()
                     )
             );
 
+            log.info("CreateCompanyCommand executed successfully");
+
             return true;
         }
 
         return false;
-    }
-
-    @Transactional(rollbackFor = Exception.class)
-    public boolean deleteCompany(final Long userId, final Long companyId) {
-
-        companyRepository.delete(userId, companyId);
-
-        return true;
     }
 }
