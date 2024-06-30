@@ -1,8 +1,8 @@
 package com.interior.adapter.inbound.business.query;
 
 import com.interior.adapter.inbound.business.enumtypes.QueryType;
-import com.interior.adapter.inbound.business.webdto.GetBusiness;
-import com.interior.application.readmodel.business.dto.GetBusinessMaterialLogs;
+import com.interior.adapter.inbound.business.webdto.GetBusinessMaterialLogsWebDtoV1;
+import com.interior.adapter.inbound.business.webdto.GetBusinessWebDtoV1;
 import com.interior.application.readmodel.business.handlers.GetAllBusinessesByUserQueryHandler;
 import com.interior.application.readmodel.business.handlers.GetBusinessMaterialLogQueryHandler;
 import com.interior.application.readmodel.business.handlers.GetBusinessQueryHandler;
@@ -50,7 +50,7 @@ public class BusinessQueryController {
 
     // 특정 사업의 모든 재료 조회
     @GetMapping(value = "/api/businesses/{businessId}")
-    public ResponseEntity<GetBusiness.Response> getBusiness(
+    public ResponseEntity<GetBusinessWebDtoV1.Response> getBusiness(
             @PathVariable(value = "businessId") final Long businessId
     ) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -107,7 +107,7 @@ public class BusinessQueryController {
 
     // 재료 변경 로그 조회
     @GetMapping(value = "/api/businesses/{businessId}/logs")
-    public ResponseEntity<List<GetBusinessMaterialLogs.Res>> getBusinessMaterialLogs(
+    public ResponseEntity<List<GetBusinessMaterialLogsWebDtoV1.Res>> getBusinessMaterialLogs(
             @PathVariable(value = "businessId") final Long businessId) {
 
         List<BusinessMaterialLog> logList = getBusinessMaterialLogQueryHandler.handle(
@@ -116,7 +116,7 @@ public class BusinessQueryController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(logList.stream()
                         .map(e ->
-                                new GetBusinessMaterialLogs.Res(
+                                new GetBusinessMaterialLogsWebDtoV1.Res(
                                         e.getUpdaterName(),
                                         e.getChangeField().getDesc(),
                                         e.getChangeDetail(),

@@ -1,12 +1,12 @@
 package com.interior.adapter.inbound.business.command;
 
-import com.interior.adapter.inbound.business.webdto.CreateBusinessMaterial.CreateBusinessMaterialReqDto;
+import com.interior.adapter.inbound.business.webdto.CreateBusinessMaterialWebDtoV1.CreateBusinessMaterialReqDto;
 import com.interior.adapter.inbound.business.webdto.CreateBusinessWebDtoV1;
 import com.interior.adapter.inbound.business.webdto.CreateBusinessWebDtoV1.Res;
-import com.interior.adapter.inbound.business.webdto.ReviseBusiness;
 import com.interior.adapter.inbound.business.webdto.ReviseBusinessMaterialWebDtoV1;
-import com.interior.adapter.inbound.business.webdto.ReviseUsageCategoryOfMaterial;
-import com.interior.adapter.inbound.business.webdto.SendQuotationDraftToClient;
+import com.interior.adapter.inbound.business.webdto.ReviseBusinessWebDtoV1;
+import com.interior.adapter.inbound.business.webdto.ReviseUsageCategoryOfMaterialWebDtoV1;
+import com.interior.adapter.inbound.business.webdto.SendQuotationDraftToClientWebDtoV1;
 import com.interior.adapter.inbound.business.webdto.UpdateBusinessProgressWebDtoV1;
 import com.interior.application.command.business.commands.CreateBusinessCommand;
 import com.interior.application.command.business.commands.CreateBusinessMaterialCommand;
@@ -123,7 +123,7 @@ public class BusinessCommandController {
     public ResponseEntity<Boolean> reviseBusiness(
             @PathVariable(value = "companyId") final Long companyId,
             @PathVariable(value = "businessId") final Long businessId,
-            @RequestBody final ReviseBusiness.WebReqV1 req,
+            @RequestBody final ReviseBusinessWebDtoV1.Req req,
             @AuthenticationPrincipal final User user
     ) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -142,7 +142,7 @@ public class BusinessCommandController {
     @PatchMapping(value = "/api/businesses/{businessId}/categories/constructions")
     public ResponseEntity<Boolean> reviseUsageCategoryOfMaterial(
             @PathVariable(value = "businessId") final Long businessId,
-            @RequestBody final ReviseUsageCategoryOfMaterial.Req req
+            @RequestBody final ReviseUsageCategoryOfMaterialWebDtoV1.Req req
     ) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(reviseUsageCategoryOfMaterialCommandHandler.handle(
@@ -189,7 +189,7 @@ public class BusinessCommandController {
     @PostMapping(value = "/api/businesses/{businessId}/quotations/draft/completions")
     public ResponseEntity<Boolean> sendQuotationDraftToClient(
             @PathVariable(value = "businessId") final Long businessId,
-            @RequestBody SendQuotationDraftToClient.Req req
+            @RequestBody SendQuotationDraftToClientWebDtoV1.Req req
     ) {
 
         sendQuotationDraftToClientCommandHandler.handle(

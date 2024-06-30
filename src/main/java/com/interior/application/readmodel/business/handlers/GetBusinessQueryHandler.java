@@ -3,7 +3,7 @@ package com.interior.application.readmodel.business.handlers;
 import static java.util.stream.Collectors.groupingBy;
 
 import com.interior.abstraction.domain.IQueryHandler;
-import com.interior.adapter.inbound.business.webdto.GetBusiness;
+import com.interior.adapter.inbound.business.webdto.GetBusinessWebDtoV1;
 import com.interior.application.readmodel.business.queries.GetBusinessQuery;
 import com.interior.domain.business.Business;
 import com.interior.domain.business.material.BusinessMaterial;
@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class GetBusinessQueryHandler implements
-        IQueryHandler<GetBusinessQuery, GetBusiness.Response> {
+        IQueryHandler<GetBusinessQuery, GetBusinessWebDtoV1.Response> {
 
     private final BusinessRepository businessRepository;
 
@@ -30,7 +30,7 @@ public class GetBusinessQueryHandler implements
 
     @Override
     @Transactional(readOnly = true)
-    public GetBusiness.Response handle(final GetBusinessQuery query) {
+    public GetBusinessWebDtoV1.Response handle(final GetBusinessQuery query) {
         log.info("process GetBusinessQuery {}", query);
 
         Business business = businessRepository.findById(query.businessId());
@@ -49,7 +49,7 @@ public class GetBusinessQueryHandler implements
             count = business.getBusinessMaterialList().size();
         }
 
-        return new GetBusiness.Response(business.getName(), business.getCreatedAt(),
+        return new GetBusinessWebDtoV1.Response(business.getName(), business.getCreatedAt(),
                 businessMaterials, count, business.getBusinessProgressList());
     }
 }

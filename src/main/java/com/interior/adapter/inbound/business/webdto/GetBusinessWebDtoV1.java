@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 
-public class GetBusiness {
+public class GetBusinessWebDtoV1 {
 
     public record Response(
             String businessName,
