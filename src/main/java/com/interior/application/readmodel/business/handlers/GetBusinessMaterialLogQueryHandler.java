@@ -1,5 +1,7 @@
-package com.interior.application.readmodel.business.temp;
+package com.interior.application.readmodel.business.handlers;
 
+import com.interior.abstraction.domain.IQueryHandler;
+import com.interior.application.readmodel.business.queries.GetBusinessMaterialLogQuery;
 import com.interior.domain.business.material.log.BusinessMaterialLog;
 import com.interior.domain.business.repository.BusinessRepository;
 import java.util.Comparator;
@@ -13,16 +15,22 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class BusinessQueryService {
+public class GetBusinessMaterialLogQueryHandler implements
+        IQueryHandler<GetBusinessMaterialLogQuery, List<BusinessMaterialLog>> {
 
     private final BusinessRepository businessRepository;
 
+    @Override
+    public boolean isQueryHandler() {
+        return true;
+    }
 
+    @Override
     @Transactional(readOnly = true)
-    public List<BusinessMaterialLog> getBusinessMaterialLog(final Long businessId) {
+    public List<BusinessMaterialLog> handle(final GetBusinessMaterialLogQuery query) {
 
         List<BusinessMaterialLog> businessMaterialLogList = businessRepository.findBusinessMaterialLogByBusinessId(
-                businessId);
+                query.businessId());
 
         return businessMaterialLogList.stream()
                 .sorted(Comparator.comparing(BusinessMaterialLog::getCreatedAt).reversed())

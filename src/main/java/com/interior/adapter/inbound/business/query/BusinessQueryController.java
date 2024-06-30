@@ -4,13 +4,17 @@ import com.interior.adapter.inbound.business.enumtypes.QueryType;
 import com.interior.adapter.inbound.business.webdto.GetBusiness;
 import com.interior.application.readmodel.business.dto.GetBusinessMaterialLogs;
 import com.interior.application.readmodel.business.handlers.GetAllBusinessesByUserQueryHandler;
+import com.interior.application.readmodel.business.handlers.GetBusinessMaterialLogQueryHandler;
 import com.interior.application.readmodel.business.handlers.GetBusinessQueryHandler;
 import com.interior.application.readmodel.business.handlers.GetBusinessesByCompanyIdQueryHandler;
 import com.interior.application.readmodel.business.handlers.GetExcelOfBusinessMaterialListQueryHandler;
+import com.interior.application.readmodel.business.handlers.GetExcelProgressInfoQueryHandler;
 import com.interior.application.readmodel.business.queries.GetAllBusinessesByUserQuery;
+import com.interior.application.readmodel.business.queries.GetBusinessMaterialLogQuery;
 import com.interior.application.readmodel.business.queries.GetBusinessQuery;
 import com.interior.application.readmodel.business.queries.GetBusinessesByCompanyIdQuery;
 import com.interior.application.readmodel.business.queries.GetExcelOfBusinessMaterialListQuery;
+import com.interior.application.readmodel.business.queries.GetExcelProgressInfoQuery;
 import com.interior.application.readmodel.business.temp.BusinessQueryService;
 import com.interior.domain.business.Business;
 import com.interior.domain.business.material.log.BusinessMaterialLog;
@@ -41,6 +45,8 @@ public class BusinessQueryController {
     private final GetAllBusinessesByUserQueryHandler getAllBusinessesByUserQueryHandler;
     private final GetBusinessesByCompanyIdQueryHandler getBusinessesByCompanyIdQueryHandler;
     private final GetExcelOfBusinessMaterialListQueryHandler getExcelOfBusinessMaterialListQueryHandler;
+    private final GetExcelProgressInfoQueryHandler getExcelProgressInfoQueryHandler;
+    private final GetBusinessMaterialLogQueryHandler getBusinessMaterialLogQueryHandler;
 
     // 특정 사업의 모든 재료 조회
     @GetMapping(value = "/api/businesses/{businessId}")
@@ -96,7 +102,7 @@ public class BusinessQueryController {
     public SseEmitter getExcelOfBusinessMaterialListProgressInfo(
             @PathVariable(value = "taskId") final String taskId
     ) {
-        return businessQueryService.getExcelProgressInfo(taskId);
+        return getExcelProgressInfoQueryHandler.handle(new GetExcelProgressInfoQuery(taskId));
     }
 
     // 재료 변경 로그 조회
@@ -104,7 +110,8 @@ public class BusinessQueryController {
     public ResponseEntity<List<GetBusinessMaterialLogs.Res>> getBusinessMaterialLogs(
             @PathVariable(value = "businessId") final Long businessId) {
 
-        List<BusinessMaterialLog> logList = businessQueryService.getBusinessMaterialLog(businessId);
+        List<BusinessMaterialLog> logList = getBusinessMaterialLogQueryHandler.handle(
+                new GetBusinessMaterialLogQuery(businessId));
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(logList.stream()
