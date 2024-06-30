@@ -40,7 +40,7 @@ public class SseService {
                     .name(taskId + " connect")
                     .data("connected"));
         } catch (IOException e) {
-            log.error("Error while connecting emitter for taskId: " + taskId, e);
+            log.error("[Err_msg] Error while connecting emitter for taskId: " + taskId, e);
             throw new RuntimeException(e);
         }
     }
@@ -60,7 +60,8 @@ public class SseService {
                         .data(data));
             }
         } catch (IOException e) {
-            log.error("Error while streaming data for taskId: " + taskId, e);
+            log.error("[Err_msg] Error while streaming data for taskId: " + taskId, e);
+            
             throw new RuntimeException(e);
         }
     }

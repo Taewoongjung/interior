@@ -78,7 +78,7 @@ public class AligoSmsService implements SmsService {
                     ));
                 }
             }, error -> {
-                log.error("휴대폰 ({}) 인증 sms 발송 실패 = {}", to, error.getMessage());
+                log.error("[Err_msg] 휴대폰 ({}) 인증 sms 발송 실패 = {}", to, error.toString());
 
                 eventPublisher.publishEvent(new SmsSendResultLogEvent(
                         senderPhoneNumber,
@@ -89,7 +89,7 @@ public class AligoSmsService implements SmsService {
             });
 
         } catch (Exception e) {
-            log.error("휴대폰 ({}) 인증 sms 발송 실패 = {}", to, e.getMessage());
+            log.error("[Err_msg] 휴대폰 ({}) 인증 sms 발송 실패 = {}", to, e.toString());
             eventPublisher.publishEvent(new SmsSendResultLogEvent(
                     senderPhoneNumber,
                     to,
@@ -109,7 +109,7 @@ public class AligoSmsService implements SmsService {
             });
 
         } catch (Exception e) {
-            log.error("로그 생성 전 파싱 에러 = {}", e.getMessage());
+            log.error("[Err_msg] 로그 생성 전 파싱 에러 = {}", e.toString());
         }
 
         return null;

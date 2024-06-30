@@ -94,8 +94,7 @@ public class KakaoAlimTalkByAligoService implements AlimTalkService {
             kakaoMsgTemplateRepository.syncToTemplateRegistered(result);
 
         }, error -> {
-            log.error("알림톡 템플릿 싱크 맞추는 중 에러");
-            log.error("Err_msg : {}", error.toString());
+            log.error("[Err_msg] 알림톡 템플릿 싱크 맞추는 중 에러 : {}", error.toString());
         });
     }
 
@@ -171,8 +170,8 @@ public class KakaoAlimTalkByAligoService implements AlimTalkService {
             }
 
         }, error -> {
-            log.error("알림톡 전송 에러 (템플릿코드: {})", template.getTemplateCode());
-            log.error("Err_msg : {}", error.toString());
+            log.error("[Err_msg] 알림톡 전송 에러 (템플릿코드: {}) : {}", template.getTemplateCode(),
+                    error.toString());
         });
     }
 
