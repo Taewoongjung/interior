@@ -15,7 +15,6 @@ import com.interior.application.readmodel.business.queries.GetBusinessQuery;
 import com.interior.application.readmodel.business.queries.GetBusinessesByCompanyIdQuery;
 import com.interior.application.readmodel.business.queries.GetExcelOfBusinessMaterialListQuery;
 import com.interior.application.readmodel.business.queries.GetExcelProgressInfoQuery;
-import com.interior.application.readmodel.business.temp.BusinessQueryService;
 import com.interior.domain.business.Business;
 import com.interior.domain.business.material.log.BusinessMaterialLog;
 import com.interior.domain.company.Company;
@@ -37,10 +36,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 @RestController
 @RequiredArgsConstructor
 public class BusinessQueryController {
-
-    private final BusinessQueryService businessQueryService;
-
-
+    
     private final GetBusinessQueryHandler getBusinessQueryHandler;
     private final GetAllBusinessesByUserQueryHandler getAllBusinessesByUserQueryHandler;
     private final GetBusinessesByCompanyIdQueryHandler getBusinessesByCompanyIdQueryHandler;

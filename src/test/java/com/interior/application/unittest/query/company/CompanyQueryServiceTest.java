@@ -5,7 +5,8 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.interior.application.readmodel.company.CompanyQueryService;
+import com.interior.application.readmodel.company.handlers.GetCompanyQueryHandler;
+import com.interior.application.readmodel.company.queries.GetCompanyQuery;
 import com.interior.domain.company.Company;
 import com.interior.domain.user.User;
 import com.interior.domain.user.UserRole;
@@ -18,7 +19,7 @@ class CompanyQueryServiceTest {
 
     private final UserRepository userRepository = mock(UserRepository.class);
 
-    private final CompanyQueryService sut = new CompanyQueryService(userRepository);
+    private final GetCompanyQueryHandler sut = new GetCompanyQueryHandler(userRepository);
 
     @Test
     @DisplayName("사업체 정보를 찾을 수 있다.")
@@ -43,7 +44,7 @@ class CompanyQueryServiceTest {
         when(userRepository.findByEmail(userEmail)).thenReturn(USER);
 
         // then
-        Company actual = sut.getCompany(userEmail, companyId);
+        Company actual = sut.handle(new GetCompanyQuery(userEmail, companyId));
         assertThat(actual).isNotNull();
         assertThat(actual.getId()).isEqualTo(1L);
         assertThat(actual.getName()).isEqualTo("TW");
@@ -78,7 +79,7 @@ class CompanyQueryServiceTest {
         when(userRepository.findByEmail(userEmail)).thenReturn(USER);
 
         // then
-        Company actual = sut.getCompany(userEmail, companyId);
+        Company actual = sut.handle(new GetCompanyQuery(userEmail, companyId));
         assertThat(actual).isNull();
     }
 }
