@@ -1,7 +1,6 @@
 package com.interior.application.readmodel.user;
 
 import static com.interior.adapter.common.exception.ErrorType.EMPTY_VERIFY_NUMBER;
-import static com.interior.adapter.common.exception.ErrorType.EXPIRED_ACCESS_TOKEN;
 import static com.interior.adapter.common.exception.ErrorType.EXPIRED_EMAIL_CHECK_REQUEST;
 import static com.interior.adapter.common.exception.ErrorType.EXPIRED_PHONE_CHECK_REQUEST;
 import static com.interior.adapter.common.exception.ErrorType.INVALID_EMAIL_CHECK_NUMBER;
@@ -9,18 +8,14 @@ import static com.interior.adapter.common.exception.ErrorType.INVALID_PHONE_CHEC
 import static com.interior.adapter.common.exception.ErrorType.NOT_6DIGIT_VERIFY_NUMBER;
 import static com.interior.util.CheckUtil.check;
 
-import com.interior.adapter.config.security.jwt.JWTUtil;
 import com.interior.adapter.outbound.cache.redis.email.CacheEmailValidationRedisRepository;
 import com.interior.adapter.outbound.cache.redis.sms.CacheSmsValidationRedisRepository;
-import com.interior.domain.user.User;
-import com.interior.domain.user.repository.UserRepository;
 import jakarta.validation.ValidationException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,26 +24,9 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserQueryService {
 
-    private final JWTUtil jwtUtil;
-    private final UserRepository userRepository;
     private final CacheSmsValidationRedisRepository cacheSmsValidationRedisRepository;
     private final CacheEmailValidationRedisRepository cacheEmailValidationRedisRepository;
 
-    @Transactional(readOnly = true)
-    public User loadUserByToken(final String reqToken) throws UsernameNotFoundException {
-
-        String token = jwtUtil.getTokenWithoutBearer(reqToken);
-
-        check(jwtUtil.isExpired(token), EXPIRED_ACCESS_TOKEN);
-
-        User user = userRepository.findByEmail(jwtUtil.getEmail(token));
-
-        if (user != null) {
-            return user;
-        }
-
-        return null;
-    }
 
     private void validateIfOverDurationOfValidation(
             final LocalDateTime target, final String type
