@@ -1,6 +1,6 @@
 package com.interior.adapter.inbound.company.query;
 
-import com.interior.adapter.inbound.company.webdto.GetCompanyDto.GetCompanyResDto;
+import com.interior.adapter.inbound.company.webdto.GetCompanyWebDtoV1;
 import com.interior.application.readmodel.company.handlers.GetCompanyQueryHandler;
 import com.interior.application.readmodel.company.queries.GetCompanyQuery;
 import com.interior.domain.user.User;
@@ -20,13 +20,13 @@ public class CompanyQueryController {
 
     // 특정 사업체 조회
     @GetMapping(value = "/api/companies/{companyId}")
-    public ResponseEntity<GetCompanyResDto> getCompany(
+    public ResponseEntity<GetCompanyWebDtoV1.Res> getCompany(
             @AuthenticationPrincipal final User user,
             @PathVariable("companyId") final Long companyId
     ) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(
-                        new GetCompanyResDto(
+                        new GetCompanyWebDtoV1.Res(
                                 user.getName(),
                                 getCompanyQueryHandler.handle(
                                         new GetCompanyQuery(user.getEmail(), companyId)))

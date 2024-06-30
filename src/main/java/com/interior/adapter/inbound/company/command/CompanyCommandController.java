@@ -1,6 +1,6 @@
 package com.interior.adapter.inbound.company.command;
 
-import com.interior.adapter.inbound.company.webdto.CreateCompanyDto;
+import com.interior.adapter.inbound.company.webdto.CreateCompanyWebDtoV1;
 import com.interior.application.command.company.CompanyCommandService;
 import com.interior.application.command.company.dto.CreateCompanyServiceDto;
 import com.interior.domain.user.User;
@@ -25,7 +25,7 @@ public class CompanyCommandController {
     // 사업체 추가
     @PostMapping(value = "/api/companies")
     public ResponseEntity<Boolean> createCompany(
-            @Valid @RequestBody final CreateCompanyDto.CreateCompanyReqDto req,
+            @Valid @RequestBody final CreateCompanyWebDtoV1.Req req,
             @AuthenticationPrincipal final User user
     ) {
         return ResponseEntity.status(HttpStatus.OK).body(

@@ -1,12 +1,13 @@
 package com.interior.adapter.inbound.company.webdto;
 
 import com.interior.domain.company.Company;
-import com.interior.domain.user.User;
 
-public class GetCompanyDto {
+public class GetCompanyWebDtoV1 {
 
-    public record GetCompanyResDto(
+    public record Res(
             String userName,
             Company company
-    ) { }
+    ) {
+
+    }
 }
