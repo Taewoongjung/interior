@@ -40,7 +40,7 @@ public class SendEmailValidationMailCommandHandler implements
             log.info("SendEmailValidationMailCommand executed successfully");
 
         } catch (Exception e) {
-            log.error("SendEmailValidationMailCommand error occurred = {}", e.toString());
+            log.error("[Err_msg] SendEmailValidationMailCommand error occurred = {}", e.toString());
 
             eventPublisher.publishEvent(
                     new ErrorAlarm("SendEmailValidationMailCommand", e.toString()));

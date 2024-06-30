@@ -116,7 +116,7 @@ public class SmsSendResult {
             }
 
         } catch (Exception e) {
-            log.error("SmsSendResult 객체 생성 중 json 파싱 실패 : {}", e.getMessage());
+            log.error("[Err_msg] SmsSendResult 객체 생성 중 json 파싱 실패 : {}", e.toString());
         }
 
         check(smsSendResult == null, NOT_EXIST_SMS_SEND_RESULT);

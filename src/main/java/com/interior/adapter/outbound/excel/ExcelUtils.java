@@ -42,30 +42,40 @@ public class ExcelUtils {
 
             for (int start = 0; start < listSize; start += MAX_ROW) {
                 int nextPage = MAX_ROW * loop;
-                if (nextPage > listSize) nextPage = listSize - 1;
+                if (nextPage > listSize) {
+                    nextPage = listSize - 1;
+                }
                 List<?> list = new ArrayList<>(data.subList(start, nextPage));
                 getWorkBook(clazz, workbook, start, findHeaderNames(clazz), list, listSize);
                 list.clear();
                 loop++;
             }
 
-            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-            response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(fileName) + ".xlsx");
+            response.setContentType(
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            response.setHeader("Content-Disposition",
+                    "attachment; filename=" + URLEncoder.encode(fileName) + ".xlsx");
 
             ServletOutputStream outputStream = response.getOutputStream();
             workbook.write(outputStream);
             outputStream.flush();
             outputStream.close();
         } catch (IOException | IllegalAccessException e) {
-            log.error("Excel Download Error Message = {}", e.getMessage());
+            log.error("[Err_msg] Excel Download Error Message = {}", e.toString());
+            
             throw new RuntimeException(e);
         }
     }
-    private SXSSFWorkbook getWorkBook(Class<?> clazz, SXSSFWorkbook workbook, int rowIdx, List<String> headerNames, List<?> data, int maxSize) throws IllegalAccessException, IOException {
+
+    private SXSSFWorkbook getWorkBook(Class<?> clazz, SXSSFWorkbook workbook, int rowIdx,
+            List<String> headerNames, List<?> data, int maxSize)
+            throws IllegalAccessException, IOException {
         // 각 시트 당 MAX_ROW 개씩
         String sheetName = "Sheet" + (rowIdx / MAX_ROW + 1);
 
-        Sheet sheet = ObjectUtils.isEmpty(workbook.getSheet(sheetName)) ? workbook.createSheet(sheetName) : workbook.getSheet(sheetName);
+        Sheet sheet =
+                ObjectUtils.isEmpty(workbook.getSheet(sheetName)) ? workbook.createSheet(sheetName)
+                        : workbook.getSheet(sheetName);
         sheet.setDefaultColumnWidth((short) 300);   // 디폴트 너비 설정
         sheet.setDefaultRowHeight((short) 500);     // 디폴트 높이 설정
 
@@ -85,7 +95,8 @@ public class ExcelUtils {
         return workbook;
     }
 
-    private void createHeaders(SXSSFWorkbook workbook, Row row, Cell cell, List<String> headerNames) {
+    private void createHeaders(SXSSFWorkbook workbook, Row row, Cell cell,
+            List<String> headerNames) {
         /**
          * header font style
          */
@@ -117,7 +128,8 @@ public class ExcelUtils {
         }
     }
 
-    private void createBody(Class<?> clazz, List<?> data, Sheet sheet, Row row, Cell cell, int rowNo) throws IllegalAccessException, IOException {
+    private void createBody(Class<?> clazz, List<?> data, Sheet sheet, Row row, Cell cell,
+            int rowNo) throws IllegalAccessException, IOException {
         int startRow = 0;
         for (Object o : data) {
             List<Object> fields = findFieldValue(clazz, o);
