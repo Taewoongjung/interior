@@ -4,9 +4,9 @@ import com.interior.domain.user.UserRole;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 
-public class SignUpDto {
+public class SignUpDtoWebDtoV1 {
 
-    public record SignUpReqDto(
+    public record Req(
             @NotNull
             String name,
 
@@ -22,7 +22,11 @@ public class SignUpDto {
 
             @NotNull
             UserRole role
-    ) {}
-    
-    public record SignUpResDto(Boolean isSuccess, String SignedUpUserName) {}
+    ) {
+
+    }
+
+    public record Res(Boolean isSuccess, String SignedUpUserName) {
+
+    }
 }

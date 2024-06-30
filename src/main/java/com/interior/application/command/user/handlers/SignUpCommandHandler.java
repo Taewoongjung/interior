@@ -1,17 +1,15 @@
-package com.interior.application.command.user;
+package com.interior.application.command.user.handlers;
 
 import static com.interior.adapter.common.exception.ErrorType.NOT_VERIFIED_PHONE;
 import static com.interior.util.CheckUtil.check;
 
-import com.interior.adapter.inbound.user.webdto.SignUpDto.SignUpReqDto;
-import com.interior.adapter.inbound.user.webdto.SignUpDto.SignUpResDto;
+import com.interior.abstraction.domain.ICommandHandler;
 import com.interior.adapter.outbound.alarm.dto.event.NewUserAlarm;
 import com.interior.adapter.outbound.alimtalk.AlimTalkService;
 import com.interior.adapter.outbound.alimtalk.dto.SendAlimTalk;
 import com.interior.adapter.outbound.cache.redis.dto.common.TearDownBucketByKey;
 import com.interior.adapter.outbound.cache.redis.sms.CacheSmsValidationRedisRepository;
-import com.interior.application.command.util.email.EmailService;
-import com.interior.application.command.util.sms.SmsUtilService;
+import com.interior.application.command.user.commands.SignUpCommand;
 import com.interior.domain.alimtalk.kakaomsgtemplate.KakaoMsgTemplateType;
 import com.interior.domain.user.User;
 import com.interior.domain.user.repository.UserRepository;
@@ -26,18 +24,23 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserCommandService {
+public class SignUpCommandHandler implements ICommandHandler<SignUpCommand, String> {
 
-    private final EmailService emailService;
-    private final SmsUtilService smsUtilService;
     private final UserRepository userRepository;
     private final AlimTalkService alimTalkService;
     private final ApplicationEventPublisher eventPublisher;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final CacheSmsValidationRedisRepository cacheSmsValidationRedisRepository;
 
+    @Override
+    public boolean isCommandHandler() {
+        return true;
+    }
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
-    public SignUpResDto signUp(final SignUpReqDto req) {
+    public String handle(final SignUpCommand req) {
+        log.info("execute SignUpCommand");
 
         userRepository.checkIfExistUserByEmail(req.email());
 
@@ -68,26 +71,11 @@ public class UserCommandService {
                     new SendAlimTalk(KakaoMsgTemplateType.COMPLETE_SIGNUP, req.tel(), req.name(),
                             null, null, null));
 
-            return new SignUpResDto(true, newUser.getName());
+            log.info("SignUpCommand executed successfully");
+
+            return newUser.getName();
         }
 
-        return new SignUpResDto(false, null);
-    }
-
-    @Transactional
-    public void sendEmailValidationMail(final String targetEmail) throws Exception {
-
-        // 존재하는 이메일인지 검증
-        userRepository.checkIfExistUserByEmail(targetEmail);
-
-        emailService.sendEmailValidationCheck(targetEmail);
-    }
-
-    @Transactional
-    public void sendPhoneValidationSms(final String targetPhoneNumber) throws Exception {
-        // 존재하는 휴대폰 번호 인지 검증
-        userRepository.checkIfExistUserByPhoneNumber(targetPhoneNumber);
-
-        smsUtilService.sendPhoneValidationSms(targetPhoneNumber);
+        return null;
     }
 }

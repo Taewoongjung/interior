@@ -20,8 +20,6 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,25 +27,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserQueryService implements UserDetailsService {
+public class UserQueryService {
 
     private final JWTUtil jwtUtil;
     private final UserRepository userRepository;
     private final CacheSmsValidationRedisRepository cacheSmsValidationRedisRepository;
     private final CacheEmailValidationRedisRepository cacheEmailValidationRedisRepository;
-
-    @Override
-    @Transactional(readOnly = true)
-    public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
-
-        User user = userRepository.findByEmail(email);
-
-        if (user != null) {
-            return user;
-        }
-
-        return null;
-    }
 
     @Transactional(readOnly = true)
     public User loadUserByToken(final String reqToken) throws UsernameNotFoundException {
@@ -61,6 +46,7 @@ public class UserQueryService implements UserDetailsService {
         if (user != null) {
             return user;
         }
+
         return null;
     }
 

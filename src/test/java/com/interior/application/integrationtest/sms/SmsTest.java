@@ -2,8 +2,8 @@ package com.interior.application.integrationtest.sms;
 
 import static java.lang.Thread.sleep;
 
-import com.interior.application.command.user.UserCommandService;
-import com.interior.application.command.util.sms.SmsUtilService;
+import com.interior.application.command.user.commands.SendPhoneValidationSmsCommand;
+import com.interior.application.command.user.handlers.SendPhoneValidationSmsCommandHandler;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
 public class SmsTest {
 
     @Autowired
-    private UserCommandService userCommandService;
-
-    @Autowired
-    private SmsUtilService smsUtilService;
+    private SendPhoneValidationSmsCommandHandler sendPhoneValidationSmsCommandHandler;
 
     @Test
     void test1() throws Exception {
@@ -33,7 +30,7 @@ public class SmsTest {
 
         for (int i = 0; i < 4; i++) {
 
-            userCommandService.sendPhoneValidationSms(aa[i]);
+            sendPhoneValidationSmsCommandHandler.handle(new SendPhoneValidationSmsCommand(aa[i]));
             System.out.println(i + " 번째 {" + aa[i] + "}");
         }
         sleep(1000);
@@ -48,7 +45,7 @@ public class SmsTest {
 
         for (int i = 0; i < 1; i++) {
 
-            userCommandService.sendPhoneValidationSms(aa[i]);
+            sendPhoneValidationSmsCommandHandler.handle(new SendPhoneValidationSmsCommand(aa[i]));
             System.out.println(i + " 번째 {" + aa[i] + "}");
         }
 
@@ -56,7 +53,7 @@ public class SmsTest {
     }
 
     @Test
-    void test3() throws Exception {
+    void test3() {
 
         String[] aa = new String[4];
 
@@ -64,7 +61,7 @@ public class SmsTest {
 
         for (int i = 0; i < 1; i++) {
 
-            userCommandService.sendPhoneValidationSms(aa[i]);
+            sendPhoneValidationSmsCommandHandler.handle(new SendPhoneValidationSmsCommand(aa[i]));
             System.out.println(i + " 번째 {" + aa[i] + "}");
         }
     }
