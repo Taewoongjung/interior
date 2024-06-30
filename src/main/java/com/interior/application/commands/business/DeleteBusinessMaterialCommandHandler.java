@@ -27,6 +27,7 @@ public class DeleteBusinessMaterialCommandHandler implements
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean handle(final DeleteBusinessMaterialCommand command) {
+        log.info("execute DeleteBusinessMaterialCommand");
 
         if (businessRepository.deleteBusinessMaterial(command.businessId(), command.materialId())) {
 
@@ -38,6 +39,8 @@ public class DeleteBusinessMaterialCommandHandler implements
                             command.user().getId()
                     ));
         }
+
+        log.info("DeleteBusinessMaterialCommand executed successfully");
 
         return true;
     }

@@ -56,6 +56,8 @@ public class CreateBusinessMaterialCommandHandler implements
                             command.req().name()));
         }
 
+        log.info("CreateBusinessCommand executed successfully");
+
         return true;
     }
 }
