@@ -1,4 +1,4 @@
-package com.interior.application.queries.user;
+package com.interior.application.readmodel.queries.user;
 
 import static com.interior.adapter.common.exception.ErrorType.EMPTY_VERIFY_NUMBER;
 import static com.interior.adapter.common.exception.ErrorType.EXPIRED_ACCESS_TOKEN;

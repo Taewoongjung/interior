@@ -1,4 +1,4 @@
-package com.interior.application.queries.business;
+package com.interior.application.readmodel.queries.business;
 
 import static java.util.stream.Collectors.groupingBy;
 
@@ -8,7 +8,7 @@ import com.interior.adapter.outbound.cache.redis.excel.CacheExcelRedisRepository
 import com.interior.adapter.outbound.excel.BusinessListExcel;
 import com.interior.adapter.outbound.excel.BusinessMaterialExcelDownload;
 import com.interior.adapter.outbound.jpa.querydsl.BusinessDao;
-import com.interior.application.queries.utill.sse.SseService;
+import com.interior.application.readmodel.queries.utill.sse.SseService;
 import com.interior.domain.business.Business;
 import com.interior.domain.business.material.BusinessMaterial;
 import com.interior.domain.business.material.log.BusinessMaterialLog;

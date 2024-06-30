@@ -1,4 +1,4 @@
-package com.interior.application.queries.business.dto;
+package com.interior.application.readmodel.queries.business.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
