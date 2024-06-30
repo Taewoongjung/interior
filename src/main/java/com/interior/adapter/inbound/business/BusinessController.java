@@ -9,9 +9,13 @@ import com.interior.adapter.inbound.business.webdto.ReviseBusinessMaterialWebDto
 import com.interior.adapter.inbound.business.webdto.ReviseUsageCategoryOfMaterial;
 import com.interior.adapter.inbound.business.webdto.SendQuotationDraftToClient;
 import com.interior.adapter.inbound.business.webdto.UpdateBusinessProgressWebDtoV1;
-import com.interior.application.commands.business.BusinessCommandService;
+import com.interior.application.commands.business.CreateBusinessCommandHandler;
+import com.interior.application.commands.business.CreateBusinessMaterialCommandHandler;
+import com.interior.application.commands.business.dto.CreateBusinessCommand;
+import com.interior.application.commands.business.dto.CreateBusinessMaterialCommand;
 import com.interior.application.commands.business.dto.CreateBusinessServiceDto.CreateBusinessMaterialDto;
 import com.interior.application.commands.business.dto.ReviseBusinessServiceDto;
+import com.interior.application.commands.business.temp.BusinessCommandService;
 import com.interior.application.readmodel.queries.business.BusinessQueryService;
 import com.interior.application.readmodel.queries.business.dto.GetBusinessMaterialLogs;
 import com.interior.domain.business.Business;
@@ -44,6 +48,9 @@ public class BusinessController {
     private final BusinessQueryService businessQueryService;
     private final BusinessCommandService businessCommandService;
 
+    private final CreateBusinessCommandHandler createBusinessCommandHandler;
+    private final CreateBusinessMaterialCommandHandler createBusinessMaterialCommandHandler;
+
     // 사업 추가
     @PostMapping(value = "/api/companies/{companyId}/businesses")
     public ResponseEntity<CreateBusinessWebDtoV1.Res> createBusiness(
@@ -55,7 +62,8 @@ public class BusinessController {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new CreateBusinessWebDtoV1.Res(
                         true,
-                        businessCommandService.createBusiness(companyId, req, user)
+                        createBusinessCommandHandler.handle(
+                                new CreateBusinessCommand(companyId, req, user))
                 ));
     }
 
@@ -68,19 +76,21 @@ public class BusinessController {
     ) {
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(businessCommandService.createBusinessMaterial(
-                        businessId,
-                        new CreateBusinessMaterialDto(
-                                req.materialName(),
-                                req.materialUsageCategory(),
-                                req.materialCategory(),
-                                req.materialAmount(),
-                                req.materialAmountUnit(),
-                                req.materialMemo(),
-                                req.materialCostPerUnit(),
-                                req.laborCostPerUnit()
-                        ),
-                        user
+                .body(createBusinessMaterialCommandHandler.handle(
+                        new CreateBusinessMaterialCommand(
+                                businessId,
+                                new CreateBusinessMaterialDto(
+                                        req.materialName(),
+                                        req.materialUsageCategory(),
+                                        req.materialCategory(),
+                                        req.materialAmount(),
+                                        req.materialAmountUnit(),
+                                        req.materialMemo(),
+                                        req.materialCostPerUnit(),
+                                        req.laborCostPerUnit()
+                                ),
+                                user
+                        )
                 ));
     }
 
