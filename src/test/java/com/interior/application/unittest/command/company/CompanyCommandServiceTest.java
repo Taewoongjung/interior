@@ -11,8 +11,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.interior.adapter.common.exception.InvalidInputException;
-import com.interior.application.command.company.CompanyCommandService;
-import com.interior.application.command.company.dto.CreateCompanyServiceDto;
+import com.interior.application.command.company.commands.CreateCompanyCommand;
+import com.interior.application.command.company.handlers.CreateCompanyCommandHandler;
 import com.interior.domain.company.Company;
 import com.interior.domain.company.repository.CompanyRepository;
 import com.interior.domain.user.User;
@@ -27,23 +27,14 @@ class CompanyCommandServiceTest {
     private final CompanyRepository companyRepository = mock(CompanyRepository.class);
     private final ApplicationEventPublisher eventPublisher = mock(ApplicationEventPublisher.class);
 
-    private final CompanyCommandService sut = new CompanyCommandService(companyRepository,
-            eventPublisher);
+    private final CreateCompanyCommandHandler sut = new CreateCompanyCommandHandler(
+            companyRepository, eventPublisher);
 
     @Test
     @DisplayName("사업체를 추가할 수 있다.")
     void test1() {
 
         // given
-        final CreateCompanyServiceDto.CreateCompanyDto req = new CreateCompanyServiceDto.CreateCompanyDto(
-                "TW 주식회사",
-                "한남대로",
-                "한남대로 12",
-                "101동 2202호",
-                "4215034022000820008042329",
-                "01088257754"
-        );
-
         final User user = User.of(
                 10L,
                 "홍길동",
@@ -56,11 +47,20 @@ class CompanyCommandServiceTest {
                 COMPANY_LIST()
         );
 
+        final CreateCompanyCommand req = new CreateCompanyCommand(
+                user,
+                "TW 주식회사",
+                "한남대로",
+                "한남대로 12",
+                "101동 2202호",
+                "4215034022000820008042329",
+                "01088257754");
+
         // when
         when(companyRepository.save(anyString(), any(Company.class))).thenReturn(true);
 
         // then
-        boolean actual = sut.createCompany(user, req);
+        boolean actual = sut.handle(req);
 
         assertThat(actual).isTrue();
     }
@@ -70,15 +70,6 @@ class CompanyCommandServiceTest {
     void test2() {
 
         // given
-        final CreateCompanyServiceDto.CreateCompanyDto req = new CreateCompanyServiceDto.CreateCompanyDto(
-                "TW 주식회사",
-                "한남대로",
-                "한남대로 12",
-                "101동 2202호",
-                "4215034022000820008042329",
-                "01088257754"
-        );
-
         final User user = User.of(
                 10L,
                 "홍길동",
@@ -91,11 +82,20 @@ class CompanyCommandServiceTest {
                 COMPANY_LIST()
         );
 
+        final CreateCompanyCommand req = new CreateCompanyCommand(
+                user,
+                "TW 주식회사",
+                "한남대로",
+                "한남대로 12",
+                "101동 2202호",
+                "4215034022000820008042329",
+                "01088257754");
+
         // when
         when(companyRepository.save(anyString(), any(Company.class))).thenReturn(false);
 
         // then
-        boolean actual = sut.createCompany(user, req);
+        boolean actual = sut.handle(req);
 
         assertThat(actual).isFalse();
     }
@@ -105,15 +105,6 @@ class CompanyCommandServiceTest {
     void test3() {
 
         // given
-        final CreateCompanyServiceDto.CreateCompanyDto req = new CreateCompanyServiceDto.CreateCompanyDto(
-                "TW 주식회사",
-                "한남대로",
-                "한남대로 12",
-                "101동 2202호",
-                "4215034022000820008042329",
-                "01088257754"
-        );
-
         final User user = User.of(
                 10L,
                 "홍길동",
@@ -126,10 +117,18 @@ class CompanyCommandServiceTest {
                 COMPANY_LIST_OVER_5()
         );
 
+        final CreateCompanyCommand req = new CreateCompanyCommand(
+                user,
+                "TW 주식회사",
+                "한남대로",
+                "한남대로 12",
+                "101동 2202호",
+                "4215034022000820008042329",
+                "01088257754");
+
         // when
         // then
-        assertThrows(InvalidInputException.class,
-                () -> sut.createCompany(user, req),
+        assertThrows(InvalidInputException.class, () -> sut.handle(req),
                 LIMIT_OF_COMPANY_COUNT_IS_FIVE.getMessage());
     }
 }

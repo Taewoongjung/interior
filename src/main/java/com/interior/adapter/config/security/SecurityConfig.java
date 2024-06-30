@@ -3,8 +3,10 @@ package com.interior.adapter.config.security;
 import com.interior.adapter.config.security.jwt.JWTFilter;
 import com.interior.adapter.config.security.jwt.JWTUtil;
 import com.interior.adapter.config.security.jwt.LoginFilter;
-import com.interior.application.query.user.UserQueryService;
+import com.interior.application.readmodel.user.handlers.LoadUserByUsernameQueryHandler;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -22,15 +24,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
-import java.util.Arrays;
-import java.util.Collections;
-
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final UserQueryService userQueryService;
+    private final LoadUserByUsernameQueryHandler loadUserByUsernameQueryHandler;
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTUtil jwtUtil;
 
@@ -106,7 +105,8 @@ public class SecurityConfig {
                         .requestMatchers("/admin").hasRole("CUSTOMER")
                         .requestMatchers("/login").permitAll()
                         .anyRequest().authenticated())
-                .addFilterBefore(new JWTFilter(jwtUtil, userQueryService), LoginFilter.class)
+                .addFilterBefore(new JWTFilter(jwtUtil, loadUserByUsernameQueryHandler),
+                        LoginFilter.class)
 
                 // 로그인 필터 앞에서 JWTFilter 검증
                 .addFilterAt(

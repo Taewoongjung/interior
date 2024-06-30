@@ -1,5 +1,13 @@
 package com.interior.adapter.outbound.jpa.repository.business;
 
+import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_BUSINESS;
+import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_BUSINESS_MATERIAL;
+import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_COMPANY;
+import static com.interior.util.CheckUtil.check;
+import static com.interior.util.converter.jpa.business.BusinessEntityConverter.businessLogToEntity;
+import static com.interior.util.converter.jpa.business.BusinessEntityConverter.businessMaterialLogToEntity;
+import static com.interior.util.converter.jpa.business.BusinessEntityConverter.businessMaterialToEntity;
+
 import com.interior.adapter.inbound.business.enumtypes.QueryType;
 import com.interior.adapter.outbound.jpa.entity.business.BusinessEntity;
 import com.interior.adapter.outbound.jpa.entity.business.expense.BusinessMaterialExpenseEntity;
@@ -8,7 +16,6 @@ import com.interior.adapter.outbound.jpa.entity.business.material.log.BusinessMa
 import com.interior.adapter.outbound.jpa.entity.company.CompanyEntity;
 import com.interior.adapter.outbound.jpa.repository.business.dto.ReviseBusinessMaterial;
 import com.interior.adapter.outbound.jpa.repository.company.CompanyJpaRepository;
-import com.interior.application.command.business.dto.ReviseBusinessServiceDto;
 import com.interior.domain.business.Business;
 import com.interior.domain.business.log.BusinessLog;
 import com.interior.domain.business.material.BusinessMaterial;
@@ -18,19 +25,14 @@ import com.interior.domain.business.repository.BusinessRepository;
 import com.interior.domain.business.repository.dto.CreateBusiness;
 import com.interior.domain.business.repository.dto.CreateBusinessMaterial;
 import com.interior.domain.util.BoolType;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
-
-import static com.interior.adapter.common.exception.ErrorType.*;
-import static com.interior.util.CheckUtil.check;
-import static com.interior.util.converter.jpa.business.BusinessEntityConverter.*;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Repository
@@ -93,7 +95,7 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
     @Override
     @Transactional(readOnly = true)
     public Business findBusinessByCompanyIdAndBusinessId(final Long companyId,
-                                                         final Long businessId) {
+            final Long businessId) {
 
         BusinessEntity businessEntities = businessJpaRepository.findBusinessEntityByCompanyIdAndId(
                 companyId, businessId);
@@ -201,12 +203,12 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
     @Override
     @Transactional
     public boolean reviseBusiness(final Long companyId, final Long businessId,
-                                  final ReviseBusinessServiceDto.Req req) {
+            final String changeBusinessName) {
 
         CompanyEntity company = companyJpaRepository.findById(companyId)
                 .orElseThrow(() -> new NoSuchElementException(NOT_EXIST_COMPANY.getMessage()));
 
-        company.reviseBusiness(businessId, req);
+        company.reviseBusiness(businessId, changeBusinessName);
 
         companyJpaRepository.save(company);
 

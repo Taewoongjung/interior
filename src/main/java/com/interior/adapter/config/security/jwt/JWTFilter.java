@@ -1,6 +1,6 @@
 package com.interior.adapter.config.security.jwt;
 
-import com.interior.application.query.user.UserQueryService;
+import com.interior.application.readmodel.user.handlers.LoadUserByUsernameQueryHandler;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -21,7 +21,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class JWTFilter extends OncePerRequestFilter {
 
     private final JWTUtil jwtUtil;
-    private final UserQueryService userQueryService;
+    private final LoadUserByUsernameQueryHandler loadUserByUsernameQueryHandler;
 
     private static final AntPathMatcher antPathMatcher = new AntPathMatcher();
     private static final String[] EXCLUDED_PATH = {
@@ -76,7 +76,7 @@ public class JWTFilter extends OncePerRequestFilter {
         String email = jwtUtil.getEmail(token);
 
         // 토큰으로 User 객체 생성
-        UserDetails user = userQueryService.loadUserByUsername(email);
+        UserDetails user = loadUserByUsernameQueryHandler.loadUserByUsername(email);
 
         // 스프링 시큐리티 인증 토큰 생성
         Authentication authToken = new UsernamePasswordAuthenticationToken(user, null,
