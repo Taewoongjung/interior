@@ -13,11 +13,13 @@ import com.interior.application.commands.business.CreateBusinessCommandHandler;
 import com.interior.application.commands.business.CreateBusinessMaterialCommandHandler;
 import com.interior.application.commands.business.DeleteBusinessCommandHandler;
 import com.interior.application.commands.business.DeleteBusinessMaterialCommandHandler;
+import com.interior.application.commands.business.ReviseBusinessCommandHandler;
 import com.interior.application.commands.business.dto.CreateBusinessCommand;
 import com.interior.application.commands.business.dto.CreateBusinessMaterialCommand;
 import com.interior.application.commands.business.dto.CreateBusinessServiceDto.CreateBusinessMaterialDto;
 import com.interior.application.commands.business.dto.DeleteBusinessCommand;
 import com.interior.application.commands.business.dto.DeleteBusinessMaterialCommand;
+import com.interior.application.commands.business.dto.ReviseBusinessCommand;
 import com.interior.application.commands.business.dto.ReviseBusinessServiceDto;
 import com.interior.application.commands.business.temp.BusinessCommandService;
 import com.interior.application.readmodel.queries.business.BusinessQueryService;
@@ -56,6 +58,7 @@ public class BusinessController {
     private final CreateBusinessMaterialCommandHandler createBusinessMaterialCommandHandler;
     private final DeleteBusinessMaterialCommandHandler deleteBusinessMaterialCommandHandler;
     private final DeleteBusinessCommandHandler deleteBusinessCommandHandler;
+    private final ReviseBusinessCommandHandler reviseBusinessCommandHandler;
 
     // 사업 추가
     @PostMapping(value = "/api/companies/{companyId}/businesses")
@@ -193,14 +196,16 @@ public class BusinessController {
             @AuthenticationPrincipal final User user
     ) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(businessCommandService.reviseBusiness(
-                        companyId,
-                        businessId,
-                        new ReviseBusinessServiceDto.Req(
-                                req.changeBusinessName()
-                        ),
-                        user
-                ));
+                .body(reviseBusinessCommandHandler.handle(
+                        new ReviseBusinessCommand(
+                                companyId,
+                                businessId,
+                                new ReviseBusinessServiceDto.Req(
+                                        req.changeBusinessName()
+                                ),
+                                user
+                        ))
+                );
     }
 
     // 회사의 사업 리스트 엑셀 다운로드
