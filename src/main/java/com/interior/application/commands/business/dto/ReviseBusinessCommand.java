@@ -5,7 +5,7 @@ import com.interior.domain.user.User;
 
 public record ReviseBusinessCommand(Long companyId,
                                     Long businessId,
-                                    ReviseBusinessServiceDto.Req req,
+                                    String changeBusinessName,
                                     User user)
         implements ICommand {
 

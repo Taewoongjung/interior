@@ -20,16 +20,13 @@ import com.interior.application.commands.business.SendQuotationDraftToClientComm
 import com.interior.application.commands.business.UpdateBusinessProgressCommandHandler;
 import com.interior.application.commands.business.dto.CreateBusinessCommand;
 import com.interior.application.commands.business.dto.CreateBusinessMaterialCommand;
-import com.interior.application.commands.business.dto.CreateBusinessServiceDto.CreateBusinessMaterialDto;
 import com.interior.application.commands.business.dto.DeleteBusinessCommand;
 import com.interior.application.commands.business.dto.DeleteBusinessMaterialCommand;
 import com.interior.application.commands.business.dto.ReviseBusinessCommand;
-import com.interior.application.commands.business.dto.ReviseBusinessServiceDto;
 import com.interior.application.commands.business.dto.ReviseMaterialCommand;
 import com.interior.application.commands.business.dto.ReviseUsageCategoryOfMaterialCommand;
 import com.interior.application.commands.business.dto.SendQuotationDraftToClientCommand;
 import com.interior.application.commands.business.dto.UpdateBusinessProgressCommand;
-import com.interior.application.commands.business.temp.BusinessCommandService;
 import com.interior.application.readmodel.queries.business.BusinessQueryService;
 import com.interior.application.readmodel.queries.business.dto.GetBusinessMaterialLogs;
 import com.interior.domain.business.Business;
@@ -60,7 +57,6 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 public class BusinessController {
 
     private final BusinessQueryService businessQueryService;
-    private final BusinessCommandService businessCommandService;
 
     private final CreateBusinessCommandHandler createBusinessCommandHandler;
     private final CreateBusinessMaterialCommandHandler createBusinessMaterialCommandHandler;
@@ -100,16 +96,14 @@ public class BusinessController {
                 .body(createBusinessMaterialCommandHandler.handle(
                         new CreateBusinessMaterialCommand(
                                 businessId,
-                                new CreateBusinessMaterialDto(
-                                        req.materialName(),
-                                        req.materialUsageCategory(),
-                                        req.materialCategory(),
-                                        req.materialAmount(),
-                                        req.materialAmountUnit(),
-                                        req.materialMemo(),
-                                        req.materialCostPerUnit(),
-                                        req.laborCostPerUnit()
-                                ),
+                                req.materialName(),
+                                req.materialUsageCategory(),
+                                req.materialCategory(),
+                                req.materialAmount(),
+                                req.materialAmountUnit(),
+                                req.materialMemo(),
+                                req.materialCostPerUnit(),
+                                req.laborCostPerUnit(),
                                 user
                         )
                 ));
@@ -216,9 +210,7 @@ public class BusinessController {
                         new ReviseBusinessCommand(
                                 companyId,
                                 businessId,
-                                new ReviseBusinessServiceDto.Req(
-                                        req.changeBusinessName()
-                                ),
+                                req.changeBusinessName(),
                                 user
                         ))
                 );

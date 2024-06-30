@@ -16,7 +16,6 @@ import com.interior.adapter.outbound.jpa.entity.business.material.log.BusinessMa
 import com.interior.adapter.outbound.jpa.entity.company.CompanyEntity;
 import com.interior.adapter.outbound.jpa.repository.business.dto.ReviseBusinessMaterial;
 import com.interior.adapter.outbound.jpa.repository.company.CompanyJpaRepository;
-import com.interior.application.commands.business.dto.ReviseBusinessServiceDto;
 import com.interior.domain.business.Business;
 import com.interior.domain.business.log.BusinessLog;
 import com.interior.domain.business.material.BusinessMaterial;
@@ -204,12 +203,12 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
     @Override
     @Transactional
     public boolean reviseBusiness(final Long companyId, final Long businessId,
-            final ReviseBusinessServiceDto.Req req) {
+            final String changeBusinessName) {
 
         CompanyEntity company = companyJpaRepository.findById(companyId)
                 .orElseThrow(() -> new NoSuchElementException(NOT_EXIST_COMPANY.getMessage()));
 
-        company.reviseBusiness(businessId, req);
+        company.reviseBusiness(businessId, changeBusinessName);
 
         companyJpaRepository.save(company);
 

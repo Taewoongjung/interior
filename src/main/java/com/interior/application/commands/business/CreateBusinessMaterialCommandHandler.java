@@ -35,14 +35,14 @@ public class CreateBusinessMaterialCommandHandler implements
         BusinessMaterial businessMaterial = businessRepository.save(
                 new CreateBusinessMaterial(
                         command.businessId(),
-                        command.req().name(),
-                        command.req().usageCategory(),
-                        command.req().category(),
-                        command.req().amount(),
-                        command.req().unit(),
-                        command.req().memo(),
-                        command.req().materialCostPerUnit(),
-                        command.req().laborCostPerUnit()
+                        command.materialName(),
+                        command.materialUsageCategory(),
+                        command.materialCategory(),
+                        command.materialAmount(),
+                        command.unitOfMaterialAmount(),
+                        command.materialMemo(),
+                        command.materialCostPerUnit(),
+                        command.laborCostPerUnit()
                 ));
 
         if (businessMaterial != null) {
@@ -53,7 +53,7 @@ public class CreateBusinessMaterialCommandHandler implements
                             command.businessId(),
                             businessMaterial.getId(),
                             command.user().getId(),
-                            command.req().name()));
+                            command.materialName()));
         }
 
         log.info("CreateBusinessCommand executed successfully");

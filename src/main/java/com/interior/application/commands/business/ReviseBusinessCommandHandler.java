@@ -36,12 +36,12 @@ public class ReviseBusinessCommandHandler implements
 
         Company company = companyRepository.findById(command.companyId());
 
-        company.validateDuplicateName(command.req().changeBusinessName());
+        company.validateDuplicateName(command.changeBusinessName());
 
         Business business = businessRepository.findById(command.businessId());
 
         if (businessRepository.reviseBusiness(command.companyId(), command.businessId(),
-                command.req())) {
+                command.changeBusinessName())) {
 
             // 사업명 수정 로그
             eventPublisher.publishEvent(
@@ -50,7 +50,7 @@ public class ReviseBusinessCommandHandler implements
                             command.user().getId(),
                             BusinessChangeFieldType.REVISE_BUSINESS_NAME,
                             business.getName(),
-                            command.req().changeBusinessName()
+                            command.changeBusinessName()
                     )
             );
         }
