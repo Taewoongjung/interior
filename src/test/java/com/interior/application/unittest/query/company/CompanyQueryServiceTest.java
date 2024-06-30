@@ -5,7 +5,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.interior.application.queries.company.CompanyQueryService;
+import com.interior.application.readmodel.queries.company.CompanyQueryService;
 import com.interior.domain.company.Company;
 import com.interior.domain.user.User;
 import com.interior.domain.user.UserRole;

@@ -5,7 +5,7 @@ import com.interior.adapter.inbound.user.webdto.RequestValidation;
 import com.interior.adapter.inbound.user.webdto.SignUpDto;
 import com.interior.adapter.inbound.user.webdto.SignUpDto.SignUpResDto;
 import com.interior.application.commands.user.UserCommandService;
-import com.interior.application.queries.user.UserQueryService;
+import com.interior.application.readmodel.queries.user.UserQueryService;
 import com.interior.domain.user.User;
 import com.interior.domain.util.BoolType;
 import jakarta.servlet.http.HttpServletRequest;

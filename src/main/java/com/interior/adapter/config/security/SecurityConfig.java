@@ -3,7 +3,7 @@ package com.interior.adapter.config.security;
 import com.interior.adapter.config.security.jwt.JWTFilter;
 import com.interior.adapter.config.security.jwt.JWTUtil;
 import com.interior.adapter.config.security.jwt.LoginFilter;
-import com.interior.application.queries.user.UserQueryService;
+import com.interior.application.readmodel.queries.user.UserQueryService;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.Collections;
