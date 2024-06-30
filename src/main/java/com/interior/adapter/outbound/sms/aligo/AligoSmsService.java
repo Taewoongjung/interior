@@ -6,7 +6,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.interior.adapter.outbound.sms.SmsService;
 import com.interior.adapter.template.sms.SmsTemplate;
-import com.interior.application.command.log.sms.event.SmsSendResultLogEvent;
+import com.interior.application.commands.log.sms.event.SmsSendResultLogEvent;
 import java.util.HashMap;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

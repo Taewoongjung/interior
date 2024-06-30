@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.interior.adapter.outbound.jpa.entity.BaseEntity;
 import com.interior.adapter.outbound.jpa.entity.business.BusinessEntity;
 import com.interior.adapter.outbound.jpa.entity.user.UserEntity;
-import com.interior.application.command.business.dto.ReviseBusinessServiceDto;
+import com.interior.application.commands.business.dto.ReviseBusinessServiceDto;
 import com.interior.domain.company.Company;
 import com.interior.domain.util.BoolType;
 import jakarta.persistence.CascadeType;

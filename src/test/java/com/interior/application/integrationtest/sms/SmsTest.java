@@ -2,8 +2,8 @@ package com.interior.application.integrationtest.sms;
 
 import static java.lang.Thread.sleep;
 
-import com.interior.application.command.user.UserCommandService;
-import com.interior.application.command.util.sms.SmsUtilService;
+import com.interior.application.commands.user.UserCommandService;
+import com.interior.application.commands.util.sms.SmsUtilService;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

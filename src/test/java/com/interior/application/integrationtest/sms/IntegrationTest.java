@@ -2,7 +2,7 @@ package com.interior.application.integrationtest.sms;
 
 import com.interior.adapter.outbound.cache.redis.dto.common.TearDownBucketByKey;
 import com.interior.adapter.outbound.cache.redis.email.CacheEmailValidationRedisRepository;
-import com.interior.application.command.util.email.EmailService;
+import com.interior.application.commands.util.email.EmailService;
 import com.interior.domain.user.repository.UserRepository;
 import java.time.Duration;
 import java.time.LocalDateTime;
