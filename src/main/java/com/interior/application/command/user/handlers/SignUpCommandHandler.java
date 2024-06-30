@@ -5,7 +5,6 @@ import static com.interior.util.CheckUtil.check;
 
 import com.interior.abstraction.domain.ICommandHandler;
 import com.interior.adapter.outbound.alarm.dto.event.NewUserAlarm;
-import com.interior.adapter.outbound.alimtalk.AlimTalkService;
 import com.interior.adapter.outbound.alimtalk.dto.SendAlimTalk;
 import com.interior.adapter.outbound.cache.redis.dto.common.TearDownBucketByKey;
 import com.interior.adapter.outbound.cache.redis.sms.CacheSmsValidationRedisRepository;
@@ -27,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class SignUpCommandHandler implements ICommandHandler<SignUpCommand, String> {
 
     private final UserRepository userRepository;
-    private final AlimTalkService alimTalkService;
     private final ApplicationEventPublisher eventPublisher;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final CacheSmsValidationRedisRepository cacheSmsValidationRedisRepository;
@@ -67,7 +65,7 @@ public class SignUpCommandHandler implements ICommandHandler<SignUpCommand, Stri
             eventPublisher.publishEvent(new NewUserAlarm(req.name(), req.email(), req.tel()));
 
             // 새로운 유저 회원가입 시 해당 유저에게 알림톡 발송
-            alimTalkService.send(
+            eventPublisher.publishEvent(
                     new SendAlimTalk(KakaoMsgTemplateType.COMPLETE_SIGNUP, req.tel(), req.name(),
                             null, null, null));
 
