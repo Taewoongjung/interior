@@ -14,6 +14,7 @@ import com.interior.application.commands.business.CreateBusinessMaterialCommandH
 import com.interior.application.commands.business.DeleteBusinessCommandHandler;
 import com.interior.application.commands.business.DeleteBusinessMaterialCommandHandler;
 import com.interior.application.commands.business.ReviseBusinessCommandHandler;
+import com.interior.application.commands.business.ReviseUsageCategoryOfMaterialCommandHandler;
 import com.interior.application.commands.business.dto.CreateBusinessCommand;
 import com.interior.application.commands.business.dto.CreateBusinessMaterialCommand;
 import com.interior.application.commands.business.dto.CreateBusinessServiceDto.CreateBusinessMaterialDto;
@@ -21,6 +22,7 @@ import com.interior.application.commands.business.dto.DeleteBusinessCommand;
 import com.interior.application.commands.business.dto.DeleteBusinessMaterialCommand;
 import com.interior.application.commands.business.dto.ReviseBusinessCommand;
 import com.interior.application.commands.business.dto.ReviseBusinessServiceDto;
+import com.interior.application.commands.business.dto.ReviseUsageCategoryOfMaterialCommand;
 import com.interior.application.commands.business.temp.BusinessCommandService;
 import com.interior.application.readmodel.queries.business.BusinessQueryService;
 import com.interior.application.readmodel.queries.business.dto.GetBusinessMaterialLogs;
@@ -59,6 +61,7 @@ public class BusinessController {
     private final DeleteBusinessMaterialCommandHandler deleteBusinessMaterialCommandHandler;
     private final DeleteBusinessCommandHandler deleteBusinessCommandHandler;
     private final ReviseBusinessCommandHandler reviseBusinessCommandHandler;
+    private final ReviseUsageCategoryOfMaterialCommandHandler reviseUsageCategoryOfMaterialCommandHandler;
 
     // 사업 추가
     @PostMapping(value = "/api/companies/{companyId}/businesses")
@@ -131,11 +134,13 @@ public class BusinessController {
             @RequestBody final ReviseUsageCategoryOfMaterial.Req req
     ) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(businessCommandService.reviseUsageCategoryOfMaterial(
-                        businessId,
-                        req.subDataIds(),
-                        req.usageCategoryName()
-                ));
+                .body(reviseUsageCategoryOfMaterialCommandHandler.handle(
+                        new ReviseUsageCategoryOfMaterialCommand(
+                                businessId,
+                                req.subDataIds(),
+                                req.usageCategoryName()
+                        ))
+                );
     }
 
     // 특정 사업 재료 수정
