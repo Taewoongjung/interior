@@ -11,9 +11,11 @@ import com.interior.adapter.inbound.business.webdto.SendQuotationDraftToClient;
 import com.interior.adapter.inbound.business.webdto.UpdateBusinessProgressWebDtoV1;
 import com.interior.application.commands.business.CreateBusinessCommandHandler;
 import com.interior.application.commands.business.CreateBusinessMaterialCommandHandler;
+import com.interior.application.commands.business.DeleteBusinessMaterialCommandHandler;
 import com.interior.application.commands.business.dto.CreateBusinessCommand;
 import com.interior.application.commands.business.dto.CreateBusinessMaterialCommand;
 import com.interior.application.commands.business.dto.CreateBusinessServiceDto.CreateBusinessMaterialDto;
+import com.interior.application.commands.business.dto.DeleteBusinessMaterialCommand;
 import com.interior.application.commands.business.dto.ReviseBusinessServiceDto;
 import com.interior.application.commands.business.temp.BusinessCommandService;
 import com.interior.application.readmodel.queries.business.BusinessQueryService;
@@ -50,6 +52,7 @@ public class BusinessController {
 
     private final CreateBusinessCommandHandler createBusinessCommandHandler;
     private final CreateBusinessMaterialCommandHandler createBusinessMaterialCommandHandler;
+    private final DeleteBusinessMaterialCommandHandler deleteBusinessMaterialCommandHandler;
 
     // 사업 추가
     @PostMapping(value = "/api/companies/{companyId}/businesses")
@@ -102,7 +105,8 @@ public class BusinessController {
             @AuthenticationPrincipal final User user
     ) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(businessCommandService.deleteBusinessMaterial(businessId, materialId, user));
+                .body(deleteBusinessMaterialCommandHandler.handle(
+                        new DeleteBusinessMaterialCommand(businessId, materialId, user)));
     }
 
     // 특정 사업의 모든 재료 조회
