@@ -11,8 +11,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.interior.adapter.common.exception.InvalidInputException;
-import com.interior.application.commands.company.CompanyCommandService;
-import com.interior.application.commands.company.dto.CreateCompanyServiceDto;
+import com.interior.application.command.company.CompanyCommandService;
+import com.interior.application.command.company.dto.CreateCompanyServiceDto;
 import com.interior.domain.company.Company;
 import com.interior.domain.company.repository.CompanyRepository;
 import com.interior.domain.user.User;
