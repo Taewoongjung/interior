@@ -24,10 +24,10 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
-import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 @Async
 @Slf4j
@@ -52,8 +52,7 @@ public class SlackAlarm implements AlarmService {
     @Value(value = "${slack.channel.monitor.new-business}")
     private String newBusinessAlarmChanel;
 
-    @EventListener
-    @Transactional
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void sendErrorAlarm(final ErrorAlarm event) {
 
         try {
@@ -77,8 +76,7 @@ public class SlackAlarm implements AlarmService {
         }
     }
 
-    @EventListener
-    @Transactional
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void sendNewUserAlarm(final NewUserAlarm event) {
 
         try {
@@ -103,8 +101,7 @@ public class SlackAlarm implements AlarmService {
         }
     }
 
-    @EventListener
-    @Transactional
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void sendNewCompanyAlarm(final NewCompanyAlarm event) {
 
         try {
@@ -132,8 +129,7 @@ public class SlackAlarm implements AlarmService {
         }
     }
 
-    @EventListener
-    @Transactional
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void sendNewBusinessAlarm(final NewBusinessAlarm event) {
 
         try {

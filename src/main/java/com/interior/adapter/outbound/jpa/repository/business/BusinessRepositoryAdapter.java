@@ -76,14 +76,12 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
             return new ArrayList<>();
         }
 
-        if (queryType != null) {
-            // queryType 이 "사업관리" 면 businessList 도 함께 조회
-            if ("사업관리".equals(queryType.getType())) {
-                return businessEntities.stream()
-                        .filter(f -> f.getIsDeleted() == BoolType.F)
-                        .map(BusinessEntity::toPojoWithRelations)
-                        .collect(Collectors.toList());
-            }
+        // queryType 이 "사업관리" 면 businessList 도 함께 조회
+        if ("사업관리".equals(queryType.getType())) {
+            return businessEntities.stream()
+                    .filter(f -> f.getIsDeleted() == BoolType.F)
+                    .map(BusinessEntity::toPojoWithRelations)
+                    .collect(Collectors.toList());
         }
 
         return businessEntities.stream()
