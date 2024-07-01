@@ -1,8 +1,11 @@
 package com.interior.application.unittest.spy;
 
 import static business.BusinessFixture.getBusinessList;
+import static business.material.BusinessMaterialFixture.getBusinessMaterial;
 import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_BUSINESS;
+import static com.interior.util.CheckUtil.check;
 
+import com.interior.adapter.common.exception.ErrorType;
 import com.interior.adapter.inbound.business.enumtypes.QueryType;
 import com.interior.adapter.outbound.jpa.repository.business.dto.ReviseBusinessMaterial;
 import com.interior.domain.business.Business;
@@ -16,7 +19,6 @@ import com.interior.domain.business.repository.dto.CreateBusinessMaterial;
 import com.interior.domain.util.BoolType;
 import java.util.List;
 import java.util.NoSuchElementException;
-import org.springframework.transaction.annotation.Transactional;
 
 public class BusinessRepositorySpy implements BusinessRepository {
 
@@ -47,7 +49,6 @@ public class BusinessRepositorySpy implements BusinessRepository {
     }
 
     @Override
-    @Transactional
     public BusinessMaterial save(CreateBusinessMaterial createBusinessMaterial) {
 
         List<Business> businessList = getBusinessList();
@@ -68,7 +69,25 @@ public class BusinessRepositorySpy implements BusinessRepository {
 
     @Override
     public boolean deleteBusinessMaterial(Long businessId, Long materialId) {
-        return false;
+
+        List<Business> businessList = getBusinessList();
+
+        Business business = businessList.stream()
+                .filter(f -> businessId.equals(f.getId()))
+                .findFirst()
+                .orElseThrow(() -> new NoSuchElementException(NOT_EXIST_BUSINESS.getMessage()));
+
+        business.getBusinessMaterialList().addAll(getBusinessMaterial());
+
+        check(materialId == null || materialId == 0, ErrorType.INAPPROPRIATE_REQUEST);
+
+        business.getBusinessMaterialList().stream()
+                .filter(f -> materialId.equals(f.getId()) && BoolType.F.equals(f.getIsDeleted()))
+                .findFirst()
+                .orElseThrow(() -> new NoSuchElementException(
+                        ErrorType.NOT_EXIST_BUSINESS_MATERIAL.getMessage()));
+
+        return true;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.interior.application.unittest.command.business.handlers;
 
 import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_BUSINESS;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
@@ -32,7 +33,8 @@ class CreateBusinessMaterialCommandHandlerTest {
         // when
         // then
         boolean actual = sut.handle(event);
-        System.out.println("@@ = " + actual);
+
+        assertThat(actual).isTrue();
     }
 
     @Test
