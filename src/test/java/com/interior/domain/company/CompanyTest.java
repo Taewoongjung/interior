@@ -82,4 +82,94 @@ class CompanyTest {
                 LocalDateTime.of(2024, 3, 22, 15, 10)
         ));
     }
+
+    @Test
+    @DisplayName("우편번호는 필수값이다.")
+    void test5() {
+        assertThatThrownBy(() -> Company.of(
+                1L,
+                "홍길동",
+                null,
+                3L,
+                "메인 주소",
+                "서브 주소",
+                "빌딩번호",
+                "01088257754",
+                BoolType.F,
+                LocalDateTime.of(2024, 3, 22, 15, 10),
+                LocalDateTime.of(2024, 3, 22, 15, 10)
+        ));
+    }
+
+    @Test
+    @DisplayName("메인주소는 필수값이다.")
+    void test6() {
+        assertThatThrownBy(() -> Company.of(
+                1L,
+                "홍길동",
+                "0100",
+                3L,
+                null,
+                "서브 주소",
+                "빌딩번호",
+                "01088257754",
+                BoolType.F,
+                LocalDateTime.of(2024, 3, 22, 15, 10),
+                LocalDateTime.of(2024, 3, 22, 15, 10)
+        ));
+    }
+
+    @Test
+    @DisplayName("서브주소는 필수값이다.")
+    void test7() {
+        assertThatThrownBy(() -> Company.of(
+                1L,
+                "홍길동",
+                "0100",
+                3L,
+                "메인 주소",
+                null,
+                "빌딩번호",
+                "01088257754",
+                BoolType.F,
+                LocalDateTime.of(2024, 3, 22, 15, 10),
+                LocalDateTime.of(2024, 3, 22, 15, 10)
+        ));
+    }
+
+    @Test
+    @DisplayName("빌딩 번호는 필수값이다.")
+    void test8() {
+        assertThatThrownBy(() -> Company.of(
+                1L,
+                "홍길동",
+                "0100",
+                3L,
+                "메인 주소",
+                "서브 주소",
+                null,
+                "01088257754",
+                BoolType.F,
+                LocalDateTime.of(2024, 3, 22, 15, 10),
+                LocalDateTime.of(2024, 3, 22, 15, 10)
+        ));
+    }
+
+    @Test
+    @DisplayName("사업체 삭제 여부 값은 필수값이다.")
+    void test9() {
+        assertThatThrownBy(() -> Company.of(
+                1L,
+                "홍길동",
+                "0100",
+                3L,
+                "메인 주소",
+                "서브 주소",
+                "빌딩번호",
+                "01088257754",
+                null,
+                LocalDateTime.of(2024, 3, 22, 15, 10),
+                LocalDateTime.of(2024, 3, 22, 15, 10)
+        ));
+    }
 }
