@@ -119,6 +119,7 @@ public class BusinessMaterialEntity extends BaseEntity {
                 getAmount(),
                 getUnit(),
                 getMemo(),
+                getIsDeleted(),
                 getLastModified(),
                 getCreatedAt(),
                 businessMaterialExpense != null ?

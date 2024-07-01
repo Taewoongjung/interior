@@ -103,6 +103,7 @@ public class BusinessMaterial {
             final BigDecimal amount,
             final String unit,
             final String memo,
+            final BoolType isDeleted,
             final LocalDateTime lastModified,
             final LocalDateTime createdAt,
             final BusinessMaterialExpense businessMaterialExpense
@@ -153,7 +154,7 @@ public class BusinessMaterial {
                 amount,
                 unit,
                 memo,
-                null,
+                isDeleted,
                 businessMaterialExpense,
                 allMaterialCostPerUnit, allLaborCostPerUnit,
                 totalUnitPrice, totalPrice,
