@@ -61,8 +61,14 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
 
     private BusinessEntity findBusinessById(final Long id) {
 
-        return businessJpaRepository.findById(id)
+        BusinessEntity businessEntity = businessJpaRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException(NOT_EXIST_BUSINESS.getMessage()));
+
+        if (businessEntity.getIsDeleted() == BoolType.T) {
+            throw new NoSuchElementException(NOT_EXIST_BUSINESS.getMessage());
+        }
+
+        return businessEntity;
     }
 
     @Override
