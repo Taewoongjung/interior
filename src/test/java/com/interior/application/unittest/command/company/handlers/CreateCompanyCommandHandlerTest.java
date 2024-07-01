@@ -1,4 +1,4 @@
-package com.interior.application.unittest.command.company;
+package com.interior.application.unittest.command.company.handlers;
 
 import static com.interior.adapter.common.exception.ErrorType.LIMIT_OF_COMPANY_COUNT_IS_FIVE;
 import static company.CompanyFixture.COMPANY_LIST;
@@ -22,7 +22,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationEventPublisher;
 
-class CompanyCommandServiceTest {
+class CreateCompanyCommandHandlerTest {
 
     private final CompanyRepository companyRepository = mock(CompanyRepository.class);
     private final ApplicationEventPublisher eventPublisher = mock(ApplicationEventPublisher.class);
@@ -47,7 +47,7 @@ class CompanyCommandServiceTest {
                 COMPANY_LIST()
         );
 
-        final CreateCompanyCommand req = new CreateCompanyCommand(
+        final CreateCompanyCommand event = new CreateCompanyCommand(
                 user,
                 "TW 주식회사",
                 "한남대로",
@@ -60,7 +60,7 @@ class CompanyCommandServiceTest {
         when(companyRepository.save(anyString(), any(Company.class))).thenReturn(true);
 
         // then
-        boolean actual = sut.handle(req);
+        boolean actual = sut.handle(event);
 
         assertThat(actual).isTrue();
     }
@@ -82,7 +82,7 @@ class CompanyCommandServiceTest {
                 COMPANY_LIST()
         );
 
-        final CreateCompanyCommand req = new CreateCompanyCommand(
+        final CreateCompanyCommand event = new CreateCompanyCommand(
                 user,
                 "TW 주식회사",
                 "한남대로",
@@ -95,7 +95,7 @@ class CompanyCommandServiceTest {
         when(companyRepository.save(anyString(), any(Company.class))).thenReturn(false);
 
         // then
-        boolean actual = sut.handle(req);
+        boolean actual = sut.handle(event);
 
         assertThat(actual).isFalse();
     }
@@ -117,7 +117,7 @@ class CompanyCommandServiceTest {
                 COMPANY_LIST_OVER_5()
         );
 
-        final CreateCompanyCommand req = new CreateCompanyCommand(
+        final CreateCompanyCommand event = new CreateCompanyCommand(
                 user,
                 "TW 주식회사",
                 "한남대로",
@@ -128,7 +128,7 @@ class CompanyCommandServiceTest {
 
         // when
         // then
-        assertThrows(InvalidInputException.class, () -> sut.handle(req),
+        assertThrows(InvalidInputException.class, () -> sut.handle(event),
                 LIMIT_OF_COMPANY_COUNT_IS_FIVE.getMessage());
     }
 }
