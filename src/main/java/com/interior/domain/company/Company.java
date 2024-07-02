@@ -155,4 +155,8 @@ public class Company {
 
         check(isExist, ErrorType.DUPLICATE_BUSINESS_NAME);
     }
+
+    public void delete() {
+        this.isDeleted = BoolType.T;
+    }
 }
