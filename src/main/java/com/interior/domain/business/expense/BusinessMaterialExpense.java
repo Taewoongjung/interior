@@ -1,5 +1,8 @@
 package com.interior.domain.business.expense;
 
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_BUSINESS_MATERIAL_ID;
+import static com.interior.util.CheckUtil.require;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.time.LocalDateTime;
@@ -46,6 +49,9 @@ public class BusinessMaterialExpense {
             final LocalDateTime lastModified,
             final LocalDateTime createdAt
     ) {
+
+        require(o -> businessMaterialId == null, businessMaterialId, EMPTY_BUSINESS_MATERIAL_ID);
+
         return new BusinessMaterialExpense(
                 id,
                 businessMaterialId,
@@ -60,6 +66,9 @@ public class BusinessMaterialExpense {
             final String materialCostPerUnit,
             final String laborCostPerUnit
     ) {
+
+        require(o -> businessMaterialId == null, businessMaterialId, EMPTY_BUSINESS_MATERIAL_ID);
+
         return new BusinessMaterialExpense(
                 null,
                 businessMaterialId,
