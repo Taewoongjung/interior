@@ -1,5 +1,13 @@
 package com.interior.domain.alimtalk.kakaomsgresult;
 
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_IS_DELETED;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_KAKAO_MSG_RESULT_MSG_ID;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_KAKAO_MSG_RESULT_RECEIVER_PHONE;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_KAKAO_MSG_RESULT_TYPE;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_KAKAO_MSG_TEMPLATE_CODE;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_KAKAO_MSG_TEMPLATE_NAME;
+import static com.interior.util.CheckUtil.require;
+
 import com.interior.domain.alimtalk.AlimTalkMessageType;
 import com.interior.domain.util.BoolType;
 import java.time.LocalDateTime;
@@ -8,25 +16,25 @@ import lombok.Getter;
 @Getter
 public class KakaoMsgResult {
 
-    private Long id;
+    private final Long id;
 
-    private String templateName;
+    private final String templateName;
 
-    private String templateCode;
+    private final String templateCode;
 
-    private String messageSubject;
+    private final String messageSubject;
 
-    private String message;
+    private final String message;
 
-    private AlimTalkMessageType messageType;
+    private final AlimTalkMessageType messageType;
 
-    private String receiverPhone;
+    private final String receiverPhone;
 
-    private String msgId;
+    private final String msgId;
 
-    private BoolType isSuccess;
+    private final BoolType isSuccess;
 
-    private LocalDateTime createdAt;
+    private final LocalDateTime createdAt;
 
     private KakaoMsgResult(
             final Long id,
@@ -65,6 +73,13 @@ public class KakaoMsgResult {
             final BoolType isSuccess
     ) {
 
+        require(o -> templateName == null, templateName, EMPTY_KAKAO_MSG_TEMPLATE_NAME);
+        require(o -> templateCode == null, templateCode, EMPTY_KAKAO_MSG_TEMPLATE_CODE);
+        require(o -> messageType == null, messageType, EMPTY_KAKAO_MSG_RESULT_TYPE);
+        require(o -> receiverPhone == null, receiverPhone, EMPTY_KAKAO_MSG_RESULT_RECEIVER_PHONE);
+        require(o -> msgId == null, msgId, EMPTY_KAKAO_MSG_RESULT_MSG_ID);
+        require(o -> isSuccess == null, isSuccess, EMPTY_IS_DELETED);
+
         return new KakaoMsgResult(
                 null,
                 templateName,
@@ -93,6 +108,13 @@ public class KakaoMsgResult {
             final LocalDateTime createdAt
     ) {
 
+        require(o -> templateName == null, templateName, EMPTY_KAKAO_MSG_TEMPLATE_NAME);
+        require(o -> templateCode == null, templateCode, EMPTY_KAKAO_MSG_TEMPLATE_CODE);
+        require(o -> messageType == null, messageType, EMPTY_KAKAO_MSG_RESULT_TYPE);
+        require(o -> receiverPhone == null, receiverPhone, EMPTY_KAKAO_MSG_RESULT_RECEIVER_PHONE);
+        require(o -> msgId == null, msgId, EMPTY_KAKAO_MSG_RESULT_MSG_ID);
+        require(o -> isSuccess == null, isSuccess, EMPTY_IS_DELETED);
+        
         return new KakaoMsgResult(
                 id,
                 templateName,

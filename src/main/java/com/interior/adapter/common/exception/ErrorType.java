@@ -82,7 +82,12 @@ public enum ErrorType {
 
     EMPTY_KAKAO_MSG_TEMPLATE_NAME(1501, "템플릿 이름은 필수값 입니다."),
     EMPTY_KAKAO_MSG_TEMPLATE_CODE(1502, "템플릿 코드는 필수값 입니다."),
-    EMPTY_KAKAO_MSG_TEMPLATE_THIRD_PART_TYPE(1503, "써드파티 타입은 필수값 입니다.");
+    EMPTY_KAKAO_MSG_TEMPLATE_THIRD_PART_TYPE(1503, "써드파티 타입은 필수값 입니다."),
+    EMPTY_KAKAO_MSG_RESULT_TYPE(1504, "메시지 결과 타입은 필수값 입니다."),
+    EMPTY_KAKAO_MSG_RESULT_RECEIVER_PHONE(1505, "메시지를 받은 번호는 필수값 입니다."),
+    EMPTY_KAKAO_MSG_RESULT_MSG_ID(1506, "메시지 결과 id는 필수값 입니다."),
+
+    ;
 
     private final int code;
     private final String message;
