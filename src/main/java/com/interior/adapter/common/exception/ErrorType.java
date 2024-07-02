@@ -68,6 +68,9 @@ public enum ErrorType {
     EMPTY_PROGRESS_TYPE(1306, "진행 상황 객체는 필수값 입니다."),
     EMPTY_IS_DELETED(1307, "삭제 유무 객체는 필수값 입니다."),
 
+    EMPTY_SENDER_ID(1320, "보낸 사람의 id는 필수값 입니다."),
+    EMPTY_RESULT_ID(1321, "알림톡 result id 는 필수값 입니다."),
+
     NOT_EXIST_SMS_SEND_RESULT(1400, "sms 발송 정보가 없습니다."),
 
     NO_ALIMTALK_TEMPLATE(1500, "템플릿이 없습니다");
