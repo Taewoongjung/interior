@@ -1,5 +1,10 @@
 package com.interior.domain.alimtalk.kakaomsgtemplate;
 
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_KAKAO_MSG_TEMPLATE_CODE;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_KAKAO_MSG_TEMPLATE_NAME;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_KAKAO_MSG_TEMPLATE_THIRD_PART_TYPE;
+import static com.interior.util.CheckUtil.require;
+
 import com.interior.domain.company.Company;
 import com.interior.domain.user.User;
 import java.time.LocalDateTime;
@@ -10,31 +15,31 @@ import lombok.ToString;
 @ToString
 public class KakaoMsgTemplate {
 
-    private Long id;
+    private final Long id;
 
-    private String templateName;
+    private final String templateName;
 
-    private String templateCode;
+    private final String templateCode;
 
-    private AlimTalkThirdPartyType thirdPartyType;
+    private final AlimTalkThirdPartyType thirdPartyType;
 
-    private String messageExtra;
+    private final String messageExtra;
 
-    private String messageSubject;
+    private final String messageSubject;
 
     private String message;
 
-    private String replaceMessageSubject;
+    private final String replaceMessageSubject;
 
-    private String replaceMessage;
+    private final String replaceMessage;
 
-    private String buttonInfo;
+    private final String buttonInfo;
 
-    private AlimTalkButtonLinkType buttonLinkType;
+    private final AlimTalkButtonLinkType buttonLinkType;
 
-    private LocalDateTime createdAt;
+    private final LocalDateTime createdAt;
 
-    private LocalDateTime lastModified;
+    private final LocalDateTime lastModified;
 
     private KakaoMsgTemplate(
             final Long id,
@@ -82,6 +87,12 @@ public class KakaoMsgTemplate {
             final LocalDateTime createdAt,
             final LocalDateTime lastModified
     ) {
+
+        require(o -> templateName == null, templateName, EMPTY_KAKAO_MSG_TEMPLATE_NAME);
+        require(o -> templateCode == null, templateCode, EMPTY_KAKAO_MSG_TEMPLATE_CODE);
+        require(o -> thirdPartyType == null, thirdPartyType,
+                EMPTY_KAKAO_MSG_TEMPLATE_THIRD_PART_TYPE);
+
         return new KakaoMsgTemplate(
                 id,
                 templateName,

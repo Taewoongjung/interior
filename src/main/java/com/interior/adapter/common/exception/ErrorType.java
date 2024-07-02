@@ -37,10 +37,12 @@ public enum ErrorType {
     NOT_VERIFIED_PHONE(1006, "휴대폰 검증이 선행 되어야 합니다."),
 
     NOT_EXIST_COMPANY(1050, "사업체가 존재하지 않습니다."),
-    INVALID_COMPANY_NAME(1051, "올바르지 않은 사업체 명 입니다."),
+    INVALID_COMPANY_NAME(1051, "사업체 명이 올바르지 않습니다."),
     INVALID_COMPANY_OWNER_ID(1052, "소유자 정보는 필수입니다."),
-    INVALID_COMPANY_TEL(1053, "올바르지 않은 전화번호입니다."),
-    COMPANY_NOT_EXIST_IN_THE_USER(1054, "삭제 하려고 하는 사업체를 가지고 있지 않습니다."),
+    INVALID_COMPANY_TEL(1053, "사업체 전화번호가 올바르지 않습니다."),
+    INVALID_COMPANY_ADDRESS_INFO(1054, "사업체 주소가 올바르지 않습니다."),
+    COMPANY_NOT_EXIST_IN_THE_USER(1055, "삭제 하려고 하는 사업체를 가지고 있지 않습니다."),
+    INVALID_COMPANY_IS_DELETED_VALUE(1056, "사업체 삭제 여부값은 필수입니다."),
 
     NOT_EXIST_BUSINESS(1100, "사업이 존재하지 않습니다."),
     INVALID_BUSINESS_NAME(1101, "올바르지 않은 사업명 입니다."),
@@ -55,6 +57,7 @@ public enum ErrorType {
     EMPTY_BUSINESS_MATERIAL_CATEGORY(1204, "재료의 카테고리는 필수값입니다."),
     EMPTY_BUSINESS_MATERIAL_AMOUNT(1205, "재료의 수량은 필수값입니다."),
     NOT_CONTAIN_MATERIAL_IN_THE_BUSINESS(1206, "해당 사업에 포함 된 재료가 아닙니다."),
+    EMPTY_BUSINESS_UNIT(1207, "재료의 수량에 대한 단위는 필수값입니다."),
 
     EMPTY_BUSINESS_ID(1300, "사업의 id는 필수값 입니다."),
     EMPTY_BUSINESS_MATERIAL_ID(1301, "사업 재료의 id는 필수값 입니다."),
@@ -62,10 +65,32 @@ public enum ErrorType {
     EMPTY_UPDATER_ID(1303, "변경자의 id는 필수값 입니다."),
     EMPTY_UPDATER_NAME(1304, "변경자의 이름은 필수값 입니다."),
     DUPLICATE_PROGRESS_VALUE(1305, "이미 해당 상태값이 존재하여 처리 된 이력이 있습니다."),
+    EMPTY_PROGRESS_TYPE(1306, "진행 상황 객체는 필수값 입니다."),
+    EMPTY_IS_DELETED(1307, "삭제 유무 객체는 필수값 입니다."),
+
+    EMPTY_SENDER_ID(1320, "보낸 사람의 id는 필수값 입니다."),
+    EMPTY_RESULT_ID(1321, "알림톡 result id 는 필수값 입니다."),
+
+    EMPTY_COMPANY_ID(1340, "사업체의 id는 필수값 입니다."),
+    EMPTY_CONTRACT_TYPE(1341, "계약 타입은 필수값 입니다."),
+    EMPTY_IS_AGREED(1342, "고객의 동의 객체는 필수값 입니다."),
+    EMPTY_CONTRACT_USER_ID(1343, "동의 한 고객의 id는 필수값 입니다."),
 
     NOT_EXIST_SMS_SEND_RESULT(1400, "sms 발송 정보가 없습니다."),
+    EMPTY_SENDER_SMS_SEND_RESULT(1401, "sms 발송자 번호는 필수값 입니다."),
+    EMPTY_RECEIVER_SMS_SEND_RESULT(1402, "sms 발신자 번호는 필수값 입니다."),
+    EMPTY_PLATFORM_TYPE_SMS_SEND_RESULT(1403, "sms 발송 플랫폼 정보는 필수값 입니다."),
+    EMPTY_MSG_ID_SMS_SEND_RESULT(1404, "sms 발송 id 정보는 필수값 입니다."),
 
-    NO_ALIMTALK_TEMPLATE(1500, "템플릿이 없습니다");
+    NO_ALIMTALK_TEMPLATE(1500, "템플릿이 없습니다"),
+
+    EMPTY_KAKAO_MSG_TEMPLATE_NAME(1501, "템플릿 이름은 필수값 입니다."),
+    EMPTY_KAKAO_MSG_TEMPLATE_CODE(1502, "템플릿 코드는 필수값 입니다."),
+    EMPTY_KAKAO_MSG_TEMPLATE_THIRD_PART_TYPE(1503, "써드파티 타입은 필수값 입니다."),
+    EMPTY_KAKAO_MSG_RESULT_TYPE(1504, "메시지 결과 타입은 필수값 입니다."),
+    EMPTY_KAKAO_MSG_RESULT_RECEIVER_PHONE(1505, "메시지를 받은 번호는 필수값 입니다."),
+
+    ;
 
     private final int code;
     private final String message;

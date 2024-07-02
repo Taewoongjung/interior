@@ -3,8 +3,10 @@ package com.interior.domain.business.material;
 import static com.interior.adapter.common.exception.ErrorType.EMPTY_BUSINESS_MATERIAL_AMOUNT;
 import static com.interior.adapter.common.exception.ErrorType.EMPTY_BUSINESS_MATERIAL_CATEGORY;
 import static com.interior.adapter.common.exception.ErrorType.EMPTY_BUSINESS_MATERIAL_NAME;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_BUSINESS_UNIT;
 import static com.interior.adapter.common.exception.ErrorType.EMPTY_RELATED_BUSINESS_TO_BUSINESS_MATERIAL;
 import static com.interior.adapter.common.exception.ErrorType.EMPTY_USAGE_CATEGORY_INVALID;
+import static com.interior.util.CheckUtil.check;
 import static com.interior.util.CheckUtil.require;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -103,6 +105,7 @@ public class BusinessMaterial {
             final BigDecimal amount,
             final String unit,
             final String memo,
+            final BoolType isDeleted,
             final LocalDateTime lastModified,
             final LocalDateTime createdAt,
             final BusinessMaterialExpense businessMaterialExpense
@@ -114,6 +117,7 @@ public class BusinessMaterial {
                 usageCategory, EMPTY_USAGE_CATEGORY_INVALID);
         require(o -> category == null, category, EMPTY_BUSINESS_MATERIAL_CATEGORY);
         require(o -> amount == null, amount, EMPTY_BUSINESS_MATERIAL_AMOUNT);
+        require(o -> unit == null, unit, EMPTY_BUSINESS_UNIT);
 
         String allMaterialCostPerUnit = null;
         String allLaborCostPerUnit = null;
@@ -153,7 +157,7 @@ public class BusinessMaterial {
                 amount,
                 unit,
                 memo,
-                null,
+                isDeleted,
                 businessMaterialExpense,
                 allMaterialCostPerUnit, allLaborCostPerUnit,
                 totalUnitPrice, totalPrice,
@@ -197,7 +201,8 @@ public class BusinessMaterial {
                 usageCategory, EMPTY_USAGE_CATEGORY_INVALID);
         require(o -> category == null, category, EMPTY_BUSINESS_MATERIAL_CATEGORY);
         require(o -> amount == null, amount, EMPTY_BUSINESS_MATERIAL_AMOUNT);
-
+        require(o -> unit == null, unit, EMPTY_BUSINESS_UNIT);
+        
         return new BusinessMaterial(
                 null,
                 businessId,
@@ -212,5 +217,39 @@ public class BusinessMaterial {
                 null, null,
                 null, null,
                 LocalDateTime.now(), LocalDateTime.now());
+    }
+
+    public void setUsageCategory(final String usageCategory) {
+        check("".equals(usageCategory.trim()), EMPTY_USAGE_CATEGORY_INVALID);
+
+        this.usageCategory = usageCategory;
+    }
+
+    public void setBusinessMaterialExpense(final BusinessMaterialExpense materialExpense) {
+        this.businessMaterialExpense = materialExpense;
+    }
+
+    public void setDeleted(final BoolType deleted) {
+        this.isDeleted = deleted;
+    }
+
+    public void setBusinessMaterialName(final String businessMaterialName) {
+        this.name = businessMaterialName;
+    }
+
+    public void setCategory(final String category) {
+        this.category = category;
+    }
+
+    public void setAmount(final BigDecimal amount) {
+        this.amount = amount;
+    }
+
+    public void setUnit(final String unit) {
+        this.unit = unit;
+    }
+
+    public void setMemo(final String memo) {
+        this.memo = memo;
     }
 }

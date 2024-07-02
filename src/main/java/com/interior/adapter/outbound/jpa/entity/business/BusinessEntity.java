@@ -198,7 +198,7 @@ public class BusinessEntity extends BaseEntity {
         check(materialId == null || materialId == 0, ErrorType.INAPPROPRIATE_REQUEST);
 
         this.businessMaterialList.stream()
-                .filter(f -> materialId.equals(f.getId()))
+                .filter(f -> materialId.equals(f.getId()) && BoolType.F.equals(f.getIsDeleted()))
                 .findFirst()
                 .orElseThrow(() -> new NoSuchElementException(
                         ErrorType.NOT_EXIST_BUSINESS_MATERIAL.getMessage()));

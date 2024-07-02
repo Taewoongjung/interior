@@ -49,20 +49,22 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
     @Transactional(readOnly = true)
     public Business findById(final Long businessId) {
 
-        BusinessEntity businessEntities = findBusinessById(businessId);
-
-        check(businessEntities.getIsDeleted() == BoolType.T, NOT_EXIST_BUSINESS);
+        BusinessEntity businessEntity = findBusinessById(businessId);
 
         // 삭제된 재료들 제외
-        businessEntities.getOnlyNotDeletedMaterials();
+        businessEntity.getOnlyNotDeletedMaterials();
 
-        return businessEntities.toPojoWithRelations();
+        return businessEntity.toPojoWithRelations();
     }
 
     private BusinessEntity findBusinessById(final Long id) {
 
-        return businessJpaRepository.findById(id)
+        BusinessEntity businessEntity = businessJpaRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException(NOT_EXIST_BUSINESS.getMessage()));
+
+        check(businessEntity.getIsDeleted() == BoolType.T, NOT_EXIST_BUSINESS);
+
+        return businessEntity;
     }
 
     @Override
@@ -76,14 +78,12 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
             return new ArrayList<>();
         }
 
-        if (queryType != null) {
-            // queryType 이 "사업관리" 면 businessList 도 함께 조회
-            if ("사업관리".equals(queryType.getType())) {
-                return businessEntities.stream()
-                        .filter(f -> f.getIsDeleted() == BoolType.F)
-                        .map(BusinessEntity::toPojoWithRelations)
-                        .collect(Collectors.toList());
-            }
+        // queryType 이 "사업관리" 면 businessList 도 함께 조회
+        if ("사업관리".equals(queryType.getType())) {
+            return businessEntities.stream()
+                    .filter(f -> f.getIsDeleted() == BoolType.F)
+                    .map(BusinessEntity::toPojoWithRelations)
+                    .collect(Collectors.toList());
         }
 
         return businessEntities.stream()
@@ -221,8 +221,7 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
             final List<Long> targetList,
             final String usageCategoryName) {
 
-        BusinessEntity business = businessJpaRepository.findById(businessId)
-                .orElseThrow(() -> new NoSuchElementException(NOT_EXIST_BUSINESS.getMessage()));
+        BusinessEntity business = findBusinessById(businessId);
 
         business.getBusinessMaterialList().stream()
                 .filter(f -> targetList.contains(f.getId()))

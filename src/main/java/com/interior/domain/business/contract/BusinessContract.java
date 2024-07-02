@@ -1,5 +1,13 @@
 package com.interior.domain.business.contract;
 
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_BUSINESS_ID;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_COMPANY_ID;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_CONTRACT_TYPE;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_CONTRACT_USER_ID;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_IS_AGREED;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_IS_DELETED;
+import static com.interior.util.CheckUtil.require;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.interior.domain.util.BoolType;
 import java.time.LocalDateTime;
@@ -11,21 +19,21 @@ import lombok.ToString;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class BusinessContract {
 
-    private Long id;
+    private final Long id;
 
-    private Long companyId;
+    private final Long companyId;
 
-    private Long businessId;
+    private final Long businessId;
 
-    private ContractType contractType;
+    private final ContractType contractType;
 
-    private BoolType isAgreed;
+    private final BoolType isAgreed;
 
-    private Long userId;
+    private final Long userId;
 
-    private BoolType isDeleted;
+    private final BoolType isDeleted;
 
-    private LocalDateTime createdAt;
+    private final LocalDateTime createdAt;
 
     private BusinessContract(
             final Long id,
@@ -44,6 +52,7 @@ public class BusinessContract {
         this.isAgreed = isAgreed;
         this.userId = userId;
         this.isDeleted = isDeleted;
+        this.createdAt = createdAt;
     }
 
     // 생성
@@ -55,6 +64,14 @@ public class BusinessContract {
             final Long userId,
             final BoolType isDeleted
     ) {
+
+        require(o -> companyId == null, businessId, EMPTY_COMPANY_ID);
+        require(o -> businessId == null, businessId, EMPTY_BUSINESS_ID);
+        require(o -> contractType == null, contractType, EMPTY_CONTRACT_TYPE);
+        require(o -> isAgreed == null, isAgreed, EMPTY_IS_AGREED);
+        require(o -> userId == null, userId, EMPTY_CONTRACT_USER_ID);
+        require(o -> isDeleted == null, isDeleted, EMPTY_IS_DELETED);
+
         return new BusinessContract(null, companyId, businessId, contractType, isAgreed,
                 userId, isDeleted, null);
     }
@@ -70,6 +87,14 @@ public class BusinessContract {
             final BoolType isDeleted,
             final LocalDateTime createdAt
     ) {
+
+        require(o -> companyId == null, businessId, EMPTY_COMPANY_ID);
+        require(o -> businessId == null, businessId, EMPTY_BUSINESS_ID);
+        require(o -> contractType == null, contractType, EMPTY_CONTRACT_TYPE);
+        require(o -> isAgreed == null, isAgreed, EMPTY_IS_AGREED);
+        require(o -> userId == null, userId, EMPTY_CONTRACT_USER_ID);
+        require(o -> isDeleted == null, isDeleted, EMPTY_IS_DELETED);
+
         return new BusinessContract(id, companyId, businessId, contractType, isAgreed,
                 userId, isDeleted, createdAt);
     }

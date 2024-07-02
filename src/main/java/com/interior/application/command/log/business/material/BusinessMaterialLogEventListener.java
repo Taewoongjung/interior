@@ -12,10 +12,10 @@ import com.interior.domain.user.repository.UserRepository;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 
 /**
@@ -60,8 +60,7 @@ public class BusinessMaterialLogEventListener {
 
 
     // 재료 삭제에 대한 로그
-    @EventListener
-    @Transactional
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void createLogForDeletingBusinessMaterial(final BusinessMaterialDeleteLogEvent event) {
 
         BusinessMaterial originalBusinessMaterial =
@@ -78,8 +77,7 @@ public class BusinessMaterialLogEventListener {
     }
 
     // 재료 생성에 대한 로그
-    @EventListener
-    @Transactional
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void createLogForCreatingBusinessMaterial(final BusinessMaterialCreateLogEvent event) {
 
         createLogOfChangeMaterials(
@@ -93,8 +91,7 @@ public class BusinessMaterialLogEventListener {
     }
 
     // 재료 생성에 대한 로그
-    @EventListener
-    @Transactional
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void createLogForRevisingBusinessMaterial(final BusinessReviseMaterialLogEvent event) {
 
         createLogOfChangeMaterials(

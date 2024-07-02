@@ -5,10 +5,10 @@ import com.interior.domain.sms.SmsSendResult;
 import com.interior.domain.sms.repository.SmsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 @Async
 @Slf4j
@@ -18,8 +18,7 @@ public class SmsSendResultLogEventListener {
 
     private final SmsRepository smsRepository;
 
-    @EventListener
-    @Transactional
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void createSmsSendResultLog(final SmsSendResultLogEvent event) {
         smsRepository.save(
                 SmsSendResult.of(

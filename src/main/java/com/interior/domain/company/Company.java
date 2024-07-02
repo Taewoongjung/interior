@@ -1,5 +1,7 @@
 package com.interior.domain.company;
 
+import static com.interior.adapter.common.exception.ErrorType.INVALID_COMPANY_ADDRESS_INFO;
+import static com.interior.adapter.common.exception.ErrorType.INVALID_COMPANY_IS_DELETED_VALUE;
 import static com.interior.adapter.common.exception.ErrorType.INVALID_COMPANY_NAME;
 import static com.interior.adapter.common.exception.ErrorType.INVALID_COMPANY_OWNER_ID;
 import static com.interior.adapter.common.exception.ErrorType.INVALID_COMPANY_TEL;
@@ -82,6 +84,11 @@ public class Company {
         require(o -> name == null, name, INVALID_COMPANY_NAME);
         require(o -> ownerId == null, ownerId, INVALID_COMPANY_OWNER_ID);
         require(o -> tel == null, tel, INVALID_COMPANY_TEL);
+        require(o -> zipCode == null, zipCode, INVALID_COMPANY_ADDRESS_INFO);
+        require(o -> address == null, address, INVALID_COMPANY_ADDRESS_INFO);
+        require(o -> subAddress == null, subAddress, INVALID_COMPANY_ADDRESS_INFO);
+        require(o -> buildingNumber == null, buildingNumber, INVALID_COMPANY_ADDRESS_INFO);
+        require(o -> isDeleted == null, isDeleted, INVALID_COMPANY_IS_DELETED_VALUE);
 
         return new Company(id, name, zipCode, ownerId, address, subAddress, buildingNumber, tel,
                 isDeleted, lastModified, createdAt, null);
@@ -101,7 +108,13 @@ public class Company {
     ) {
 
         require(o -> name == null, name, INVALID_COMPANY_NAME);
+        require(o -> ownerId == null, ownerId, INVALID_COMPANY_OWNER_ID);
         require(o -> tel == null, tel, INVALID_COMPANY_TEL);
+        require(o -> zipCode == null, zipCode, INVALID_COMPANY_ADDRESS_INFO);
+        require(o -> address == null, address, INVALID_COMPANY_ADDRESS_INFO);
+        require(o -> subAddress == null, subAddress, INVALID_COMPANY_ADDRESS_INFO);
+        require(o -> buildingNumber == null, buildingNumber, INVALID_COMPANY_ADDRESS_INFO);
+        require(o -> isDeleted == null, isDeleted, INVALID_COMPANY_IS_DELETED_VALUE);
 
         return new Company(null, name, zipCode, ownerId, address, subAddress, buildingNumber, tel,
                 isDeleted, lastModified, createdAt, null);
@@ -123,7 +136,13 @@ public class Company {
     ) {
 
         require(o -> name == null, name, INVALID_COMPANY_NAME);
+        require(o -> ownerId == null, ownerId, INVALID_COMPANY_OWNER_ID);
         require(o -> tel == null, tel, INVALID_COMPANY_TEL);
+        require(o -> zipCode == null, zipCode, INVALID_COMPANY_ADDRESS_INFO);
+        require(o -> address == null, address, INVALID_COMPANY_ADDRESS_INFO);
+        require(o -> subAddress == null, subAddress, INVALID_COMPANY_ADDRESS_INFO);
+        require(o -> buildingNumber == null, buildingNumber, INVALID_COMPANY_ADDRESS_INFO);
+        require(o -> isDeleted == null, isDeleted, INVALID_COMPANY_IS_DELETED_VALUE);
 
         return new Company(id, name, zipCode, ownerId, address, subAddress, buildingNumber, tel,
                 isDeleted, lastModified, createdAt, businessList);
@@ -135,5 +154,9 @@ public class Company {
                 .anyMatch(business -> targetName.equals(business.getName()));
 
         check(isExist, ErrorType.DUPLICATE_BUSINESS_NAME);
+    }
+
+    public void delete() {
+        this.isDeleted = BoolType.T;
     }
 }

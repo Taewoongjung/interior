@@ -2,10 +2,10 @@ package com.interior.adapter.outbound.jpa.repository.company;
 
 import static com.interior.adapter.common.exception.ErrorType.COMPANY_NOT_EXIST_IN_THE_USER;
 import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_COMPANY;
+import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_CUSTOMER;
 import static com.interior.util.CheckUtil.check;
 import static com.interior.util.converter.jpa.company.CompanyEntityConverter.companyToEntity;
 
-import com.interior.adapter.common.exception.ErrorType;
 import com.interior.adapter.outbound.jpa.entity.company.CompanyEntity;
 import com.interior.adapter.outbound.jpa.entity.user.UserEntity;
 import com.interior.adapter.outbound.jpa.repository.user.UserJpaRepository;
@@ -41,6 +41,7 @@ public class CompanyRepositoryAdapter implements CompanyRepository {
     @Transactional
     public boolean save(final String userEmail, final Company addingCompany) {
         UserEntity user = userJpaRepository.findByEmail(userEmail);
+        check(user == null, NOT_EXIST_CUSTOMER);
 
         user.getCompanyEntityList().add(companyToEntity(addingCompany));
 
@@ -55,7 +56,7 @@ public class CompanyRepositoryAdapter implements CompanyRepository {
 
         UserEntity user = userJpaRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException(
-                        ErrorType.NOT_EXIST_CUSTOMER.getMessage()));
+                        NOT_EXIST_CUSTOMER.getMessage()));
 
         check(user.getCompanyEntityList().stream().noneMatch(f -> companyId.equals(f.getId())),
                 COMPANY_NOT_EXIST_IN_THE_USER);

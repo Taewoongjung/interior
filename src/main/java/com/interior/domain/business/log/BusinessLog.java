@@ -1,5 +1,11 @@
 package com.interior.domain.business.log;
 
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_BUSINESS_ID;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_CHANGE_FIELD;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_UPDATER_ID;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_UPDATER_NAME;
+import static com.interior.util.CheckUtil.require;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 import lombok.Getter;
@@ -24,7 +30,7 @@ public class BusinessLog {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdAt;
 
-    public BusinessLog(
+    private BusinessLog(
             final Long id,
             final Long businessId,
             final BusinessChangeFieldType changeField,
@@ -55,6 +61,11 @@ public class BusinessLog {
             final String updaterName,
             final LocalDateTime createdAt
     ) {
+        require(o -> businessId == null, businessId, EMPTY_BUSINESS_ID);
+        require(o -> changeField == null, changeField, EMPTY_CHANGE_FIELD);
+        require(o -> updaterId == null, updaterId, EMPTY_UPDATER_ID);
+        require(o -> updaterName == null, updaterName, EMPTY_UPDATER_NAME);
+
         return new BusinessLog(id, businessId, changeField, beforeData, afterData, updaterId,
                 updaterName, createdAt);
     }
@@ -69,20 +80,13 @@ public class BusinessLog {
             final String updaterName,
             final LocalDateTime createdAt
     ) {
+
+        require(o -> businessId == null, businessId, EMPTY_BUSINESS_ID);
+        require(o -> changeField == null, changeField, EMPTY_CHANGE_FIELD);
+        require(o -> updaterId == null, updaterId, EMPTY_UPDATER_ID);
+        require(o -> updaterName == null, updaterName, EMPTY_UPDATER_NAME);
+
         return new BusinessLog(null, businessId, changeField,
                 beforeData, afterData, updaterId, updaterName, createdAt);
-    }
-
-    public String getChangeDetail() {
-
-        if (changeField.equals(BusinessChangeFieldType.CREATE_NEW_BUSINESS)) {
-            return getAfterData();
-        }
-
-        if (changeField.equals(BusinessChangeFieldType.DELETE_BUSINESS)) {
-            return getBeforeData();
-        }
-
-        return getBeforeData() + " → " + getAfterData();
     }
 }

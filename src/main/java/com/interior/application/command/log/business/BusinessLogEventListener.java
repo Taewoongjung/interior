@@ -10,10 +10,10 @@ import com.interior.domain.user.repository.UserRepository;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 @Async
 @Slf4j
@@ -47,8 +47,7 @@ public class BusinessLogEventListener {
         );
     }
 
-    @EventListener
-    @Transactional
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void createLogForChangingBusinessName(final BusinessReviseLogEvent event) {
 
         createLogOfChangeBusiness(
@@ -60,8 +59,7 @@ public class BusinessLogEventListener {
         );
     }
 
-    @EventListener
-    @Transactional
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void createLogForDeletingBusiness(final BusinessDeleteLogEvent event) {
 
         createLogOfChangeBusiness(
