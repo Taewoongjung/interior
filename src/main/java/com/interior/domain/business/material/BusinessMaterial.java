@@ -3,6 +3,7 @@ package com.interior.domain.business.material;
 import static com.interior.adapter.common.exception.ErrorType.EMPTY_BUSINESS_MATERIAL_AMOUNT;
 import static com.interior.adapter.common.exception.ErrorType.EMPTY_BUSINESS_MATERIAL_CATEGORY;
 import static com.interior.adapter.common.exception.ErrorType.EMPTY_BUSINESS_MATERIAL_NAME;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_BUSINESS_UNIT;
 import static com.interior.adapter.common.exception.ErrorType.EMPTY_RELATED_BUSINESS_TO_BUSINESS_MATERIAL;
 import static com.interior.adapter.common.exception.ErrorType.EMPTY_USAGE_CATEGORY_INVALID;
 import static com.interior.util.CheckUtil.check;
@@ -116,6 +117,7 @@ public class BusinessMaterial {
                 usageCategory, EMPTY_USAGE_CATEGORY_INVALID);
         require(o -> category == null, category, EMPTY_BUSINESS_MATERIAL_CATEGORY);
         require(o -> amount == null, amount, EMPTY_BUSINESS_MATERIAL_AMOUNT);
+        require(o -> unit == null, unit, EMPTY_BUSINESS_UNIT);
 
         String allMaterialCostPerUnit = null;
         String allLaborCostPerUnit = null;
@@ -199,7 +201,8 @@ public class BusinessMaterial {
                 usageCategory, EMPTY_USAGE_CATEGORY_INVALID);
         require(o -> category == null, category, EMPTY_BUSINESS_MATERIAL_CATEGORY);
         require(o -> amount == null, amount, EMPTY_BUSINESS_MATERIAL_AMOUNT);
-
+        require(o -> unit == null, unit, EMPTY_BUSINESS_UNIT);
+        
         return new BusinessMaterial(
                 null,
                 businessId,
