@@ -71,6 +71,11 @@ public enum ErrorType {
     EMPTY_SENDER_ID(1320, "보낸 사람의 id는 필수값 입니다."),
     EMPTY_RESULT_ID(1321, "알림톡 result id 는 필수값 입니다."),
 
+    EMPTY_COMPANY_ID(1340, "사업체의 id는 필수값 입니다."),
+    EMPTY_CONTRACT_TYPE(1341, "계약 타입은 필수값 입니다."),
+    EMPTY_IS_AGREED(1342, "고객의 동의 객체는 필수값 입니다."),
+    EMPTY_CONTRACT_USER_ID(1343, "동의 한 고객의 id는 필수값 입니다."),
+
     NOT_EXIST_SMS_SEND_RESULT(1400, "sms 발송 정보가 없습니다."),
 
     NO_ALIMTALK_TEMPLATE(1500, "템플릿이 없습니다");
