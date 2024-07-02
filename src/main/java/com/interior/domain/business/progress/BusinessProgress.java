@@ -40,11 +40,10 @@ public class BusinessProgress {
     // 생성
     public static BusinessProgress of(
             final Long businessId,
-            final ProgressType progressType,
-            final BoolType isDeleted
+            final ProgressType progressType
     ) {
 
-        return new BusinessProgress(null, businessId, progressType, isDeleted, null);
+        return new BusinessProgress(null, businessId, progressType, BoolType.F, null);
     }
 
     // 조회

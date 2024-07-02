@@ -1,6 +1,8 @@
 package business;
 
 import com.interior.domain.business.Business;
+import com.interior.domain.business.progress.BusinessProgress;
+import com.interior.domain.business.progress.ProgressType;
 import com.interior.domain.util.BoolType;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -31,7 +33,7 @@ public class BusinessFixture {
             "01000", "부산 해운대구 APEC로 21", "401동 1202호", "2635010500115130000000002",
             LocalDateTime.of(2024, 7, 1, 2, 3),
             LocalDateTime.of(2024, 7, 1, 2, 3),
-            new ArrayList<>(), new ArrayList<>());
+            new ArrayList<>(), getBusinessProgress());
 
     public static Business B_3 = Business.of(
             3L, "사업 현장 2", 56L, 519L, BoolType.T,
@@ -39,4 +41,13 @@ public class BusinessFixture {
             LocalDateTime.of(2024, 7, 1, 2, 3),
             LocalDateTime.of(2024, 7, 1, 2, 3),
             new ArrayList<>(), new ArrayList<>());
+
+    private static List<BusinessProgress> getBusinessProgress() {
+
+        List<BusinessProgress> list = new ArrayList<>();
+
+        list.add(BusinessProgress.of(3L, ProgressType.IN_PROGRESS));
+
+        return list;
+    }
 }

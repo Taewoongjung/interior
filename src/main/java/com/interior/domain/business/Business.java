@@ -1,5 +1,6 @@
 package com.interior.domain.business;
 
+import static com.interior.adapter.common.exception.ErrorType.DUPLICATE_PROGRESS_VALUE;
 import static com.interior.adapter.common.exception.ErrorType.EMPTY_BUSINESS_NAME;
 import static com.interior.adapter.common.exception.ErrorType.EMPTY_RELATED_COMPANY_TO_BUSINESS;
 import static com.interior.adapter.common.exception.ErrorType.INVALID_BUSINESS_NAME;
@@ -10,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.interior.domain.business.material.BusinessMaterial;
 import com.interior.domain.business.progress.BusinessProgress;
+import com.interior.domain.business.progress.ProgressType;
 import com.interior.domain.util.BoolType;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -128,5 +130,15 @@ public class Business {
         check(name == null || "".equals(name.trim()), INVALID_BUSINESS_NAME);
 
         this.name = name;
+    }
+
+    public void updateBusinessProgress(final ProgressType updateProgressType) {
+
+        check(this.getBusinessProgressList().stream()
+                        .anyMatch(f -> f.getProgressType().equals(updateProgressType)),
+                DUPLICATE_PROGRESS_VALUE);
+
+        this.getBusinessProgressList()
+                .add(BusinessProgress.of(this.getId(), updateProgressType));
     }
 }
