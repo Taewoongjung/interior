@@ -1,7 +1,6 @@
 package com.interior.domain.alimtalk.kakaomsgresult;
 
 import static com.interior.adapter.common.exception.ErrorType.EMPTY_IS_DELETED;
-import static com.interior.adapter.common.exception.ErrorType.EMPTY_KAKAO_MSG_RESULT_MSG_ID;
 import static com.interior.adapter.common.exception.ErrorType.EMPTY_KAKAO_MSG_RESULT_RECEIVER_PHONE;
 import static com.interior.adapter.common.exception.ErrorType.EMPTY_KAKAO_MSG_RESULT_TYPE;
 import static com.interior.adapter.common.exception.ErrorType.EMPTY_KAKAO_MSG_TEMPLATE_CODE;
@@ -77,7 +76,6 @@ public class KakaoMsgResult {
         require(o -> templateCode == null, templateCode, EMPTY_KAKAO_MSG_TEMPLATE_CODE);
         require(o -> messageType == null, messageType, EMPTY_KAKAO_MSG_RESULT_TYPE);
         require(o -> receiverPhone == null, receiverPhone, EMPTY_KAKAO_MSG_RESULT_RECEIVER_PHONE);
-        require(o -> msgId == null, msgId, EMPTY_KAKAO_MSG_RESULT_MSG_ID);
         require(o -> isSuccess == null, isSuccess, EMPTY_IS_DELETED);
 
         return new KakaoMsgResult(
@@ -112,9 +110,8 @@ public class KakaoMsgResult {
         require(o -> templateCode == null, templateCode, EMPTY_KAKAO_MSG_TEMPLATE_CODE);
         require(o -> messageType == null, messageType, EMPTY_KAKAO_MSG_RESULT_TYPE);
         require(o -> receiverPhone == null, receiverPhone, EMPTY_KAKAO_MSG_RESULT_RECEIVER_PHONE);
-        require(o -> msgId == null, msgId, EMPTY_KAKAO_MSG_RESULT_MSG_ID);
         require(o -> isSuccess == null, isSuccess, EMPTY_IS_DELETED);
-        
+
         return new KakaoMsgResult(
                 id,
                 templateName,

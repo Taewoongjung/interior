@@ -77,6 +77,10 @@ public enum ErrorType {
     EMPTY_CONTRACT_USER_ID(1343, "동의 한 고객의 id는 필수값 입니다."),
 
     NOT_EXIST_SMS_SEND_RESULT(1400, "sms 발송 정보가 없습니다."),
+    EMPTY_SENDER_SMS_SEND_RESULT(1401, "sms 발송자 번호는 필수값 입니다."),
+    EMPTY_RECEIVER_SMS_SEND_RESULT(1402, "sms 발신자 번호는 필수값 입니다."),
+    EMPTY_PLATFORM_TYPE_SMS_SEND_RESULT(1403, "sms 발송 플랫폼 정보는 필수값 입니다."),
+    EMPTY_MSG_ID_SMS_SEND_RESULT(1404, "sms 발송 id 정보는 필수값 입니다."),
 
     NO_ALIMTALK_TEMPLATE(1500, "템플릿이 없습니다"),
 
@@ -85,7 +89,6 @@ public enum ErrorType {
     EMPTY_KAKAO_MSG_TEMPLATE_THIRD_PART_TYPE(1503, "써드파티 타입은 필수값 입니다."),
     EMPTY_KAKAO_MSG_RESULT_TYPE(1504, "메시지 결과 타입은 필수값 입니다."),
     EMPTY_KAKAO_MSG_RESULT_RECEIVER_PHONE(1505, "메시지를 받은 번호는 필수값 입니다."),
-    EMPTY_KAKAO_MSG_RESULT_MSG_ID(1506, "메시지 결과 id는 필수값 입니다."),
 
     ;
 

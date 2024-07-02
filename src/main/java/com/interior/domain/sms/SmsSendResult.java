@@ -1,7 +1,13 @@
 package com.interior.domain.sms;
 
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_IS_DELETED;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_MSG_ID_SMS_SEND_RESULT;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_PLATFORM_TYPE_SMS_SEND_RESULT;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_RECEIVER_SMS_SEND_RESULT;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_SENDER_SMS_SEND_RESULT;
 import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_SMS_SEND_RESULT;
 import static com.interior.util.CheckUtil.check;
+import static com.interior.util.CheckUtil.require;
 
 import com.interior.domain.util.BoolType;
 import java.time.LocalDateTime;
@@ -13,23 +19,23 @@ import lombok.extern.slf4j.Slf4j;
 @Getter
 public class SmsSendResult {
 
-    private Long id;
+    private final Long id;
 
-    private BoolType isSuccess;
+    private final BoolType isSuccess;
 
-    private String type;
+    private final String type;
 
-    private String sender;
+    private final String sender;
 
-    private String receiver;
+    private final String receiver;
 
-    private String platformType;
+    private final String platformType;
 
-    private String resultCode;
+    private final String resultCode;
 
-    private String msgId;
+    private final String msgId;
 
-    private LocalDateTime createdAt;
+    private final LocalDateTime createdAt;
 
     private SmsSendResult(
             final Long id,
@@ -63,9 +69,14 @@ public class SmsSendResult {
             final String resultCode,
             final String msgId
     ) {
+
+        require(o -> isSuccess == null, isSuccess, EMPTY_IS_DELETED);
+        require(o -> sender == null, sender, EMPTY_SENDER_SMS_SEND_RESULT);
+        require(o -> receiver == null, sender, EMPTY_RECEIVER_SMS_SEND_RESULT);
+        require(o -> platformType == null, platformType, EMPTY_PLATFORM_TYPE_SMS_SEND_RESULT);
+
         return new SmsSendResult(null, isSuccess, type, sender, receiver, platformType, resultCode,
-                msgId,
-                null);
+                msgId, null);
     }
 
     public static SmsSendResult of(
@@ -77,20 +88,17 @@ public class SmsSendResult {
 
         SmsSendResult smsSendResult = null;
 
-        System.out.println("여기가 = " + json);
-        System.out.println("여기가 = " + platformType);
-
         try {
             if ("ALIGO".equals(platformType)) {
                 if (json != null && "success".equals(json.get("message"))) {
                     smsSendResult = SmsSendResult.of(
                             BoolType.T,
-                            json.get("msg_type").toString(),
+                            json.get("msg_type"),
                             sender,
                             receiver,
                             platformType,
-                            json.get("result_code").toString(),
-                            json.get("msg_id").toString()
+                            json.get("result_code"),
+                            json.get("msg_id")
                     );
                 } else if (json == null) {
                     smsSendResult = SmsSendResult.of(
@@ -109,7 +117,7 @@ public class SmsSendResult {
                             sender,
                             receiver,
                             platformType,
-                            json.get("result_code").toString(),
+                            json.get("result_code"),
                             ""
                     );
                 }
@@ -136,6 +144,13 @@ public class SmsSendResult {
             final String msgId,
             final LocalDateTime createdAt
     ) {
+
+        require(o -> isSuccess == null, isSuccess, EMPTY_IS_DELETED);
+        require(o -> sender == null, sender, EMPTY_SENDER_SMS_SEND_RESULT);
+        require(o -> receiver == null, sender, EMPTY_RECEIVER_SMS_SEND_RESULT);
+        require(o -> platformType == null, platformType, EMPTY_PLATFORM_TYPE_SMS_SEND_RESULT);
+        require(o -> msgId == null, msgId, EMPTY_MSG_ID_SMS_SEND_RESULT);
+
         return new SmsSendResult(id, isSuccess, type, sender, receiver, platformType, resultCode,
                 msgId, createdAt);
     }
