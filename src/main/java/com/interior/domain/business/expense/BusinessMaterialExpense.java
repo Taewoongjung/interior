@@ -67,4 +67,12 @@ public class BusinessMaterialExpense {
                 laborCostPerUnit,
                 LocalDateTime.now(), LocalDateTime.now());
     }
+
+    public void setMaterialCostPerUnit(final String materialCostPerUnit) {
+        this.materialCostPerUnit = materialCostPerUnit;
+    }
+
+    public void setLaborCostPerUnit(final String laborCostPerUnit) {
+        this.laborCostPerUnit = laborCostPerUnit;
+    }
 }

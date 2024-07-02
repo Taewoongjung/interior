@@ -49,14 +49,12 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
     @Transactional(readOnly = true)
     public Business findById(final Long businessId) {
 
-        BusinessEntity businessEntities = findBusinessById(businessId);
-
-        check(businessEntities.getIsDeleted() == BoolType.T, NOT_EXIST_BUSINESS);
+        BusinessEntity businessEntity = findBusinessById(businessId);
 
         // 삭제된 재료들 제외
-        businessEntities.getOnlyNotDeletedMaterials();
+        businessEntity.getOnlyNotDeletedMaterials();
 
-        return businessEntities.toPojoWithRelations();
+        return businessEntity.toPojoWithRelations();
     }
 
     private BusinessEntity findBusinessById(final Long id) {
@@ -64,9 +62,7 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
         BusinessEntity businessEntity = businessJpaRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException(NOT_EXIST_BUSINESS.getMessage()));
 
-        if (businessEntity.getIsDeleted() == BoolType.T) {
-            throw new NoSuchElementException(NOT_EXIST_BUSINESS.getMessage());
-        }
+        check(businessEntity.getIsDeleted() == BoolType.T, NOT_EXIST_BUSINESS);
 
         return businessEntity;
     }

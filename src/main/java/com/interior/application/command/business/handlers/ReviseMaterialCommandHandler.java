@@ -1,8 +1,6 @@
 package com.interior.application.command.business.handlers;
 
-import static com.interior.adapter.common.exception.ErrorType.NOT_CONTAIN_MATERIAL_IN_THE_BUSINESS;
 import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_BUSINESS_MATERIAL;
-import static com.interior.util.CheckUtil.check;
 
 import com.interior.abstraction.domain.ICommandHandler;
 import com.interior.adapter.outbound.jpa.repository.business.dto.ReviseBusinessMaterial;
@@ -45,10 +43,6 @@ public class ReviseMaterialCommandHandler implements
                 .findFirst()
                 .orElseThrow(
                         () -> new NoSuchElementException(NOT_EXIST_BUSINESS_MATERIAL.getMessage()));
-
-        check(business.getBusinessMaterialList().stream()
-                        .noneMatch(e -> command.materialId().equals(e.getId())),
-                NOT_CONTAIN_MATERIAL_IN_THE_BUSINESS);
 
         ReviseBusinessMaterial repositoryDto = ReviseBusinessMaterial.of(command.req(),
                 businessMaterial);

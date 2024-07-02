@@ -48,4 +48,19 @@ public class BusinessMaterialFixture {
                     LocalDateTime.of(2024, 7, 1, 2, 3)
             )
     );
+
+    public static BusinessMaterial BM_3 = BusinessMaterial.of(
+            81L, 1L, "벽돌", "외벽 공사",
+            "세라믹 벽돌", BigDecimal.valueOf(21), "ea", "메모해요", BoolType.T,
+            LocalDateTime.of(2024, 7, 1, 2, 3),
+            LocalDateTime.of(2024, 7, 1, 2, 3),
+            BusinessMaterialExpense.of(
+                    12L,
+                    1L,
+                    "1200",
+                    "5000",
+                    LocalDateTime.of(2024, 7, 1, 2, 3),
+                    LocalDateTime.of(2024, 7, 1, 2, 3)
+            )
+    );
 }

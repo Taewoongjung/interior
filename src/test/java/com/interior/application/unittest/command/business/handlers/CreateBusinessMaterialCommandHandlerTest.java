@@ -33,13 +33,13 @@ class CreateBusinessMaterialCommandHandlerTest {
         // when
         // then
         boolean actual = sut.handle(event);
-
         assertThat(actual).isTrue();
     }
 
     @Test
     @DisplayName("존재하지 않은 사업에는 재료를 추가할 수 없다.")
     void test2() {
+        
         // given
         CreateBusinessMaterialCommand event = new CreateBusinessMaterialCommand(
                 5L, "벽돌", "외벽공사", "벽돌류", BigDecimal.valueOf(1), "ea", "메모메모", "11", "22", null);
