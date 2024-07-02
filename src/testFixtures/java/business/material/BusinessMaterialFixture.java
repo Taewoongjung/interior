@@ -15,6 +15,7 @@ public class BusinessMaterialFixture {
 
         list.add(BM_1);
         list.add(BM_2);
+        list.add(BM_3);
 
         return list;
     }

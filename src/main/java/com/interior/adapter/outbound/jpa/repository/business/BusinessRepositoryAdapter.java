@@ -221,8 +221,7 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
             final List<Long> targetList,
             final String usageCategoryName) {
 
-        BusinessEntity business = businessJpaRepository.findById(businessId)
-                .orElseThrow(() -> new NoSuchElementException(NOT_EXIST_BUSINESS.getMessage()));
+        BusinessEntity business = findBusinessById(businessId);
 
         business.getBusinessMaterialList().stream()
                 .filter(f -> targetList.contains(f.getId()))

@@ -116,6 +116,20 @@ public class BusinessRepositorySpy implements BusinessRepository {
     @Override
     public boolean reviseUsageCategoryOfMaterial(Long businessId, List<Long> targetList,
             String usageCategoryName) {
+
+        List<Business> businessList = getBusinessList();
+
+        Business business = businessList.stream()
+                .filter(f -> businessId.equals(f.getId()) && BoolType.F.equals(f.getIsDeleted()))
+                .findFirst()
+                .orElseThrow(() -> new NoSuchElementException(NOT_EXIST_BUSINESS.getMessage()));
+
+        business.getBusinessMaterialList().addAll(getBusinessMaterial());
+
+        business.getBusinessMaterialList().stream()
+                .filter(f -> targetList.contains(f.getId()))
+                .forEach(e -> e.setUsageCategory(usageCategoryName));
+
         return false;
     }
 
