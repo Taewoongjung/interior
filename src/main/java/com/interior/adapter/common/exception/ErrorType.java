@@ -78,7 +78,11 @@ public enum ErrorType {
 
     NOT_EXIST_SMS_SEND_RESULT(1400, "sms 발송 정보가 없습니다."),
 
-    NO_ALIMTALK_TEMPLATE(1500, "템플릿이 없습니다");
+    NO_ALIMTALK_TEMPLATE(1500, "템플릿이 없습니다"),
+
+    EMPTY_KAKAO_MSG_TEMPLATE_NAME(1501, "템플릿 이름은 필수값 입니다."),
+    EMPTY_KAKAO_MSG_TEMPLATE_CODE(1502, "템플릿 코드는 필수값 입니다."),
+    EMPTY_KAKAO_MSG_TEMPLATE_THIRD_PART_TYPE(1503, "써드파티 타입은 필수값 입니다.");
 
     private final int code;
     private final String message;
