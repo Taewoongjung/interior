@@ -7,7 +7,7 @@ import static org.mockito.Mockito.mock;
 
 import com.interior.application.command.business.commands.CreateBusinessMaterialCommand;
 import com.interior.application.command.business.handlers.CreateBusinessMaterialCommandHandler;
-import com.interior.application.unittest.spy.BusinessRepositorySpy;
+import com.interior.helper.spy.BusinessRepositorySpy;
 import java.math.BigDecimal;
 import java.util.NoSuchElementException;
 import org.junit.jupiter.api.DisplayName;
@@ -39,7 +39,7 @@ class CreateBusinessMaterialCommandHandlerTest {
     @Test
     @DisplayName("존재하지 않은 사업에는 재료를 추가할 수 없다.")
     void test2() {
-        
+
         // given
         CreateBusinessMaterialCommand event = new CreateBusinessMaterialCommand(
                 5L, "벽돌", "외벽공사", "벽돌류", BigDecimal.valueOf(1), "ea", "메모메모", "11", "22", null);

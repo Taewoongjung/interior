@@ -1,4 +1,4 @@
-package com.interior.application.unittest.spy;
+package com.interior.helper.spy;
 
 import static business.BusinessFixture.getBusinessList;
 import static business.material.BusinessMaterialFixture.getBusinessMaterial;

@@ -9,8 +9,8 @@ import static org.mockito.Mockito.mock;
 
 import com.interior.application.command.business.commands.ReviseUsageCategoryOfMaterialCommand;
 import com.interior.application.command.business.handlers.ReviseUsageCategoryOfMaterialCommandHandler;
-import com.interior.application.unittest.spy.BusinessRepositorySpy;
 import com.interior.domain.business.repository.BusinessRepository;
+import com.interior.helper.spy.BusinessRepositorySpy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
