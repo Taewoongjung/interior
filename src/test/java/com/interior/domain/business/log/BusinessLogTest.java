@@ -30,7 +30,7 @@ class BusinessLogTest {
     }
 
     @Test
-    @DisplayName("연관 된 사업 id 는 필수값입니다.")
+    @DisplayName("연관 된 사업 id가 필수값입니다.")
     void test2() {
         assertThatThrownBy(() -> {
             BusinessLog.of(
@@ -48,7 +48,7 @@ class BusinessLogTest {
     }
 
     @Test
-    @DisplayName("변경 된 필드는 필수값입니다.")
+    @DisplayName("변경 된 필드가 필수값입니다.")
     void test3() {
         assertThatThrownBy(() -> {
             BusinessLog.of(
@@ -66,7 +66,7 @@ class BusinessLogTest {
     }
 
     @Test
-    @DisplayName("업데이트 한 사람의 id는 필수값입니다.")
+    @DisplayName("업데이트 한 사람의 id가 필수값입니다.")
     void test4() {
         assertThatThrownBy(() -> {
             BusinessLog.of(
@@ -84,7 +84,7 @@ class BusinessLogTest {
     }
 
     @Test
-    @DisplayName("업데이트 한 사람의 이름은 필수값입니다.")
+    @DisplayName("업데이트 한 사람의 이름이 필수값입니다.")
     void test5() {
         assertThatThrownBy(() -> {
             BusinessLog.of(
