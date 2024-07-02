@@ -1,5 +1,10 @@
 package com.interior.domain.business.progress;
 
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_BUSINESS_ID;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_IS_DELETED;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_PROGRESS_TYPE;
+import static com.interior.util.CheckUtil.require;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.interior.domain.util.BoolType;
@@ -43,6 +48,9 @@ public class BusinessProgress {
             final ProgressType progressType
     ) {
 
+        require(o -> businessId == null, businessId, EMPTY_BUSINESS_ID);
+        require(o -> progressType == null, progressType, EMPTY_PROGRESS_TYPE);
+
         return new BusinessProgress(null, businessId, progressType, BoolType.F, null);
     }
 
@@ -54,6 +62,10 @@ public class BusinessProgress {
             final BoolType isDeleted,
             final LocalDateTime createdAt
     ) {
+
+        require(o -> businessId == null, businessId, EMPTY_BUSINESS_ID);
+        require(o -> progressType == null, progressType, EMPTY_PROGRESS_TYPE);
+        require(o -> isDeleted == null, isDeleted, EMPTY_IS_DELETED);
 
         return new BusinessProgress(id, businessId, progressType, isDeleted, createdAt);
     }

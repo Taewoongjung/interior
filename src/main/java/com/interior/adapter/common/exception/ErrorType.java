@@ -65,6 +65,8 @@ public enum ErrorType {
     EMPTY_UPDATER_ID(1303, "변경자의 id는 필수값 입니다."),
     EMPTY_UPDATER_NAME(1304, "변경자의 이름은 필수값 입니다."),
     DUPLICATE_PROGRESS_VALUE(1305, "이미 해당 상태값이 존재하여 처리 된 이력이 있습니다."),
+    EMPTY_PROGRESS_TYPE(1306, "진행 상황 객체는 필수값 입니다."),
+    EMPTY_IS_DELETED(1307, "삭제 유무 객체는 필수값 입니다."),
 
     NOT_EXIST_SMS_SEND_RESULT(1400, "sms 발송 정보가 없습니다."),
 
