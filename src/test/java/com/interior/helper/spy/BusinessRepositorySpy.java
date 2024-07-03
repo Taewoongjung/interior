@@ -1,6 +1,7 @@
 package com.interior.helper.spy;
 
 import static business.BusinessFixture.getBusinessList;
+import static business.log.BusinessMaterialLogFixture.getBusinessMaterialLogList;
 import static business.material.BusinessMaterialFixture.getBusinessMaterial;
 import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_BUSINESS;
 import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_BUSINESS_MATERIAL;
@@ -207,7 +208,11 @@ public class BusinessRepositorySpy implements BusinessRepository {
 
     @Override
     public List<BusinessMaterialLog> findBusinessMaterialLogByBusinessId(Long businessId) {
-        return null;
+
+        List<BusinessMaterialLog> list = getBusinessMaterialLogList();
+
+        return list.stream().filter(f -> businessId.equals(f.getBusinessId()))
+                .collect(Collectors.toList());
     }
 
     @Override

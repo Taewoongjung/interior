@@ -254,10 +254,10 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
 
     @Override
     @Transactional(readOnly = true)
-    public List<BusinessMaterialLog> findBusinessMaterialLogByBusinessId(final Long materialId) {
+    public List<BusinessMaterialLog> findBusinessMaterialLogByBusinessId(final Long businessId) {
 
         List<BusinessMaterialLogEntity> materialLogList = businessMaterialLogJpaRepository.findAllByBusinessId(
-                materialId);
+                businessId);
 
         if (materialLogList == null || materialLogList.size() == 0) {
             return new ArrayList<>();
