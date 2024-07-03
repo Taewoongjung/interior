@@ -3,13 +3,13 @@ package com.interior.adapter.inbound.business.query;
 import com.interior.adapter.inbound.business.enumtypes.QueryType;
 import com.interior.adapter.inbound.business.webdto.GetBusinessMaterialLogsWebDtoV1;
 import com.interior.adapter.inbound.business.webdto.GetBusinessWebDtoV1;
-import com.interior.application.readmodel.business.handlers.GetAllBusinessesByUserQueryHandler;
+import com.interior.application.readmodel.business.handlers.GetAllBusinessesByCompanyIdListQueryHandler;
 import com.interior.application.readmodel.business.handlers.GetBusinessMaterialLogQueryHandler;
 import com.interior.application.readmodel.business.handlers.GetBusinessQueryHandler;
 import com.interior.application.readmodel.business.handlers.GetBusinessesByCompanyIdQueryHandler;
 import com.interior.application.readmodel.business.handlers.GetExcelOfBusinessMaterialListQueryHandler;
 import com.interior.application.readmodel.business.handlers.GetExcelProgressInfoQueryHandler;
-import com.interior.application.readmodel.business.queries.GetAllBusinessesByUserQuery;
+import com.interior.application.readmodel.business.queries.GetAllBusinessesByCompanyIdListQuery;
 import com.interior.application.readmodel.business.queries.GetBusinessMaterialLogQuery;
 import com.interior.application.readmodel.business.queries.GetBusinessQuery;
 import com.interior.application.readmodel.business.queries.GetBusinessesByCompanyIdQuery;
@@ -36,9 +36,9 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 @RestController
 @RequiredArgsConstructor
 public class BusinessQueryController {
-    
+
     private final GetBusinessQueryHandler getBusinessQueryHandler;
-    private final GetAllBusinessesByUserQueryHandler getAllBusinessesByUserQueryHandler;
+    private final GetAllBusinessesByCompanyIdListQueryHandler getAllBusinessesByUserQueryHandler;
     private final GetBusinessesByCompanyIdQueryHandler getBusinessesByCompanyIdQueryHandler;
     private final GetExcelOfBusinessMaterialListQueryHandler getExcelOfBusinessMaterialListQueryHandler;
     private final GetExcelProgressInfoQueryHandler getExcelProgressInfoQueryHandler;
@@ -62,7 +62,7 @@ public class BusinessQueryController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(getAllBusinessesByUserQueryHandler.handle(
-                        new GetAllBusinessesByUserQuery(
+                        new GetAllBusinessesByCompanyIdListQuery(
                                 user.getCompanyList().stream()
                                         .map(Company::getId)
                                         .toList())
