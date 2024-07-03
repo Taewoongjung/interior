@@ -8,12 +8,10 @@ import com.interior.application.readmodel.utill.sse.SseService;
 import com.interior.domain.business.Business;
 import com.interior.domain.business.repository.BusinessRepository;
 import jakarta.servlet.ServletOutputStream;
-import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,12 +30,11 @@ public class GetExcelOfBusinessMaterialListQueryHandler implements
         return true;
     }
 
-    @Async
     @Override
     @Transactional(readOnly = true)
     public CompletableFuture<Void> handle(final GetExcelOfBusinessMaterialListQuery query) {
         log.info("process GetExcelOfBusinessMaterialListQuery {}", query);
-        
+
         BusinessListExcel businessListExcel = null;
 
         Business business = businessRepository.findBusinessByCompanyIdAndBusinessId(
@@ -64,10 +61,10 @@ public class GetExcelOfBusinessMaterialListQueryHandler implements
             outputStream.flush();
             outputStream.close();
 
-        } catch (IOException | InterruptedException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
-        return CompletableFuture.completedFuture(null);
+        return null;
     }
 }
