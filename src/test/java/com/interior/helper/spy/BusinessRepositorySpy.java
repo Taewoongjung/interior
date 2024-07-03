@@ -21,6 +21,7 @@ import com.interior.domain.business.repository.dto.CreateBusinessMaterial;
 import com.interior.domain.util.BoolType;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 public class BusinessRepositorySpy implements BusinessRepository {
 
@@ -55,7 +56,13 @@ public class BusinessRepositorySpy implements BusinessRepository {
 
     @Override
     public List<Business> findAllByCompanyIdIn(List<Long> companyIdList) {
-        return null;
+
+        List<Business> businessList = getBusinessList();
+
+        return businessList.stream()
+                .filter(f -> f.getIsDeleted() == BoolType.F)
+                .filter(f -> companyIdList.contains(f.getCompanyId()))
+                .collect(Collectors.toList());
     }
 
     @Override
