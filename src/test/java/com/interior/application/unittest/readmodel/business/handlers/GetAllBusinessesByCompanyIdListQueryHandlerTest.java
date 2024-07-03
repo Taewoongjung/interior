@@ -1,4 +1,4 @@
-package com.interior.application.unittest.query.business.handlers;
+package com.interior.application.unittest.readmodel.business.handlers;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -38,7 +38,7 @@ class GetAllBusinessesByCompanyIdListQueryHandlerTest {
 
         // then
         assertThat(actual).isNotNull();
-        assertThat(actual.size()).isEqualTo(2);
+        assertThat(actual.size()).isEqualTo(3);
 
         assertThat(actual.get(0).getCompanyId()).isEqualTo(17L);
         assertThat(actual.get(1).getCompanyId()).isEqualTo(23L);
