@@ -37,11 +37,6 @@ class ValidationCheckOfEmailQueryHandlerTest {
     private final ValidationCheckOfEmailQueryHandler sut = new ValidationCheckOfEmailQueryHandler(
             cacheEmailValidationRedisRepository);
 
-//    @BeforeTestClass
-//    public void init() {
-//        redisContainer.start();
-//    }
-
     @BeforeTestClass
     public void setUp() {
         redisContainer.start();

@@ -37,11 +37,6 @@ class ValidationCheckOfPhoneNumberQueryHandlerTest {
     private final ValidationCheckOfPhoneNumberQueryHandler sut = new ValidationCheckOfPhoneNumberQueryHandler(
             cacheSmsValidationRedisRepository);
 
-//    @BeforeTestClass
-//    public void init() {
-//        redisContainer.start();
-//    }
-
     @BeforeTestClass
     public void setUp() {
         redisContainer.start();
