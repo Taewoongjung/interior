@@ -23,11 +23,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.data.redis.core.ValueOperations;
+import org.testcontainers.junit.jupiter.Container;
 
 @ExtendWith(RedisTestContainerConfig.class)
 @DisplayName("ValidationCheckOfPhoneNumberQueryHandler 는 ")
 class ValidationCheckOfPhoneNumberQueryHandlerTest {
 
+    @Container
     private final CacheSmsValidationRedisRepository cacheSmsValidationRedisRepository = new CacheSmsValidationRedisRepository(
             redisTemplate);
 
