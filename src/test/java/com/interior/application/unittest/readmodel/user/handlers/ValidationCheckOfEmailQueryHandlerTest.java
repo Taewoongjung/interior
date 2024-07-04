@@ -39,7 +39,7 @@ class ValidationCheckOfEmailQueryHandlerTest {
             cacheEmailValidationRedisRepository);
 
     @BeforeTestClass
-    void init() {
+    public void init() {
         redisContainer.start();
     }
 

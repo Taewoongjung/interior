@@ -39,7 +39,7 @@ class ValidationCheckOfPhoneNumberQueryHandlerTest {
             cacheSmsValidationRedisRepository);
 
     @BeforeTestClass
-    void init() {
+    public void init() {
         redisContainer.start();
     }
 

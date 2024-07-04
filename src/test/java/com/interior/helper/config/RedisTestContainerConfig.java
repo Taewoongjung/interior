@@ -15,7 +15,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-@Testcontainers(disabledWithoutDocker = true)
+@Testcontainers
 public class RedisTestContainerConfig implements BeforeAllCallback, AfterAllCallback {
 
     private static final int REDIS_PORT = 6379;
@@ -29,7 +29,7 @@ public class RedisTestContainerConfig implements BeforeAllCallback, AfterAllCall
     @Override
     public void beforeAll(ExtensionContext context) {
         redisTemplate = redisTemplate();
-
+        
         redisTemplate.setConnectionFactory(redisConnectionFactory());
     }
 

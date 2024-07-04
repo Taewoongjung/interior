@@ -28,8 +28,5 @@ jobs:
         with:
           token: ${{ secrets.TC_CLOUD_TOKEN }}
 
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v1
-
       - name: Run CI test with Gradle Wrapper
         run: ./gradlew test
