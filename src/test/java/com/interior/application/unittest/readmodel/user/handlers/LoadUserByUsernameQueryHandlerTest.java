@@ -1,10 +1,11 @@
-package com.interior.application.readmodel.user.handlers;
+package com.interior.application.unittest.readmodel.user.handlers;
 
 import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_USER;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 import com.interior.adapter.common.exception.InvalidInputException;
+import com.interior.application.readmodel.user.handlers.LoadUserByUsernameQueryHandler;
 import com.interior.domain.user.repository.UserRepository;
 import com.interior.helper.spy.UserRepositorySpy;
 import org.junit.jupiter.api.DisplayName;
