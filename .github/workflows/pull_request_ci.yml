@@ -22,7 +22,7 @@ jobs:
 
       - name: Start Docker Container
         run: |
-          docker run -d --name my-container -p 8080:8080 my-docker-image
+          docker run -d --name redis-container -p 6379:6379 redis
           docker ps
 
       - name: Set up JDK 17
@@ -42,5 +42,5 @@ jobs:
 
       - name: Stop and Remove Docker Container
         run: |
-          docker stop my-container
-          docker rm my-container
+          docker stop redis-container
+          docker rm redis-container
