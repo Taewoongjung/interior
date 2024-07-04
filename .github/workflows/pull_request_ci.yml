@@ -15,21 +15,13 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: openjdk:17
+      image: openjdk:17  # Use an appropriate Docker image with JDK 17 pre-installed
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up JDK 17
-        run: |
-          apt-get update
-          apt-get install -y openjdk-17-jdk
-
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v1
-
-      - name: Run CI checks with Gradle Wrapper
-        run: ./gradlew check
 
       - name: Run CI checks with Gradle Wrapper
         run: ./gradlew check
