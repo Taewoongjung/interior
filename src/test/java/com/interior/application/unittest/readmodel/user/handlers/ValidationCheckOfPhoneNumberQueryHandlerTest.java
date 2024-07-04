@@ -24,7 +24,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.test.context.event.annotation.BeforeTestClass;
 import org.testcontainers.junit.jupiter.Container;
 
 @ExtendWith(RedisTestContainerConfig.class)
@@ -38,13 +37,14 @@ class ValidationCheckOfPhoneNumberQueryHandlerTest {
     private final ValidationCheckOfPhoneNumberQueryHandler sut = new ValidationCheckOfPhoneNumberQueryHandler(
             cacheSmsValidationRedisRepository);
 
-    @BeforeTestClass
-    public void init() {
-        redisContainer.start();
-    }
+//    @BeforeTestClass
+//    public void init() {
+//        redisContainer.start();
+//    }
 
     @BeforeEach
     void setUp() {
+        redisContainer.start();
         redisTemplate.afterPropertiesSet();
     }
 
