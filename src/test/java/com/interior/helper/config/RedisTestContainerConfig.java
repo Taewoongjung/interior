@@ -11,6 +11,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.utility.DockerImageName;
 
 public class RedisTestContainerConfig implements BeforeAllCallback {
@@ -19,6 +20,7 @@ public class RedisTestContainerConfig implements BeforeAllCallback {
     private static final int REDIS_PORT = 6379;
     private GenericContainer redis;
 
+    @Container
     public static RedisTemplate<String, Map<String, String>> redisTemplate;
 
     @Override
