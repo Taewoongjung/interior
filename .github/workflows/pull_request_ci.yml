@@ -23,27 +23,8 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Install Docker
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-              ca-certificates \
-              curl \
-              gnupg \
-              lsb-release
-          sudo mkdir -p /etc/apt/keyrings
-          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-          echo \
-            "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-            $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-          sudo apt-get update
-          sudo apt-get install -y docker-ce docker-ce-cli containerd.io
-          sudo systemctl start docker
-          sudo systemctl enable docker
-          sudo usermod -aG docker $USER
-
-      - name: Verify Docker installation
-        run: sudo docker run hello-world
+      - name: Setup Testcontainers Cloud Client
+        uses: atomicjar/testcontainers-cloud-setup-action@v1
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v1
