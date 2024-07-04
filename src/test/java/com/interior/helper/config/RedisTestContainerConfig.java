@@ -18,9 +18,9 @@ public class RedisTestContainerConfig implements BeforeAllCallback {
 
     private static final String REDIS_IMAGE = "redis:7.0.8-alpine";
     private static final int REDIS_PORT = 6379;
+    @Container
     private GenericContainer redis;
 
-    @Container
     public static RedisTemplate<String, Map<String, String>> redisTemplate;
 
     @Override
