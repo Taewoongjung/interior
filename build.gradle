@@ -94,8 +94,13 @@ dependencies {
 
     // gson
     implementation 'com.google.code.gson:gson:2.8.9'
-
     implementation 'org.json:json:20210307'
+
+    // test container
+    testImplementation "org.testcontainers:testcontainers:1.19.0"
+    testImplementation "org.testcontainers:junit-jupiter:1.19.0"
+
+    testCompileOnly 'org.projectlombok:lombok'
 }
 
 tasks.named('test') {

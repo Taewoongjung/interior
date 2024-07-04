@@ -58,7 +58,7 @@ public class CacheEmailValidationRedisRepository {
         return false;
     }
 
-    public void setIsVerifiedByKey(final String key) {
+    public boolean setIsVerifiedByKey(final String key) {
         ValueOperations<String, Map<String, String>> valueOps = redisTemplate.opsForValue();
 
         Map<String, String> valueMap = valueOps.get(key);
@@ -66,9 +66,13 @@ public class CacheEmailValidationRedisRepository {
         if (valueMap != null) {
             valueMap.put("isVerified", "true");
             valueOps.set(key, valueMap);
+
+            return true;
         } else {
             log.error("[Redis] No value found for key: " + key);
         }
+
+        return false;
     }
 
     @Async
