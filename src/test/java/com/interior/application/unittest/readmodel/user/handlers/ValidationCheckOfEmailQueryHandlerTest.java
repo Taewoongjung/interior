@@ -4,8 +4,6 @@ import static com.interior.adapter.common.exception.ErrorType.EMPTY_VERIFY_NUMBE
 import static com.interior.adapter.common.exception.ErrorType.EXPIRED_EMAIL_CHECK_REQUEST;
 import static com.interior.adapter.common.exception.ErrorType.INVALID_EMAIL_CHECK_NUMBER;
 import static com.interior.adapter.common.exception.ErrorType.NOT_6DIGIT_VERIFY_NUMBER;
-import static com.interior.helper.config.RedisTestContainerConfig.redisContainer;
-import static com.interior.helper.config.RedisTestContainerConfig.redisTemplate;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
@@ -19,33 +17,30 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.test.context.event.annotation.BeforeTestClass;
 import org.testcontainers.junit.jupiter.Container;
 
-@ExtendWith(RedisTestContainerConfig.class)
 @DisplayName("ValidationCheckOfEmailQueryHandlerTest 는 ")
 class ValidationCheckOfEmailQueryHandlerTest {
 
+    RedisTestContainerConfig redis = new RedisTestContainerConfig();
+
     @Container
     private final CacheEmailValidationRedisRepository cacheEmailValidationRedisRepository = new CacheEmailValidationRedisRepository(
-            redisTemplate);
+            redis.getRedisTemplate());
 
     private final ValidationCheckOfEmailQueryHandler sut = new ValidationCheckOfEmailQueryHandler(
             cacheEmailValidationRedisRepository);
 
-//    @BeforeTestClass
-//    public void init() {
-//        redisContainer.start();
-//    }
+    RedisTemplate<String, Map<String, String>> redisTemplate = redis.getRedisTemplate();
 
-    @BeforeEach
-    void setUp() {
-        redisContainer.start();
-        redisTemplate.afterPropertiesSet();
+    @BeforeTestClass
+    public void setUp() {
+        redis.getRedisContainer().start();
     }
 
 

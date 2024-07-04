@@ -3,9 +3,7 @@ package com.interior.helper.config;
 import com.redis.testcontainers.RedisContainer;
 import java.time.Duration;
 import java.util.Map;
-import org.junit.jupiter.api.extension.AfterAllCallback;
-import org.junit.jupiter.api.extension.BeforeAllCallback;
-import org.junit.jupiter.api.extension.ExtensionContext;
+import lombok.Getter;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
@@ -15,22 +13,23 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+@Getter
 @Testcontainers
-public class RedisTestContainerConfig implements BeforeAllCallback, AfterAllCallback {
+public class RedisTestContainerConfig {
 
     private static final int REDIS_PORT = 6379;
 
     @Container
-    public static RedisContainer redisContainer = new RedisContainer(
+    public RedisContainer redisContainer = new RedisContainer(
             RedisContainer.DEFAULT_IMAGE_NAME.withTag(RedisContainer.DEFAULT_TAG));
 
-    public static RedisTemplate<String, Map<String, String>> redisTemplate;
+    public RedisTemplate<String, Map<String, String>> redisTemplate;
 
-    @Override
-    public void beforeAll(ExtensionContext context) {
+
+    public RedisTestContainerConfig() {
         redisTemplate = redisTemplate();
-        
         redisTemplate.setConnectionFactory(redisConnectionFactory());
+        redisTemplate.afterPropertiesSet();
     }
 
     public RedisTemplate<String, Map<String, String>> redisTemplate() {
@@ -60,10 +59,5 @@ public class RedisTestContainerConfig implements BeforeAllCallback, AfterAllCall
         lettuceConnectionFactory.setShareNativeConnection(false);
 
         return lettuceConnectionFactory;
-    }
-
-    @Override
-    public void afterAll(ExtensionContext context) throws Exception {
-        redisContainer.stop();
     }
 }
