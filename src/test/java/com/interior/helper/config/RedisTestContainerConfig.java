@@ -15,10 +15,9 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-@Testcontainers
+@Testcontainers(disabledWithoutDocker = true)
 public class RedisTestContainerConfig implements BeforeAllCallback, AfterAllCallback {
 
-    private static final String REDIS_IMAGE = "redis:7.0.8-alpine";
     private static final int REDIS_PORT = 6379;
 
     @Container
