@@ -52,6 +52,7 @@ class ValidationCheckOfEmailQueryHandlerTest {
                 targetEmail, compTargetNumber
         );
 
+        // when
         HashMap<String, String> dateMappedByEmailInCache = new HashMap<>();
         dateMappedByEmailInCache.put("number", compTargetNumber);
         dateMappedByEmailInCache.put("createdAt", LocalDateTime.now().toString());
@@ -83,6 +84,7 @@ class ValidationCheckOfEmailQueryHandlerTest {
                 targetEmail, compTargetNumber
         );
 
+        // when
         HashMap<String, String> dateMappedByEmailInCache = new HashMap<>();
         dateMappedByEmailInCache.put("number", compTargetNumber);
         dateMappedByEmailInCache.put("createdAt",
@@ -112,6 +114,7 @@ class ValidationCheckOfEmailQueryHandlerTest {
                 targetEmail, compTargetNumber
         );
 
+        // when
         HashMap<String, String> dateMappedByEmailInCache = new HashMap<>();
         dateMappedByEmailInCache.put("number", "");
         dateMappedByEmailInCache.put("createdAt", LocalDateTime.now().toString());
@@ -140,6 +143,7 @@ class ValidationCheckOfEmailQueryHandlerTest {
                 targetEmail, compTargetNumber
         );
 
+        // when
         HashMap<String, String> dateMappedByEmailInCache = new HashMap<>();
         dateMappedByEmailInCache.put("number", "12345");
         dateMappedByEmailInCache.put("createdAt", LocalDateTime.now().toString());
@@ -157,8 +161,37 @@ class ValidationCheckOfEmailQueryHandlerTest {
     }
 
     @Test
-    @DisplayName("사용자가 입력한 인증번호와 대조 대상 인증번호가 같지 않으면 이메일 인증에 실패한다.")
+    @DisplayName("대조 하려는 인증번호가 6자리이지만 숫자로만 이루어지지 않으면 이메일 인증에 실패한다.")
     void test5() {
+
+        // given
+        String compTargetNumber = "123456";
+        String targetEmail = "a@a.com";
+
+        ValidationCheckOfEmailQuery event = new ValidationCheckOfEmailQuery(
+                targetEmail, compTargetNumber
+        );
+
+        // when
+        HashMap<String, String> dateMappedByEmailInCache = new HashMap<>();
+        dateMappedByEmailInCache.put("number", "12345a");
+        dateMappedByEmailInCache.put("createdAt", LocalDateTime.now().toString());
+        dateMappedByEmailInCache.put("isVerified", "false");
+
+        ValueOperations<String, Map<String, String>> cache = redisTemplate.opsForValue();
+        cache.set(targetEmail, dateMappedByEmailInCache);
+
+        // then
+        assertThatThrownBy(() -> {
+            sut.handle(event);
+        })
+                .isInstanceOf(InvalidInputException.class)
+                .hasMessage(NOT_6DIGIT_VERIFY_NUMBER.getMessage());
+    }
+
+    @Test
+    @DisplayName("사용자가 입력한 인증번호와 대조 대상 인증번호가 같지 않으면 이메일 인증에 실패한다.")
+    void test6() {
 
         // given
         String compTargetNumber = "111111";
@@ -168,6 +201,7 @@ class ValidationCheckOfEmailQueryHandlerTest {
                 targetEmail, compTargetNumber
         );
 
+        // when
         HashMap<String, String> dateMappedByEmailInCache = new HashMap<>();
         dateMappedByEmailInCache.put("number", "123456");
         dateMappedByEmailInCache.put("createdAt", LocalDateTime.now().toString());
