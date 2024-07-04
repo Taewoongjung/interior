@@ -26,6 +26,7 @@ jobs:
       - name: Setup Testcontainers Cloud Client
         uses: atomicjar/testcontainers-cloud-setup-action@v1
         with:
+          wait: true
           token: ${{ secrets.TC_CLOUD_TOKEN }}
 
       - name: Run CI test with Gradle Wrapper
