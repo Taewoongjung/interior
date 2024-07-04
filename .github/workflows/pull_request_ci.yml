@@ -20,6 +20,11 @@ jobs:
       - name: Set up Docker
         uses: docker/setup-buildx-action@v2
 
+      - name: Start Docker Container
+        run: |
+          docker run -d --name my-container -p 8080:8080 my-docker-image
+          docker ps
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -34,3 +39,8 @@ jobs:
 
       - name: Run CI test with Gradle Wrapper
         run: ./gradlew test
+
+      - name: Stop and Remove Docker Container
+        run: |
+          docker stop my-container
+          docker rm my-container
