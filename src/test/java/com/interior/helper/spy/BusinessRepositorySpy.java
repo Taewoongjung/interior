@@ -107,7 +107,21 @@ public class BusinessRepositorySpy implements BusinessRepository {
     @Override
     public Business findBusinessByCompanyIdAndBusinessId(Long companyId,
             Long businessId) {
-        return null;
+
+        List<Business> businessList = getBusinessList();
+
+        Business business = businessList.stream()
+                .filter(f ->
+                        businessId.equals(f.getId()) &&
+                                companyId.equals(f.getCompanyId()) &&
+                                BoolType.F.equals(f.getIsDeleted())
+                )
+                .findFirst()
+                .orElseThrow(() -> new NoSuchElementException(NOT_EXIST_BUSINESS.getMessage()));
+
+        business.getBusinessMaterialList().addAll(getBusinessMaterial());
+        
+        return business;
     }
 
     @Override
