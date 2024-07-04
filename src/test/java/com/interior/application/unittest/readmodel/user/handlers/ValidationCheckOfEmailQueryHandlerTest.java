@@ -4,7 +4,7 @@ import static com.interior.adapter.common.exception.ErrorType.EMPTY_VERIFY_NUMBE
 import static com.interior.adapter.common.exception.ErrorType.EXPIRED_EMAIL_CHECK_REQUEST;
 import static com.interior.adapter.common.exception.ErrorType.INVALID_EMAIL_CHECK_NUMBER;
 import static com.interior.adapter.common.exception.ErrorType.NOT_6DIGIT_VERIFY_NUMBER;
-import static com.interior.helper.RedisTestContainerConfig.redisTemplate;
+import static com.interior.helper.config.RedisTestContainerConfig.redisTemplate;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
@@ -12,7 +12,7 @@ import com.interior.adapter.common.exception.InvalidInputException;
 import com.interior.adapter.outbound.cache.redis.email.CacheEmailValidationRedisRepository;
 import com.interior.application.readmodel.user.handlers.ValidationCheckOfEmailQueryHandler;
 import com.interior.application.readmodel.user.queries.ValidationCheckOfEmailQuery;
-import com.interior.helper.RedisTestContainerConfig;
+import com.interior.helper.config.RedisTestContainerConfig;
 import jakarta.validation.ValidationException;
 import java.time.LocalDateTime;
 import java.util.HashMap;

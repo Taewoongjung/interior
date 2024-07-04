@@ -1,4 +1,4 @@
-package com.interior.helper;
+package com.interior.helper.config;
 
 import java.time.Duration;
 import java.util.Map;
@@ -57,7 +57,7 @@ public class RedisTestContainerConfig implements BeforeAllCallback {
 
         lettuceConnectionFactory.afterPropertiesSet();
         lettuceConnectionFactory.start();
-        
+
         lettuceConnectionFactory.setShareNativeConnection(false);
 
         return lettuceConnectionFactory;
