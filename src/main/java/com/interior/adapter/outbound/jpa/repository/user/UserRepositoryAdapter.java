@@ -3,6 +3,7 @@ package com.interior.adapter.outbound.jpa.repository.user;
 import static com.interior.adapter.common.exception.ErrorType.INVALID_SIGNUP_REQUEST_DUPLICATE_EMAIL;
 import static com.interior.adapter.common.exception.ErrorType.INVALID_SIGNUP_REQUEST_DUPLICATE_TEL;
 import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_CUSTOMER;
+import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_USER;
 import static com.interior.util.CheckUtil.check;
 import static com.interior.util.converter.jpa.user.UserEntityConverter.userToEntity;
 
@@ -27,7 +28,11 @@ public class UserRepositoryAdapter implements UserRepository {
     @Transactional(readOnly = true)
     public User findByEmail(final String email) {
         UserEntity entity = userJpaRepository.findByEmail(email);
+
+        check(entity == null, NOT_EXIST_USER);
+
         List<CompanyEntity> companyEntityList = entity.getCompanyEntityList();
+        
         return entity.toPojo(companyEntityList);
     }
 

@@ -11,6 +11,8 @@ public enum ErrorType {
 
     INAPPROPRIATE_REQUEST(1, "부적절한 요청 입니다."),
 
+    NOT_EXIST_USER(50, "유저가 존재하지 않습니다."),
+
     LOGIN_FAIL(100, "로그인 실패, 아이디 또는 비밀번호를 확인해주세요."),
     EXPIRED_ACCESS_TOKEN(101, "만료 된 토큰입니다."),
     INVALID_SIGNUP_REQUEST_DUPLICATE_EMAIL(102, "이미 존재하는 이메일 입니다."),
