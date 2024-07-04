@@ -20,6 +20,7 @@ class GetExcelProgressInfoQueryHandlerTest {
     @Test
     @DisplayName("Sse 를 연결 하여 엑셀 진행사항을 업데이트 한다.")
     void test() {
+
         // given
         GetExcelProgressInfoQuery event = new GetExcelProgressInfoQuery("taskId");
 
