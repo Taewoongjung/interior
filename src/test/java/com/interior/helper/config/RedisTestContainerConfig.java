@@ -12,6 +12,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
@@ -30,8 +31,11 @@ public class RedisTestContainerConfig implements BeforeAllCallback, AfterAllCall
     @Override
     public void beforeAll(ExtensionContext context) {
         redis = new GenericContainer(DockerImageName.parse(REDIS_IMAGE))
-                .withExposedPorts(REDIS_PORT);
+                .withExposedPorts(REDIS_PORT)
+                .waitingFor(Wait.forLogMessage(".*Ready to accept connections.*\\n", 1));
+
         redis.start();
+        
         System.setProperty("spring.data.redis.host", redis.getHost());
         System.setProperty("spring.data.redis.port",
                 String.valueOf(redis.getMappedPort(REDIS_PORT)));
