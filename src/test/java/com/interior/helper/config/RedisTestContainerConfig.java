@@ -3,7 +3,9 @@ package com.interior.helper.config;
 import com.redis.testcontainers.RedisContainer;
 import java.time.Duration;
 import java.util.Map;
-import lombok.Getter;
+import org.junit.jupiter.api.extension.AfterAllCallback;
+import org.junit.jupiter.api.extension.BeforeAllCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
@@ -13,26 +15,25 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-@Getter
 @Testcontainers
-public class RedisTestContainerConfig {
+public class RedisTestContainerConfig implements BeforeAllCallback, AfterAllCallback {
 
     private static final int REDIS_PORT = 6379;
 
     @Container
-    public RedisContainer redisContainer = new RedisContainer(
+    public static RedisContainer redisContainer = new RedisContainer(
             RedisContainer.DEFAULT_IMAGE_NAME.withTag(RedisContainer.DEFAULT_TAG));
 
-    public RedisTemplate<String, Map<String, String>> redisTemplate;
+    public static RedisTemplate<String, Map<String, String>> redisTemplate;
 
-
-    public RedisTestContainerConfig() {
+    @Override
+    public void beforeAll(ExtensionContext context) {
         redisTemplate = redisTemplate();
-        redisTemplate.setConnectionFactory(redisConnectionFactory());
         redisTemplate.afterPropertiesSet();
+        redisTemplate.setConnectionFactory(redisConnectionFactory());
     }
 
-    public RedisTemplate<String, Map<String, String>> redisTemplate() {
+    public static RedisTemplate<String, Map<String, String>> redisTemplate() {
         RedisTemplate<String, Map<String, String>> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory());
         redisTemplate.setEnableTransactionSupport(true);
@@ -41,7 +42,7 @@ public class RedisTestContainerConfig {
         return redisTemplate;
     }
 
-    public LettuceConnectionFactory redisConnectionFactory() {
+    public static LettuceConnectionFactory redisConnectionFactory() {
         RedisStandaloneConfiguration serverConfig = new RedisStandaloneConfiguration(
                 redisContainer.getHost(), REDIS_PORT);
 
@@ -59,5 +60,10 @@ public class RedisTestContainerConfig {
         lettuceConnectionFactory.setShareNativeConnection(false);
 
         return lettuceConnectionFactory;
+    }
+
+    @Override
+    public void afterAll(ExtensionContext context) throws Exception {
+        redisContainer.stop();
     }
 }
