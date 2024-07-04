@@ -11,63 +11,77 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
 
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v2
 
-    - name: Build with Gradle Wrapper
-      run: ./gradlew build
+      - name: Start Docker Container
+        run: |
+          docker run -d --name redis-container -p 6379:6379 redis
+          docker ps  
 
-    - name: execute remote ssh & deploy
-      uses: appleboy/ssh-action@v1.0.3
-      with:
-        host: ${{ secrets.SERVER_HOST }}
-        username: ${{ secrets.SERVER_USERNAME }}
-        key: ${{ secrets.SERVER_SSH_KEY }}
-        port: ${{ secrets.SERVER_PORT }}
-        script: |
-          cd /home/twj/interior
-          git pull
-          sleep 3
-          docker compose up -d --build 
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
 
-  # test:
-  #     needs: build
-  #     runs-on: ubuntu-latest
-  #     steps:
-  #     - name: Verify the server's active status.
-  #       uses: appleboy/ssh-action@v1.0.3
-  #       with:
-  #         host: ${{ secrets.SERVER_HOST }}
-  #         username: ${{ secrets.SERVER_USERNAME }}
-  #         key: ${{ secrets.SERVER_SSH_KEY }}
-  #         port: ${{ secrets.SERVER_PORT }}
-  #         script: |
-  #           whoami
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
+
+      - name: Build with Gradle Wrapper
+        run: ./gradlew build
+
+      - name: Stop and Remove Docker Container
+        run: |
+          docker stop redis-container
+          docker rm redis-container
+
+      - name: execute remote ssh & deploy
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          port: ${{ secrets.SERVER_PORT }}
+          script: |
+            cd /home/twj/interior
+            git pull
+            sleep 3
+            docker compose up -d --build 
             
-  #           # 헬스체크 10번
-  #           for i in {1..100}
-  #           do
-  #           response=$(curl -s http://localhost:707/actuator/health)
+            # test:
+            #     needs: build
+            #     runs-on: ubuntu-latest
+            #     steps:
+            #     - name: Verify the server's active status.
+            #       uses: appleboy/ssh-action@v1.0.3
+            #       with:
+            #         host: ${{ secrets.SERVER_HOST }}
+            #         username: ${{ secrets.SERVER_USERNAME }}
+            #         key: ${{ secrets.SERVER_SSH_KEY }}
+            #         port: ${{ secrets.SERVER_PORT }}
+            #         script: |
+            #           whoami
             
-  #           # 응답이 "status":"UP"을 포함하는지 확인
-  #           if [[ "$response" == *"\"status\":\"UP\""* ]]; then
-  #             echo "true"
-  #             break # 성공 시 루프를 종료합니다.
-  #           else
-  #             echo "Attempt $i: Server is not up"
-  #           fi
+            #           # 헬스체크 10번
+            #           for i in {1..100}
+            #           do
+            #           response=$(curl -s http://localhost:707/actuator/health)
             
-  #           # 1초 대기
-  #           sleep 1
-  #           done
+            #           # 응답이 "status":"UP"을 포함하는지 확인
+            #           if [[ "$response" == *"\"status\":\"UP\""* ]]; then
+            #             echo "true"
+            #             break # 성공 시 루프를 종료합니다.
+            #           else
+            #             echo "Attempt $i: Server is not up"
+            #           fi
             
+            #           # 1초 대기
+            #           sleep 1
+            #           done
+
   #           # 10번 시도 후에도 성공하지 못한 경우
   #           if [[ "$i" == 100 ]]; then
   #             echo "서버가 정상적으로 시동되지 않았음."

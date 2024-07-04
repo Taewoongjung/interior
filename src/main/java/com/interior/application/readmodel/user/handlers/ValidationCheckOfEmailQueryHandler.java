@@ -34,6 +34,7 @@ public class ValidationCheckOfEmailQueryHandler implements
     @Override
     @Transactional(readOnly = true)
     public Boolean handle(final ValidationCheckOfEmailQuery query) {
+
         Map<String, String> data = cacheEmailValidationRedisRepository.getBucketByKey(
                 query.targetEmail());
 
@@ -48,8 +49,13 @@ public class ValidationCheckOfEmailQueryHandler implements
         if (data.get("number").equals(query.compTargetNumber())) {
 
             // 인증번호가 같으면 isVerified = true 로 수정
-            cacheEmailValidationRedisRepository.setIsVerifiedByKey(query.targetEmail());
+            boolean res = cacheEmailValidationRedisRepository.setIsVerifiedByKey(
+                    query.targetEmail());
 
+            if (!res) {
+                throw new ValidationException(INVALID_EMAIL_CHECK_NUMBER.getMessage());
+            }
+            
             return true;
 
         } else {
@@ -58,7 +64,7 @@ public class ValidationCheckOfEmailQueryHandler implements
     }
 
     private void validateIfOverDurationOfValidation(final LocalDateTime target) {
-        
+
         Duration duration = Duration.between(target, LocalDateTime.now());
         long diffInMinutes = duration.toMinutes();
 

@@ -1,7 +1,7 @@
 package com.interior.application.readmodel.user.handlers;
 
 import static com.interior.adapter.common.exception.ErrorType.EMPTY_VERIFY_NUMBER;
-import static com.interior.adapter.common.exception.ErrorType.EXPIRED_EMAIL_CHECK_REQUEST;
+import static com.interior.adapter.common.exception.ErrorType.EXPIRED_PHONE_CHECK_REQUEST;
 import static com.interior.adapter.common.exception.ErrorType.INVALID_PHONE_CHECK_NUMBER;
 import static com.interior.adapter.common.exception.ErrorType.NOT_6DIGIT_VERIFY_NUMBER;
 import static com.interior.util.CheckUtil.check;
@@ -15,11 +15,13 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
+@EnableRedisRepositories
 @RequiredArgsConstructor
 public class ValidationCheckOfPhoneNumberQueryHandler implements
         IQueryHandler<ValidationCheckOfPhoneNumberQuery, Boolean> {
@@ -62,6 +64,6 @@ public class ValidationCheckOfPhoneNumberQueryHandler implements
         Duration duration = Duration.between(target, LocalDateTime.now());
         long diffInMinutes = duration.toMinutes();
 
-        check(diffInMinutes > 3, EXPIRED_EMAIL_CHECK_REQUEST);
+        check(diffInMinutes > 3, EXPIRED_PHONE_CHECK_REQUEST);
     }
 }

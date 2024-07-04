@@ -1,6 +1,7 @@
 package com.interior.helper.spy;
 
 import static business.BusinessFixture.getBusinessList;
+import static business.log.BusinessMaterialLogFixture.getBusinessMaterialLogList;
 import static business.material.BusinessMaterialFixture.getBusinessMaterial;
 import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_BUSINESS;
 import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_BUSINESS_MATERIAL;
@@ -19,8 +20,11 @@ import com.interior.domain.business.repository.BusinessRepository;
 import com.interior.domain.business.repository.dto.CreateBusiness;
 import com.interior.domain.business.repository.dto.CreateBusinessMaterial;
 import com.interior.domain.util.BoolType;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 public class BusinessRepositorySpy implements BusinessRepository {
 
@@ -44,18 +48,91 @@ public class BusinessRepositorySpy implements BusinessRepository {
 
     @Override
     public List<Business> findBusinessByCompanyId(Long companyId, QueryType queryType) {
-        return null;
+
+        // queryType 이 "사업관리" 면 연관 객체들도 함께 return
+        if ("사업관리".equals(queryType.getType())) {
+            List<Business> businessWithRealationsList = getBusinessList();
+
+            List<Business> businessesRelatedToCompanyId = businessWithRealationsList.stream()
+                    .filter(f -> companyId.equals(f.getCompanyId()))
+                    .toList();
+
+            return businessesRelatedToCompanyId.stream()
+                    .filter(f -> f.getIsDeleted() == BoolType.F)
+                    .collect(Collectors.toList());
+        }
+
+        // 연관 객체들 null 로 return
+        List<Business> businessWithOutRealationsList = new ArrayList<>();
+
+        Business B_1 = Business.of(
+                1L, "사업 현장 1", 17L, 519L, BoolType.F,
+                "01000", "서울 강서구 강서로 375", "101동 202호", "1150010400114530001010977",
+                LocalDateTime.of(2024, 7, 1, 2, 3),
+                LocalDateTime.of(2024, 7, 1, 2, 3),
+                null, null);
+
+        Business B_2 = Business.of(
+                2L, "사업 현장 2", 23L, 519L, BoolType.F,
+                "01000", "부산 해운대구 APEC로 21", "401동 1202호", "2635010500115130000000002",
+                LocalDateTime.of(2024, 7, 1, 2, 3),
+                LocalDateTime.of(2024, 7, 1, 2, 3),
+                null, null);
+
+        Business B_2_1 = Business.of(
+                21L, "사업 현장 2", 23L, 519L, BoolType.F,
+                "01000", "부산 해운대구 APEC로 21", "401동 1202호", "2635010500115130000000002",
+                LocalDateTime.of(2024, 7, 1, 2, 3),
+                LocalDateTime.of(2024, 7, 1, 2, 3),
+                null, null);
+
+        Business B_3 = Business.of(
+                3L, "사업 현장 2", 56L, 519L, BoolType.T,
+                "01000", "경기 성남시 분당구 판교대장로 7", "101동 1403호", "1171010900106580001000001",
+                LocalDateTime.of(2024, 7, 1, 2, 3),
+                LocalDateTime.of(2024, 7, 1, 2, 3),
+                null, null);
+
+        businessWithOutRealationsList.add(B_1);
+        businessWithOutRealationsList.add(B_2);
+        businessWithOutRealationsList.add(B_2_1);
+        businessWithOutRealationsList.add(B_3);
+
+        return businessWithOutRealationsList.stream()
+                .filter(f -> companyId.equals(f.getCompanyId()))
+                .filter(f -> f.getIsDeleted() == BoolType.F)
+                .collect(Collectors.toList());
     }
 
     @Override
     public Business findBusinessByCompanyIdAndBusinessId(Long companyId,
             Long businessId) {
-        return null;
+
+        List<Business> businessList = getBusinessList();
+
+        Business business = businessList.stream()
+                .filter(f ->
+                        businessId.equals(f.getId()) &&
+                                companyId.equals(f.getCompanyId()) &&
+                                BoolType.F.equals(f.getIsDeleted())
+                )
+                .findFirst()
+                .orElseThrow(() -> new NoSuchElementException(NOT_EXIST_BUSINESS.getMessage()));
+
+        business.getBusinessMaterialList().addAll(getBusinessMaterial());
+        
+        return business;
     }
 
     @Override
     public List<Business> findAllByCompanyIdIn(List<Long> companyIdList) {
-        return null;
+
+        List<Business> businessList = getBusinessList();
+
+        return businessList.stream()
+                .filter(f -> f.getIsDeleted() == BoolType.F)
+                .filter(f -> companyIdList.contains(f.getCompanyId()))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -145,7 +222,11 @@ public class BusinessRepositorySpy implements BusinessRepository {
 
     @Override
     public List<BusinessMaterialLog> findBusinessMaterialLogByBusinessId(Long businessId) {
-        return null;
+
+        List<BusinessMaterialLog> list = getBusinessMaterialLogList();
+
+        return list.stream().filter(f -> businessId.equals(f.getBusinessId()))
+                .collect(Collectors.toList());
     }
 
     @Override

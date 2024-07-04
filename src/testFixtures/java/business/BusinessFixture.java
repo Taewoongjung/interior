@@ -16,6 +16,7 @@ public class BusinessFixture {
 
         list.add(B_1);
         list.add(B_2);
+        list.add(B_2_1);
         list.add(B_3);
 
         return list;
@@ -30,6 +31,13 @@ public class BusinessFixture {
 
     public static Business B_2 = Business.of(
             2L, "사업 현장 2", 23L, 519L, BoolType.F,
+            "01000", "부산 해운대구 APEC로 21", "401동 1202호", "2635010500115130000000002",
+            LocalDateTime.of(2024, 7, 1, 2, 3),
+            LocalDateTime.of(2024, 7, 1, 2, 3),
+            new ArrayList<>(), getBusinessProgress());
+
+    public static Business B_2_1 = Business.of(
+            21L, "사업 현장 2", 23L, 519L, BoolType.F,
             "01000", "부산 해운대구 APEC로 21", "401동 1202호", "2635010500115130000000002",
             LocalDateTime.of(2024, 7, 1, 2, 3),
             LocalDateTime.of(2024, 7, 1, 2, 3),

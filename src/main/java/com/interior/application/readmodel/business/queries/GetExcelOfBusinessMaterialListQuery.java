@@ -12,7 +12,7 @@ public class GetExcelOfBusinessMaterialListQuery implements IQuery {
     private final Long companyId;
     private final Long businessId;
     private final String taskId;
-    private HttpServletResponse response;
+    private final HttpServletResponse response;
 
     public GetExcelOfBusinessMaterialListQuery(
             final Long companyId,
@@ -27,9 +27,9 @@ public class GetExcelOfBusinessMaterialListQuery implements IQuery {
     }
 
     public void setResponseHeader() throws UnsupportedEncodingException {
-        response.setHeader("Content-Disposition",
+        this.response.setHeader("Content-Disposition",
                 "attachment; filename=\"" + URLEncoder.encode("재료 리스트.xlsx", "UTF-8") + "\"");
-        response.setContentType(
+        this.response.setContentType(
                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
     }
 }

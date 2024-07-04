@@ -1,7 +1,7 @@
 package com.interior.application.readmodel.business.handlers;
 
 import com.interior.abstraction.domain.IQueryHandler;
-import com.interior.application.readmodel.business.queries.GetAllBusinessesByUserQuery;
+import com.interior.application.readmodel.business.queries.GetAllBusinessesByCompanyIdListQuery;
 import com.interior.domain.business.Business;
 import com.interior.domain.business.repository.BusinessRepository;
 import java.util.List;
@@ -13,8 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class GetAllBusinessesByUserQueryHandler implements
-        IQueryHandler<GetAllBusinessesByUserQuery, List<Business>> {
+public class GetAllBusinessesByCompanyIdListQueryHandler implements
+        IQueryHandler<GetAllBusinessesByCompanyIdListQuery, List<Business>> {
 
     private final BusinessRepository businessRepository;
 
@@ -25,9 +25,9 @@ public class GetAllBusinessesByUserQueryHandler implements
 
     @Override
     @Transactional(readOnly = true)
-    public List<Business> handle(final GetAllBusinessesByUserQuery query) {
+    public List<Business> handle(final GetAllBusinessesByCompanyIdListQuery query) {
         log.info("process GetAllBusinessesByUserQuery {}", query);
-        
+
         return businessRepository.findAllByCompanyIdIn(query.companyIdList());
     }
 }

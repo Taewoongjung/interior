@@ -78,7 +78,7 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
             return new ArrayList<>();
         }
 
-        // queryType 이 "사업관리" 면 businessList 도 함께 조회
+        // queryType 이 "사업관리" 면 연관 객체들도 함께 조회
         if ("사업관리".equals(queryType.getType())) {
             return businessEntities.stream()
                     .filter(f -> f.getIsDeleted() == BoolType.F)
@@ -254,10 +254,10 @@ public class BusinessRepositoryAdapter implements BusinessRepository {
 
     @Override
     @Transactional(readOnly = true)
-    public List<BusinessMaterialLog> findBusinessMaterialLogByBusinessId(final Long materialId) {
+    public List<BusinessMaterialLog> findBusinessMaterialLogByBusinessId(final Long businessId) {
 
         List<BusinessMaterialLogEntity> materialLogList = businessMaterialLogJpaRepository.findAllByBusinessId(
-                materialId);
+                businessId);
 
         if (materialLogList == null || materialLogList.size() == 0) {
             return new ArrayList<>();

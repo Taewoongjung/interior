@@ -25,8 +25,25 @@ public class SseService {
 
     public SseEmitter addEmitter(final String taskId) {
         SseEmitter emitter = emitterRepository.add(taskId, new SseEmitter(DEFAULT_TIMEOUT));
+
+        //연결 세션 timeout 이벤트 핸들러 등록
+        emitter.onTimeout(() -> {
+            log.error("server sent event timed out : taskId={}", taskId);
+            //onCompletion 핸들러 호출
+            emitterRepository.deleteById(taskId);
+            emitter.complete();
+        });
+
+        //에러 핸들러 등록
+        emitter.onError(e -> {
+            log.error("server sent event error occurred : taskId={}, message={}", taskId,
+                    e.getMessage());
+            emitterRepository.deleteById(taskId);
+            //onCompletion 핸들러 호출
+            emitter.complete();
+        });
+
         emitter.onCompletion(() -> emitterRepository.deleteById(taskId));
-        emitter.onTimeout(() -> emitterRepository.deleteById(taskId));
         log.info("emitter 생성 됨 = {}", emitter);
         return emitter;
     }
@@ -61,7 +78,7 @@ public class SseService {
             }
         } catch (IOException e) {
             log.error("[Err_msg] Error while streaming data for taskId: " + taskId, e);
-            
+
             throw new RuntimeException(e);
         }
     }

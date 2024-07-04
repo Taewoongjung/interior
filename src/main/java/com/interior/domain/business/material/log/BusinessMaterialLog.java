@@ -14,24 +14,24 @@ import lombok.Getter;
 @Getter
 public class BusinessMaterialLog {
 
-    private Long id;
+    private final Long id;
 
-    private Long businessId;
+    private final Long businessId;
 
-    private Long businessMaterialId;
+    private final Long businessMaterialId;
 
-    private BusinessMaterialChangeFieldType changeField;
+    private final BusinessMaterialChangeFieldType changeField;
 
-    private String beforeData;
+    private final String beforeData;
 
-    private String afterData;
+    private final String afterData;
 
-    private Long updater;
+    private final Long updater;
 
-    private String updaterName;
+    private final String updaterName;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
-    private LocalDateTime createdAt;
+    private final LocalDateTime createdAt;
 
     private BusinessMaterialLog(
             final Long id,
