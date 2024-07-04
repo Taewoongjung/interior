@@ -1,5 +1,6 @@
 package com.interior.helper.config;
 
+import com.redis.testcontainers.RedisContainer;
 import java.time.Duration;
 import java.util.Map;
 import org.junit.jupiter.api.extension.AfterAllCallback;
@@ -11,11 +12,8 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.utility.DockerImageName;
 
 @Testcontainers
 public class RedisTestContainerConfig implements BeforeAllCallback, AfterAllCallback {
@@ -24,23 +22,17 @@ public class RedisTestContainerConfig implements BeforeAllCallback, AfterAllCall
     private static final int REDIS_PORT = 6379;
 
     @Container
-    private GenericContainer redis;
+    public static RedisContainer redisContainer = new RedisContainer(
+            RedisContainer.DEFAULT_IMAGE_NAME.withTag(RedisContainer.DEFAULT_TAG));
 
     public static RedisTemplate<String, Map<String, String>> redisTemplate;
 
     @Override
     public void beforeAll(ExtensionContext context) {
-        redis = new GenericContainer(DockerImageName.parse(REDIS_IMAGE))
-                .withExposedPorts(REDIS_PORT)
-                .waitingFor(Wait.forLogMessage(".*Ready to accept connections.*\\n", 1));
-
-        redis.start();
-        
-        System.setProperty("spring.data.redis.host", redis.getHost());
-        System.setProperty("spring.data.redis.port",
-                String.valueOf(redis.getMappedPort(REDIS_PORT)));
+        redisContainer.start();
 
         redisTemplate = redisTemplate();
+        
         redisTemplate.setConnectionFactory(redisConnectionFactory());
     }
 
@@ -55,7 +47,7 @@ public class RedisTestContainerConfig implements BeforeAllCallback, AfterAllCall
 
     public LettuceConnectionFactory redisConnectionFactory() {
         RedisStandaloneConfiguration serverConfig = new RedisStandaloneConfiguration(
-                redis.getHost(), REDIS_PORT);
+                redisContainer.getHost(), REDIS_PORT);
 
         LettuceClientConfiguration clientConfig = LettuceClientConfiguration.builder()
                 .shutdownTimeout(Duration.ofMillis(100))
@@ -75,6 +67,6 @@ public class RedisTestContainerConfig implements BeforeAllCallback, AfterAllCall
 
     @Override
     public void afterAll(ExtensionContext context) throws Exception {
-        redis.stop();
+        redisContainer.stop();
     }
 }

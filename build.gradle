@@ -99,6 +99,7 @@ dependencies {
     // test container
     testImplementation "org.testcontainers:testcontainers:1.19.0"
     testImplementation "org.testcontainers:junit-jupiter:1.19.0"
+    testImplementation "com.redis:testcontainers-redis:2.2.2"
 
     testCompileOnly 'org.projectlombok:lombok'
 }
