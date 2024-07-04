@@ -29,10 +29,8 @@ public class RedisTestContainerConfig implements BeforeAllCallback, AfterAllCall
 
     @Override
     public void beforeAll(ExtensionContext context) {
-        redisContainer.start();
-
         redisTemplate = redisTemplate();
-        
+
         redisTemplate.setConnectionFactory(redisConnectionFactory());
     }
 
