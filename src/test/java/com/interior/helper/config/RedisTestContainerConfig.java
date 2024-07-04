@@ -3,6 +3,7 @@ package com.interior.helper.config;
 import com.redis.testcontainers.RedisContainer;
 import java.time.Duration;
 import java.util.Map;
+import org.junit.ClassRule;
 import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -20,9 +21,12 @@ public class RedisTestContainerConfig implements BeforeAllCallback, AfterAllCall
 
     private static final int REDIS_PORT = 6379;
 
+    @ClassRule
     @Container
     public static RedisContainer redisContainer = new RedisContainer(
-            RedisContainer.DEFAULT_IMAGE_NAME.withTag(RedisContainer.DEFAULT_TAG));
+            RedisContainer.DEFAULT_IMAGE_NAME.withTag(
+                    RedisContainer.DEFAULT_TAG))
+            .withStartupTimeout(Duration.ofSeconds(30));
 
     public static RedisTemplate<String, Map<String, String>> redisTemplate;
 
