@@ -1,6 +1,5 @@
 package com.interior.application.readmodel.user.handlers;
 
-import com.interior.domain.user.User;
 import com.interior.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,12 +20,6 @@ public class LoadUserByUsernameQueryHandler implements UserDetailsService {
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
 
-        User user = userRepository.findByEmail(email);
-
-        if (user != null) {
-            return user;
-        }
-
-        return null;
+        return userRepository.findByEmail(email);
     }
 }
