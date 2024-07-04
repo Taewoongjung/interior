@@ -38,8 +38,12 @@ jobs:
             $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
           sudo apt-get update
           sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+          sudo systemctl start docker
+          sudo systemctl enable docker
           sudo usermod -aG docker $USER
 
+      - name: Verify Docker installation
+        run: sudo docker run hello-world
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v1
