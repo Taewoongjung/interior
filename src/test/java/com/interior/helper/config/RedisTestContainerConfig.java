@@ -29,11 +29,11 @@ public class RedisTestContainerConfig implements BeforeAllCallback, AfterAllCall
     @Override
     public void beforeAll(ExtensionContext context) {
         redisTemplate = redisTemplate();
-        
+        redisTemplate.afterPropertiesSet();
         redisTemplate.setConnectionFactory(redisConnectionFactory());
     }
 
-    public RedisTemplate<String, Map<String, String>> redisTemplate() {
+    public static RedisTemplate<String, Map<String, String>> redisTemplate() {
         RedisTemplate<String, Map<String, String>> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory());
         redisTemplate.setEnableTransactionSupport(true);
@@ -42,7 +42,7 @@ public class RedisTestContainerConfig implements BeforeAllCallback, AfterAllCall
         return redisTemplate;
     }
 
-    public LettuceConnectionFactory redisConnectionFactory() {
+    public static LettuceConnectionFactory redisConnectionFactory() {
         RedisStandaloneConfiguration serverConfig = new RedisStandaloneConfiguration(
                 redisContainer.getHost(), REDIS_PORT);
 

@@ -19,11 +19,11 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.test.context.event.annotation.BeforeTestClass;
 import org.testcontainers.junit.jupiter.Container;
 
 @ExtendWith(RedisTestContainerConfig.class)
@@ -42,10 +42,10 @@ class ValidationCheckOfEmailQueryHandlerTest {
 //        redisContainer.start();
 //    }
 
-    @BeforeEach
-    void setUp() {
+    @BeforeTestClass
+    public void setUp() {
         redisContainer.start();
-        redisTemplate.afterPropertiesSet();
+        redisTemplate = redisTemplate();
     }
 
 
