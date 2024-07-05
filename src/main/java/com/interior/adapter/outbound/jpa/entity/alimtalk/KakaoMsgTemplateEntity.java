@@ -1,5 +1,10 @@
 package com.interior.adapter.outbound.jpa.entity.alimtalk;
 
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_KAKAO_MSG_TEMPLATE_CODE;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_KAKAO_MSG_TEMPLATE_NAME;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_KAKAO_MSG_TEMPLATE_THIRD_PART_TYPE;
+import static com.interior.util.CheckUtil.require;
+
 import com.interior.adapter.outbound.jpa.entity.BaseEntity;
 import com.interior.domain.alimtalk.kakaomsgtemplate.AlimTalkButtonLinkType;
 import com.interior.domain.alimtalk.kakaomsgtemplate.AlimTalkThirdPartyType;
@@ -96,6 +101,11 @@ public class KakaoMsgTemplateEntity extends BaseEntity {
             final String buttonInfo,
             final AlimTalkButtonLinkType buttonLinkType
     ) {
+
+        require(o -> templateName == null, templateName, EMPTY_KAKAO_MSG_TEMPLATE_NAME);
+        require(o -> templateCode == null, templateCode, EMPTY_KAKAO_MSG_TEMPLATE_CODE);
+        require(o -> thirdPartyType == null, thirdPartyType,
+                EMPTY_KAKAO_MSG_TEMPLATE_THIRD_PART_TYPE);
 
         return new KakaoMsgTemplateEntity(
                 id,
