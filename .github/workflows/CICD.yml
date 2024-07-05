@@ -17,8 +17,8 @@ jobs:
 
       - name: Start Docker Container
         run: |
-          docker run -d --name redis-container -p 6379:6379 redis
-          docker ps  
+          docker run -d --name mysql-container -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=testdb -p 3306:3306 mysql:8.0.5
+          docker ps
 
       - uses: actions/checkout@v4
       - name: Set up JDK 17
@@ -35,8 +35,8 @@ jobs:
 
       - name: Stop and Remove Docker Container
         run: |
-          docker stop redis-container
-          docker rm redis-container
+          docker stop mysql-container
+          docker rm mysql-container
 
       - name: execute remote ssh & deploy
         uses: appleboy/ssh-action@v1.0.3
@@ -50,7 +50,7 @@ jobs:
             git pull
             sleep 3
             docker compose up -d --build 
-              
+
   # test:
   #     needs: build
   #     runs-on: ubuntu-latest
