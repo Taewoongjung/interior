@@ -1,5 +1,11 @@
 package com.interior.adapter.outbound.jpa.entity.sms;
 
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_IS_DELETED;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_PLATFORM_TYPE_SMS_SEND_RESULT;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_RECEIVER_SMS_SEND_RESULT;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_SENDER_SMS_SEND_RESULT;
+import static com.interior.util.CheckUtil.require;
+
 import com.interior.domain.sms.SmsSendResult;
 import com.interior.domain.util.BoolType;
 import jakarta.persistence.Column;
@@ -78,6 +84,12 @@ public class SmsSendResultEntity {
             final String resultCode,
             final String msgId
     ) {
+
+        require(o -> isSuccess == null, isSuccess, EMPTY_IS_DELETED);
+        require(o -> sender == null, sender, EMPTY_SENDER_SMS_SEND_RESULT);
+        require(o -> receiver == null, sender, EMPTY_RECEIVER_SMS_SEND_RESULT);
+        require(o -> platformType == null, platformType, EMPTY_PLATFORM_TYPE_SMS_SEND_RESULT);
+
         return new SmsSendResultEntity(null, isSuccess, type, sender, receiver, platformType,
                 resultCode, msgId);
     }
