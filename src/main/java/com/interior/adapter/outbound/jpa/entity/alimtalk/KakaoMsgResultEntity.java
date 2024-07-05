@@ -1,5 +1,12 @@
 package com.interior.adapter.outbound.jpa.entity.alimtalk;
 
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_IS_DELETED;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_KAKAO_MSG_RESULT_RECEIVER_PHONE;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_KAKAO_MSG_RESULT_TYPE;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_KAKAO_MSG_TEMPLATE_CODE;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_KAKAO_MSG_TEMPLATE_NAME;
+import static com.interior.util.CheckUtil.require;
+
 import com.interior.domain.alimtalk.AlimTalkMessageType;
 import com.interior.domain.alimtalk.kakaomsgresult.KakaoMsgResult;
 import com.interior.domain.util.BoolType;
@@ -87,6 +94,12 @@ public class KakaoMsgResultEntity {
             final String msgId,
             final BoolType isSuccess
     ) {
+
+        require(o -> templateName == null, templateName, EMPTY_KAKAO_MSG_TEMPLATE_NAME);
+        require(o -> templateCode == null, templateCode, EMPTY_KAKAO_MSG_TEMPLATE_CODE);
+        require(o -> messageType == null, messageType, EMPTY_KAKAO_MSG_RESULT_TYPE);
+        require(o -> receiverPhone == null, receiverPhone, EMPTY_KAKAO_MSG_RESULT_RECEIVER_PHONE);
+        require(o -> isSuccess == null, isSuccess, EMPTY_IS_DELETED);
 
         return new KakaoMsgResultEntity(
                 null,
