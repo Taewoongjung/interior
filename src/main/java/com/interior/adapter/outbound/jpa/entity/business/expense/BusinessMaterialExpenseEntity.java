@@ -1,15 +1,25 @@
 package com.interior.adapter.outbound.jpa.entity.business.expense;
 
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_BUSINESS_MATERIAL_ID;
+import static com.interior.util.CheckUtil.require;
+
 import com.interior.adapter.outbound.jpa.entity.BaseEntity;
 import com.interior.adapter.outbound.jpa.entity.business.material.BusinessMaterialEntity;
 import com.interior.domain.business.expense.BusinessMaterialExpense;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -54,6 +64,8 @@ public class BusinessMaterialExpenseEntity extends BaseEntity {
             final String materialCostPerUnit,
             final String laborCostPerUnit
     ) {
+        require(o -> businessMaterialId == null, businessMaterialId, EMPTY_BUSINESS_MATERIAL_ID);
+
         return new BusinessMaterialExpenseEntity(null, businessMaterialId, materialCostPerUnit,
                 laborCostPerUnit);
     }
