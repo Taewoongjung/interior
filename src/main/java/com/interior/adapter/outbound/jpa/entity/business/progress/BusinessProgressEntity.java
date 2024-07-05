@@ -1,5 +1,10 @@
 package com.interior.adapter.outbound.jpa.entity.business.progress;
 
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_BUSINESS_ID;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_IS_DELETED;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_PROGRESS_TYPE;
+import static com.interior.util.CheckUtil.require;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.interior.adapter.outbound.jpa.entity.business.BusinessEntity;
 import com.interior.domain.business.progress.BusinessProgress;
@@ -75,6 +80,9 @@ public class BusinessProgressEntity {
             final ProgressType progressType
     ) {
 
+        require(o -> businessId == null, businessId, EMPTY_BUSINESS_ID);
+        require(o -> progressType == null, progressType, EMPTY_PROGRESS_TYPE);
+
         return new BusinessProgressEntity(null, businessId, progressType, BoolType.F);
     }
 
@@ -85,6 +93,10 @@ public class BusinessProgressEntity {
             final ProgressType progressType,
             final BoolType isDeleted
     ) {
+
+        require(o -> businessId == null, businessId, EMPTY_BUSINESS_ID);
+        require(o -> progressType == null, progressType, EMPTY_PROGRESS_TYPE);
+        require(o -> isDeleted == null, isDeleted, EMPTY_IS_DELETED);
 
         return new BusinessProgressEntity(id, businessId, progressType, isDeleted);
     }
