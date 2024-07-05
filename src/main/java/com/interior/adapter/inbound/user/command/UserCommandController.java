@@ -47,7 +47,7 @@ public class UserCommandController {
     @PostMapping(value = "/api/emails/validations")
     public ResponseEntity<Boolean> requestValidationEmail(
             @RequestBody final RequestValidation.EmailValidationReq req
-    ) {
+    ) throws Exception {
 
         sendEmailValidationMailCommandHandler.handle(
                 new SendEmailValidationMailCommand(req.targetEmail()));
@@ -58,7 +58,7 @@ public class UserCommandController {
     @PostMapping(value = "/api/phones/validations")
     public ResponseEntity<Boolean> requestValidationPhone(
             @RequestBody final RequestValidation.PhoneValidationReq req
-    ) {
+    ) throws Exception {
 
         sendPhoneValidationSmsCommandHandler.handle(
                 new SendPhoneValidationSmsCommand(req.targetPhoneNumber()));

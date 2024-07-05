@@ -3,7 +3,7 @@ package com.interior.application.command.util.email.template;
 import lombok.Getter;
 
 @Getter
-public class EmailValidationCheckMail implements EmailTemplate {
+public class EmailValidationCheckMail implements IEmailTemplate {
 
     private final String title;
     private final String content;

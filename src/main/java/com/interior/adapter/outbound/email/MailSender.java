@@ -2,7 +2,7 @@ package com.interior.adapter.outbound.email;
 
 import static com.interior.adapter.common.exception.ErrorType.UNABLE_TO_SEND_EMAIL;
 
-import com.interior.application.command.util.email.template.EmailTemplate;
+import com.interior.application.command.util.email.template.IEmailTemplate;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +34,7 @@ public class MailSender {
         }
     }
 
-    public MimeMessage createMail(final EmailTemplate template) {
+    public MimeMessage createMail(final IEmailTemplate template) {
 
         MimeMessage message = javaMailSender.createMimeMessage();
 

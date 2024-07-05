@@ -4,6 +4,6 @@ public interface ICommandHandler<Command, CommandResult> {
 
     boolean isCommandHandler();
 
-    CommandResult handle(final Command command);
+    CommandResult handle(final Command command) throws Exception;
 
 }

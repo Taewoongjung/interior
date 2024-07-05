@@ -1,6 +1,6 @@
 package com.interior.application.command.util.email.template;
 
-public interface EmailTemplate {
+public interface IEmailTemplate {
 
     String getTitle();
 

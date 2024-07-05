@@ -2,7 +2,7 @@ package com.interior.application.integrationtest.sms;
 
 import com.interior.adapter.outbound.cache.redis.dto.common.TearDownBucketByKey;
 import com.interior.adapter.outbound.cache.redis.email.CacheEmailValidationRedisRepository;
-import com.interior.application.command.util.email.EmailService;
+import com.interior.application.command.util.email.EmailIUtilService;
 import com.interior.domain.user.repository.UserRepository;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -22,7 +22,7 @@ public class IntegrationTest {
     private UserRepository userRepository;
 
     @Autowired
-    private EmailService emailService;
+    private EmailIUtilService emailService;
 
     @Autowired
     private CacheEmailValidationRedisRepository cacheEmailValidationRedisRepository;
@@ -34,7 +34,7 @@ public class IntegrationTest {
 
     @Test
     void test2() throws Exception {
-        emailService.sendEmailValidationCheck("aipooh8882@naver.com");
+        emailService.sendValidationCheck("aipooh8882@naver.com");
     }
 
     @Test
