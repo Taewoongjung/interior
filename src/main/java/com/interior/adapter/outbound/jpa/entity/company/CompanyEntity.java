@@ -1,6 +1,12 @@
 package com.interior.adapter.outbound.jpa.entity.company;
 
+import static com.interior.adapter.common.exception.ErrorType.INVALID_COMPANY_ADDRESS_INFO;
+import static com.interior.adapter.common.exception.ErrorType.INVALID_COMPANY_IS_DELETED_VALUE;
+import static com.interior.adapter.common.exception.ErrorType.INVALID_COMPANY_NAME;
+import static com.interior.adapter.common.exception.ErrorType.INVALID_COMPANY_OWNER_ID;
+import static com.interior.adapter.common.exception.ErrorType.INVALID_COMPANY_TEL;
 import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_BUSINESS;
+import static com.interior.util.CheckUtil.require;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.interior.adapter.outbound.jpa.entity.BaseEntity;
@@ -104,6 +110,16 @@ public class CompanyEntity extends BaseEntity {
             final String tel,
             final BoolType isDeleted
     ) {
+
+        require(o -> name == null, name, INVALID_COMPANY_NAME);
+        require(o -> ownerId == null, ownerId, INVALID_COMPANY_OWNER_ID);
+        require(o -> tel == null, tel, INVALID_COMPANY_TEL);
+        require(o -> zipCode == null, zipCode, INVALID_COMPANY_ADDRESS_INFO);
+        require(o -> address == null, address, INVALID_COMPANY_ADDRESS_INFO);
+        require(o -> subAddress == null, subAddress, INVALID_COMPANY_ADDRESS_INFO);
+        require(o -> buildingNumber == null, buildingNumber, INVALID_COMPANY_ADDRESS_INFO);
+        require(o -> isDeleted == null, isDeleted, INVALID_COMPANY_IS_DELETED_VALUE);
+
         return new CompanyEntity(null, name, zipCode, ownerId, address, subAddress, buildingNumber,
                 tel, isDeleted);
     }
