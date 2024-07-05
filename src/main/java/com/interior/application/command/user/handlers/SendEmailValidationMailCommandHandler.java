@@ -1,11 +1,11 @@
 package com.interior.application.command.user.handlers;
 
 import com.interior.abstraction.domain.ICommandHandler;
+import com.interior.abstraction.serviceutill.IThirdPartyValidationCheckSender;
 import com.interior.adapter.outbound.alarm.dto.event.ErrorAlarm;
 import com.interior.application.command.user.commands.SendEmailValidationMailCommand;
-import com.interior.application.command.util.email.EmailService;
+import com.interior.application.command.util.email.EmailIUtilService;
 import com.interior.domain.user.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -13,13 +13,22 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class SendEmailValidationMailCommandHandler implements
         ICommandHandler<SendEmailValidationMailCommand, Void> {
 
-    private final EmailService emailService;
+    private final IThirdPartyValidationCheckSender emailThirdPartyValidationCheckSender;
     private final UserRepository userRepository;
     private final ApplicationEventPublisher eventPublisher;
+
+    public SendEmailValidationMailCommandHandler(
+            final EmailIUtilService emailService,
+            final UserRepository userRepository,
+            final ApplicationEventPublisher eventPublisher
+    ) {
+        this.emailThirdPartyValidationCheckSender = emailService;
+        this.userRepository = userRepository;
+        this.eventPublisher = eventPublisher;
+    }
 
     @Override
     public boolean isCommandHandler() {
@@ -35,7 +44,7 @@ public class SendEmailValidationMailCommandHandler implements
             // 존재하는 이메일인지 검증
             userRepository.checkIfExistUserByEmail(command.targetEmail());
 
-            emailService.sendEmailValidationCheck(command.targetEmail());
+            emailThirdPartyValidationCheckSender.sendValidationCheck(command.targetEmail());
 
             log.info("SendEmailValidationMailCommand executed successfully");
 

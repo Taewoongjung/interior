@@ -1,6 +1,8 @@
 package com.interior.application.command.util.sms;
 
+import com.interior.abstraction.serviceutill.IThirdPartyValidationCheckSender;
 import com.interior.adapter.outbound.cache.redis.sms.CacheSmsValidationRedisRepository;
+import com.interior.adapter.outbound.sms.SmsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
@@ -11,13 +13,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class SmsService {
+public class SmsUtilService implements IThirdPartyValidationCheckSender {
 
-    private final com.interior.adapter.outbound.sms.SmsService smsService;
+    private final SmsService smsService;
     private final CacheSmsValidationRedisRepository cacheSmsValidationRedisRepository;
 
+    @Override
     @Transactional
-    public void sendPhoneValidationSms(final String targetPhoneNumber) throws Exception {
+    public void sendValidationCheck(final String targetPhoneNumber) throws Exception {
 
         int validationNumber = createNumber();
         cacheSmsValidationRedisRepository.makeBucketByKey(targetPhoneNumber, validationNumber);

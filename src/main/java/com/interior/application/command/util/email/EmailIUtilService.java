@@ -1,5 +1,6 @@
 package com.interior.application.command.util.email;
 
+import com.interior.abstraction.serviceutill.IThirdPartyValidationCheckSender;
 import com.interior.adapter.outbound.cache.redis.email.CacheEmailValidationRedisRepository;
 import com.interior.adapter.outbound.email.MailSender;
 import com.interior.application.command.util.email.template.EmailValidationCheckMail;
@@ -14,13 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class EmailService {
+public class EmailIUtilService implements IThirdPartyValidationCheckSender {
 
     private final MailSender mailSender;
     private final CacheEmailValidationRedisRepository cacheEmailValidationRedisRepository;
 
+    @Override
     @Transactional
-    public void sendEmailValidationCheck(final String toEmail) throws Exception {
+    public void sendValidationCheck(final String toEmail) throws Exception {
 
         int validationNumber = createNumber();
 
