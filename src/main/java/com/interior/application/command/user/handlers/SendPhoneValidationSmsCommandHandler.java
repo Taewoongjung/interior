@@ -3,7 +3,7 @@ package com.interior.application.command.user.handlers;
 import com.interior.abstraction.domain.ICommandHandler;
 import com.interior.adapter.outbound.alarm.dto.event.ErrorAlarm;
 import com.interior.application.command.user.commands.SendPhoneValidationSmsCommand;
-import com.interior.application.command.util.sms.SmsUtilService;
+import com.interior.application.command.util.sms.SmsService;
 import com.interior.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class SendPhoneValidationSmsCommandHandler implements
         ICommandHandler<SendPhoneValidationSmsCommand, Void> {
 
-    private final SmsUtilService smsUtilService;
+    private final SmsService smsUtilService;
     private final UserRepository userRepository;
     private final ApplicationEventPublisher eventPublisher;
 
