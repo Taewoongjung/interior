@@ -1,7 +1,13 @@
 package com.interior.adapter.outbound.jpa.entity.business.material;
 
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_BUSINESS_MATERIAL_AMOUNT;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_BUSINESS_MATERIAL_CATEGORY;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_BUSINESS_MATERIAL_NAME;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_BUSINESS_UNIT;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_RELATED_BUSINESS_TO_BUSINESS_MATERIAL;
 import static com.interior.adapter.common.exception.ErrorType.EMPTY_USAGE_CATEGORY_INVALID;
 import static com.interior.util.CheckUtil.check;
+import static com.interior.util.CheckUtil.require;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.interior.adapter.outbound.jpa.entity.BaseEntity;
@@ -104,6 +110,15 @@ public class BusinessMaterialEntity extends BaseEntity {
             final BoolType isDeleted,
             final BusinessMaterialExpenseEntity businessMaterialExpense
     ) {
+
+        require(o -> businessId == null, businessId, EMPTY_RELATED_BUSINESS_TO_BUSINESS_MATERIAL);
+        require(o -> name == null, name, EMPTY_BUSINESS_MATERIAL_NAME);
+        require(o -> (usageCategory == null || "".equals(usageCategory.trim())),
+                usageCategory, EMPTY_USAGE_CATEGORY_INVALID);
+        require(o -> category == null, category, EMPTY_BUSINESS_MATERIAL_CATEGORY);
+        require(o -> amount == null, amount, EMPTY_BUSINESS_MATERIAL_AMOUNT);
+        require(o -> unit == null, unit, EMPTY_BUSINESS_UNIT);
+
         return new BusinessMaterialEntity(null, businessId, name, usageCategory, category, amount,
                 unit, memo, isDeleted, businessMaterialExpense);
     }
