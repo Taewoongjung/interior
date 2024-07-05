@@ -53,7 +53,7 @@ public class SmsTest {
     }
 
     @Test
-    void test3() {
+    void test3() throws Exception {
 
         String[] aa = new String[4];
 

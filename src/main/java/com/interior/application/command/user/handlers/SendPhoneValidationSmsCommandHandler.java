@@ -37,7 +37,7 @@ public class SendPhoneValidationSmsCommandHandler implements
 
     @Override
     @Transactional
-    public Void handle(final SendPhoneValidationSmsCommand command) {
+    public Void handle(final SendPhoneValidationSmsCommand command) throws Exception {
         log.info("execute SendPhoneValidationSmsCommand");
 
         try {
@@ -53,6 +53,8 @@ public class SendPhoneValidationSmsCommandHandler implements
 
             eventPublisher.publishEvent(
                     new ErrorAlarm("SendPhoneValidationSmsCommand", e.toString()));
+
+            throw new Exception(e.getMessage());
         }
 
         return null;

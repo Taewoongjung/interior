@@ -1,14 +1,14 @@
 package com.interior.application.unittest.command.user.handlers;
 
-import static com.interior.adapter.common.exception.ErrorType.INVALID_SIGNUP_REQUEST_DUPLICATE_EMAIL;
+import static com.interior.adapter.common.exception.ErrorType.INVALID_SIGNUP_REQUEST_DUPLICATE_TEL;
 import static com.interior.helper.config.RedisTestContainerConfig.redisTemplate;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
 import com.interior.abstraction.serviceutill.IThirdPartyValidationCheckSender;
-import com.interior.application.command.user.commands.SendEmailValidationMailCommand;
-import com.interior.application.command.user.handlers.SendEmailValidationMailCommandHandler;
+import com.interior.application.command.user.commands.SendPhoneValidationSmsCommand;
+import com.interior.application.command.user.handlers.SendPhoneValidationSmsCommandHandler;
 import com.interior.domain.user.repository.UserRepository;
 import com.interior.helper.config.RedisTestContainerConfig;
 import com.interior.helper.spy.ThirdPartyValidationCheckSenderSpy;
@@ -22,26 +22,25 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.redis.core.ValueOperations;
 
 @ExtendWith(RedisTestContainerConfig.class)
-@DisplayName("SendEmailValidationMailCommandHandler 는 ")
-class SendEmailValidationMailCommandHandlerTest {
+@DisplayName("SendPhoneValidationSmsCommandHandler 는 ")
+class SendPhoneValidationSmsCommandHandlerTest {
 
-    private final IThirdPartyValidationCheckSender emailThirdPartyValidationCheckSender = new ThirdPartyValidationCheckSenderSpy();
+    private final IThirdPartyValidationCheckSender smsThirdPartyValidationCheckSender = new ThirdPartyValidationCheckSenderSpy();
     private final UserRepository userRepository = new UserRepositorySpy();
     private final ApplicationEventPublisher eventPublisher = mock(ApplicationEventPublisher.class);
 
-    private final SendEmailValidationMailCommandHandler sut = new SendEmailValidationMailCommandHandler(
-            emailThirdPartyValidationCheckSender, userRepository, eventPublisher
-    );
+    private final SendPhoneValidationSmsCommandHandler sut = new SendPhoneValidationSmsCommandHandler(
+            smsThirdPartyValidationCheckSender, userRepository, eventPublisher);
 
 
     @Test
-    @DisplayName("회원가입을 위한 이메일 검증 이메일을 보낸다.")
+    @DisplayName("회원가입을 위한 이메일 검증 sms를 보낸다.")
     void test1() throws Exception {
 
         // given
-        String targetEmail = "csa@asa.com";
+        String targetPhoneNumber = "01088887777";
 
-        SendEmailValidationMailCommand event = new SendEmailValidationMailCommand(targetEmail);
+        SendPhoneValidationSmsCommand event = new SendPhoneValidationSmsCommand(targetPhoneNumber);
 
         ValueOperations<String, Map<String, String>> cache = redisTemplate.opsForValue();
 
@@ -49,23 +48,23 @@ class SendEmailValidationMailCommandHandlerTest {
         sut.handle(event);
 
         // then
-        assertThat(cache.get(targetEmail)).isNotNull();
+        assertThat(cache.get(targetPhoneNumber)).isNotNull();
 
-        assertThat(Objects.requireNonNull(cache.get(targetEmail)).get("isVerified"))
+        assertThat(Objects.requireNonNull(cache.get(targetPhoneNumber)).get("isVerified"))
                 .isEqualTo("false");
 
-        assertThat(Objects.requireNonNull(cache.get(targetEmail)).get("number"))
+        assertThat(Objects.requireNonNull(cache.get(targetPhoneNumber)).get("number"))
                 .isEqualTo("123456");
     }
 
     @Test
-    @DisplayName("이미 존재하는 이메일이면 에러가 발생한다.")
+    @DisplayName("이미 존재하는 전화번호이면 에러가 발생한다.")
     void test2() {
 
         // given
-        String targetEmail = "a@a.com";
+        String targetPhoneNumber = "01012345678";
 
-        SendEmailValidationMailCommand event = new SendEmailValidationMailCommand(targetEmail);
+        SendPhoneValidationSmsCommand event = new SendPhoneValidationSmsCommand(targetPhoneNumber);
 
         // when
         // then
@@ -73,6 +72,6 @@ class SendEmailValidationMailCommandHandlerTest {
             sut.handle(event);
         })
                 .isInstanceOf(Exception.class)
-                .hasMessage(INVALID_SIGNUP_REQUEST_DUPLICATE_EMAIL.getMessage());
+                .hasMessage(INVALID_SIGNUP_REQUEST_DUPLICATE_TEL.getMessage());
     }
 }
