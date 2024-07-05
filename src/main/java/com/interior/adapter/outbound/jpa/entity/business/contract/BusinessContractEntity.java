@@ -1,5 +1,13 @@
 package com.interior.adapter.outbound.jpa.entity.business.contract;
 
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_BUSINESS_ID;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_COMPANY_ID;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_CONTRACT_TYPE;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_CONTRACT_USER_ID;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_IS_AGREED;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_IS_DELETED;
+import static com.interior.util.CheckUtil.require;
+
 import com.interior.domain.business.contract.ContractType;
 import com.interior.domain.util.BoolType;
 import jakarta.persistence.Column;
@@ -82,6 +90,14 @@ public class BusinessContractEntity {
             final Long userId,
             final BoolType isDeleted
     ) {
+
+        require(o -> companyId == null, businessId, EMPTY_COMPANY_ID);
+        require(o -> businessId == null, businessId, EMPTY_BUSINESS_ID);
+        require(o -> contractType == null, contractType, EMPTY_CONTRACT_TYPE);
+        require(o -> isAgreed == null, isAgreed, EMPTY_IS_AGREED);
+        require(o -> userId == null, userId, EMPTY_CONTRACT_USER_ID);
+        require(o -> isDeleted == null, isDeleted, EMPTY_IS_DELETED);
+
         return new BusinessContractEntity(null, companyId, businessId, contractType, isAgreed,
                 userId, isDeleted);
     }
@@ -96,6 +112,14 @@ public class BusinessContractEntity {
             final Long userId,
             final BoolType isDeleted
     ) {
+
+        require(o -> companyId == null, businessId, EMPTY_COMPANY_ID);
+        require(o -> businessId == null, businessId, EMPTY_BUSINESS_ID);
+        require(o -> contractType == null, contractType, EMPTY_CONTRACT_TYPE);
+        require(o -> isAgreed == null, isAgreed, EMPTY_IS_AGREED);
+        require(o -> userId == null, userId, EMPTY_CONTRACT_USER_ID);
+        require(o -> isDeleted == null, isDeleted, EMPTY_IS_DELETED);
+
         return new BusinessContractEntity(id, companyId, businessId, contractType, isAgreed,
                 userId, isDeleted);
     }
