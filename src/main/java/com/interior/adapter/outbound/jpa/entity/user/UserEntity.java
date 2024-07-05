@@ -1,5 +1,12 @@
 package com.interior.adapter.outbound.jpa.entity.user;
 
+import static com.interior.adapter.common.exception.ErrorType.INVALID_CUSTOMER_EMAIL;
+import static com.interior.adapter.common.exception.ErrorType.INVALID_CUSTOMER_NAME;
+import static com.interior.adapter.common.exception.ErrorType.INVALID_CUSTOMER_PASSWORD;
+import static com.interior.adapter.common.exception.ErrorType.INVALID_CUSTOMER_TEL;
+import static com.interior.adapter.common.exception.ErrorType.INVALID_CUSTOMER_USER_ROLE;
+import static com.interior.util.CheckUtil.require;
+
 import com.interior.adapter.outbound.jpa.entity.BaseEntity;
 import com.interior.adapter.outbound.jpa.entity.company.CompanyEntity;
 import com.interior.domain.user.User;
@@ -85,6 +92,13 @@ public class UserEntity extends BaseEntity {
             final String tel,
             final UserRole userRole
     ) {
+
+        require(o -> name == null, name, INVALID_CUSTOMER_NAME);
+        require(o -> email == null, email, INVALID_CUSTOMER_EMAIL);
+        require(o -> password == null, password, INVALID_CUSTOMER_PASSWORD);
+        require(o -> tel == null, tel, INVALID_CUSTOMER_TEL);
+        require(o -> userRole == null, userRole, INVALID_CUSTOMER_USER_ROLE);
+
         return new UserEntity(id, name, email, password, tel, userRole, null);
     }
 
@@ -96,6 +110,13 @@ public class UserEntity extends BaseEntity {
             final UserRole userRole,
             final List<CompanyEntity> companyEntityList
     ) {
+
+        require(o -> name == null, name, INVALID_CUSTOMER_NAME);
+        require(o -> email == null, email, INVALID_CUSTOMER_EMAIL);
+        require(o -> password == null, password, INVALID_CUSTOMER_PASSWORD);
+        require(o -> tel == null, tel, INVALID_CUSTOMER_TEL);
+        require(o -> userRole == null, userRole, INVALID_CUSTOMER_USER_ROLE);
+
         return new UserEntity(null, name, email, password, tel, userRole, companyEntityList);
     }
 
