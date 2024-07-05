@@ -47,7 +47,7 @@ public class UserCommandController {
     @PostMapping(value = "/api/emails/validations")
     public ResponseEntity<Boolean> requestValidationEmail(
             @RequestBody final RequestValidation.EmailValidationReq req
-    ) {
+    ) throws Exception {
 
         sendEmailValidationMailCommandHandler.handle(
                 new SendEmailValidationMailCommand(req.targetEmail()));

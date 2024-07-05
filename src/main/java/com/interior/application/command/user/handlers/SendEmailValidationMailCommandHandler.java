@@ -37,7 +37,7 @@ public class SendEmailValidationMailCommandHandler implements
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Void handle(final SendEmailValidationMailCommand command) {
+    public Void handle(final SendEmailValidationMailCommand command) throws Exception {
         log.info("execute SendEmailValidationMailCommand");
 
         try {
@@ -53,6 +53,8 @@ public class SendEmailValidationMailCommandHandler implements
 
             eventPublisher.publishEvent(
                     new ErrorAlarm("SendEmailValidationMailCommand", e.toString()));
+
+            throw new Exception(e.getMessage());
         }
 
         return null;
