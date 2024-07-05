@@ -1,5 +1,10 @@
 package com.interior.adapter.outbound.jpa.entity.business.businessthirdpartymessage;
 
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_BUSINESS_ID;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_RESULT_ID;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_SENDER_ID;
+import static com.interior.util.CheckUtil.require;
+
 import com.interior.domain.business.thirdpartymessage.BusinessThirdPartyMessage;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -46,6 +51,11 @@ public class BusinessThirdPartyMessageEntity {
             final Long senderId,
             final Long kakaoMsgResultId
     ) {
+
+        require(o -> businessId == null, businessId, EMPTY_BUSINESS_ID);
+        require(o -> senderId == null, senderId, EMPTY_SENDER_ID);
+        require(o -> kakaoMsgResultId == null, kakaoMsgResultId, EMPTY_RESULT_ID);
+
         return new BusinessThirdPartyMessageEntity(id, businessId, senderId, kakaoMsgResultId);
     }
 
