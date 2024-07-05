@@ -50,37 +50,37 @@ jobs:
             git pull
             sleep 3
             docker compose up -d --build 
-            
-            # test:
-            #     needs: build
-            #     runs-on: ubuntu-latest
-            #     steps:
-            #     - name: Verify the server's active status.
-            #       uses: appleboy/ssh-action@v1.0.3
-            #       with:
-            #         host: ${{ secrets.SERVER_HOST }}
-            #         username: ${{ secrets.SERVER_USERNAME }}
-            #         key: ${{ secrets.SERVER_SSH_KEY }}
-            #         port: ${{ secrets.SERVER_PORT }}
-            #         script: |
-            #           whoami
-            
-            #           # 헬스체크 10번
-            #           for i in {1..100}
-            #           do
-            #           response=$(curl -s http://localhost:707/actuator/health)
-            
-            #           # 응답이 "status":"UP"을 포함하는지 확인
-            #           if [[ "$response" == *"\"status\":\"UP\""* ]]; then
-            #             echo "true"
-            #             break # 성공 시 루프를 종료합니다.
-            #           else
-            #             echo "Attempt $i: Server is not up"
-            #           fi
-            
-            #           # 1초 대기
-            #           sleep 1
-            #           done
+              
+  # test:
+  #     needs: build
+  #     runs-on: ubuntu-latest
+  #     steps:
+  #     - name: Verify the server's active status.
+  #       uses: appleboy/ssh-action@v1.0.3
+  #       with:
+  #         host: ${{ secrets.SERVER_HOST }}
+  #         username: ${{ secrets.SERVER_USERNAME }}
+  #         key: ${{ secrets.SERVER_SSH_KEY }}
+  #         port: ${{ secrets.SERVER_PORT }}
+  #         script: |
+  #           whoami
+
+  #           # 헬스체크 10번
+  #           for i in {1..100}
+  #           do
+  #           response=$(curl -s http://localhost:707/actuator/health)
+
+  #           # 응답이 "status":"UP"을 포함하는지 확인
+  #           if [[ "$response" == *"\"status\":\"UP\""* ]]; then
+  #             echo "true"
+  #             break # 성공 시 루프를 종료합니다.
+  #           else
+  #             echo "Attempt $i: Server is not up"
+  #           fi
+
+  #           # 1초 대기
+  #           sleep 1
+  #           done
 
   #           # 10번 시도 후에도 성공하지 못한 경우
   #           if [[ "$i" == 100 ]]; then
