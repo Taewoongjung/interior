@@ -1,7 +1,6 @@
 package com.interior.domain.business;
 
 import static com.interior.adapter.common.exception.ErrorType.DUPLICATE_PROGRESS_VALUE;
-import static com.interior.adapter.common.exception.ErrorType.EMPTY_BUSINESS_NAME;
 import static com.interior.adapter.common.exception.ErrorType.EMPTY_RELATED_COMPANY_TO_BUSINESS;
 import static com.interior.adapter.common.exception.ErrorType.INVALID_BUSINESS_NAME;
 import static com.interior.util.CheckUtil.check;
@@ -9,6 +8,7 @@ import static com.interior.util.CheckUtil.require;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.interior.adapter.common.exception.ErrorType;
 import com.interior.domain.business.material.BusinessMaterial;
 import com.interior.domain.business.progress.BusinessProgress;
 import com.interior.domain.business.progress.ProgressType;
@@ -97,7 +97,8 @@ public class Business {
             final List<BusinessProgress> businessProgressList
     ) {
 
-        require(o -> name == null, name, EMPTY_BUSINESS_NAME);
+        check(name == null || "".equals(name.trim()), ErrorType.INVALID_BUSINESS_NAME);
+        check(name.toCharArray().length < 1, INVALID_BUSINESS_NAME);
         require(o -> companyId == null, companyId, EMPTY_RELATED_COMPANY_TO_BUSINESS);
 
         return new Business(id, name, companyId, customerId, isDeleted, zipCode, address,
@@ -119,7 +120,8 @@ public class Business {
             final LocalDateTime createdAt
     ) {
 
-        require(o -> name == null, name, EMPTY_BUSINESS_NAME);
+        check(name == null || "".equals(name.trim()), ErrorType.INVALID_BUSINESS_NAME);
+        check(name.toCharArray().length < 1, INVALID_BUSINESS_NAME);
         require(o -> companyId == null, companyId, EMPTY_RELATED_COMPANY_TO_BUSINESS);
 
         return new Business(id, name, companyId, customerId, isDeleted, zipCode, address,

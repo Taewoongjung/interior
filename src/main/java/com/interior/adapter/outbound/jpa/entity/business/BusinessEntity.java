@@ -1,8 +1,10 @@
 package com.interior.adapter.outbound.jpa.entity.business;
 
 import static com.interior.adapter.common.exception.ErrorType.DUPLICATE_PROGRESS_VALUE;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_RELATED_COMPANY_TO_BUSINESS;
 import static com.interior.adapter.common.exception.ErrorType.INVALID_BUSINESS_NAME;
 import static com.interior.util.CheckUtil.check;
+import static com.interior.util.CheckUtil.require;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.interior.adapter.common.exception.ErrorType;
@@ -120,6 +122,7 @@ public class BusinessEntity extends BaseEntity {
 
         check(name == null || "".equals(name.trim()), INVALID_BUSINESS_NAME);
         check(name.toCharArray().length < 1, INVALID_BUSINESS_NAME); // 사업명은 2 글자 이상
+        require(o -> companyId == null, companyId, EMPTY_RELATED_COMPANY_TO_BUSINESS);
 
         return new BusinessEntity(null, name, companyId, customerId, BoolType.F,
                 zipCode, address, subAddress, buildingNumber, new ArrayList<>(), new ArrayList<>());
@@ -140,6 +143,7 @@ public class BusinessEntity extends BaseEntity {
 
         check(name == null || "".equals(name.trim()), INVALID_BUSINESS_NAME);
         check(name.toCharArray().length < 1, INVALID_BUSINESS_NAME);
+        require(o -> companyId == null, companyId, EMPTY_RELATED_COMPANY_TO_BUSINESS);
 
         return new BusinessEntity(null, name, companyId, customerId, isDeleted, zipCode, address,
                 subAddress, buildingNumber, businessMaterialList, businessProgressList);
