@@ -4,9 +4,9 @@ import com.interior.abstraction.domain.ICommandHandler;
 import com.interior.abstraction.serviceutill.IThirdPartyValidationCheckSender;
 import com.interior.adapter.outbound.alarm.dto.event.ErrorAlarm;
 import com.interior.application.command.user.commands.SendPhoneValidationSmsCommand;
-import com.interior.application.command.util.sms.SmsUtilService;
 import com.interior.domain.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +21,7 @@ public class SendPhoneValidationSmsCommandHandler implements
     private final ApplicationEventPublisher eventPublisher;
 
     public SendPhoneValidationSmsCommandHandler(
-            final SmsUtilService smsUtilService,
+            @Qualifier("SmsUtilService") final IThirdPartyValidationCheckSender smsUtilService,
             final UserRepository userRepository,
             final ApplicationEventPublisher eventPublisher
     ) {

@@ -4,9 +4,9 @@ import com.interior.abstraction.domain.ICommandHandler;
 import com.interior.abstraction.serviceutill.IThirdPartyValidationCheckSender;
 import com.interior.adapter.outbound.alarm.dto.event.ErrorAlarm;
 import com.interior.application.command.user.commands.SendEmailValidationMailCommand;
-import com.interior.application.command.util.email.EmailIUtilService;
 import com.interior.domain.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +21,7 @@ public class SendEmailValidationMailCommandHandler implements
     private final ApplicationEventPublisher eventPublisher;
 
     public SendEmailValidationMailCommandHandler(
-            final EmailIUtilService emailService,
+            @Qualifier("EmailIUtilService") final IThirdPartyValidationCheckSender emailService,
             final UserRepository userRepository,
             final ApplicationEventPublisher eventPublisher
     ) {

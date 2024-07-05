@@ -7,6 +7,7 @@ import com.interior.application.command.util.email.template.EmailValidationCheck
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Qualifier("EmailIUtilService")
 public class EmailIUtilService implements IThirdPartyValidationCheckSender {
 
     private final MailSender mailSender;

@@ -5,6 +5,7 @@ import com.interior.adapter.outbound.cache.redis.sms.CacheSmsValidationRedisRepo
 import com.interior.adapter.outbound.sms.SmsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Qualifier("SmsUtilService")
 public class SmsUtilService implements IThirdPartyValidationCheckSender {
 
     private final SmsService smsService;
