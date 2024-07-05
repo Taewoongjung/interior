@@ -17,7 +17,8 @@ jobs:
 
       - name: Start Docker Container
         run: |
-          docker run -d --name mysql-container -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=testdb -p 3306:3306 mysql:8.0.5
+          docker pull mysql
+          docker run -d --name mysql-container -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=testdb -p 3306:3306 mysql:latest
           docker ps
 
       - uses: actions/checkout@v4
@@ -35,8 +36,8 @@ jobs:
 
       - name: Stop and Remove Docker Container
         run: |
-          docker stop mysql-container
-          docker rm mysql-container
+          docker stop redis-container
+          docker rm redis-container
 
       - name: execute remote ssh & deploy
         uses: appleboy/ssh-action@v1.0.3
