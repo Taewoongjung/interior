@@ -19,8 +19,6 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers
 public class RedisTestContainerConfig implements BeforeAllCallback, AfterAllCallback {
 
-    private static final int REDIS_PORT = 6379;
-
     @ClassRule
     @Container
     public static RedisContainer redisContainer = new RedisContainer(
@@ -32,6 +30,7 @@ public class RedisTestContainerConfig implements BeforeAllCallback, AfterAllCall
 
     @Override
     public void beforeAll(ExtensionContext context) {
+        redisContainer.start();
         redisTemplate = redisTemplate();
         redisTemplate.afterPropertiesSet();
         redisTemplate.setConnectionFactory(redisConnectionFactory());
@@ -48,7 +47,7 @@ public class RedisTestContainerConfig implements BeforeAllCallback, AfterAllCall
 
     public static LettuceConnectionFactory redisConnectionFactory() {
         RedisStandaloneConfiguration serverConfig = new RedisStandaloneConfiguration(
-                redisContainer.getHost(), REDIS_PORT);
+                redisContainer.getHost(), redisContainer.getRedisPort());
 
         LettuceClientConfiguration clientConfig = LettuceClientConfiguration.builder()
                 .shutdownTimeout(Duration.ofMillis(100))
