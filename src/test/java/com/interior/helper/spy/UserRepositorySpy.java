@@ -101,7 +101,16 @@ public class UserRepositorySpy implements UserRepository {
 
     @Override
     public User save(User user) {
-        return null;
+        return User.of(
+                12L,
+                user.getName(),
+                user.getEmail(),
+                user.getPassword(),
+                user.getTel(),
+                user.getUserRole(),
+                LocalDateTime.of(2024, 5, 19, 23, 30),
+                LocalDateTime.of(2024, 5, 19, 23, 30)
+        );
     }
 
     @Override

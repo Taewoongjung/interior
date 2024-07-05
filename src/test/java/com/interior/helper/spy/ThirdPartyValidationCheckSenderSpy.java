@@ -20,6 +20,7 @@ public class ThirdPartyValidationCheckSenderSpy implements IThirdPartyValidation
         dateMappedByEmailInCache.put("isVerified", "false");
 
         ValueOperations<String, Map<String, String>> cache = redisTemplate.opsForValue();
+
         cache.set(target, dateMappedByEmailInCache);
     }
 }
