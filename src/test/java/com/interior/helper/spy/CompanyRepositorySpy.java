@@ -1,25 +1,37 @@
 package com.interior.helper.spy;
 
-import static com.interior.adapter.common.exception.ErrorType.COMPANY_NOT_EXIST_IN_THE_USER;
-import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_CUSTOMER;
-import static com.interior.util.CheckUtil.check;
-import static company.CompanyFixture.COMPANY_LIST;
-import static company.CompanyFixture.COMPANY_LIST_OVER_5;
-
 import com.interior.domain.company.Company;
 import com.interior.domain.company.repository.CompanyRepository;
 import com.interior.domain.user.User;
 import com.interior.domain.user.UserRole;
+import com.interior.domain.util.BoolType;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import static com.interior.adapter.common.exception.ErrorType.*;
+import static com.interior.util.CheckUtil.check;
+import static company.CompanyFixture.COMPANY_LIST;
+import static company.CompanyFixture.COMPANY_LIST_OVER_5;
+
 public class CompanyRepositorySpy implements CompanyRepository {
 
     @Override
     public Company findById(Long companyId) {
-        return null;
+
+        List<Company> companyList = COMPANY_LIST_OVER_5();
+
+        Company company = companyList.stream()
+                .filter(f -> companyId.equals(f.getId()))
+                .findFirst()
+                .orElseThrow(() -> new NoSuchElementException(
+                        NOT_EXIST_COMPANY.getMessage()));
+
+        check(BoolType.T == company.getIsDeleted(), NOT_EXIST_COMPANY);
+
+        return company;
     }
 
     @Override
