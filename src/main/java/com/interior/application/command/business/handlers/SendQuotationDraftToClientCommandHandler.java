@@ -38,13 +38,14 @@ public class SendQuotationDraftToClientCommandHandler implements
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean handle(final SendQuotationDraftToClientCommand command) {
+        log.info("execute SendQuotationDraftToClientCommand");
 
         Business business = businessRepository.findById(command.businessId());
 
         if (business.getBusinessProgressList().stream()
                 .noneMatch(p -> ProgressType.QUOTATION_REQUESTED.equals(p.getProgressType()))
         ) {
-            
+
             updateBusinessProgressCommandHandler.handle(
                     new UpdateBusinessProgressCommand(
                             command.businessId(),
@@ -63,6 +64,8 @@ public class SendQuotationDraftToClientCommandHandler implements
                 business,
                 company,
                 user));
+
+        log.info("SendQuotationDraftToClientCommand executed successfully");
 
         return true;
     }
