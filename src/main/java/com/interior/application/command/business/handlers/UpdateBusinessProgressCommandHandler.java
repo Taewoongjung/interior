@@ -6,7 +6,6 @@ import com.interior.domain.business.Business;
 import com.interior.domain.business.repository.BusinessRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,7 +16,6 @@ public class UpdateBusinessProgressCommandHandler implements
         ICommandHandler<UpdateBusinessProgressCommand, Business> {
 
     private final BusinessRepository businessRepository;
-    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     public boolean isCommandHandler() {

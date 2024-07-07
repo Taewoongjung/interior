@@ -1,11 +1,5 @@
 package com.interior.application.unittest.command.business.handlers;
 
-import static com.interior.adapter.common.exception.ErrorType.DUPLICATE_PROGRESS_VALUE;
-import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_BUSINESS;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.mockito.Mockito.mock;
-
 import com.interior.adapter.common.exception.InvalidInputException;
 import com.interior.application.command.business.commands.UpdateBusinessProgressCommand;
 import com.interior.application.command.business.handlers.UpdateBusinessProgressCommandHandler;
@@ -13,18 +7,22 @@ import com.interior.domain.business.Business;
 import com.interior.domain.business.progress.ProgressType;
 import com.interior.domain.business.repository.BusinessRepository;
 import com.interior.helper.spy.BusinessRepositorySpy;
-import java.util.NoSuchElementException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.context.ApplicationEventPublisher;
+
+import java.util.NoSuchElementException;
+
+import static com.interior.adapter.common.exception.ErrorType.DUPLICATE_PROGRESS_VALUE;
+import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_BUSINESS;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 class UpdateBusinessProgressCommandHandlerTest {
 
     private final BusinessRepository businessRepository = new BusinessRepositorySpy();
-    private final ApplicationEventPublisher eventPublisher = mock(ApplicationEventPublisher.class);
 
     private final UpdateBusinessProgressCommandHandler sut = new UpdateBusinessProgressCommandHandler(
-            businessRepository, eventPublisher);
+            businessRepository);
 
 
     @Test

@@ -7,6 +7,7 @@ import com.interior.application.command.business.commands.UpdateBusinessProgress
 import com.interior.domain.alimtalk.kakaomsgtemplate.KakaoMsgTemplateType;
 import com.interior.domain.business.Business;
 import com.interior.domain.business.progress.ProgressType;
+import com.interior.domain.business.repository.BusinessRepository;
 import com.interior.domain.company.Company;
 import com.interior.domain.company.repository.CompanyRepository;
 import com.interior.domain.user.User;
@@ -25,6 +26,7 @@ public class SendQuotationDraftToClientCommandHandler implements
 
     private final UserRepository userRepository;
     private final CompanyRepository companyRepository;
+    private final BusinessRepository businessRepository;
     private final ApplicationEventPublisher eventPublisher;
     private final UpdateBusinessProgressCommandHandler updateBusinessProgressCommandHandler;
 
@@ -36,12 +38,21 @@ public class SendQuotationDraftToClientCommandHandler implements
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean handle(final SendQuotationDraftToClientCommand command) {
+        log.info("execute SendQuotationDraftToClientCommand");
 
-        Business business = updateBusinessProgressCommandHandler.handle(
-                new UpdateBusinessProgressCommand(
-                        command.businessId(),
-                        ProgressType.QUOTATION_REQUESTED)
-        );
+        Business business = businessRepository.findById(command.businessId());
+
+        if (business.getBusinessProgressList().stream()
+                .noneMatch(p -> ProgressType.QUOTATION_REQUESTED.equals(p.getProgressType()))
+        ) {
+
+            updateBusinessProgressCommandHandler.handle(
+                    new UpdateBusinessProgressCommand(
+                            command.businessId(),
+                            ProgressType.QUOTATION_REQUESTED)
+            );
+        }
+
         Company company = companyRepository.findById(business.getCompanyId());
         User user = userRepository.findById(company.getOwnerId());
 
@@ -53,6 +64,8 @@ public class SendQuotationDraftToClientCommandHandler implements
                 business,
                 company,
                 user));
+
+        log.info("SendQuotationDraftToClientCommand executed successfully");
 
         return true;
     }
