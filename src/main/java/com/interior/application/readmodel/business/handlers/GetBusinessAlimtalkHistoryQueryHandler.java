@@ -28,7 +28,8 @@ public class GetBusinessAlimtalkHistoryQueryHandler implements IQueryHandler<Get
     @Override
     @Transactional(readOnly = true)
     public List<KakaoMsgResult> handle(final GetBusinessAlimtalkHistoryQuery query) {
-
+        log.info("process GetBusinessAlimtalkHistoryQuery {}", query);
+        
         List<KakaoMsgResult> historyResult = kakaoMsgResultRepository.getAlimtalkHistory(query.businessId());
 
         if (query.progressType() != null) {

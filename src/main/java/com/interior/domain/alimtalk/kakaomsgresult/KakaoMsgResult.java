@@ -1,16 +1,14 @@
 package com.interior.domain.alimtalk.kakaomsgresult;
 
-import static com.interior.adapter.common.exception.ErrorType.EMPTY_IS_DELETED;
-import static com.interior.adapter.common.exception.ErrorType.EMPTY_KAKAO_MSG_RESULT_RECEIVER_PHONE;
-import static com.interior.adapter.common.exception.ErrorType.EMPTY_KAKAO_MSG_RESULT_TYPE;
-import static com.interior.adapter.common.exception.ErrorType.EMPTY_KAKAO_MSG_TEMPLATE_CODE;
-import static com.interior.adapter.common.exception.ErrorType.EMPTY_KAKAO_MSG_TEMPLATE_NAME;
-import static com.interior.util.CheckUtil.require;
-
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.interior.domain.alimtalk.AlimTalkMessageType;
 import com.interior.domain.util.BoolType;
-import java.time.LocalDateTime;
 import lombok.Getter;
+
+import java.time.LocalDateTime;
+
+import static com.interior.adapter.common.exception.ErrorType.*;
+import static com.interior.util.CheckUtil.require;
 
 @Getter
 public class KakaoMsgResult {
@@ -33,6 +31,7 @@ public class KakaoMsgResult {
 
     private final BoolType isSuccess;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private final LocalDateTime createdAt;
 
     private KakaoMsgResult(
