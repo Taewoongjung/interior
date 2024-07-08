@@ -2,6 +2,7 @@ package com.interior.application.command.user.handlers;
 
 import com.interior.abstraction.domain.ICommandHandler;
 import com.interior.abstraction.serviceutill.IThirdPartyValidationCheckSender;
+import com.interior.adapter.inbound.user.webdto.ValidationType;
 import com.interior.adapter.outbound.alarm.dto.event.ErrorAlarm;
 import com.interior.application.command.user.commands.SendPhoneValidationSmsCommand;
 import com.interior.domain.user.repository.UserRepository;
@@ -41,8 +42,10 @@ public class SendPhoneValidationSmsCommandHandler implements
         log.info("execute SendPhoneValidationSmsCommand");
 
         try {
-            // 존재하는 휴대폰 번호 인지 검증
-            userRepository.checkIfExistUserByPhoneNumber(command.targetPhoneNumber());
+            if (ValidationType.SIGN_UP.equals(command.validationType())) {
+                // 존재하는 휴대폰 번호 인지 검증
+                userRepository.checkIfExistUserByPhoneNumber(command.targetPhoneNumber());
+            }
 
             smsThirdPartyValidationCheckSender.sendValidationCheck(command.targetPhoneNumber());
 

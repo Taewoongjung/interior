@@ -2,6 +2,7 @@ package com.interior.application.integrationtest.sms;
 
 import static java.lang.Thread.sleep;
 
+import com.interior.adapter.inbound.user.webdto.ValidationType;
 import com.interior.application.command.user.commands.SendPhoneValidationSmsCommand;
 import com.interior.application.command.user.handlers.SendPhoneValidationSmsCommandHandler;
 import org.junit.jupiter.api.Disabled;
@@ -21,6 +22,8 @@ public class SmsTest {
     @Test
     void test1() throws Exception {
 
+        ValidationType validationType = ValidationType.SIGN_UP;
+
         String[] aa = new String[4];
 
         aa[0] = "01063637786";
@@ -30,7 +33,8 @@ public class SmsTest {
 
         for (int i = 0; i < 4; i++) {
 
-            sendPhoneValidationSmsCommandHandler.handle(new SendPhoneValidationSmsCommand(aa[i]));
+            sendPhoneValidationSmsCommandHandler.handle(
+                    new SendPhoneValidationSmsCommand(aa[i], validationType));
             System.out.println(i + " 번째 {" + aa[i] + "}");
         }
         sleep(1000);
@@ -39,13 +43,17 @@ public class SmsTest {
     @Test
     void test2() throws Exception {
 
+        ValidationType validationType = ValidationType.SIGN_UP;
+
         String[] aa = new String[4];
 
         aa[0] = "01088257754";
 
         for (int i = 0; i < 1; i++) {
 
-            sendPhoneValidationSmsCommandHandler.handle(new SendPhoneValidationSmsCommand(aa[i]));
+            sendPhoneValidationSmsCommandHandler.handle(
+                    new SendPhoneValidationSmsCommand(aa[i], validationType));
+
             System.out.println(i + " 번째 {" + aa[i] + "}");
         }
 
@@ -55,13 +63,17 @@ public class SmsTest {
     @Test
     void test3() throws Exception {
 
+        ValidationType validationType = ValidationType.SIGN_UP;
+
         String[] aa = new String[4];
 
         aa[0] = "01088257754";
 
         for (int i = 0; i < 1; i++) {
 
-            sendPhoneValidationSmsCommandHandler.handle(new SendPhoneValidationSmsCommand(aa[i]));
+            sendPhoneValidationSmsCommandHandler.handle(
+                    new SendPhoneValidationSmsCommand(aa[i], validationType));
+            
             System.out.println(i + " 번째 {" + aa[i] + "}");
         }
     }
