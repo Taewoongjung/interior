@@ -12,7 +12,5 @@ public interface UserRepository {
 
     User save(final User user);
 
-    Boolean existsByEmail(final String email);
-
     User findById(final Long id);
 }

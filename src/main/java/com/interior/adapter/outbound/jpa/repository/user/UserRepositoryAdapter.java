@@ -32,7 +32,7 @@ public class UserRepositoryAdapter implements UserRepository {
         check(entity == null, NOT_EXIST_USER);
 
         List<CompanyEntity> companyEntityList = entity.getCompanyEntityList();
-        
+
         return entity.toPojo(companyEntityList);
     }
 
@@ -55,12 +55,6 @@ public class UserRepositoryAdapter implements UserRepository {
     public User save(final User user) {
         UserEntity entity = userJpaRepository.save(userToEntity(user));
         return entity.toPojoWithRelations();
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Boolean existsByEmail(final String email) {
-        return userJpaRepository.existsByEmail(email);
     }
 
     @Override
