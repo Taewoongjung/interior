@@ -129,7 +129,7 @@ public class BusinessQueryController {
     @GetMapping(value = "/api/businesses/{businessId}/alimtalks/logs")
     public ResponseEntity<List<KakaoMsgResult>> getBusinessAlimtalkHistory(
             @PathVariable(value = "businessId") final Long businessId,
-            @RequestParam("progressType") final ProgressQueryType progressType
+            @RequestParam(value = "progressType", defaultValue = "ALL") final ProgressQueryType progressType
     ) {
 
         return ResponseEntity.status(HttpStatus.OK)
