@@ -13,6 +13,8 @@ import com.interior.domain.company.Company;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import lombok.Getter;
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
@@ -160,5 +162,28 @@ public class User extends Throwable implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public String getMaskedEmail() {
+        if (this.email == null || !this.email.contains("@")) {
+            return this.email; // 유효한 이메일이 아니면 그대로 반환
+        }
+
+        String[] parts = this.email.split("@");
+        if (parts[0].length() <= 2) {
+            return this.email; // '@' 앞 부분이 두 글자 이하인 경우 그대로 반환
+        }
+
+        Pattern pattern = Pattern.compile("(^..)[^@]*(?=@)");
+        Matcher matcher = pattern.matcher(this.email);
+
+        if (matcher.find()) {
+            String firstTwoChars = matcher.group(1);
+            int starsCount = matcher.group().length() - 2;
+            String stars = "*".repeat(starsCount);
+            return matcher.replaceFirst(firstTwoChars + stars);
+        }
+        
+        return this.email;
     }
 }

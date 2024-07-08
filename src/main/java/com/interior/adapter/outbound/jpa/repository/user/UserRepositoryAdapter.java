@@ -66,4 +66,14 @@ public class UserRepositoryAdapter implements UserRepository {
 
         return entity.toPojo();
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public User findByPhoneNumber(final String phoneNumber) {
+        UserEntity entity = userJpaRepository.findByTel(phoneNumber);
+
+        check(entity == null, NOT_EXIST_CUSTOMER);
+
+        return entity.toPojo();
+    }
 }

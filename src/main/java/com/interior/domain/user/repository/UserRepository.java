@@ -13,4 +13,6 @@ public interface UserRepository {
     User save(final User user);
 
     User findById(final Long id);
+
+    User findByPhoneNumber(final String phoneNumber);
 }

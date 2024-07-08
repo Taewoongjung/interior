@@ -151,6 +151,11 @@ public class UserRepositorySpy implements UserRepository {
         return entity;
     }
 
+    @Override
+    public User findByPhoneNumber(String phoneNumber) {
+        return null;
+    }
+
     private List<User> getUserListForTest() {
         List<User> userList = new ArrayList<>();
 
