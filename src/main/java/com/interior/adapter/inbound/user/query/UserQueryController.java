@@ -2,8 +2,9 @@ package com.interior.adapter.inbound.user.query;
 
 import com.interior.adapter.inbound.user.webdto.GetUserEmailWebDtoV1;
 import com.interior.adapter.inbound.user.webdto.LoadUserDto.LoadUserResDto;
+import com.interior.adapter.inbound.user.webdto.VerifyUserWebDtoV1;
 import com.interior.application.readmodel.user.GetUserEmailQueryHandler;
-import com.interior.application.readmodel.user.handlers.LoadUserByTokenCommandHandler;
+import com.interior.application.readmodel.user.handlers.LoadUserByTokenQueryHandler;
 import com.interior.application.readmodel.user.handlers.ValidationCheckOfEmailQueryHandler;
 import com.interior.application.readmodel.user.handlers.ValidationCheckOfPhoneNumberQueryHandler;
 import com.interior.application.readmodel.user.queries.GetUserEmailQuery;
@@ -19,6 +20,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserQueryController {
 
     private final GetUserEmailQueryHandler getUserEmailQueryHandler;
-    private final LoadUserByTokenCommandHandler loadUserByTokenCommandHandler;
+    private final LoadUserByTokenQueryHandler loadUserByTokenCommandHandler;
     private final ValidationCheckOfEmailQueryHandler validationCheckOfEmailQueryHandler;
     private final ValidationCheckOfPhoneNumberQueryHandler validationCheckOfPhoneNumberQueryHandler;
 
@@ -86,5 +89,13 @@ public class UserQueryController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new GetUserEmailWebDtoV1.Res(user.getMaskedEmail(), user.getCreatedAt()));
+    }
+
+    @PostMapping(value = "/api/users/veriy")
+    public ResponseEntity<Boolean> verifyUser(
+            @RequestBody final VerifyUserWebDtoV1.Req req
+    ) {
+
+        return ResponseEntity.status(HttpStatus.OK).body(true);
     }
 }

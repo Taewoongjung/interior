@@ -34,6 +34,7 @@ public class ValidationCheckOfEmailQueryHandler implements
     @Override
     @Transactional(readOnly = true)
     public Boolean handle(final ValidationCheckOfEmailQuery query) {
+        log.info("ValidationCheckOfEmailQuery {}", query);
 
         Map<String, String> data = cacheEmailValidationRedisRepository.getBucketByKey(
                 query.targetEmail());
@@ -55,7 +56,7 @@ public class ValidationCheckOfEmailQueryHandler implements
             if (!res) {
                 throw new ValidationException(INVALID_EMAIL_CHECK_NUMBER.getMessage());
             }
-            
+
             return true;
 
         } else {
