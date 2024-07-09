@@ -38,16 +38,16 @@ public class SendPhoneValidationSmsCommandHandler implements
 
     @Override
     @Transactional
-    public Void handle(final SendPhoneValidationSmsCommand command) throws Exception {
-        log.info("execute SendPhoneValidationSmsCommand");
+    public Void handle(final SendPhoneValidationSmsCommand event) throws Exception {
+        log.info("execute SendPhoneValidationSmsCommand = {}", event);
 
         try {
-            if (ValidationType.SIGN_UP.equals(command.validationType())) {
+            if (ValidationType.SIGN_UP.equals(event.validationType())) {
                 // 존재하는 휴대폰 번호 인지 검증
-                userRepository.checkIfExistUserByPhoneNumber(command.targetPhoneNumber());
+                userRepository.checkIfExistUserByPhoneNumber(event.targetPhoneNumber());
             }
 
-            smsThirdPartyValidationCheckSender.sendValidationCheck(command.targetPhoneNumber());
+            smsThirdPartyValidationCheckSender.sendValidationCheck(event.targetPhoneNumber());
 
             log.info("SendPhoneValidationSmsCommand executed successfully");
 
