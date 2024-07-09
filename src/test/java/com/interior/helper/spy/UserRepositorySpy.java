@@ -156,7 +156,14 @@ public class UserRepositorySpy implements UserRepository {
 
     @Override
     public boolean reviseUserPassword(final String email, final String phoneNumber, String password) {
-        return false;
+
+        User user = findByEmail(email);
+
+        check(!phoneNumber.equals(user.getTel()), NOT_EXIST_CUSTOMER);
+
+        /* 엔티티 도메인 비즈니스 모델로 비밀번호 재설정 */
+
+        return true;
     }
 
     private List<User> getUserListForTest() {
@@ -179,7 +186,7 @@ public class UserRepositorySpy implements UserRepository {
                 "홍길동",
                 "ss@sss.com",
                 "asdqeer1r12jiudjd^312&2ews",
-                "01012345678",
+                "01088257754",
                 UserRole.ADMIN,
                 LocalDateTime.of(2024, 5, 19, 23, 30),
                 LocalDateTime.of(2024, 5, 19, 23, 30),
