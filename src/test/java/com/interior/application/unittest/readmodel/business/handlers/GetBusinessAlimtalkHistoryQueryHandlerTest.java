@@ -1,15 +1,17 @@
-package com.interior.application.readmodel.business.handlers;
-
-import static org.assertj.core.api.Assertions.assertThat;
+package com.interior.application.unittest.readmodel.business.handlers;
 
 import com.interior.adapter.inbound.business.enumtypes.ProgressQueryType;
+import com.interior.application.readmodel.business.handlers.GetBusinessAlimtalkHistoryQueryHandler;
 import com.interior.application.readmodel.business.queries.GetBusinessAlimtalkHistoryQuery;
 import com.interior.domain.alimtalk.kakaomsgresult.KakaoMsgResult;
 import com.interior.domain.alimtalk.kakaomsgresult.repository.KakaoMsgResultRepository;
 import com.interior.helper.spy.KakaoMsgResultRepositorySpy;
-import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("GetBusinessAlimtalkHistoryQueryHandler 는 ")
 class GetBusinessAlimtalkHistoryQueryHandlerTest {

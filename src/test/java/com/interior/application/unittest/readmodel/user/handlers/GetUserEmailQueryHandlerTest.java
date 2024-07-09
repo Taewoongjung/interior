@@ -1,5 +1,6 @@
-package com.interior.application.readmodel.user;
+package com.interior.application.unittest.readmodel.user.handlers;
 
+import com.interior.application.readmodel.user.GetUserEmailQueryHandler;
 import com.interior.application.readmodel.user.queries.GetUserEmailQuery;
 import com.interior.domain.user.User;
 import com.interior.domain.user.repository.UserRepository;
