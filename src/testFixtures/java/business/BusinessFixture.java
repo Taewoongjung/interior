@@ -53,7 +53,7 @@ public class BusinessFixture {
             "01000", "부산 해운대구 APEC로 21", "401동 1202호", "2635010500115130000000002",
             LocalDateTime.of(2024, 7, 1, 2, 3),
             LocalDateTime.of(2024, 7, 1, 2, 3),
-            new ArrayList<>(), getBusinessProgress());
+            getBusinessMaterial(), getBusinessProgress());
 
     public static Business B_3 = Business.of(
             3L, "사업 현장 2", 56L, 519L, BoolType.T,
@@ -67,7 +67,7 @@ public class BusinessFixture {
             "01000", "경기 성남시 분당구 판교대장로 7", "101동 1403호", "1171010900106580001000001",
             LocalDateTime.of(2024, 7, 1, 2, 3),
             LocalDateTime.of(2024, 7, 1, 2, 3),
-            getBusinessMaterial(), getBusinessProgress());
+            new ArrayList<>(), getBusinessProgress());
 
     private static List<BusinessProgress> getBusinessProgress() {
 

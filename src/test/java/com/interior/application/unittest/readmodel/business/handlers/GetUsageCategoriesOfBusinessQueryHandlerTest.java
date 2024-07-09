@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static business.BusinessFixture.B_4;
+import static business.BusinessFixture.B_2_2;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -26,10 +26,10 @@ class GetUsageCategoriesOfBusinessQueryHandlerTest {
     void test1() {
 
         // given
-        Long businessId = 1L;
+        Long businessId = 22L;
 
         // when
-        when(businessRepository.findById(businessId)).thenReturn(B_4);
+        when(businessRepository.findById(businessId)).thenReturn(B_2_2);
 
         // then
         List<GetUsageCategoriesOfBusinessQueryResponse> actual = sut.handle(businessId);
