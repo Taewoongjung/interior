@@ -24,7 +24,7 @@ class GetUsageCategoriesOfBusinessQueryHandlerTest {
     void test1() {
 
         // given
-        Long businessId = 4L;
+        Long businessId = 1L;
 
         // when
         // then
@@ -32,6 +32,6 @@ class GetUsageCategoriesOfBusinessQueryHandlerTest {
 
         assertThat(actual).isNotNull();
         assertThat(actual.size()).isEqualTo(1);
-        assertThat(actual.get(0).count()).isEqualTo(3);
+        assertThat(actual.get(0).count()).isEqualTo(1);
     }
 }
