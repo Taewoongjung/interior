@@ -151,7 +151,13 @@ public class UserRepositorySpy implements UserRepository {
 
     @Override
     public User findByPhoneNumber(String phoneNumber) {
-        return null;
+
+        List<User> userList = getUserListForTest();
+
+        return userList.stream()
+                .filter(f -> phoneNumber.equals(f.getTel()))
+                .findFirst()
+                .orElseThrow(() -> new InvalidInputException(NOT_EXIST_CUSTOMER));
     }
 
     @Override
