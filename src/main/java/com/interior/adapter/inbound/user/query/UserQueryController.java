@@ -7,9 +7,11 @@ import com.interior.application.readmodel.user.GetUserEmailQueryHandler;
 import com.interior.application.readmodel.user.handlers.LoadUserByTokenQueryHandler;
 import com.interior.application.readmodel.user.handlers.ValidationCheckOfEmailQueryHandler;
 import com.interior.application.readmodel.user.handlers.ValidationCheckOfPhoneNumberQueryHandler;
+import com.interior.application.readmodel.user.handlers.VerifyUserQueryHandler;
 import com.interior.application.readmodel.user.queries.GetUserEmailQuery;
 import com.interior.application.readmodel.user.queries.ValidationCheckOfEmailQuery;
 import com.interior.application.readmodel.user.queries.ValidationCheckOfPhoneNumberQuery;
+import com.interior.application.readmodel.user.queries.VerifyUserQuery;
 import com.interior.domain.user.User;
 import com.interior.domain.util.BoolType;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserQueryController {
 
+    private final VerifyUserQueryHandler verifyUserQueryHandler;
     private final GetUserEmailQueryHandler getUserEmailQueryHandler;
     private final LoadUserByTokenQueryHandler loadUserByTokenCommandHandler;
     private final ValidationCheckOfEmailQueryHandler validationCheckOfEmailQueryHandler;
@@ -91,11 +94,12 @@ public class UserQueryController {
                 .body(new GetUserEmailWebDtoV1.Res(user.getMaskedEmail(), user.getCreatedAt()));
     }
 
-    @PostMapping(value = "/api/users/veriy")
+    @PostMapping(value = "/api/users/verify")
     public ResponseEntity<Boolean> verifyUser(
             @RequestBody final VerifyUserWebDtoV1.Req req
     ) {
 
-        return ResponseEntity.status(HttpStatus.OK).body(true);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                verifyUserQueryHandler.handle(new VerifyUserQuery(req.email(), req.phoneNumber())));
     }
 }

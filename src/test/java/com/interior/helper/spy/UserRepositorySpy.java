@@ -1,20 +1,18 @@
 package com.interior.helper.spy;
 
-import static com.interior.adapter.common.exception.ErrorType.INVALID_SIGNUP_REQUEST_DUPLICATE_EMAIL;
-import static com.interior.adapter.common.exception.ErrorType.INVALID_SIGNUP_REQUEST_DUPLICATE_TEL;
-import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_CUSTOMER;
-import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_USER;
-import static com.interior.util.CheckUtil.check;
-import static company.CompanyFixture.COMPANY_LIST;
-import static company.CompanyFixture.COMPANY_LIST_OVER_5;
-
 import com.interior.adapter.common.exception.InvalidInputException;
 import com.interior.domain.user.User;
 import com.interior.domain.user.UserRole;
 import com.interior.domain.user.repository.UserRepository;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.interior.adapter.common.exception.ErrorType.*;
+import static com.interior.util.CheckUtil.check;
+import static company.CompanyFixture.COMPANY_LIST;
+import static company.CompanyFixture.COMPANY_LIST_OVER_5;
 
 public class UserRepositorySpy implements UserRepository {
 
@@ -154,6 +152,11 @@ public class UserRepositorySpy implements UserRepository {
     @Override
     public User findByPhoneNumber(String phoneNumber) {
         return null;
+    }
+
+    @Override
+    public boolean reviseUserPassword(final String email, final String phoneNumber, String password) {
+        return false;
     }
 
     private List<User> getUserListForTest() {

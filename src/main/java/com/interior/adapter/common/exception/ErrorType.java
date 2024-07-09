@@ -37,6 +37,7 @@ public enum ErrorType {
     INVALID_CUSTOMER_PASSWORD(1004, "올바르지 않은 비밀번호입니다."),
     INVALID_CUSTOMER_USER_ROLE(1005, "올바르지 않은 유저역할입니다."),
     NOT_VERIFIED_PHONE(1006, "휴대폰 검증이 선행 되어야 합니다."),
+    NOT_MATCHED_EMAIL_WITH_PHONE_NUMBER(1007, "이메일과 휴대폰번호가 일치하지 않습니다."),
 
     NOT_EXIST_COMPANY(1050, "사업체가 존재하지 않습니다."),
     INVALID_COMPANY_NAME(1051, "사업체 명이 올바르지 않습니다."),

@@ -1,10 +1,13 @@
 package com.interior.adapter.inbound.user.command;
 
 import com.interior.adapter.inbound.user.webdto.RequestValidation;
+import com.interior.adapter.inbound.user.webdto.ResetUserPasswordWebDtoV1;
 import com.interior.adapter.inbound.user.webdto.SignUpDtoWebDtoV1;
+import com.interior.application.command.user.commands.ResetUserPasswordCommand;
 import com.interior.application.command.user.commands.SendEmailValidationMailCommand;
 import com.interior.application.command.user.commands.SendPhoneValidationSmsCommand;
 import com.interior.application.command.user.commands.SignUpCommand;
+import com.interior.application.command.user.handlers.ResetUserPasswordCommandHandler;
 import com.interior.application.command.user.handlers.SendEmailValidationMailCommandHandler;
 import com.interior.application.command.user.handlers.SendPhoneValidationSmsCommandHandler;
 import com.interior.application.command.user.handlers.SignUpCommandHandler;
@@ -13,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserCommandController {
 
     private final SignUpCommandHandler signUpCommandHandler;
+    private final ResetUserPasswordCommandHandler resetUserPasswordCommandHandler;
     private final SendEmailValidationMailCommandHandler sendEmailValidationMailCommandHandler;
     private final SendPhoneValidationSmsCommandHandler sendPhoneValidationSmsCommandHandler;
 
@@ -64,5 +69,15 @@ public class UserCommandController {
                 new SendPhoneValidationSmsCommand(req.targetPhoneNumber(), req.validationType()));
 
         return ResponseEntity.status(HttpStatus.OK).body(true);
+    }
+
+    @PatchMapping(value = "/api/users/passwords")
+    public ResponseEntity<Boolean> resetUserPassword(
+            @RequestBody final ResetUserPasswordWebDtoV1.Req req
+    ) {
+        
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(resetUserPasswordCommandHandler.handle(
+                        new ResetUserPasswordCommand(req.email(), req.phoneNumber(), req.password())));
     }
 }

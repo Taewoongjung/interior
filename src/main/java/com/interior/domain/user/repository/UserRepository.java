@@ -15,4 +15,6 @@ public interface UserRepository {
     User findById(final Long id);
 
     User findByPhoneNumber(final String phoneNumber);
+
+    boolean reviseUserPassword(final String email, final String phoneNumber, final String password);
 }

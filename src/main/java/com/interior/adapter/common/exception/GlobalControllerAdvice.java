@@ -2,6 +2,7 @@ package com.interior.adapter.common.exception;
 
 import com.interior.adapter.outbound.alarm.dto.event.ErrorAlarm;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -10,8 +11,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
-import java.util.HashMap;
 
 @Slf4j
 @RestControllerAdvice
@@ -57,6 +56,6 @@ public class GlobalControllerAdvice {
 
     @ExceptionHandler(InvalidInputException.class)
     public ResponseEntity<ErrorResponse> badRequestExceptionHandler(final InvalidInputException e) {
-        return ResponseEntity.badRequest().body(new ErrorResponse(e.getCode(), e.toString()));
+        return ResponseEntity.badRequest().body(new ErrorResponse(e.getCode(), e.getMessage()));
     }
 }
