@@ -1,12 +1,5 @@
 package com.interior.helper.spy;
 
-import static business.BusinessFixture.getBusinessList;
-import static business.log.BusinessMaterialLogFixture.getBusinessMaterialLogList;
-import static business.material.BusinessMaterialFixture.getBusinessMaterial;
-import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_BUSINESS;
-import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_BUSINESS_MATERIAL;
-import static com.interior.util.CheckUtil.check;
-
 import com.interior.adapter.common.exception.ErrorType;
 import com.interior.adapter.inbound.business.enumtypes.QueryType;
 import com.interior.adapter.outbound.jpa.repository.business.dto.ReviseBusinessMaterial;
@@ -20,11 +13,19 @@ import com.interior.domain.business.repository.BusinessRepository;
 import com.interior.domain.business.repository.dto.CreateBusiness;
 import com.interior.domain.business.repository.dto.CreateBusinessMaterial;
 import com.interior.domain.util.BoolType;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
+
+import static business.BusinessFixture.getBusinessList;
+import static business.log.BusinessMaterialLogFixture.getBusinessMaterialLogList;
+import static business.material.BusinessMaterialFixture.getBusinessMaterial;
+import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_BUSINESS;
+import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_BUSINESS_MATERIAL;
+import static com.interior.util.CheckUtil.check;
 
 public class BusinessRepositorySpy implements BusinessRepository {
 
@@ -106,7 +107,7 @@ public class BusinessRepositorySpy implements BusinessRepository {
 
     @Override
     public Business findBusinessByCompanyIdAndBusinessId(Long companyId,
-            Long businessId) {
+                                                         Long businessId) {
 
         List<Business> businessList = getBusinessList();
 
@@ -120,7 +121,7 @@ public class BusinessRepositorySpy implements BusinessRepository {
                 .orElseThrow(() -> new NoSuchElementException(NOT_EXIST_BUSINESS.getMessage()));
 
         business.getBusinessMaterialList().addAll(getBusinessMaterial());
-        
+
         return business;
     }
 
@@ -186,13 +187,13 @@ public class BusinessRepositorySpy implements BusinessRepository {
 
     @Override
     public boolean reviseBusiness(Long userId, Long businessId,
-            String changeBusinessName) {
+                                  String changeBusinessName) {
         return false;
     }
 
     @Override
     public boolean reviseUsageCategoryOfMaterial(Long businessId, List<Long> targetList,
-            String usageCategoryName) {
+                                                 String usageCategoryName) {
 
         List<Business> businessList = getBusinessList();
 
@@ -236,7 +237,7 @@ public class BusinessRepositorySpy implements BusinessRepository {
 
     @Override
     public boolean reviseBusinessMaterial(Long materialId,
-            ReviseBusinessMaterial reviseReq) {
+                                          ReviseBusinessMaterial reviseReq) {
 
         List<BusinessMaterial> businessMaterialList = getBusinessMaterial();
 

@@ -23,6 +23,7 @@ public class GetExcelProgressInfoQueryHandler implements
 
     @Override
     public SseEmitter handle(final GetExcelProgressInfoQuery query) {
+        log.info("process GetExcelProgressInfoQuery {}", query);
 
         SseEmitter emitter = sseService.addEmitter(query.taskId());
 
