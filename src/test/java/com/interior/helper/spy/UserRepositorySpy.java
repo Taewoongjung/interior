@@ -113,11 +113,6 @@ public class UserRepositorySpy implements UserRepository {
     }
 
     @Override
-    public Boolean existsByEmail(String email) {
-        return null;
-    }
-
-    @Override
     public User findById(Long id) {
 
         List<User> userList = new ArrayList<>();
@@ -154,6 +149,29 @@ public class UserRepositorySpy implements UserRepository {
         return entity;
     }
 
+    @Override
+    public User findByPhoneNumber(String phoneNumber) {
+
+        List<User> userList = getUserListForTest();
+
+        return userList.stream()
+                .filter(f -> phoneNumber.equals(f.getTel()))
+                .findFirst()
+                .orElseThrow(() -> new InvalidInputException(NOT_EXIST_CUSTOMER));
+    }
+
+    @Override
+    public boolean reviseUserPassword(final String email, final String phoneNumber, String password) {
+
+        User user = findByEmail(email);
+
+        check(!phoneNumber.equals(user.getTel()), NOT_EXIST_CUSTOMER);
+
+        /* 엔티티 도메인 비즈니스 모델로 비밀번호 재설정 */
+
+        return true;
+    }
+
     private List<User> getUserListForTest() {
         List<User> userList = new ArrayList<>();
 
@@ -174,7 +192,7 @@ public class UserRepositorySpy implements UserRepository {
                 "홍길동",
                 "ss@sss.com",
                 "asdqeer1r12jiudjd^312&2ews",
-                "01012345678",
+                "01088257754",
                 UserRole.ADMIN,
                 LocalDateTime.of(2024, 5, 19, 23, 30),
                 LocalDateTime.of(2024, 5, 19, 23, 30),

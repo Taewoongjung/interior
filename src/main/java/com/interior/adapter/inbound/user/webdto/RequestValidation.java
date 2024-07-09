@@ -6,7 +6,7 @@ public class RequestValidation {
 
     }
 
-    public record PhoneValidationReq(String targetPhoneNumber) {
-        
+    public record PhoneValidationReq(String targetPhoneNumber, ValidationType validationType) {
+
     }
 }

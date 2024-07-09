@@ -36,6 +36,7 @@ public class ValidationCheckOfPhoneNumberQueryHandler implements
     @Override
     @Transactional(readOnly = true)
     public Boolean handle(final ValidationCheckOfPhoneNumberQuery query) {
+        log.info("ValidationCheckOfPhoneNumberQuery {}", query);
 
         Map<String, String> data = cacheSmsValidationRedisRepository.getBucketByKey(
                 query.targetPhoneNumber());

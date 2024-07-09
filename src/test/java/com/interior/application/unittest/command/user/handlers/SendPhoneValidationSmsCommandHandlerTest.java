@@ -7,6 +7,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
 import com.interior.abstraction.serviceutill.IThirdPartyValidationCheckSender;
+import com.interior.adapter.inbound.user.webdto.ValidationType;
 import com.interior.application.command.user.commands.SendPhoneValidationSmsCommand;
 import com.interior.application.command.user.handlers.SendPhoneValidationSmsCommandHandler;
 import com.interior.domain.user.repository.UserRepository;
@@ -39,8 +40,10 @@ class SendPhoneValidationSmsCommandHandlerTest {
 
         // given
         String targetPhoneNumber = "01088887777";
+        ValidationType validationType = ValidationType.SIGN_UP;
 
-        SendPhoneValidationSmsCommand event = new SendPhoneValidationSmsCommand(targetPhoneNumber);
+        SendPhoneValidationSmsCommand event = new SendPhoneValidationSmsCommand(targetPhoneNumber,
+                validationType);
 
         ValueOperations<String, Map<String, String>> cache = redisTemplate.opsForValue();
 
@@ -63,8 +66,10 @@ class SendPhoneValidationSmsCommandHandlerTest {
 
         // given
         String targetPhoneNumber = "01012345678";
+        ValidationType validationType = ValidationType.SIGN_UP;
 
-        SendPhoneValidationSmsCommand event = new SendPhoneValidationSmsCommand(targetPhoneNumber);
+        SendPhoneValidationSmsCommand event = new SendPhoneValidationSmsCommand(targetPhoneNumber,
+                validationType);
 
         // when
         // then

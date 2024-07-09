@@ -37,14 +37,14 @@ public class SendEmailValidationMailCommandHandler implements
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Void handle(final SendEmailValidationMailCommand command) throws Exception {
-        log.info("execute SendEmailValidationMailCommand");
+    public Void handle(final SendEmailValidationMailCommand event) throws Exception {
+        log.info("execute SendEmailValidationMailCommand = {}", event);
 
         try {
             // 존재하는 이메일인지 검증
-            userRepository.checkIfExistUserByEmail(command.targetEmail());
+            userRepository.checkIfExistUserByEmail(event.targetEmail());
 
-            emailThirdPartyValidationCheckSender.sendValidationCheck(command.targetEmail());
+            emailThirdPartyValidationCheckSender.sendValidationCheck(event.targetEmail());
 
             log.info("SendEmailValidationMailCommand executed successfully");
 

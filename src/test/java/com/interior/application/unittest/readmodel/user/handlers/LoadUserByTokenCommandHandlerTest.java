@@ -9,20 +9,20 @@ import static org.mockito.Mockito.when;
 
 import com.interior.adapter.common.exception.InvalidInputException;
 import com.interior.adapter.config.security.jwt.JWTUtil;
-import com.interior.application.readmodel.user.handlers.LoadUserByTokenCommandHandler;
+import com.interior.application.readmodel.user.handlers.LoadUserByTokenQueryHandler;
 import com.interior.domain.user.User;
 import com.interior.domain.user.repository.UserRepository;
 import com.interior.helper.spy.UserRepositorySpy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-@DisplayName("LoadUserByTokenCommandHandler 는 ")
+@DisplayName("LoadUserByTokenQueryHandler 는 ")
 class LoadUserByTokenCommandHandlerTest {
 
     private final JWTUtil jwtUtil = mock(JWTUtil.class);
     private final UserRepository userRepository = new UserRepositorySpy();
 
-    private final LoadUserByTokenCommandHandler sut = new LoadUserByTokenCommandHandler(
+    private final LoadUserByTokenQueryHandler sut = new LoadUserByTokenQueryHandler(
             jwtUtil, userRepository);
 
 

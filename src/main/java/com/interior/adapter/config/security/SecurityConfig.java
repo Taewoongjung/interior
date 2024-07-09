@@ -62,21 +62,25 @@ public class SecurityConfig {
         http.httpBasic(AbstractHttpConfigurer::disable);
 
         http.authorizeHttpRequests((auth) -> auth
+                        // all permitted
                         .requestMatchers(HttpMethod.GET,
                                 "/api/excels/tasks/{taskId}"
                                 , "/api/emails/validations"
                                 , "/api/phones/validations"
-                        ).permitAll()
-
-                        .requestMatchers(HttpMethod.POST,
-                                "/api/emails/validations"
-                                , "/api/phones/validations"
+                                , "/api/users/emails"
                         ).permitAll()
                         .requestMatchers(HttpMethod.POST,
                                 "/api/login"
                                 , "/api/signup"
+                                , "/api/users/verify"
+                                , "/api/emails/validations"
+                                , "/api/phones/validations"
+                        ).permitAll()
+                        .requestMatchers(HttpMethod.PATCH,
+                                "/api/users/passwords"
                         ).permitAll()
 
+                        // all authorize
                         .requestMatchers(HttpMethod.GET,
                                 "/actuator/health"
                                 , "/api/me"

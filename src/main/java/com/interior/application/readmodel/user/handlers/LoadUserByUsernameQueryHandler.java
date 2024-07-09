@@ -19,6 +19,7 @@ public class LoadUserByUsernameQueryHandler implements UserDetailsService {
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
+        log.info("LoadUserByUsernameQuery {}", email);
 
         return userRepository.findByEmail(email);
     }

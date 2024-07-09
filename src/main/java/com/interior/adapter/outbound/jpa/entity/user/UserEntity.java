@@ -1,36 +1,23 @@
 package com.interior.adapter.outbound.jpa.entity.user;
 
-import static com.interior.adapter.common.exception.ErrorType.INVALID_CUSTOMER_EMAIL;
-import static com.interior.adapter.common.exception.ErrorType.INVALID_CUSTOMER_NAME;
-import static com.interior.adapter.common.exception.ErrorType.INVALID_CUSTOMER_PASSWORD;
-import static com.interior.adapter.common.exception.ErrorType.INVALID_CUSTOMER_TEL;
-import static com.interior.adapter.common.exception.ErrorType.INVALID_CUSTOMER_USER_ROLE;
-import static com.interior.util.CheckUtil.require;
-
 import com.interior.adapter.outbound.jpa.entity.BaseEntity;
 import com.interior.adapter.outbound.jpa.entity.company.CompanyEntity;
 import com.interior.domain.user.User;
 import com.interior.domain.user.UserRole;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.interior.adapter.common.exception.ErrorType.*;
+import static com.interior.util.CheckUtil.require;
 
 @Entity
 @Getter
@@ -164,5 +151,9 @@ public class UserEntity extends BaseEntity {
                 getCompanyEntityList().stream().map(CompanyEntity::toPojo)
                         .collect(Collectors.toList())
         );
+    }
+
+    public void resetPassword(final String targetPwd) {
+        this.password = targetPwd;
     }
 }
