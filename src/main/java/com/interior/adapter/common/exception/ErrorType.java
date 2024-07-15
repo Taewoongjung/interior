@@ -93,7 +93,11 @@ public enum ErrorType {
     EMPTY_KAKAO_MSG_RESULT_TYPE(1504, "메시지 결과 타입은 필수값 입니다."),
     EMPTY_KAKAO_MSG_RESULT_RECEIVER_PHONE(1505, "메시지를 받은 번호는 필수값 입니다."),
 
-    ;
+    EMPTY_BUSINESS_ID_IN_SCHEDULE(1600, "연관 사업 id는 필수입니다."),
+    EMPTY_USER_ID_IN_SCHEDULE(1601, "등록한 사람의 id는 필수입니다."),
+    EMPTY_TYPE_IN_SCHEDULE(1602, "스케줄 타입은 필수입니다."),
+    EMPTY_START_DATE_IN_SCHEDULE(1603, "시작 날짜는 필수입니다."),
+    EMPTY_IS_ALARM_ON_IN_SCHEDULE(1604, "알람 켜짐 여부는 필수입니다.");
 
     private final int code;
     private final String message;
