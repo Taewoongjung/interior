@@ -1,5 +1,10 @@
 package com.interior.adapter.outbound.jpa.entity.schedule;
 
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_BUSINESS_SCHEDULE_ID_IN_SCHEDULE_ALARM;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_IS_DELETED_IN_SCHEDULE_ALARM;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_IS_SUCCESS_IN_SCHEDULE_ALARM;
+import static com.interior.util.CheckUtil.require;
+
 import com.interior.adapter.outbound.jpa.entity.BaseEntity;
 import com.interior.domain.schedule.BusinessScheduleAlarm;
 import com.interior.domain.util.BoolType;
@@ -34,23 +39,36 @@ public class BusinessScheduleAlarmEntity extends BaseEntity {
     @Column(name = "is_success", columnDefinition = "char(1)")
     private BoolType isSuccess;
 
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "is_deleted", columnDefinition = "char(1)")
+    private BoolType isDeleted;
+
     private BusinessScheduleAlarmEntity(
             final Long id,
             final Long businessScheduleId,
-            final BoolType isSuccess
+            final BoolType isSuccess,
+            final BoolType isDeleted
     ) {
         super(LocalDateTime.now(), LocalDateTime.now());
 
         this.id = id;
         this.businessScheduleId = businessScheduleId;
         this.isSuccess = isSuccess;
+        this.isDeleted = isDeleted;
     }
 
     public static BusinessScheduleAlarmEntity of(
             final Long businessScheduleId,
-            final BoolType isSuccess
+            final BoolType isSuccess,
+            final BoolType isDeleted
     ) {
-        return new BusinessScheduleAlarmEntity(null, businessScheduleId, isSuccess);
+
+        require(o -> businessScheduleId == null, businessScheduleId,
+                EMPTY_BUSINESS_SCHEDULE_ID_IN_SCHEDULE_ALARM);
+        require(o -> isSuccess == null, isSuccess, EMPTY_IS_SUCCESS_IN_SCHEDULE_ALARM);
+        require(o -> isDeleted == null, isDeleted, EMPTY_IS_DELETED_IN_SCHEDULE_ALARM);
+
+        return new BusinessScheduleAlarmEntity(null, businessScheduleId, isSuccess, isDeleted);
     }
 
     public BusinessScheduleAlarm toPojo() {
@@ -58,6 +76,7 @@ public class BusinessScheduleAlarmEntity extends BaseEntity {
                 getId(),
                 getBusinessScheduleId(),
                 getIsSuccess(),
+                getIsDeleted(),
                 getLastModified(),
                 getCreatedAt()
         );

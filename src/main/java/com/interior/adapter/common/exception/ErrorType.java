@@ -98,7 +98,11 @@ public enum ErrorType {
     EMPTY_TYPE_IN_SCHEDULE(1602, "스케줄 타입은 필수입니다."),
     EMPTY_START_DATE_IN_SCHEDULE(1603, "시작 날짜는 필수입니다."),
     EMPTY_END_DATE_IN_SCHEDULE(1604, "일정(WORK) 타입 스케줄일 때 끝나는 날짜는 필수입니다."),
-    EMPTY_IS_ALARM_ON_IN_SCHEDULE(1605, "알람 켜짐 여부는 필수입니다.");
+    EMPTY_IS_ALARM_ON_IN_SCHEDULE(1605, "알람 켜짐 여부는 필수입니다."),
+
+    EMPTY_BUSINESS_SCHEDULE_ID_IN_SCHEDULE_ALARM(1620, "연관 스케줄의 id는 필수값입니다."),
+    EMPTY_IS_SUCCESS_IN_SCHEDULE_ALARM(1621, "알람 성공 여부는 필수값입니다."),
+    EMPTY_IS_DELETED_IN_SCHEDULE_ALARM(1622, "알람 삭제 여부는 필수값입니다.");
 
     private final int code;
     private final String message;
