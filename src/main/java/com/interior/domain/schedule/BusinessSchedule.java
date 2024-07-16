@@ -1,5 +1,14 @@
 package com.interior.domain.schedule;
 
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_BUSINESS_ID_IN_SCHEDULE;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_END_DATE_IN_SCHEDULE;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_IS_ALARM_ON_IN_SCHEDULE;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_IS_DELETED;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_START_DATE_IN_SCHEDULE;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_TYPE_IN_SCHEDULE;
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_USER_ID_IN_SCHEDULE;
+import static com.interior.util.CheckUtil.require;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.interior.domain.util.BoolType;
 import java.time.LocalDateTime;
@@ -78,6 +87,14 @@ public class BusinessSchedule {
             final LocalDateTime lastModified,
             final LocalDateTime createdAt
     ) {
+
+        require(o -> businessId == null, businessId, EMPTY_BUSINESS_ID_IN_SCHEDULE);
+        require(o -> userId == null, userId, EMPTY_USER_ID_IN_SCHEDULE);
+        require(o -> type == null, type, EMPTY_TYPE_IN_SCHEDULE);
+        require(o -> startDate == null, startDate, EMPTY_START_DATE_IN_SCHEDULE);
+        require(o -> isAlarmOn == null, isAlarmOn, EMPTY_IS_ALARM_ON_IN_SCHEDULE);
+        require(o -> isDeleted == null, isDeleted, EMPTY_IS_DELETED);
+
         return new BusinessSchedule(id, businessId, userId, type, title, orderingPlace, startDate,
                 endDate, isAlarmOn, isDeleted, lastModified, createdAt);
     }
@@ -96,6 +113,16 @@ public class BusinessSchedule {
             final LocalDateTime lastModified,
             final LocalDateTime createdAt
     ) {
+
+        require(o -> businessId == null, businessId, EMPTY_BUSINESS_ID_IN_SCHEDULE);
+        require(o -> userId == null, userId, EMPTY_USER_ID_IN_SCHEDULE);
+        require(o -> type == null, type, EMPTY_TYPE_IN_SCHEDULE);
+        require(o -> startDate == null, startDate, EMPTY_START_DATE_IN_SCHEDULE);
+        require(o -> (ScheduleType.WORK.equals(type) && endDate == null)
+                , endDate, EMPTY_END_DATE_IN_SCHEDULE);
+        require(o -> isAlarmOn == null, isAlarmOn, EMPTY_IS_ALARM_ON_IN_SCHEDULE);
+        require(o -> isDeleted == null, isDeleted, EMPTY_IS_DELETED);
+
         return new BusinessSchedule(null, businessId, userId, type, title, orderingPlace, startDate,
                 endDate, isAlarmOn, isDeleted, lastModified, createdAt);
     }
