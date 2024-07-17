@@ -5,6 +5,8 @@ import com.interior.adapter.config.security.jwt.JWTUtil;
 import com.interior.adapter.config.security.jwt.LoginFilter;
 import com.interior.application.readmodel.user.handlers.LoadUserByUsernameQueryHandler;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -21,9 +23,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
-
-import java.util.Arrays;
-import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
@@ -103,6 +102,7 @@ public class SecurityConfig {
                                 , "/api/businesses"
                                 , "/api/companies/{companyId}/businesses"
                                 , "/api/businesses/{businessId}/quotations/draft/completions"
+                                , "/api/businesses/schedules"
                         ).authenticated()
                         .requestMatchers(HttpMethod.PATCH,
                                 "/api/businesses/{businessId}/usages/categories",
