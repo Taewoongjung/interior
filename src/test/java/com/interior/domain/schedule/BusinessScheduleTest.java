@@ -30,10 +30,7 @@ class BusinessScheduleTest {
                 null,
                 LocalDateTime.of(2024, 5, 19, 23, 30),
                 LocalDateTime.of(2024, 5, 19, 23, 50),
-                BoolType.F,
-                BoolType.F,
-                LocalDateTime.now(),
-                LocalDateTime.now()
+                BoolType.F
         ));
     }
 
@@ -48,10 +45,7 @@ class BusinessScheduleTest {
                 "양주시 머선머선면 머선머선 주소",
                 LocalDateTime.of(2024, 5, 19, 23, 30),
                 null,
-                BoolType.T,
-                BoolType.F,
-                LocalDateTime.now(),
-                LocalDateTime.now()
+                BoolType.T
         ));
     }
 
@@ -67,10 +61,7 @@ class BusinessScheduleTest {
                     "양주시 머선머선면 머선머선 주소",
                     LocalDateTime.of(2024, 5, 19, 23, 30),
                     null,
-                    BoolType.T,
-                    BoolType.F,
-                    LocalDateTime.now(),
-                    LocalDateTime.now()
+                    BoolType.T
             );
         })
                 .isInstanceOf(InvalidInputException.class)
@@ -89,10 +80,7 @@ class BusinessScheduleTest {
                     "양주시 머선머선면 머선머선 주소",
                     LocalDateTime.of(2024, 5, 19, 23, 30),
                     null,
-                    BoolType.T,
-                    BoolType.F,
-                    LocalDateTime.now(),
-                    LocalDateTime.now()
+                    BoolType.T
             );
         })
                 .isInstanceOf(InvalidInputException.class)
@@ -111,10 +99,7 @@ class BusinessScheduleTest {
                     "양주시 머선머선면 머선머선 주소",
                     LocalDateTime.of(2024, 5, 19, 23, 30),
                     null,
-                    BoolType.T,
-                    BoolType.F,
-                    LocalDateTime.now(),
-                    LocalDateTime.now()
+                    BoolType.T
             );
         })
                 .isInstanceOf(InvalidInputException.class)
@@ -133,10 +118,7 @@ class BusinessScheduleTest {
                     "양주시 머선머선면 머선머선 주소",
                     null,
                     null,
-                    BoolType.T,
-                    BoolType.F,
-                    LocalDateTime.now(),
-                    LocalDateTime.now()
+                    BoolType.T
             );
         })
                 .isInstanceOf(InvalidInputException.class)
@@ -155,10 +137,7 @@ class BusinessScheduleTest {
                     "양주시 머선머선면 머선머선 주소",
                     LocalDateTime.of(2024, 5, 19, 23, 30),
                     null,
-                    BoolType.T,
-                    BoolType.F,
-                    LocalDateTime.now(),
-                    LocalDateTime.now()
+                    BoolType.T
             );
         })
                 .isInstanceOf(InvalidInputException.class)
@@ -177,10 +156,7 @@ class BusinessScheduleTest {
                     "양주시 머선머선면 머선머선 주소",
                     LocalDateTime.of(2024, 5, 19, 23, 30),
                     null,
-                    null,
-                    BoolType.F,
-                    LocalDateTime.now(),
-                    LocalDateTime.now()
+                    null
             );
         })
                 .isInstanceOf(InvalidInputException.class)
@@ -192,6 +168,7 @@ class BusinessScheduleTest {
     void test9() {
         assertThatThrownBy(() -> {
             BusinessSchedule.of(
+                    10L,
                     1L,
                     519L,
                     ScheduleType.ORDER,

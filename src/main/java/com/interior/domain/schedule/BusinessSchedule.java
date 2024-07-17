@@ -108,10 +108,7 @@ public class BusinessSchedule {
             final String orderingPlace,
             final LocalDateTime startDate,
             final LocalDateTime endDate,
-            final BoolType isAlarmOn,
-            final BoolType isDeleted,
-            final LocalDateTime lastModified,
-            final LocalDateTime createdAt
+            final BoolType isAlarmOn
     ) {
 
         require(o -> businessId == null, businessId, EMPTY_BUSINESS_ID_IN_SCHEDULE);
@@ -121,9 +118,8 @@ public class BusinessSchedule {
         require(o -> (ScheduleType.WORK.equals(type) && endDate == null)
                 , endDate, EMPTY_END_DATE_IN_SCHEDULE);
         require(o -> isAlarmOn == null, isAlarmOn, EMPTY_IS_ALARM_ON_IN_SCHEDULE);
-        require(o -> isDeleted == null, isDeleted, EMPTY_IS_DELETED);
 
         return new BusinessSchedule(null, businessId, userId, type, title, orderingPlace, startDate,
-                endDate, isAlarmOn, isDeleted, lastModified, createdAt);
+                endDate, isAlarmOn, BoolType.F, null, null);
     }
 }

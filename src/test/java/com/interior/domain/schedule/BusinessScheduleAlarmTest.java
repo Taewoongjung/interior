@@ -1,5 +1,6 @@
 package com.interior.domain.schedule;
 
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_ALARM_START_DATE_IN_SCHEDULE_ALARM;
 import static com.interior.adapter.common.exception.ErrorType.EMPTY_BUSINESS_SCHEDULE_ID_IN_SCHEDULE_ALARM;
 import static com.interior.adapter.common.exception.ErrorType.EMPTY_IS_DELETED_IN_SCHEDULE_ALARM;
 import static com.interior.adapter.common.exception.ErrorType.EMPTY_IS_SUCCESS_IN_SCHEDULE_ALARM;
@@ -20,10 +21,9 @@ class BusinessScheduleAlarmTest {
     void test1() {
         assertDoesNotThrow(() -> BusinessScheduleAlarm.of(
                 10L,
+                LocalDateTime.of(2024, 5, 19, 23, 30),
                 BoolType.T,
-                BoolType.T,
-                LocalDateTime.now(),
-                LocalDateTime.now()
+                BoolType.T
         ));
     }
 
@@ -33,10 +33,9 @@ class BusinessScheduleAlarmTest {
         assertThatThrownBy(() -> {
             BusinessScheduleAlarm.of(
                     null,
+                    LocalDateTime.of(2024, 5, 19, 23, 30),
                     BoolType.T,
-                    BoolType.T,
-                    LocalDateTime.now(),
-                    LocalDateTime.now()
+                    BoolType.T
             );
         })
                 .isInstanceOf(InvalidInputException.class)
@@ -44,15 +43,29 @@ class BusinessScheduleAlarmTest {
     }
 
     @Test
-    @DisplayName("알람 성공여부값은 필수값입니다.")
+    @DisplayName("알람시간은 필수값입니다.")
     void test3() {
         assertThatThrownBy(() -> {
             BusinessScheduleAlarm.of(
                     10L,
                     null,
                     BoolType.T,
-                    LocalDateTime.now(),
-                    LocalDateTime.now()
+                    BoolType.T
+            );
+        })
+                .isInstanceOf(InvalidInputException.class)
+                .hasMessage(EMPTY_ALARM_START_DATE_IN_SCHEDULE_ALARM.getMessage());
+    }
+
+    @Test
+    @DisplayName("알람 성공여부값은 필수값입니다.")
+    void test4() {
+        assertThatThrownBy(() -> {
+            BusinessScheduleAlarm.of(
+                    10L,
+                    LocalDateTime.of(2024, 5, 19, 23, 30),
+                    null,
+                    BoolType.T
             );
         })
                 .isInstanceOf(InvalidInputException.class)
@@ -61,14 +74,13 @@ class BusinessScheduleAlarmTest {
 
     @Test
     @DisplayName("알람 삭제여부값은 필수값입니다.")
-    void test4() {
+    void test5() {
         assertThatThrownBy(() -> {
             BusinessScheduleAlarm.of(
                     10L,
+                    LocalDateTime.of(2024, 5, 19, 23, 30),
                     BoolType.T,
-                    null,
-                    LocalDateTime.now(),
-                    LocalDateTime.now()
+                    null
             );
         })
                 .isInstanceOf(InvalidInputException.class)

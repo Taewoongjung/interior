@@ -1,5 +1,6 @@
 package com.interior.domain.schedule;
 
+import static com.interior.adapter.common.exception.ErrorType.EMPTY_ALARM_START_DATE_IN_SCHEDULE_ALARM;
 import static com.interior.adapter.common.exception.ErrorType.EMPTY_BUSINESS_SCHEDULE_ID_IN_SCHEDULE_ALARM;
 import static com.interior.adapter.common.exception.ErrorType.EMPTY_IS_DELETED_IN_SCHEDULE_ALARM;
 import static com.interior.adapter.common.exception.ErrorType.EMPTY_IS_SUCCESS_IN_SCHEDULE_ALARM;
@@ -17,6 +18,9 @@ public class BusinessScheduleAlarm {
 
     private final Long businessScheduleId;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
+    private final LocalDateTime alarmStartDate;
+
     private final BoolType isSuccess;
 
     private final BoolType isDeleted;
@@ -30,6 +34,7 @@ public class BusinessScheduleAlarm {
     private BusinessScheduleAlarm(
             final Long id,
             final Long businessScheduleId,
+            final LocalDateTime alarmStartDate,
             final BoolType isSuccess,
             final BoolType isDeleted,
             final LocalDateTime lastModified,
@@ -37,6 +42,7 @@ public class BusinessScheduleAlarm {
     ) {
         this.id = id;
         this.businessScheduleId = businessScheduleId;
+        this.alarmStartDate = alarmStartDate;
         this.isSuccess = isSuccess;
         this.isDeleted = isDeleted;
         this.lastModified = lastModified;
@@ -47,6 +53,7 @@ public class BusinessScheduleAlarm {
     public static BusinessScheduleAlarm of(
             final Long id,
             final Long businessScheduleId,
+            final LocalDateTime alarmStartDate,
             final BoolType isSuccess,
             final BoolType isDeleted,
             final LocalDateTime lastModified,
@@ -55,28 +62,31 @@ public class BusinessScheduleAlarm {
 
         require(o -> businessScheduleId == null, businessScheduleId,
                 EMPTY_BUSINESS_SCHEDULE_ID_IN_SCHEDULE_ALARM);
+        require(o -> alarmStartDate == null, alarmStartDate,
+                EMPTY_ALARM_START_DATE_IN_SCHEDULE_ALARM);
         require(o -> isSuccess == null, isSuccess, EMPTY_IS_SUCCESS_IN_SCHEDULE_ALARM);
         require(o -> isDeleted == null, isDeleted, EMPTY_IS_DELETED_IN_SCHEDULE_ALARM);
 
-        return new BusinessScheduleAlarm(id, businessScheduleId, isSuccess, isDeleted, lastModified,
-                createdAt);
+        return new BusinessScheduleAlarm(id, businessScheduleId, alarmStartDate, isSuccess,
+                isDeleted, lastModified, createdAt);
     }
 
     // 생성
     public static BusinessScheduleAlarm of(
             final Long businessScheduleId,
+            final LocalDateTime alarmStartDate,
             final BoolType isSuccess,
-            final BoolType isDeleted,
-            final LocalDateTime lastModified,
-            final LocalDateTime createdAt
+            final BoolType isDeleted
     ) {
 
         require(o -> businessScheduleId == null, businessScheduleId,
                 EMPTY_BUSINESS_SCHEDULE_ID_IN_SCHEDULE_ALARM);
+        require(o -> alarmStartDate == null, alarmStartDate,
+                EMPTY_ALARM_START_DATE_IN_SCHEDULE_ALARM);
         require(o -> isSuccess == null, isSuccess, EMPTY_IS_SUCCESS_IN_SCHEDULE_ALARM);
         require(o -> isDeleted == null, isDeleted, EMPTY_IS_DELETED_IN_SCHEDULE_ALARM);
 
-        return new BusinessScheduleAlarm(null, businessScheduleId, isSuccess, isDeleted,
-                lastModified, createdAt);
+        return new BusinessScheduleAlarm(null, businessScheduleId, alarmStartDate, isSuccess,
+                isDeleted, null, null);
     }
 }
