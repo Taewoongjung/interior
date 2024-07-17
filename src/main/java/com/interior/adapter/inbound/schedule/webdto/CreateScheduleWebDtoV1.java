@@ -19,7 +19,7 @@ public class CreateScheduleWebDtoV1 {
             ScheduleType scheduleType,
 
             @NotNull
-            List<Long> relatedBusinesses,
+            List<Long> relatedBusinessList,
 
             @NotBlank
             String title,
@@ -86,7 +86,7 @@ public class CreateScheduleWebDtoV1 {
         public CreateScheduleCommand toCommand(final Long registerId) {
 
             return new CreateScheduleCommand(
-                    relatedBusinesses,
+                    relatedBusinessList,
                     registerId,
                     scheduleType,
                     title,
