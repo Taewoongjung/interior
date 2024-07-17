@@ -14,11 +14,14 @@ public enum AlarmTime {
     THIRTY_M_AGO,
     FIFTY_M_AGO,
     TEN_M_AGO,
-    FIVE_M_AGO;
+    FIVE_M_AGO,
+    AT_THE_TIME;
 
     public LocalDateTime getAlarmTime(final LocalDateTime startTime) {
 
-        if (this.equals(FIVE_M_AGO)) {
+        if (this.equals(AT_THE_TIME)) {
+            return startTime;
+        } else if (this.equals(FIVE_M_AGO)) {
             return startTime.minusMinutes(5L);
         } else if (this.equals(TEN_M_AGO)) {
             return startTime.minusMinutes(10L);
