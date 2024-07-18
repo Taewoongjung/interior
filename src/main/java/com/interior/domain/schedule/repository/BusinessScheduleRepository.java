@@ -10,5 +10,5 @@ public interface BusinessScheduleRepository {
 
     void createAlarmRelatedToSchedule(final List<BusinessScheduleAlarm> businessScheduleAlarmList);
 
-    List<BusinessSchedule> findAllByBusinessId(final Long businessId);
+    List<BusinessSchedule> findAllByBusinessId(final List<Long> businessId);
 }

@@ -29,8 +29,10 @@ public class BusinessSchedule {
 
     private final String orderingPlace;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private final LocalDateTime startDate;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private final LocalDateTime endDate;
 
     private final BoolType isAlarmOn;
