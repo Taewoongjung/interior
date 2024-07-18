@@ -51,10 +51,10 @@ public class BusinessScheduleRepositoryAdapter implements BusinessScheduleReposi
 
     @Override
     @Transactional(readOnly = true)
-    public List<BusinessSchedule> findAllByBusinessId(final Long businessId) {
+    public List<BusinessSchedule> findAllByBusinessId(final List<Long> businessId) {
 
-        List<BusinessScheduleEntity> businessScheduleEntityList = scheduleJpaRepository.findAllByBusinessId(
-                businessId);
+        List<BusinessScheduleEntity> businessScheduleEntityList =
+                scheduleJpaRepository.findAllByBusinessIdIn(businessId);
 
         check(businessScheduleEntityList == null, NOT_EXIST_BUSINESS_SCHEDULE);
 

@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BusinessScheduleJpaRepository extends JpaRepository<BusinessScheduleEntity, Long> {
 
-    List<BusinessScheduleEntity> findAllByBusinessId(final Long businessId);
+    List<BusinessScheduleEntity> findAllByBusinessIdIn(final List<Long> businessIdList);
 }

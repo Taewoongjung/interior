@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.Collections;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -45,7 +46,7 @@ public class SecurityConfig {
                         new CorsConfigurationSource() {
                             @Override
                             public CorsConfiguration getCorsConfiguration(
-                                    HttpServletRequest request) {
+                                    @NotNull HttpServletRequest request) {
 
                                 CorsConfiguration configuration = new CorsConfiguration();
 
