@@ -31,12 +31,16 @@ public class BusinessScheduleAlarm {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private final LocalDateTime createdAt;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
+    private LocalDateTime deletedAt;
+
     private BusinessScheduleAlarm(
             final Long id,
             final Long businessScheduleId,
             final LocalDateTime alarmStartDate,
             final BoolType isSuccess,
             final BoolType isDeleted,
+            final LocalDateTime deletedAt,
             final LocalDateTime lastModified,
             final LocalDateTime createdAt
     ) {
@@ -45,6 +49,7 @@ public class BusinessScheduleAlarm {
         this.alarmStartDate = alarmStartDate;
         this.isSuccess = isSuccess;
         this.isDeleted = isDeleted;
+        this.deletedAt = deletedAt;
         this.lastModified = lastModified;
         this.createdAt = createdAt;
     }
@@ -56,6 +61,7 @@ public class BusinessScheduleAlarm {
             final LocalDateTime alarmStartDate,
             final BoolType isSuccess,
             final BoolType isDeleted,
+            final LocalDateTime deletedAt,
             final LocalDateTime lastModified,
             final LocalDateTime createdAt
     ) {
@@ -68,7 +74,7 @@ public class BusinessScheduleAlarm {
         require(o -> isDeleted == null, isDeleted, EMPTY_IS_DELETED_IN_SCHEDULE_ALARM);
 
         return new BusinessScheduleAlarm(id, businessScheduleId, alarmStartDate, isSuccess,
-                isDeleted, lastModified, createdAt);
+                isDeleted, deletedAt, lastModified, createdAt);
     }
 
     // 생성
@@ -87,6 +93,6 @@ public class BusinessScheduleAlarm {
         require(o -> isDeleted == null, isDeleted, EMPTY_IS_DELETED_IN_SCHEDULE_ALARM);
 
         return new BusinessScheduleAlarm(null, businessScheduleId, alarmStartDate, isSuccess,
-                isDeleted, null, null);
+                isDeleted, null, null, null);
     }
 }
