@@ -19,7 +19,8 @@ public class BusinessScheduleEntityConverter {
                 businessSchedule.getStartDate(),
                 businessSchedule.getEndDate(),
                 businessSchedule.getIsAlarmOn(),
-                businessSchedule.getIsDeleted()
+                businessSchedule.getIsDeleted(),
+                businessSchedule.getColorHexInfo()
         );
     }
 

@@ -44,7 +44,8 @@ public class CreateScheduleWebDtoV1 {
             AlarmTime alarmTime,
 
             @Nullable
-            Boolean isAllDay) {
+            Boolean isAllDay,
+            String colorHexInfo) {
 
         private LocalDateTime getStartDate() {
             if (isAllDay != null) {
@@ -98,7 +99,8 @@ public class CreateScheduleWebDtoV1 {
                     isAlarmOn ?
                             BoolType.T : BoolType.F,
                     alarmTime != null ?
-                            alarmTime.getAlarmTime(startDate) : null
+                            alarmTime.getAlarmTime(startDate) : null,
+                    colorHexInfo
             );
         }
     }

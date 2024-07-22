@@ -14,7 +14,8 @@ public record CreateScheduleCommand(List<Long> relatedBusinessIds,
                                     LocalDateTime startDate,
                                     LocalDateTime endDate,
                                     BoolType isAlarmOn,
-                                    LocalDateTime alarmTime)
+                                    LocalDateTime alarmTime,
+                                    String colorHexInfo)
         implements ICommand {
 
 }

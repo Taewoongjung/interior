@@ -39,6 +39,7 @@ class CreateScheduleCommandHandlerTest {
         LocalDateTime endDate = LocalDateTime.of(2024, 3, 22, 15, 10);
         BoolType isAlarmOn = BoolType.F;
         LocalDateTime alarmTime = null;
+        String colorHexInfo = "FF4D4F";
 
         CreateScheduleCommand event = new CreateScheduleCommand(
                 relatedBusinessIds,
@@ -49,7 +50,8 @@ class CreateScheduleCommandHandlerTest {
                 startDate,
                 endDate,
                 isAlarmOn,
-                alarmTime
+                alarmTime,
+                colorHexInfo
         );
 
         // when
@@ -73,6 +75,7 @@ class CreateScheduleCommandHandlerTest {
         LocalDateTime endDate = LocalDateTime.of(2024, 3, 22, 15, 10);
         BoolType isAlarmOn = BoolType.T;
         LocalDateTime alarmTime = LocalDateTime.of(2024, 3, 22, 15, 10);
+        String colorHexInfo = "FF4D4F";
 
         CreateScheduleCommand event = new CreateScheduleCommand(
                 relatedBusinessIds,
@@ -83,7 +86,8 @@ class CreateScheduleCommandHandlerTest {
                 startDate,
                 endDate,
                 isAlarmOn,
-                alarmTime
+                alarmTime,
+                colorHexInfo
         );
 
         // when
@@ -107,6 +111,7 @@ class CreateScheduleCommandHandlerTest {
         LocalDateTime endDate = LocalDateTime.of(2024, 3, 22, 15, 10);
         BoolType isAlarmOn = BoolType.T;
         LocalDateTime alarmTime = LocalDateTime.of(2024, 3, 22, 15, 10);
+        String colorHexInfo = "FF4D4F";
 
         CreateScheduleCommand event = new CreateScheduleCommand(
                 relatedBusinessIds,
@@ -117,7 +122,8 @@ class CreateScheduleCommandHandlerTest {
                 startDate,
                 endDate,
                 isAlarmOn,
-                alarmTime
+                alarmTime,
+                colorHexInfo
         );
 
         // when

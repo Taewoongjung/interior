@@ -30,7 +30,8 @@ class BusinessScheduleTest {
                 null,
                 LocalDateTime.of(2024, 5, 19, 23, 30),
                 LocalDateTime.of(2024, 5, 19, 23, 50),
-                BoolType.F
+                BoolType.F,
+                "colorHexInfo"
         ));
     }
 
@@ -45,7 +46,8 @@ class BusinessScheduleTest {
                 "양주시 머선머선면 머선머선 주소",
                 LocalDateTime.of(2024, 5, 19, 23, 30),
                 null,
-                BoolType.T
+                BoolType.T,
+                "colorHexInfo"
         ));
     }
 
@@ -61,7 +63,8 @@ class BusinessScheduleTest {
                     "양주시 머선머선면 머선머선 주소",
                     LocalDateTime.of(2024, 5, 19, 23, 30),
                     null,
-                    BoolType.T
+                    BoolType.T,
+                    "colorHexInfo"
             );
         })
                 .isInstanceOf(InvalidInputException.class)
@@ -80,7 +83,8 @@ class BusinessScheduleTest {
                     "양주시 머선머선면 머선머선 주소",
                     LocalDateTime.of(2024, 5, 19, 23, 30),
                     null,
-                    BoolType.T
+                    BoolType.T,
+                    "colorHexInfo"
             );
         })
                 .isInstanceOf(InvalidInputException.class)
@@ -99,7 +103,8 @@ class BusinessScheduleTest {
                     "양주시 머선머선면 머선머선 주소",
                     LocalDateTime.of(2024, 5, 19, 23, 30),
                     null,
-                    BoolType.T
+                    BoolType.T,
+                    "colorHexInfo"
             );
         })
                 .isInstanceOf(InvalidInputException.class)
@@ -118,7 +123,8 @@ class BusinessScheduleTest {
                     "양주시 머선머선면 머선머선 주소",
                     null,
                     null,
-                    BoolType.T
+                    BoolType.T,
+                    "colorHexInfo"
             );
         })
                 .isInstanceOf(InvalidInputException.class)
@@ -137,7 +143,8 @@ class BusinessScheduleTest {
                     "양주시 머선머선면 머선머선 주소",
                     LocalDateTime.of(2024, 5, 19, 23, 30),
                     null,
-                    BoolType.T
+                    BoolType.T,
+                    "colorHexInfo"
             );
         })
                 .isInstanceOf(InvalidInputException.class)
@@ -156,7 +163,8 @@ class BusinessScheduleTest {
                     "양주시 머선머선면 머선머선 주소",
                     LocalDateTime.of(2024, 5, 19, 23, 30),
                     null,
-                    null
+                    null,
+                    "colorHexInfo"
             );
         })
                 .isInstanceOf(InvalidInputException.class)
@@ -178,6 +186,7 @@ class BusinessScheduleTest {
                     null,
                     BoolType.T,
                     null,
+                    "colorHexInfo",
                     LocalDateTime.now(),
                     LocalDateTime.now()
             );

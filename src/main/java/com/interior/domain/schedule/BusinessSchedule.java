@@ -39,6 +39,8 @@ public class BusinessSchedule {
 
     private final BoolType isDeleted;
 
+    private String colorHexInfo;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private final LocalDateTime lastModified;
 
@@ -57,6 +59,7 @@ public class BusinessSchedule {
             final LocalDateTime endDate,
             final BoolType isAlarmOn,
             final BoolType isDeleted,
+            final String colorHexInfo,
             final LocalDateTime lastModified,
             final LocalDateTime createdAt
     ) {
@@ -70,6 +73,7 @@ public class BusinessSchedule {
         this.endDate = endDate;
         this.isAlarmOn = isAlarmOn;
         this.isDeleted = isDeleted;
+        this.colorHexInfo = colorHexInfo;
         this.lastModified = lastModified;
         this.createdAt = createdAt;
     }
@@ -86,6 +90,7 @@ public class BusinessSchedule {
             final LocalDateTime endDate,
             final BoolType isAlarmOn,
             final BoolType isDeleted,
+            final String colorHexInfo,
             final LocalDateTime lastModified,
             final LocalDateTime createdAt
     ) {
@@ -98,7 +103,7 @@ public class BusinessSchedule {
         require(o -> isDeleted == null, isDeleted, EMPTY_IS_DELETED);
 
         return new BusinessSchedule(id, businessId, userId, type, title, orderingPlace, startDate,
-                endDate, isAlarmOn, isDeleted, lastModified, createdAt);
+                endDate, isAlarmOn, isDeleted, colorHexInfo, lastModified, createdAt);
     }
 
     // 생성
@@ -110,7 +115,8 @@ public class BusinessSchedule {
             final String orderingPlace,
             final LocalDateTime startDate,
             final LocalDateTime endDate,
-            final BoolType isAlarmOn
+            final BoolType isAlarmOn,
+            final String colorHexInfo
     ) {
 
         require(o -> businessId == null, businessId, EMPTY_BUSINESS_ID_IN_SCHEDULE);
@@ -122,6 +128,6 @@ public class BusinessSchedule {
         require(o -> isAlarmOn == null, isAlarmOn, EMPTY_IS_ALARM_ON_IN_SCHEDULE);
 
         return new BusinessSchedule(null, businessId, userId, type, title, orderingPlace, startDate,
-                endDate, isAlarmOn, BoolType.F, null, null);
+                endDate, isAlarmOn, BoolType.F, colorHexInfo, null, null);
     }
 }

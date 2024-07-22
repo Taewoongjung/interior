@@ -41,7 +41,8 @@ public class CreateScheduleCommandHandler implements
                     event.orderingPlace(),
                     event.startDate(),
                     event.endDate(),
-                    event.isAlarmOn()
+                    event.isAlarmOn(),
+                    event.colorHexInfo()
             ));
         });
 

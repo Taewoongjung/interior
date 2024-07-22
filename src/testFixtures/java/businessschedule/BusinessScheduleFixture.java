@@ -18,6 +18,7 @@ public class BusinessScheduleFixture {
             LocalDateTime.of(2024, 7, 2, 2, 3),
             BoolType.F,
             BoolType.F,
+            "colorHexInfo",
             LocalDateTime.of(2024, 7, 1, 2, 3),
             LocalDateTime.of(2024, 7, 1, 2, 3)
     );
@@ -33,6 +34,7 @@ public class BusinessScheduleFixture {
             LocalDateTime.of(2024, 7, 5, 23, 59),
             BoolType.T,
             BoolType.F,
+            "colorHexInfo",
             LocalDateTime.of(2024, 7, 1, 2, 3),
             LocalDateTime.of(2024, 7, 1, 2, 3)
     );
@@ -48,6 +50,7 @@ public class BusinessScheduleFixture {
             LocalDateTime.of(2024, 7, 5, 23, 59),
             BoolType.F,
             BoolType.F,
+            "colorHexInfo",
             LocalDateTime.of(2024, 7, 1, 2, 3),
             LocalDateTime.of(2024, 7, 1, 2, 3)
     );
@@ -63,6 +66,7 @@ public class BusinessScheduleFixture {
             LocalDateTime.of(2024, 7, 5, 23, 59),
             BoolType.T,
             BoolType.T,
+            "colorHexInfo",
             LocalDateTime.of(2024, 7, 1, 2, 3),
             LocalDateTime.of(2024, 7, 1, 2, 3)
     );

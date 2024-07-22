@@ -130,6 +130,7 @@ public class BusinessScheduleEntity extends BaseEntity {
                 getEndDate(),
                 getIsAlarmOn(),
                 getIsDeleted(),
+                getColorHexInfo(),
                 getLastModified(),
                 getCreatedAt()
         );
