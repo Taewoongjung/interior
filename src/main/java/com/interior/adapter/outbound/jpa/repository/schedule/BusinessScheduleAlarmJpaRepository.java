@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 public interface BusinessScheduleAlarmJpaRepository extends
         JpaRepository<BusinessScheduleAlarmEntity, Long> {
 
-    @Query("SELECT b FROM BusinessScheduleAlarmEntity b WHERE b.businessScheduleId IN :businessScheduleIds AND b.isDeleted = 'F'")
+    @Query("SELECT b FROM BusinessScheduleAlarmEntity b WHERE b.businessScheduleId IN :businessScheduleIdList AND b.isDeleted = 'F'")
     List<BusinessScheduleAlarmEntity> findAllByBusinessScheduleIdInAndIsNotDeleted(
-            final List<Long> BusinessScheduleIdList);
+            final List<Long> businessScheduleIdList);
 }
