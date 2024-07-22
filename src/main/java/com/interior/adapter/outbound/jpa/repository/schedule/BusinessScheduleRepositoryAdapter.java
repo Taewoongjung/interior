@@ -47,7 +47,7 @@ public class BusinessScheduleRepositoryAdapter implements BusinessScheduleReposi
                 .toList();
 
         check(!scheduleAlarmJpaRepository
-                        .findAllByBusinessScheduleIdInAndIsDeleted_F(creatingIdListOfBusinessSchedule)
+                        .findAllByBusinessScheduleIdInAndIsNotDeleted(creatingIdListOfBusinessSchedule)
                         .isEmpty(),
                 ALREADY_EXIST_ALARM_INFO_OF_THE_SCHEDULE);
         // end
