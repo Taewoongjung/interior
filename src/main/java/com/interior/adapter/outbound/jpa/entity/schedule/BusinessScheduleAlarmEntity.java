@@ -66,6 +66,7 @@ public class BusinessScheduleAlarmEntity extends BaseEntity {
         this.alarmStartDate = alarmStartDate;
         this.isSuccess = isSuccess;
         this.isDeleted = isDeleted;
+        this.deletedAt = deletedAt;
     }
 
     public static BusinessScheduleAlarmEntity of(
