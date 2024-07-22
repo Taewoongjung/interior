@@ -48,12 +48,16 @@ public class BusinessScheduleAlarmEntity extends BaseEntity {
     @Column(name = "is_deleted", columnDefinition = "char(1)")
     private BoolType isDeleted;
 
+    @Column(nullable = false, updatable = false, name = "deleted_at")
+    private LocalDateTime deletedAt;
+
     private BusinessScheduleAlarmEntity(
             final Long id,
             final Long businessScheduleId,
             final LocalDateTime alarmStartDate,
             final BoolType isSuccess,
-            final BoolType isDeleted
+            final BoolType isDeleted,
+            final LocalDateTime deletedAt
     ) {
         super(LocalDateTime.now(), LocalDateTime.now());
 
@@ -62,6 +66,7 @@ public class BusinessScheduleAlarmEntity extends BaseEntity {
         this.alarmStartDate = alarmStartDate;
         this.isSuccess = isSuccess;
         this.isDeleted = isDeleted;
+        this.deletedAt = deletedAt;
     }
 
     public static BusinessScheduleAlarmEntity of(
@@ -79,7 +84,7 @@ public class BusinessScheduleAlarmEntity extends BaseEntity {
         require(o -> isDeleted == null, isDeleted, EMPTY_IS_DELETED_IN_SCHEDULE_ALARM);
 
         return new BusinessScheduleAlarmEntity(null, businessScheduleId, alarmStartDate, isSuccess,
-                isDeleted);
+                isDeleted, null);
     }
 
     public BusinessScheduleAlarm toPojo() {
@@ -90,7 +95,8 @@ public class BusinessScheduleAlarmEntity extends BaseEntity {
                 getIsSuccess(),
                 getIsDeleted(),
                 getLastModified(),
-                getCreatedAt()
+                getCreatedAt(),
+                getDeletedAt()
         );
     }
 }

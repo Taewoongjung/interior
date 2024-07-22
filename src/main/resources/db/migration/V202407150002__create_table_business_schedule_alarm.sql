@@ -5,6 +5,7 @@ CREATE TABLE business_schedule_alarm
     alarm_start_date           DATETIME(6)                              NOT NULL COMMENT '스케줄 시작 날짜',
     is_success                 CHAR(1)                                  NOT NULL COMMENT '알람 성공 여부 (T/F)',
     is_deleted                 CHAR(1)                                  NOT NULL COMMENT '알람 삭제 여부 (T/F)',
+    deleted_at                 DATETIME(6)                                  NULL COMMENT '해당 알람이 삭제 된 날짜/시간',
     created_at                 DATETIME(6) DEFAULT CURRENT_TIMESTAMP(6) NOT NULL,
     last_modified              DATETIME(6) DEFAULT CURRENT_TIMESTAMP(6) NOT NULL ON UPDATE CURRENT_TIMESTAMP(6),
     PRIMARY KEY (`id`)

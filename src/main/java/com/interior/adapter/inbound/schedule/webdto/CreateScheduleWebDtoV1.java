@@ -5,6 +5,7 @@ import com.interior.domain.schedule.ScheduleType;
 import com.interior.domain.util.BoolType;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,6 +20,7 @@ public class CreateScheduleWebDtoV1 {
             ScheduleType scheduleType,
 
             @NotNull
+            @NotEmpty
             List<Long> relatedBusinessList,
 
             @NotBlank

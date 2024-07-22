@@ -126,6 +126,10 @@ management:
       base-path: /actuator
       exposure:
         include: health
+    enabled-by-default: false
+  endpoint:
+    health:
+      enabled: true
 
 jwt:
   secret-key: ${JWT_SECRET_KEY}
@@ -251,6 +255,10 @@ management:
       base-path: /actuator
       exposure:
         include: health
+    enabled-by-default: false
+  endpoint:
+    health:
+      enabled: true
 
 jwt:
   secret-key: ${JWT_SECRET_KEY}

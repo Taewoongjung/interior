@@ -35,10 +35,7 @@ dependencies {
     // lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
-
-    // h2
-//    testImplementation 'com.h2database:h2'
-
+    
     // actuator
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
