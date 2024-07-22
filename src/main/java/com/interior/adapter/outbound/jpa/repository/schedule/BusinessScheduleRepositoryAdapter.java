@@ -1,6 +1,5 @@
 package com.interior.adapter.outbound.jpa.repository.schedule;
 
-import static com.interior.adapter.common.exception.ErrorType.ALREADY_EXIST_ALARM_INFO_OF_THE_SCHEDULE;
 import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_BUSINESS_SCHEDULE;
 import static com.interior.util.CheckUtil.check;
 import static com.interior.util.converter.jpa.schedule.BusinessScheduleEntityConverter.businessScheduleAlarmToEntity;
@@ -40,17 +39,6 @@ public class BusinessScheduleRepositoryAdapter implements BusinessScheduleReposi
     @Transactional
     public void createAlarmRelatedToSchedule(
             final List<BusinessScheduleAlarm> businessScheduleAlarmList) {
-
-        // start : 해당 스케줄에 이미 알람이 생성 되어 있는지 확인하기
-        List<Long> creatingIdListOfBusinessSchedule = businessScheduleAlarmList.stream()
-                .map(BusinessScheduleAlarm::getBusinessScheduleId)
-                .toList();
-
-        check(!scheduleAlarmJpaRepository
-                        .findAllByBusinessScheduleIdInAndIsNotDeleted(creatingIdListOfBusinessSchedule)
-                        .isEmpty(),
-                ALREADY_EXIST_ALARM_INFO_OF_THE_SCHEDULE);
-        // end
 
         List<BusinessScheduleAlarmEntity> saveList = new ArrayList<>();
 
