@@ -64,6 +64,8 @@ public class BusinessScheduleEntity extends BaseEntity {
     @Column(name = "is_deleted", columnDefinition = "char(1)")
     private BoolType isDeleted;
 
+    private String colorHexInfo;
+
     private BusinessScheduleEntity(
             final Long id,
             final Long businessId,
@@ -74,7 +76,8 @@ public class BusinessScheduleEntity extends BaseEntity {
             final LocalDateTime startDate,
             final LocalDateTime endDate,
             final BoolType isAlarmOn,
-            final BoolType isDeleted
+            final BoolType isDeleted,
+            final String colorHexInfo
     ) {
         super(LocalDateTime.now(), LocalDateTime.now());
 
@@ -88,6 +91,7 @@ public class BusinessScheduleEntity extends BaseEntity {
         this.endDate = endDate;
         this.isAlarmOn = isAlarmOn;
         this.isDeleted = isDeleted;
+        this.colorHexInfo = colorHexInfo;
     }
 
     public static BusinessScheduleEntity of(
@@ -99,7 +103,8 @@ public class BusinessScheduleEntity extends BaseEntity {
             final LocalDateTime startDate,
             final LocalDateTime endDate,
             final BoolType isAlarmOn,
-            final BoolType isDeleted
+            final BoolType isDeleted,
+            final String colorHexInfo
     ) {
 
         require(o -> businessId == null, businessId, EMPTY_BUSINESS_ID_IN_SCHEDULE);
@@ -110,7 +115,7 @@ public class BusinessScheduleEntity extends BaseEntity {
         require(o -> isDeleted == null, isDeleted, EMPTY_IS_DELETED);
 
         return new BusinessScheduleEntity(null, businessId, userId, type, title, orderingPlace,
-                startDate, endDate, isAlarmOn, isDeleted);
+                startDate, endDate, isAlarmOn, isDeleted, colorHexInfo);
     }
 
     public BusinessSchedule toPojo() {

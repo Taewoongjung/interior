@@ -10,6 +10,7 @@ CREATE TABLE business_schedule
     end_date                   DATETIME(6)                                  NULL COMMENT '스케줄 끝 날짜',
     is_alarm_on                CHAR(1)                                  NOT NULL COMMENT '알람이 켜져 있는지 여부 (T/F)',
     is_deleted                 CHAR(1)                                  NOT NULL COMMENT '삭제 된 스케줄 여부 (T/F)',
+    color_hex_info             VARCHAR(7)                                   NULL COMMENT '스케줄 색상 정보',
     created_at                 DATETIME(6) DEFAULT CURRENT_TIMESTAMP(6) NOT NULL,
     last_modified              DATETIME(6) DEFAULT CURRENT_TIMESTAMP(6) NOT NULL ON UPDATE CURRENT_TIMESTAMP(6),
     PRIMARY KEY (`id`)
