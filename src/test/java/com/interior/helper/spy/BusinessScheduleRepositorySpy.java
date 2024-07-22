@@ -1,5 +1,7 @@
 package com.interior.helper.spy;
 
+import static businessschedule.BusinessScheduleAlarmFixture.BSA_1;
+import static businessschedule.BusinessScheduleAlarmFixture.BSA_2;
 import static businessschedule.BusinessScheduleFixture.BS_1;
 import static businessschedule.BusinessScheduleFixture.BS_2;
 import static businessschedule.BusinessScheduleFixture.BS_3;
@@ -31,13 +33,18 @@ public class BusinessScheduleRepositorySpy implements BusinessScheduleRepository
 
         List<BusinessSchedule> businessScheduleList = getBusinessScheduleList();
 
-        BusinessSchedule foundSchedule = businessScheduleList.stream()
+        List<Long> foundScheduleId = businessScheduleList.stream()
                 .filter(f -> creatingIdListOfBusinessSchedule.contains(f.getBusinessId())
                         && BoolType.F.equals(f.getIsDeleted()))
-                .findFirst()
+                .map(BusinessSchedule::getId)
+                .toList();
+
+        BusinessScheduleAlarm foundScheduleAlarm = getBusinessScheduleAlarmList().stream()
+                .filter(f -> foundScheduleId.contains(f.getBusinessScheduleId()) &&
+                        BoolType.F.equals(f.getIsDeleted())).findFirst()
                 .orElse(null);
 
-        check(foundSchedule != null, ALREADY_EXIST_ALARM_INFO_OF_THE_SCHEDULE);
+        check(foundScheduleAlarm != null, ALREADY_EXIST_ALARM_INFO_OF_THE_SCHEDULE);
 
     }
 
@@ -49,6 +56,14 @@ public class BusinessScheduleRepositorySpy implements BusinessScheduleRepository
         list.add(BS_4);
 
         return list;
+    }
+
+    private List<BusinessScheduleAlarm> getBusinessScheduleAlarmList() {
+        List<BusinessScheduleAlarm> businessScheduleAlarmList = new ArrayList<>();
+        businessScheduleAlarmList.add(BSA_1);
+        businessScheduleAlarmList.add(BSA_2);
+
+        return businessScheduleAlarmList;
     }
 
     @Override

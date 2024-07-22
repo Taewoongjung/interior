@@ -11,7 +11,7 @@ public class BusinessScheduleAlarmFixture {
             101L,
             LocalDateTime.of(2024, 7, 5, 8, 0),
             BoolType.F,
-            BoolType.F,
+            BoolType.T,
             null,
             LocalDateTime.of(2024, 7, 1, 2, 3),
             LocalDateTime.of(2024, 7, 1, 2, 3)
