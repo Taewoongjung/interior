@@ -24,8 +24,8 @@ public class BusinessScheduleRepositorySpy implements BusinessScheduleRepository
     @Override
     public BusinessScheduleAlarm createAlarmRelatedToSchedule(
             BusinessScheduleAlarm businessScheduleAlarm) {
-        // save
-        return null;
+        // entity save
+        return businessScheduleAlarm;
     }
 
     private List<BusinessSchedule> getBusinessScheduleList() {
