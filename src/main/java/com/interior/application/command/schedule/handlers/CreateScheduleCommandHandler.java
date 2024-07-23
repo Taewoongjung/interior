@@ -1,15 +1,18 @@
 package com.interior.application.command.schedule.handlers;
 
 import com.interior.abstraction.domain.ICommandHandler;
+import com.interior.adapter.outbound.alimtalk.dto.SendAlimTalk;
 import com.interior.application.command.schedule.commands.CreateScheduleCommand;
+import com.interior.domain.alimtalk.kakaomsgtemplate.KakaoMsgTemplateType;
+import com.interior.domain.business.Business;
+import com.interior.domain.business.repository.BusinessRepository;
 import com.interior.domain.schedule.BusinessSchedule;
 import com.interior.domain.schedule.BusinessScheduleAlarm;
 import com.interior.domain.schedule.repository.BusinessScheduleRepository;
 import com.interior.domain.util.BoolType;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class CreateScheduleCommandHandler implements
         ICommandHandler<CreateScheduleCommand, Boolean> {
 
+    private final BusinessRepository businessRepository;
+    private final ApplicationEventPublisher eventPublisher;
     private final BusinessScheduleRepository businessScheduleRepository;
 
     @Override
@@ -30,43 +35,42 @@ public class CreateScheduleCommandHandler implements
     @Transactional
     public Boolean handle(final CreateScheduleCommand event) {
 
-        List<BusinessSchedule> createScheduleList = new ArrayList<>();
-
-        event.relatedBusinessIds().forEach(relatedBusinessId -> {
-            createScheduleList.add(BusinessSchedule.of(
-                    relatedBusinessId,
-                    event.registerId(),
-                    event.scheduleType(),
-                    event.title(),
-                    event.orderingPlace(),
-                    event.startDate(),
-                    event.endDate(),
-                    event.isAlarmOn(),
-                    event.colorHexInfo()
-            ));
-        });
-
-        if (!createScheduleList.isEmpty()) {
-            businessScheduleRepository.createSchedule(createScheduleList);
-        }
+        BusinessSchedule createdSchedule = businessScheduleRepository.createSchedule(
+                BusinessSchedule.of(
+                        event.relatedBusinessId(),
+                        event.registerUser().getId(),
+                        event.scheduleType(),
+                        event.title(),
+                        event.orderingPlace(),
+                        event.startDate(),
+                        event.endDate(),
+                        event.isAlarmOn(),
+                        event.colorHexInfo()
+                ));
 
         if (BoolType.T.equals(event.isAlarmOn())) {
 
-            List<BusinessScheduleAlarm> createScheduleAlarmList = new ArrayList<>();
+            BusinessScheduleAlarm createdBusinessScheduleAlarm = businessScheduleRepository.createAlarmRelatedToSchedule(
+                    BusinessScheduleAlarm.of(
+                            event.relatedBusinessId(),
+                            event.alarmTime(),
+                            BoolType.F,
+                            BoolType.F,
+                            event.selectedAlarmTime()
+                    ));
 
-            event.relatedBusinessIds().forEach(relatedBusinessId -> {
-                createScheduleAlarmList.add(BusinessScheduleAlarm.of(
-                        relatedBusinessId,
-                        event.alarmTime(),
-                        BoolType.F,
-                        BoolType.F,
-                        event.selectedAlarmTime()
-                ));
-            });
+            Business business = businessRepository.findById(event.relatedBusinessId());
 
-            if (!createScheduleAlarmList.isEmpty()) {
-                businessScheduleRepository.createAlarmRelatedToSchedule(createScheduleAlarmList);
-            }
+            eventPublisher.publishEvent(new SendAlimTalk(
+                    createdBusinessScheduleAlarm,
+                    createdSchedule,
+                    KakaoMsgTemplateType.ORDER_SCHEDULE,
+                    event.registerUser().getTel(),
+                    event.registerUser().getName(),
+                    business,
+                    null,
+                    null)
+            );
         }
 
         return true;

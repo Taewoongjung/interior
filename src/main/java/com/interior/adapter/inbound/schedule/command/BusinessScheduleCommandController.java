@@ -27,7 +27,7 @@ public class BusinessScheduleCommandController {
     ) {
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(createScheduleCommandHandler.handle(req.toCommand(user.getId())));
+                .body(createScheduleCommandHandler.handle(req.toCommand(user)));
     }
 
 }

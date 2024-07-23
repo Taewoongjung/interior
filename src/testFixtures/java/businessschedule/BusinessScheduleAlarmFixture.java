@@ -13,7 +13,7 @@ public class BusinessScheduleAlarmFixture {
             LocalDateTime.of(2024, 7, 5, 8, 0),
             BoolType.F,
             BoolType.T,
-            AlarmTime.A_DAY_AGO,
+            AlarmTime.AT_THE_TIME,
             null,
             LocalDateTime.of(2024, 7, 1, 2, 3),
             LocalDateTime.of(2024, 7, 1, 2, 3)

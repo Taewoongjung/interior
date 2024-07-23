@@ -6,9 +6,10 @@ import java.util.List;
 
 public interface BusinessScheduleRepository {
 
-    void createSchedule(final List<BusinessSchedule> businessScheduleList);
+    BusinessSchedule createSchedule(final BusinessSchedule businessSchedule);
 
-    void createAlarmRelatedToSchedule(final List<BusinessScheduleAlarm> businessScheduleAlarmList);
+    BusinessScheduleAlarm createAlarmRelatedToSchedule(
+            final BusinessScheduleAlarm businessScheduleAlarm);
 
     List<BusinessSchedule> findAllByBusinessId(final List<Long> businessId);
 }

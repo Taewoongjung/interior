@@ -32,7 +32,7 @@ public class BusinessScheduleEntityConverter {
                 businessScheduleAlarm.getAlarmStartDate(),
                 businessScheduleAlarm.getIsSuccess(),
                 businessScheduleAlarm.getIsDeleted(),
-                businessScheduleAlarm.getAlarmTime()
+                businessScheduleAlarm.getSelectedAlarmTime()
         );
     }
 }

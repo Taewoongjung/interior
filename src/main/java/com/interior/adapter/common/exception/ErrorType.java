@@ -86,6 +86,8 @@ public enum ErrorType {
     EMPTY_MSG_ID_SMS_SEND_RESULT(1404, "sms 발송 id 정보는 필수값 입니다."),
 
     NO_ALIMTALK_TEMPLATE(1500, "템플릿이 없습니다"),
+    ALIMTALK_SEND_ERROR(1501, "알림톡 전송 실패"),
+    RESERVED_ALIMTALK_SHOULD_BE_MORE_THAN_TEN_MINUTES_LATER(1502, "예약 발송은 현재로 부터 10분 이후여야만 합니다."),
 
     EMPTY_KAKAO_MSG_TEMPLATE_NAME(1501, "템플릿 이름은 필수값 입니다."),
     EMPTY_KAKAO_MSG_TEMPLATE_CODE(1502, "템플릿 코드는 필수값 입니다."),

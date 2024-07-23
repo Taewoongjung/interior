@@ -259,7 +259,7 @@ public class AligoKakaoAlimTalkTest {
     @DisplayName("[알리고] 발주 스케줄 알림 알림톡 발송 테스트")
     void sendAlimTalkTest3() {
 
-        KakaoMsgTemplate template = kakaoMsgTemplateRepositoryAdapter.findByTemplateCode("TT_9664");
+        KakaoMsgTemplate template = kakaoMsgTemplateRepositoryAdapter.findByTemplateCode("TT_9862");
 
         template.replaceArgumentOfTemplate(null,
                 Company.of("서울인테리어", "01000", 519L, "address", "subAddress", "buildingNumber",
@@ -280,6 +280,7 @@ public class AligoKakaoAlimTalkTest {
         formData.add("receiver_1", "01088257754");
         formData.add("subject_1", template.getTemplateName());
         formData.add("message_1", template.getMessage());
+        formData.add("senddate", "20240723180800");
 //        formData.add("testMode", "Y");
 
         Mono<String> responseMono = webClient.post()

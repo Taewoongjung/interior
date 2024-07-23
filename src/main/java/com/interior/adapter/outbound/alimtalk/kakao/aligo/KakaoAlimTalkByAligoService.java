@@ -1,6 +1,8 @@
 package com.interior.adapter.outbound.alimtalk.kakao.aligo;
 
+import static com.interior.adapter.common.exception.ErrorType.ALIMTALK_SEND_ERROR;
 import static com.interior.domain.alimtalk.kakaomsgtemplate.KakaoMsgTemplateType.REQUEST_QUOTATION_DRAFT;
+import static com.interior.util.CheckUtil.check;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -18,6 +20,7 @@ import com.interior.domain.alimtalk.kakaomsgtemplate.repository.KakaoMsgTemplate
 import com.interior.domain.business.thirdpartymessage.BusinessThirdPartyMessage;
 import com.interior.domain.util.BoolType;
 import java.lang.reflect.Type;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -137,13 +140,21 @@ public class KakaoAlimTalkByAligoService implements AlimTalkService {
         formData.add("receiver_1", sendReq.receiverPhoneNumber());
         formData.add("subject_1", template.getMessageSubject());
 
+        if (sendReq.businessScheduleAlarm() != null) { // 예약 발송
+            LocalDateTime alarmStartTime = sendReq.businessScheduleAlarm().getAlarmStartDate();
+            formData.add("senddate", getReservingAlimTalkTimeAsString(alarmStartTime));
+        }
+
         if (REQUEST_QUOTATION_DRAFT.getTemplateCode()
                 .equals(sendReq.template().getTemplateCode())) {
             formData.add("emtitle_1", "[" + sendReq.business().getName() + "]");
         }
 
         formData.add("message_1", template.getMessage());
-        formData.add("button_1", template.getButtonInfo());
+
+        if (!AlimTalkButtonLinkType.NO.equals(template.getButtonLinkType())) {
+            formData.add("button_1", template.getButtonInfo());
+        }
 
         Mono<String> responseMono = webClient.post()
                 .uri("https://kakaoapi.aligo.in/akv10/alimtalk/send/")
@@ -179,6 +190,7 @@ public class KakaoAlimTalkByAligoService implements AlimTalkService {
         }, error -> {
             log.error("[Err_msg] 알림톡 전송 에러 (템플릿코드: {}) : {}", template.getTemplateCode(),
                     error.toString());
+            error.printStackTrace();
         });
     }
 
@@ -194,11 +206,25 @@ public class KakaoAlimTalkByAligoService implements AlimTalkService {
         }.getType();
 
         Map<String, String> wholeJson = gson.fromJson(target, mapType);
+
+        check("-99".equals(wholeJson.get("code")), ALIMTALK_SEND_ERROR);
+
         Map<String, String> infoFromWholeJson = gson.fromJson(wholeJson.get("info"), mapType);
 
         Map<String, String> resultMap = new HashMap<>(wholeJson);
         resultMap.putAll(infoFromWholeJson);
 
         return wholeJson;
+    }
+
+    private String getReservingAlimTalkTimeAsString(final LocalDateTime target) {
+
+        return
+                target.getYear() +
+                        String.format("%02d", target.getMonthValue()) +
+                        String.format("%02d", target.getDayOfMonth()) +
+                        String.format("%02d", target.getHour()) +
+                        String.format("%02d", target.getMinute()) +
+                        String.format("%02d", target.getSecond());
     }
 }

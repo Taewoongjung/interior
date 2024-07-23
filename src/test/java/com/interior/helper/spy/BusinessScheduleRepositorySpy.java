@@ -16,14 +16,16 @@ import java.util.List;
 public class BusinessScheduleRepositorySpy implements BusinessScheduleRepository {
 
     @Override
-    public void createSchedule(List<BusinessSchedule> businessScheduleList) {
+    public BusinessSchedule createSchedule(BusinessSchedule businessSchedule) {
         // saveAll
+        return null;
     }
 
     @Override
-    public void createAlarmRelatedToSchedule(
-            List<BusinessScheduleAlarm> businessScheduleAlarmList) {
+    public BusinessScheduleAlarm createAlarmRelatedToSchedule(
+            BusinessScheduleAlarm businessScheduleAlarm) {
         // save
+        return null;
     }
 
     private List<BusinessSchedule> getBusinessScheduleList() {
