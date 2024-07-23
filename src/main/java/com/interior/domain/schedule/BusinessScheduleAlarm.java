@@ -7,6 +7,7 @@ import static com.interior.adapter.common.exception.ErrorType.EMPTY_IS_SUCCESS_I
 import static com.interior.util.CheckUtil.require;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.interior.adapter.inbound.schedule.webdto.AlarmTime;
 import com.interior.domain.util.BoolType;
 import java.time.LocalDateTime;
 import lombok.Getter;
@@ -25,6 +26,8 @@ public class BusinessScheduleAlarm {
 
     private final BoolType isDeleted;
 
+    private final AlarmTime selectedAlarmTime;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private final LocalDateTime lastModified;
 
@@ -40,6 +43,7 @@ public class BusinessScheduleAlarm {
             final LocalDateTime alarmStartDate,
             final BoolType isSuccess,
             final BoolType isDeleted,
+            final AlarmTime selectedAlarmTime,
             final LocalDateTime deletedAt,
             final LocalDateTime lastModified,
             final LocalDateTime createdAt
@@ -50,6 +54,7 @@ public class BusinessScheduleAlarm {
         this.isSuccess = isSuccess;
         this.isDeleted = isDeleted;
         this.deletedAt = deletedAt;
+        this.selectedAlarmTime = selectedAlarmTime;
         this.lastModified = lastModified;
         this.createdAt = createdAt;
     }
@@ -61,6 +66,7 @@ public class BusinessScheduleAlarm {
             final LocalDateTime alarmStartDate,
             final BoolType isSuccess,
             final BoolType isDeleted,
+            final AlarmTime selectedAlarmTime,
             final LocalDateTime deletedAt,
             final LocalDateTime lastModified,
             final LocalDateTime createdAt
@@ -74,7 +80,7 @@ public class BusinessScheduleAlarm {
         require(o -> isDeleted == null, isDeleted, EMPTY_IS_DELETED_IN_SCHEDULE_ALARM);
 
         return new BusinessScheduleAlarm(id, businessScheduleId, alarmStartDate, isSuccess,
-                isDeleted, deletedAt, lastModified, createdAt);
+                isDeleted, selectedAlarmTime, deletedAt, lastModified, createdAt);
     }
 
     // 생성
@@ -82,7 +88,8 @@ public class BusinessScheduleAlarm {
             final Long businessScheduleId,
             final LocalDateTime alarmStartDate,
             final BoolType isSuccess,
-            final BoolType isDeleted
+            final BoolType isDeleted,
+            final AlarmTime selectedAlarmTime
     ) {
 
         require(o -> businessScheduleId == null, businessScheduleId,
@@ -93,6 +100,6 @@ public class BusinessScheduleAlarm {
         require(o -> isDeleted == null, isDeleted, EMPTY_IS_DELETED_IN_SCHEDULE_ALARM);
 
         return new BusinessScheduleAlarm(null, businessScheduleId, alarmStartDate, isSuccess,
-                isDeleted, null, null, null);
+                isDeleted, selectedAlarmTime, null, null, null);
     }
 }

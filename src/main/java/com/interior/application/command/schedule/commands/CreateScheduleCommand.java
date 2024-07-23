@@ -1,6 +1,7 @@
 package com.interior.application.command.schedule.commands;
 
 import com.interior.abstraction.domain.ICommand;
+import com.interior.adapter.inbound.schedule.webdto.AlarmTime;
 import com.interior.domain.schedule.ScheduleType;
 import com.interior.domain.util.BoolType;
 import java.time.LocalDateTime;
@@ -15,7 +16,8 @@ public record CreateScheduleCommand(List<Long> relatedBusinessIds,
                                     LocalDateTime endDate,
                                     BoolType isAlarmOn,
                                     LocalDateTime alarmTime,
-                                    String colorHexInfo)
+                                    String colorHexInfo,
+                                    AlarmTime selectedAlarmTime)
         implements ICommand {
 
 }

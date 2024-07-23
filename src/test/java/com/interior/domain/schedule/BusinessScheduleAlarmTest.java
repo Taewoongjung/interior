@@ -8,6 +8,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import com.interior.adapter.common.exception.InvalidInputException;
+import com.interior.adapter.inbound.schedule.webdto.AlarmTime;
 import com.interior.domain.util.BoolType;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
@@ -23,7 +24,8 @@ class BusinessScheduleAlarmTest {
                 10L,
                 LocalDateTime.of(2024, 5, 19, 23, 30),
                 BoolType.T,
-                BoolType.T
+                BoolType.T,
+                AlarmTime.A_DAY_AGO
         ));
     }
 
@@ -35,7 +37,8 @@ class BusinessScheduleAlarmTest {
                     null,
                     LocalDateTime.of(2024, 5, 19, 23, 30),
                     BoolType.T,
-                    BoolType.T
+                    BoolType.T,
+                    AlarmTime.A_DAY_AGO
             );
         })
                 .isInstanceOf(InvalidInputException.class)
@@ -50,7 +53,8 @@ class BusinessScheduleAlarmTest {
                     10L,
                     null,
                     BoolType.T,
-                    BoolType.T
+                    BoolType.T,
+                    AlarmTime.A_DAY_AGO
             );
         })
                 .isInstanceOf(InvalidInputException.class)
@@ -65,7 +69,8 @@ class BusinessScheduleAlarmTest {
                     10L,
                     LocalDateTime.of(2024, 5, 19, 23, 30),
                     null,
-                    BoolType.T
+                    BoolType.T,
+                    AlarmTime.A_DAY_AGO
             );
         })
                 .isInstanceOf(InvalidInputException.class)
@@ -80,7 +85,8 @@ class BusinessScheduleAlarmTest {
                     10L,
                     LocalDateTime.of(2024, 5, 19, 23, 30),
                     BoolType.T,
-                    null
+                    null,
+                    AlarmTime.A_DAY_AGO
             );
         })
                 .isInstanceOf(InvalidInputException.class)

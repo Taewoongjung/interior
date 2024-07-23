@@ -1,5 +1,6 @@
 package com.interior.application.unittest.command.schedule.handlers;
 
+import com.interior.adapter.inbound.schedule.webdto.AlarmTime;
 import com.interior.application.command.schedule.commands.CreateScheduleCommand;
 import com.interior.application.command.schedule.handlers.CreateScheduleCommandHandler;
 import com.interior.domain.schedule.ScheduleType;
@@ -34,6 +35,7 @@ class CreateScheduleCommandHandlerTest {
         LocalDateTime startDate = LocalDateTime.of(2024, 3, 22, 15, 10);
         LocalDateTime endDate = LocalDateTime.of(2024, 3, 22, 15, 10);
         BoolType isAlarmOn = BoolType.F;
+        AlarmTime selectedAlarmTime = AlarmTime.A_DAY_AGO;
         LocalDateTime alarmTime = null;
         String colorHexInfo = "FF4D4F";
 
@@ -47,7 +49,8 @@ class CreateScheduleCommandHandlerTest {
                 endDate,
                 isAlarmOn,
                 alarmTime,
-                colorHexInfo
+                colorHexInfo,
+                selectedAlarmTime
         );
 
         // when
@@ -70,6 +73,7 @@ class CreateScheduleCommandHandlerTest {
         LocalDateTime startDate = LocalDateTime.of(2024, 3, 22, 15, 10);
         LocalDateTime endDate = LocalDateTime.of(2024, 3, 22, 15, 10);
         BoolType isAlarmOn = BoolType.T;
+        AlarmTime selectedAlarmTime = AlarmTime.A_DAY_AGO;
         LocalDateTime alarmTime = LocalDateTime.of(2024, 3, 22, 15, 10);
         String colorHexInfo = "FF4D4F";
 
@@ -83,7 +87,8 @@ class CreateScheduleCommandHandlerTest {
                 endDate,
                 isAlarmOn,
                 alarmTime,
-                colorHexInfo
+                colorHexInfo,
+                selectedAlarmTime
         );
 
         // when

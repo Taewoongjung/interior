@@ -115,11 +115,18 @@ public class KakaoAlimTalkByAligoService implements AlimTalkService {
     @Override
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void send(final SendAlimTalk sendReq) {
+
         KakaoMsgTemplate template = kakaoMsgTemplateRepository.findByTemplateCode(
                 sendReq.template().getTemplateCode());
 
-        template.replaceArgumentOfTemplate(sendReq.customerName(), sendReq.company(),
-                sendReq.user());
+        template.replaceArgumentOfTemplate(
+                sendReq.customerName(),
+                sendReq.company(),
+                sendReq.user(),
+                sendReq.business(),
+                sendReq.businessSchedule(),
+                sendReq.businessScheduleAlarm()
+        );
 
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
         formData.add("apikey", KEY);

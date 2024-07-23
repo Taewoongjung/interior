@@ -58,6 +58,8 @@ public class SendQuotationDraftToClientCommandHandler implements
 
         // 알림톡 발송
         eventPublisher.publishEvent(new SendAlimTalk(
+                null,
+                null,
                 KakaoMsgTemplateType.REQUEST_QUOTATION_DRAFT,
                 command.receiverPhoneNumber(),
                 null,

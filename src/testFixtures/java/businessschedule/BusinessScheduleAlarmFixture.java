@@ -1,5 +1,6 @@
 package businessschedule;
 
+import com.interior.adapter.inbound.schedule.webdto.AlarmTime;
 import com.interior.domain.schedule.BusinessScheduleAlarm;
 import com.interior.domain.util.BoolType;
 import java.time.LocalDateTime;
@@ -12,6 +13,7 @@ public class BusinessScheduleAlarmFixture {
             LocalDateTime.of(2024, 7, 5, 8, 0),
             BoolType.F,
             BoolType.T,
+            AlarmTime.A_DAY_AGO,
             null,
             LocalDateTime.of(2024, 7, 1, 2, 3),
             LocalDateTime.of(2024, 7, 1, 2, 3)
@@ -23,6 +25,7 @@ public class BusinessScheduleAlarmFixture {
             LocalDateTime.of(2024, 7, 5, 8, 0),
             BoolType.F,
             BoolType.F,
+            AlarmTime.A_DAY_AGO,
             null,
             LocalDateTime.of(2024, 7, 1, 2, 3),
             LocalDateTime.of(2024, 7, 1, 2, 3)

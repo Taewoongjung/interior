@@ -59,7 +59,8 @@ public class CreateScheduleCommandHandler implements
                         relatedBusinessId,
                         event.alarmTime(),
                         BoolType.F,
-                        BoolType.F
+                        BoolType.F,
+                        event.selectedAlarmTime()
                 ));
             });
 

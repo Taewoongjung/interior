@@ -100,7 +100,8 @@ public class CreateScheduleWebDtoV1 {
                             BoolType.T : BoolType.F,
                     alarmTime != null ?
                             alarmTime.getAlarmTime(startDate) : null,
-                    colorHexInfo
+                    colorHexInfo,
+                    alarmTime
             );
         }
     }
