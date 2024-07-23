@@ -10,6 +10,8 @@ import com.interior.domain.schedule.BusinessSchedule;
 import com.interior.domain.schedule.BusinessScheduleAlarm;
 import com.interior.domain.schedule.repository.BusinessScheduleRepository;
 import com.interior.domain.util.BoolType;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -59,18 +61,24 @@ public class CreateScheduleCommandHandler implements
                             event.selectedAlarmTime()
                     ));
 
-            Business business = businessRepository.findById(event.relatedBusinessId());
+            Duration duration = Duration.between(LocalDateTime.now(),
+                    createdBusinessScheduleAlarm.getAlarmStartDate());
+            long minutes = duration.toMinutes();
 
-            eventPublisher.publishEvent(new SendAlimTalk(
-                    createdBusinessScheduleAlarm,
-                    createdSchedule,
-                    KakaoMsgTemplateType.ORDER_SCHEDULE,
-                    event.registerUser().getTel(),
-                    event.registerUser().getName(),
-                    business,
-                    null,
-                    null)
-            );
+            if (minutes > 10) {
+                Business business = businessRepository.findById(event.relatedBusinessId());
+
+                eventPublisher.publishEvent(new SendAlimTalk(
+                        createdBusinessScheduleAlarm,
+                        createdSchedule,
+                        KakaoMsgTemplateType.ORDER_SCHEDULE,
+                        event.registerUser().getTel(),
+                        event.registerUser().getName(),
+                        business,
+                        null,
+                        null)
+                );
+            }
         }
 
         return true;
