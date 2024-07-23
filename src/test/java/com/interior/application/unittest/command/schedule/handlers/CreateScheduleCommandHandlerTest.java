@@ -1,8 +1,11 @@
 package com.interior.application.unittest.command.schedule.handlers;
 
+import static com.interior.adapter.common.exception.ErrorType.RESERVED_ALIMTALK_SHOULD_BE_MORE_THAN_TEN_MINUTES_LATER;
 import static company.CompanyFixture.COMPANY_LIST;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
+import com.interior.adapter.common.exception.InvalidInputException;
 import com.interior.adapter.inbound.schedule.webdto.AlarmTime;
 import com.interior.application.command.schedule.commands.CreateScheduleCommand;
 import com.interior.application.command.schedule.handlers.CreateScheduleCommandHandler;
@@ -96,11 +99,11 @@ class CreateScheduleCommandHandlerTest {
         ScheduleType scheduleType = ScheduleType.ORDER;
         String title = "~~~ 발주를 등록한다";
         String orderingPlace = null;
-        LocalDateTime startDate = LocalDateTime.of(2024, 3, 22, 15, 10);
-        LocalDateTime endDate = LocalDateTime.of(2024, 3, 22, 15, 10);
+        LocalDateTime startDate = LocalDateTime.of(2050, 3, 22, 15, 10);
+        LocalDateTime endDate = LocalDateTime.of(2050, 3, 22, 15, 10);
         BoolType isAlarmOn = BoolType.T;
         AlarmTime selectedAlarmTime = AlarmTime.A_DAY_AGO;
-        LocalDateTime alarmTime = LocalDateTime.of(2024, 3, 22, 15, 10);
+        LocalDateTime alarmTime = LocalDateTime.of(2050, 3, 21, 15, 10);
         String colorHexInfo = "FF4D4F";
 
         CreateScheduleCommand event = new CreateScheduleCommand(
@@ -120,5 +123,56 @@ class CreateScheduleCommandHandlerTest {
         // when
         // then
         sut.handle(event);
+    }
+
+    @Test
+    @DisplayName("발주 스케줄 등록 시 알림을 등록할 때 10분 초과의 차이가 나지 않으면 에러가 발생한다.")
+    void test3() {
+
+        // given
+        Long relatedBusinessId = 1L;
+
+        User registerUser = User.of(
+                10L,
+                "홍길동",
+                "a@a.com",
+                "asdqeer1r12jiudjd^312&2ews",
+                "01012345678",
+                UserRole.ADMIN,
+                LocalDateTime.of(2024, 5, 19, 23, 30),
+                LocalDateTime.of(2024, 5, 19, 23, 30),
+                COMPANY_LIST()
+        );
+        ScheduleType scheduleType = ScheduleType.ORDER;
+        String title = "~~~ 발주를 등록한다";
+        String orderingPlace = null;
+        LocalDateTime startDate = LocalDateTime.of(2024, 3, 22, 15, 10);
+        LocalDateTime endDate = LocalDateTime.of(2024, 3, 22, 15, 10);
+        BoolType isAlarmOn = BoolType.T;
+        AlarmTime selectedAlarmTime = AlarmTime.A_DAY_AGO;
+        LocalDateTime alarmTime = LocalDateTime.of(2024, 3, 21, 15, 10);
+        String colorHexInfo = "FF4D4F";
+
+        CreateScheduleCommand event = new CreateScheduleCommand(
+                relatedBusinessId,
+                registerUser,
+                scheduleType,
+                title,
+                orderingPlace,
+                startDate,
+                endDate,
+                isAlarmOn,
+                alarmTime,
+                colorHexInfo,
+                selectedAlarmTime
+        );
+
+        // when
+        // then
+        assertThatThrownBy(() -> {
+            sut.handle(event);
+        })
+                .isInstanceOf(InvalidInputException.class)
+                .hasMessage(RESERVED_ALIMTALK_SHOULD_BE_MORE_THAN_TEN_MINUTES_LATER.getMessage());
     }
 }
