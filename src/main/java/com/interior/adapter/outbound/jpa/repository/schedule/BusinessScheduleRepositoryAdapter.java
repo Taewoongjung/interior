@@ -25,28 +25,23 @@ public class BusinessScheduleRepositoryAdapter implements BusinessScheduleReposi
 
     @Override
     @Transactional
-    public void createSchedule(final List<BusinessSchedule> businessScheduleList) {
+    public BusinessSchedule createSchedule(final BusinessSchedule businessSchedule) {
 
-        List<BusinessScheduleEntity> saveList = new ArrayList<>();
+        BusinessScheduleEntity entity = scheduleJpaRepository.save(
+                businessScheduleToEntity(businessSchedule));
 
-        businessScheduleList.forEach(
-                businessSchedule -> saveList.add(businessScheduleToEntity(businessSchedule)));
-
-        scheduleJpaRepository.saveAll(saveList);
+        return entity.toPojo();
     }
 
     @Override
     @Transactional
-    public void createAlarmRelatedToSchedule(
-            final List<BusinessScheduleAlarm> businessScheduleAlarmList) {
+    public BusinessScheduleAlarm createAlarmRelatedToSchedule(
+            final BusinessScheduleAlarm businessScheduleAlarm) {
 
-        List<BusinessScheduleAlarmEntity> saveList = new ArrayList<>();
+        BusinessScheduleAlarmEntity entity = scheduleAlarmJpaRepository.save(
+                businessScheduleAlarmToEntity(businessScheduleAlarm));
 
-        businessScheduleAlarmList.forEach(
-                businessScheduleAlarm -> saveList.add(
-                        businessScheduleAlarmToEntity(businessScheduleAlarm)));
-
-        scheduleAlarmJpaRepository.saveAll(saveList);
+        return entity.toPojo();
     }
 
     @Override

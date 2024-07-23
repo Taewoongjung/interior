@@ -5,7 +5,11 @@ import static com.interior.adapter.common.exception.ErrorType.EMPTY_KAKAO_MSG_TE
 import static com.interior.adapter.common.exception.ErrorType.EMPTY_KAKAO_MSG_TEMPLATE_THIRD_PART_TYPE;
 import static com.interior.util.CheckUtil.require;
 
+import com.interior.adapter.inbound.schedule.webdto.AlarmTime;
+import com.interior.domain.business.Business;
 import com.interior.domain.company.Company;
+import com.interior.domain.schedule.BusinessSchedule;
+import com.interior.domain.schedule.BusinessScheduleAlarm;
 import com.interior.domain.user.User;
 import java.time.LocalDateTime;
 import lombok.Getter;
@@ -113,8 +117,12 @@ public class KakaoMsgTemplate {
     public void replaceArgumentOfTemplate(
             final String customerName,
             final Company company,
-            final User user
+            final User user,
+            final Business business,
+            final BusinessSchedule businessSchedule,
+            final BusinessScheduleAlarm businessScheduleAlarm
     ) {
+
         String finalRes = null;
 
         if (this.templateCode.equals("TT_6051")) { // [알림톡] 회원가입 완료
@@ -123,7 +131,27 @@ public class KakaoMsgTemplate {
 
         if (this.templateCode.equals("TT_6052")) { // [알림톡] 견적서 초안 도착
             String replaceStr = this.getMessage().replace("#{요청한사람}", user.getName());
+
             finalRes = replaceStr.replace("#{회사명}", company.getName());
+        }
+
+        if (this.templateCode.equals("TT_9862")) { // [알림톡] 발주 스케줄 알람
+            String replaceStr1 = this.getMessage().replace("#{사업명}", business.getName());
+            String replaceStr2 = replaceStr1.replace("#{발주명}", businessSchedule.getTitle());
+            String replaceStr3 = replaceStr2.replace("#{발주처정보}",
+                    businessSchedule.getOrderingPlace());
+
+            String firstMessage = null;
+
+            if (AlarmTime.AT_THE_TIME.equals(businessScheduleAlarm.getSelectedAlarmTime())) {
+                firstMessage = "예정 된 발주가 들어오는 시간입니다.";
+            } else {
+                firstMessage =
+                        "예정 된 발주가 들어오기 " + businessScheduleAlarm.getSelectedAlarmTime().getType()
+                                + "입니다.";
+            }
+
+            finalRes = replaceStr3.replace("#{지정된발주알람시간에맞춘메시지}", firstMessage);
         }
 
         this.message = finalRes;

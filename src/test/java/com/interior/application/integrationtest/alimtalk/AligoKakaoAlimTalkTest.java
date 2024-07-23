@@ -1,5 +1,9 @@
 package com.interior.application.integrationtest.alimtalk;
 
+import static business.BusinessFixture.B_1;
+import static businessschedule.BusinessScheduleAlarmFixture.BSA_1;
+import static businessschedule.BusinessScheduleFixture.BS_2;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -10,6 +14,16 @@ import com.interior.domain.alimtalk.kakaomsgtemplate.AlimTalkButtonLinkType;
 import com.interior.domain.alimtalk.kakaomsgtemplate.AlimTalkThirdPartyType;
 import com.interior.domain.alimtalk.kakaomsgtemplate.KakaoMsgTemplate;
 import com.interior.domain.alimtalk.kakaomsgtemplate.KakaoMsgTemplateType;
+import com.interior.domain.company.Company;
+import com.interior.domain.user.User;
+import com.interior.domain.user.UserRole;
+import com.interior.domain.util.BoolType;
+import java.lang.reflect.Type;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,12 +40,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Disabled
 @SpringBootTest
@@ -117,7 +125,8 @@ public class AligoKakaoAlimTalkTest {
         jsonString = jsonString.replaceAll("=(?!(//|\\?))", ":");
 
         // Wrap URL values in quotes explicitly
-        jsonString = jsonString.replaceAll(":kakaotalk://web/openExternal\\?#\\{url}", ":\"kakaotalk://web/openExternal?#{url}\"");
+        jsonString = jsonString.replaceAll(":kakaotalk://web/openExternal\\?#\\{url}",
+                ":\"kakaotalk://web/openExternal?#{url}\"");
 
         // Fix empty values and remove unnecessary spaces
         jsonString = jsonString.replaceAll(":,", ":\"empty\",");
@@ -139,10 +148,12 @@ public class AligoKakaoAlimTalkTest {
             button.put("linkType", item.getString("linkType"));
             button.put("linkTypeName", item.getString("linkTypeName"));
 
-            if (item.has("linkIos") && !item.getString("linkIos").isEmpty() && !item.getString("linkIos").equals("empty")) {
+            if (item.has("linkIos") && !item.getString("linkIos").isEmpty() && !item.getString(
+                    "linkIos").equals("empty")) {
                 button.put("linkIos", item.getString("linkIos"));
             }
-            if (item.has("linkAnd") && !item.getString("linkAnd").isEmpty() && !item.getString("linkAnd").equals("empty")) {
+            if (item.has("linkAnd") && !item.getString("linkAnd").isEmpty() && !item.getString(
+                    "linkAnd").equals("empty")) {
                 button.put("linkAnd", item.getString("linkAnd"));
             }
 
@@ -163,28 +174,11 @@ public class AligoKakaoAlimTalkTest {
     @DisplayName("[알리고] 회원가입 완료 알림톡 발송 테스트")
     void sendAlimTalkTest1() {
 
-        KakaoMsgTemplate template = kakaoMsgTemplateRepositoryAdapter.findByTemplateCode("TT_5653");
+        KakaoMsgTemplate template = kakaoMsgTemplateRepositoryAdapter.findByTemplateCode("TT_6051");
+
+        template.replaceArgumentOfTemplate("정태웅", null, null, null, null, null);
 
         System.out.println("template = " + template);
-        System.out.println();
-
-        String buttonJson = """
-                {
-                    "button": [{
-                         "name": "채널 추가",
-                         "linkType": "AC",
-                         "linkTypeName": "채널 추가"
-                      },
-                      {
-                        "name": "서비스 바로가기",
-                        "linkType": "AL",
-                        "linkTypeName": "앱링크",
-                        "linkIos": "kakaotalk://web/openExternal?url=http://interiorjung.shop",
-                        "linkAnd": "kakaotalk://web/openExternal?url=http://interiorjung.shop"
-                      }
-                    ]
-                }
-                """;
 
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
         formData.add("apikey", "gtmpgewaf3b1ofzzxzb3qc5zpxzr3xw7");
@@ -194,12 +188,8 @@ public class AligoKakaoAlimTalkTest {
         formData.add("sender", "01029143611");
         formData.add("receiver_1", "01088257754");
         formData.add("subject_1", template.getMessageSubject());
-        formData.add("message_1", "(축하) 정태웅님! 환영합니다 (축하)\n"
-                + "\n"
-                + "인테리어정가(鄭家)에 회원가입해 주셔서 진심으로 감사드립니다.\n"
-                + "\n"
-                + "인테리어 공사의 시작부터 함께 하겠습니다.");
-        formData.add("button_1", buttonJson);
+        formData.add("message_1", template.getMessage());
+        formData.add("button_1", template.getButtonInfo());
 //        formData.add("testMode", "Y");
 
         Mono<String> responseMono = webClient.post()
@@ -226,6 +216,16 @@ public class AligoKakaoAlimTalkTest {
 
         KakaoMsgTemplate template = kakaoMsgTemplateRepositoryAdapter.findByTemplateCode("TT_6052");
 
+        template.replaceArgumentOfTemplate(null,
+                Company.of("서울인테리어", "01000", 519L, "address", "subAddress", "buildingNumber",
+                        "tel", BoolType.F, LocalDateTime.now(), LocalDateTime.now()),
+                User.of("정태웅", "a@a.com", "password", "tel", UserRole.ADMIN,
+                        LocalDateTime.now(), LocalDateTime.now()),
+                null,
+                null,
+                null
+        );
+
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
         formData.add("apikey", "gtmpgewaf3b1ofzzxzb3qc5zpxzr3xw7");
         formData.add("userid", "interiorjung");
@@ -234,9 +234,53 @@ public class AligoKakaoAlimTalkTest {
         formData.add("sender", "01029143611");
         formData.add("receiver_1", "01088257754");
         formData.add("emtitle_1", "[" + "무지개 아파트 인테리어 견적서" + "]");
-        formData.add("subject_1", "견적서 초안 도착");
+        formData.add("subject_1", template.getTemplateName());
         formData.add("message_1", template.getMessage());
         formData.add("button_1", template.getButtonInfo());
+//        formData.add("testMode", "Y");
+
+        Mono<String> responseMono = webClient.post()
+                .uri("https://kakaoapi.aligo.in/akv10/alimtalk/send/")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .bodyValue(formData)
+                .retrieve().bodyToMono(String.class);
+
+        responseMono.subscribe(response -> {
+
+            System.out.println("success = " + response);
+
+        }, error -> {
+            System.out.println("에러 발생");
+        });
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("[알리고] 발주 스케줄 알림 알림톡 발송 테스트")
+    void sendAlimTalkTest3() {
+
+        KakaoMsgTemplate template = kakaoMsgTemplateRepositoryAdapter.findByTemplateCode("TT_9862");
+
+        template.replaceArgumentOfTemplate(null,
+                Company.of("서울인테리어", "01000", 519L, "address", "subAddress", "buildingNumber",
+                        "tel", BoolType.F, LocalDateTime.now(), LocalDateTime.now()),
+                User.of("정태웅", "a@a.com", "password", "tel", UserRole.ADMIN,
+                        LocalDateTime.now(), LocalDateTime.now()),
+                B_1, // Business
+                BS_2, // BusinessSchedule
+                BSA_1 // BusinessScheduleAlarm
+        );
+
+        MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
+        formData.add("apikey", "gtmpgewaf3b1ofzzxzb3qc5zpxzr3xw7");
+        formData.add("userid", "interiorjung");
+        formData.add("senderkey", "c600ad999cf3840328560d429e3f43fef8012719");
+        formData.add("tpl_code", template.getTemplateCode());
+        formData.add("sender", "01029143611");
+        formData.add("receiver_1", "01088257754");
+        formData.add("subject_1", template.getTemplateName());
+        formData.add("message_1", template.getMessage());
+        formData.add("senddate", "20240723180800");
 //        formData.add("testMode", "Y");
 
         Mono<String> responseMono = webClient.post()
@@ -286,7 +330,9 @@ public class AligoKakaoAlimTalkTest {
     @Test
     @DisplayName("회원가입 완료 알림톡 전송 테스트")
     void test1() {
-        eventPublisher.publishEvent(new SendAlimTalk(KakaoMsgTemplateType.COMPLETE_SIGNUP, "01088257754", "태웅정", null, null, null));
+        eventPublisher.publishEvent(
+                new SendAlimTalk(null, null, KakaoMsgTemplateType.COMPLETE_SIGNUP, "01088257754",
+                        "태웅정", null, null, null));
     }
 
     @Test
@@ -298,7 +344,8 @@ public class AligoKakaoAlimTalkTest {
         jsonString = jsonString.replaceAll("=(?!(//|\\?))", ":");
 
         // Wrap URL values in quotes explicitly
-        jsonString = jsonString.replaceAll(":kakaotalk://web/openExternal\\?#\\{url}", ":\"kakaotalk://web/openExternal?#{url}\"");
+        jsonString = jsonString.replaceAll(":kakaotalk://web/openExternal\\?#\\{url}",
+                ":\"kakaotalk://web/openExternal?#{url}\"");
 
         // Fix empty values and remove unnecessary spaces
         jsonString = jsonString.replaceAll(":,", ":\"empty\",");
@@ -320,10 +367,12 @@ public class AligoKakaoAlimTalkTest {
             button.put("linkType", item.getString("linkType"));
             button.put("linkTypeName", item.getString("linkTypeName"));
 
-            if (item.has("linkIos") && !item.getString("linkIos").isEmpty() && !item.getString("linkIos").equals("empty")) {
+            if (item.has("linkIos") && !item.getString("linkIos").isEmpty() && !item.getString(
+                    "linkIos").equals("empty")) {
                 button.put("linkIos", item.getString("linkIos"));
             }
-            if (item.has("linkAnd") && !item.getString("linkAnd").isEmpty() && !item.getString("linkAnd").equals("empty")) {
+            if (item.has("linkAnd") && !item.getString("linkAnd").isEmpty() && !item.getString(
+                    "linkAnd").equals("empty")) {
                 button.put("linkAnd", item.getString("linkAnd"));
             }
 
@@ -335,27 +384,5 @@ public class AligoKakaoAlimTalkTest {
 
         // Step 3: Output the result
         System.out.println(result.toString(4)); // Pretty print with an indent of 4
-    }
-
-    @Test
-    void test3() {
-        String str = "{\"button\": [\n" +
-                "    {\n" +
-                "        \"linkTypeName\": \"채널 추가\",\n" +
-                "        \"name\": \"채널 추가\",\n" +
-                "        \"linkType\": \"AC\"\n" +
-                "    },\n" +
-                "    {\n" +
-                "        \"linkTypeName\": \"앱링크\",\n" +
-                "        \"linkAnd\": \"kakaotalk://web/openExternal?#{url}\",\n" +
-                "        \"name\": \"서비스 바로가기\",\n" +
-                "        \"linkType\": \"AL\",\n" +
-                "        \"linkIos\": \"kakaotalk://web/openExternal?#{url}\"\n" +
-                "    }\n" +
-                "]}\n";
-
-        str = str.replace("#{url}", "url=http://interiorjung.shop");
-
-        System.out.println(str);
     }
 }

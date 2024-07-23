@@ -2,13 +2,12 @@ package com.interior.adapter.inbound.schedule.webdto;
 
 import com.interior.application.command.schedule.commands.CreateScheduleCommand;
 import com.interior.domain.schedule.ScheduleType;
+import com.interior.domain.user.User;
 import com.interior.domain.util.BoolType;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
@@ -20,8 +19,7 @@ public class CreateScheduleWebDtoV1 {
             ScheduleType scheduleType,
 
             @NotNull
-            @NotEmpty
-            List<Long> relatedBusinessList,
+            Long relatedBusinessId,
 
             @NotBlank
             String title,
@@ -86,11 +84,11 @@ public class CreateScheduleWebDtoV1 {
             return endDate;
         }
 
-        public CreateScheduleCommand toCommand(final Long registerId) {
+        public CreateScheduleCommand toCommand(final User registerUser) {
 
             return new CreateScheduleCommand(
-                    relatedBusinessList,
-                    registerId,
+                    relatedBusinessId,
+                    registerUser,
                     scheduleType,
                     title,
                     titleWhereStemsFrom,
@@ -100,7 +98,8 @@ public class CreateScheduleWebDtoV1 {
                             BoolType.T : BoolType.F,
                     alarmTime != null ?
                             alarmTime.getAlarmTime(startDate) : null,
-                    colorHexInfo
+                    colorHexInfo,
+                    alarmTime
             );
         }
     }

@@ -1,21 +1,27 @@
 package com.interior.adapter.inbound.schedule.webdto;
 
 import java.time.LocalDateTime;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
+@Getter
+@RequiredArgsConstructor
 public enum AlarmTime {
 
-    A_WEEK_AGO,
-    FIVE_DAYS_AGO,
-    TWO_DAYS_AGO,
-    A_DAY_AGO,
-    FIVE_HOURS_AGO,
-    TWO_HOURS_AGO,
-    A_HOUR_AGO,
-    THIRTY_M_AGO,
-    FIFTY_M_AGO,
-    TEN_M_AGO,
-    FIVE_M_AGO,
-    AT_THE_TIME;
+    A_WEEK_AGO("1주일 전"),
+    FIVE_DAYS_AGO("5일 전"),
+    TWO_DAYS_AGO("2일 전"),
+    A_DAY_AGO("하루 전"),
+    FIVE_HOURS_AGO("5시간 전"),
+    TWO_HOURS_AGO("2시간 전"),
+    A_HOUR_AGO("1시간 전"),
+    THIRTY_M_AGO("30분 전"),
+    FIFTY_M_AGO("15분 전"),
+    TEN_M_AGO("10분 전"),
+    FIVE_M_AGO("5분 전"),
+    AT_THE_TIME("");
+
+    private final String type;
 
     public LocalDateTime getAlarmTime(final LocalDateTime startTime) {
 

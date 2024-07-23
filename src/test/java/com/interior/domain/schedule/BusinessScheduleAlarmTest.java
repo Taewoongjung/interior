@@ -4,10 +4,12 @@ import static com.interior.adapter.common.exception.ErrorType.EMPTY_ALARM_START_
 import static com.interior.adapter.common.exception.ErrorType.EMPTY_BUSINESS_SCHEDULE_ID_IN_SCHEDULE_ALARM;
 import static com.interior.adapter.common.exception.ErrorType.EMPTY_IS_DELETED_IN_SCHEDULE_ALARM;
 import static com.interior.adapter.common.exception.ErrorType.EMPTY_IS_SUCCESS_IN_SCHEDULE_ALARM;
+import static com.interior.adapter.common.exception.ErrorType.RESERVED_ALIMTALK_SHOULD_BE_MORE_THAN_TEN_MINUTES_LATER;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import com.interior.adapter.common.exception.InvalidInputException;
+import com.interior.adapter.inbound.schedule.webdto.AlarmTime;
 import com.interior.domain.util.BoolType;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
@@ -21,9 +23,10 @@ class BusinessScheduleAlarmTest {
     void test1() {
         assertDoesNotThrow(() -> BusinessScheduleAlarm.of(
                 10L,
-                LocalDateTime.of(2024, 5, 19, 23, 30),
+                LocalDateTime.of(2050, 5, 19, 23, 30),
                 BoolType.T,
-                BoolType.T
+                BoolType.T,
+                AlarmTime.A_DAY_AGO
         ));
     }
 
@@ -35,7 +38,8 @@ class BusinessScheduleAlarmTest {
                     null,
                     LocalDateTime.of(2024, 5, 19, 23, 30),
                     BoolType.T,
-                    BoolType.T
+                    BoolType.T,
+                    AlarmTime.A_DAY_AGO
             );
         })
                 .isInstanceOf(InvalidInputException.class)
@@ -50,7 +54,8 @@ class BusinessScheduleAlarmTest {
                     10L,
                     null,
                     BoolType.T,
-                    BoolType.T
+                    BoolType.T,
+                    AlarmTime.A_DAY_AGO
             );
         })
                 .isInstanceOf(InvalidInputException.class)
@@ -63,9 +68,10 @@ class BusinessScheduleAlarmTest {
         assertThatThrownBy(() -> {
             BusinessScheduleAlarm.of(
                     10L,
-                    LocalDateTime.of(2024, 5, 19, 23, 30),
+                    LocalDateTime.of(2050, 5, 19, 23, 30),
                     null,
-                    BoolType.T
+                    BoolType.T,
+                    AlarmTime.A_DAY_AGO
             );
         })
                 .isInstanceOf(InvalidInputException.class)
@@ -78,12 +84,29 @@ class BusinessScheduleAlarmTest {
         assertThatThrownBy(() -> {
             BusinessScheduleAlarm.of(
                     10L,
-                    LocalDateTime.of(2024, 5, 19, 23, 30),
+                    LocalDateTime.of(2050, 5, 19, 23, 30),
                     BoolType.T,
-                    null
+                    null,
+                    AlarmTime.A_DAY_AGO
             );
         })
                 .isInstanceOf(InvalidInputException.class)
                 .hasMessage(EMPTY_IS_DELETED_IN_SCHEDULE_ALARM.getMessage());
+    }
+
+    @Test
+    @DisplayName("알람 10분 초과의 차이가 나야 합니다.")
+    void test6() {
+        assertThatThrownBy(() -> {
+            BusinessScheduleAlarm.of(
+                    10L,
+                    LocalDateTime.of(2024, 5, 19, 23, 30),
+                    BoolType.T,
+                    null,
+                    AlarmTime.A_DAY_AGO
+            );
+        })
+                .isInstanceOf(InvalidInputException.class)
+                .hasMessage(RESERVED_ALIMTALK_SHOULD_BE_MORE_THAN_TEN_MINUTES_LATER.getMessage());
     }
 }
