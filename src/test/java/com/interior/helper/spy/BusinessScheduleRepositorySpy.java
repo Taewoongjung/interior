@@ -10,10 +10,16 @@ import static businessschedule.BusinessScheduleFixture.BS_4;
 import com.interior.domain.schedule.BusinessSchedule;
 import com.interior.domain.schedule.BusinessScheduleAlarm;
 import com.interior.domain.schedule.repository.BusinessScheduleRepository;
+import com.interior.domain.schedule.repository.dto.ReviseBusinessSchedule;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BusinessScheduleRepositorySpy implements BusinessScheduleRepository {
+
+    @Override
+    public BusinessSchedule findById(Long businessScheduleId) {
+        return null;
+    }
 
     @Override
     public BusinessSchedule createSchedule(BusinessSchedule businessSchedule) {
@@ -48,6 +54,11 @@ public class BusinessScheduleRepositorySpy implements BusinessScheduleRepository
 
     @Override
     public List<BusinessSchedule> findAllByBusinessId(List<Long> businessId) {
+        return null;
+    }
+
+    @Override
+    public Long reviseBusinessSchedule(ReviseBusinessSchedule businessSchedule) {
         return null;
     }
 }

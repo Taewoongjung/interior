@@ -93,7 +93,8 @@ public class SecurityConfig {
                         ).authenticated()
 
                         .requestMatchers(HttpMethod.PUT,
-                                "/api/businesses/{businessId}/materials/{materialId}"
+                                "/api/businesses/schedules/{scheduleId}"
+                                , "/api/businesses/{businessId}/materials/{materialId}"
                         ).authenticated()
 
                         .requestMatchers(HttpMethod.POST,

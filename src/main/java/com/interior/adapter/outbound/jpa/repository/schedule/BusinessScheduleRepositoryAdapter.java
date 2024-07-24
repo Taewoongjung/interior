@@ -1,6 +1,7 @@
 package com.interior.adapter.outbound.jpa.repository.schedule;
 
 import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_BUSINESS_SCHEDULE;
+import static com.interior.adapter.common.exception.ErrorType.NOT_EXIST_BUSINESS_SCHEDULE_RELATED_TO_THE_BUSINESS;
 import static com.interior.util.CheckUtil.check;
 import static com.interior.util.converter.jpa.schedule.BusinessScheduleEntityConverter.businessScheduleAlarmToEntity;
 import static com.interior.util.converter.jpa.schedule.BusinessScheduleEntityConverter.businessScheduleToEntity;
@@ -10,8 +11,10 @@ import com.interior.adapter.outbound.jpa.entity.schedule.BusinessScheduleEntity;
 import com.interior.domain.schedule.BusinessSchedule;
 import com.interior.domain.schedule.BusinessScheduleAlarm;
 import com.interior.domain.schedule.repository.BusinessScheduleRepository;
+import com.interior.domain.schedule.repository.dto.ReviseBusinessSchedule;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +25,21 @@ public class BusinessScheduleRepositoryAdapter implements BusinessScheduleReposi
 
     private final BusinessScheduleJpaRepository scheduleJpaRepository;
     private final BusinessScheduleAlarmJpaRepository scheduleAlarmJpaRepository;
+
+    @Override
+    @Transactional(readOnly = true)
+    public BusinessSchedule findById(final Long businessScheduleId) {
+
+        BusinessScheduleEntity entity = getBusinessScheduleEntity(businessScheduleId);
+
+        return entity.toPojo();
+    }
+
+    private BusinessScheduleEntity getBusinessScheduleEntity(final Long businessScheduleId) {
+        return scheduleJpaRepository.findById(businessScheduleId)
+                .orElseThrow(
+                        () -> new NoSuchElementException(NOT_EXIST_BUSINESS_SCHEDULE.getMessage()));
+    }
 
     @Override
     @Transactional
@@ -51,7 +69,8 @@ public class BusinessScheduleRepositoryAdapter implements BusinessScheduleReposi
         List<BusinessScheduleEntity> businessScheduleEntityList =
                 scheduleJpaRepository.findAllByBusinessIdIn(businessId);
 
-        check(businessScheduleEntityList == null, NOT_EXIST_BUSINESS_SCHEDULE);
+        check(businessScheduleEntityList == null,
+                NOT_EXIST_BUSINESS_SCHEDULE_RELATED_TO_THE_BUSINESS);
 
         if (businessScheduleEntityList.size() == 0) {
             return new ArrayList<>();
@@ -61,5 +80,22 @@ public class BusinessScheduleRepositoryAdapter implements BusinessScheduleReposi
                 .map(BusinessScheduleEntity::toPojo).toList();
     }
 
+    @Override
+    @Transactional
+    public Long reviseBusinessSchedule(final ReviseBusinessSchedule reviseReq) {
 
+        BusinessScheduleEntity businessScheduleEntity = getBusinessScheduleEntity(
+                reviseReq.scheduleId());
+
+        businessScheduleEntity.setBusinessId(reviseReq.relatedBusinessId());
+        businessScheduleEntity.setType(reviseReq.scheduleType());
+        businessScheduleEntity.setTitle(reviseReq.title());
+        businessScheduleEntity.setOrderingPlace(reviseReq.orderingPlace());
+        businessScheduleEntity.setStartDate(reviseReq.startDate());
+        businessScheduleEntity.setEndDate(reviseReq.endDate());
+        businessScheduleEntity.setIsAlarmOn(reviseReq.isAlarmOn());
+        businessScheduleEntity.setColorHexInfo(reviseReq.colorHexInfo());
+
+        return businessScheduleEntity.getId();
+    }
 }
