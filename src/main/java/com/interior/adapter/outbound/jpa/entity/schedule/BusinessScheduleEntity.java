@@ -135,4 +135,40 @@ public class BusinessScheduleEntity extends BaseEntity {
                 getCreatedAt()
         );
     }
+
+    public void setBusinessId(final Long businessId) {
+        this.businessId = businessId;
+    }
+
+    public void setType(final ScheduleType type) {
+        this.type = type;
+    }
+
+    public void setTitle(final String title) {
+        this.title = title;
+    }
+
+    public void setOrderingPlace(final String orderingPlace) {
+        this.orderingPlace = orderingPlace;
+    }
+
+    public void setStartDate(final LocalDateTime startDate) {
+        this.startDate = startDate;
+    }
+
+    public void setEndDate(final LocalDateTime endDate) {
+        this.endDate = endDate;
+    }
+
+    public void setIsAlarmOn(final BoolType isAlarmOn) {
+        this.isAlarmOn = isAlarmOn;
+    }
+
+    public void delete() {
+        this.isDeleted = BoolType.T;
+    }
+
+    public void setColorHexInfo(final String colorHexInfo) {
+        this.colorHexInfo = colorHexInfo;
+    }
 }

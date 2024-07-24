@@ -23,8 +23,8 @@ public class DeleteCompanyCommandHandler implements ICommandHandler<DeleteCompan
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean handle(final DeleteCompanyCommand command) {
-        log.info("execute DeleteCompanyCommand");
-        
+        log.info("execute DeleteCompanyCommand = {}", command);
+
         companyRepository.delete(command.userId(), command.companyId());
 
         log.info("DeleteCompanyCommand executed successfully");

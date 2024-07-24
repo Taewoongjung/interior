@@ -214,7 +214,7 @@ public class KakaoAlimTalkByAligoService implements AlimTalkService {
         Map<String, String> resultMap = new HashMap<>(wholeJson);
         resultMap.putAll(infoFromWholeJson);
 
-        return wholeJson;
+        return resultMap;
     }
 
     private String getReservingAlimTalkTimeAsString(final LocalDateTime target) {
