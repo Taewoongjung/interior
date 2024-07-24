@@ -32,7 +32,7 @@ public class CreateCompanyCommandHandler implements ICommandHandler<CreateCompan
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean handle(final CreateCompanyCommand command) {
-        log.info("execute CreateCompanyCommand");
+        log.info("execute CreateCompanyCommand = {}", command);
 
         check(command.user().getCompanyList().size() >= 5, LIMIT_OF_COMPANY_COUNT_IS_FIVE);
 

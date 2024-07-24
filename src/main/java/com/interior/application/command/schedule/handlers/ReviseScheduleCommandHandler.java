@@ -29,26 +29,28 @@ public class ReviseScheduleCommandHandler implements
 
     @Override
     @Transactional
-    public Long handle(final ReviseScheduleCommand event) {
+    public Long handle(final ReviseScheduleCommand command) {
+        log.info("execute ReviseScheduleCommand = {}", command);
 
         BusinessSchedule originalBusinessSchedule = businessScheduleRepository.findById(
-                event.scheduleId());
+                command.scheduleId());
 
         // revisedUser 를 받는데, 최초 자신이 등록한 스케줄은 그 사람의 것이며, 자기 자신만 변경 가능.
-        check(!event.revisedUser().getId().equals(originalBusinessSchedule.getUserId()),
+        check(!command.revisedUser().getId().equals(originalBusinessSchedule.getUserId()),
                 ONLY_OWNER_CAN_REVISE_BUSINESS_SCHEDULE);
 
-        if (!event.relatedBusinessId().equals(originalBusinessSchedule.getBusinessId())) {
+        if (!command.relatedBusinessId().equals(originalBusinessSchedule.getBusinessId())) {
             // 존재 하는 사업인지 조회/검증
-            businessRepository.findById(event.relatedBusinessId());
+            businessRepository.findById(command.relatedBusinessId());
         }
 
         // 이전에 isAlarmOn 이 true 였다가 false 로 변경 되면 BusinessScheduleAlarm 에 isDeleted 가 true 로 변경 됨
         Long revisedBusinessScheduleId = businessScheduleRepository.reviseBusinessSchedule(
-                event.convertToReviseBusinessSchedule());
+                command.convertToReviseBusinessSchedule());
 
         // 변경 로그를 쌓을지는 더 검토 필요
-
+        
+        log.info("ReviseScheduleCommand executed successfully");
         return revisedBusinessScheduleId; // 수정 된 스케줄의 id 리턴
     }
 }

@@ -35,30 +35,31 @@ public class CreateScheduleCommandHandler implements
 
     @Override
     @Transactional
-    public Boolean handle(final CreateScheduleCommand event) {
+    public Boolean handle(final CreateScheduleCommand command) {
+        log.info("execute CreateScheduleCommand = {}", command);
 
         BusinessSchedule createdSchedule = businessScheduleRepository.createSchedule(
                 BusinessSchedule.of(
-                        event.relatedBusinessId(),
-                        event.registerUser().getId(),
-                        event.scheduleType(),
-                        event.title(),
-                        event.orderingPlace(),
-                        event.startDate(),
-                        event.endDate(),
-                        event.isAlarmOn(),
-                        event.colorHexInfo()
+                        command.relatedBusinessId(),
+                        command.registerUser().getId(),
+                        command.scheduleType(),
+                        command.title(),
+                        command.orderingPlace(),
+                        command.startDate(),
+                        command.endDate(),
+                        command.isAlarmOn(),
+                        command.colorHexInfo()
                 ));
 
-        if (BoolType.T.equals(event.isAlarmOn())) {
+        if (BoolType.T.equals(command.isAlarmOn())) {
 
             BusinessScheduleAlarm createdBusinessScheduleAlarm = businessScheduleRepository.createAlarmRelatedToSchedule(
                     BusinessScheduleAlarm.of(
-                            event.relatedBusinessId(),
-                            event.alarmTime(),
+                            command.relatedBusinessId(),
+                            command.alarmTime(),
                             BoolType.F,
                             BoolType.F,
-                            event.selectedAlarmTime()
+                            command.selectedAlarmTime()
                     ));
 
             Duration duration = Duration.between(LocalDateTime.now(),
@@ -66,14 +67,14 @@ public class CreateScheduleCommandHandler implements
             long minutes = duration.toMinutes();
 
             if (minutes > 10) {
-                Business business = businessRepository.findById(event.relatedBusinessId());
+                Business business = businessRepository.findById(command.relatedBusinessId());
 
                 eventPublisher.publishEvent(new SendAlimTalk(
                         createdBusinessScheduleAlarm,
                         createdSchedule,
                         KakaoMsgTemplateType.ORDER_SCHEDULE,
-                        event.registerUser().getTel(),
-                        event.registerUser().getName(),
+                        command.registerUser().getTel(),
+                        command.registerUser().getName(),
                         business,
                         null,
                         null)
@@ -81,6 +82,7 @@ public class CreateScheduleCommandHandler implements
             }
         }
 
+        log.info("CreateScheduleCommand executed successfully");
         return true;
     }
 }
