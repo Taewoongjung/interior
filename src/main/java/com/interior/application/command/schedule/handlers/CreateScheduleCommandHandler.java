@@ -55,7 +55,7 @@ public class CreateScheduleCommandHandler implements
 
             BusinessScheduleAlarm createdBusinessScheduleAlarm = businessScheduleRepository.createAlarmRelatedToSchedule(
                     BusinessScheduleAlarm.of(
-                            command.relatedBusinessId(),
+                            createdSchedule.getId(),
                             command.alarmTime(),
                             BoolType.F,
                             BoolType.F,

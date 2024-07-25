@@ -1,5 +1,6 @@
 package com.interior.adapter.inbound.schedule.webdto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.interior.domain.schedule.ScheduleType;
 import com.interior.domain.util.BoolType;
 import jakarta.validation.constraints.NotNull;
@@ -20,7 +21,9 @@ public class GetBusinessSchedulesWebDtoV1 {
                       ScheduleType type,
                       String title,
                       String orderingPlace,
+                      @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
                       LocalDateTime startDate,
+                      @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
                       LocalDateTime endDate,
                       BoolType isAlarmOn,
                       BoolType isDeleted,
@@ -28,6 +31,7 @@ public class GetBusinessSchedulesWebDtoV1 {
                       LocalDateTime createdAt,
 
                       // 알람
+                      @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
                       LocalDateTime alarmStartDate,
                       AlarmTime selectedAlarmTime) {
 
