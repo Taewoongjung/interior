@@ -15,6 +15,7 @@ import com.interior.domain.schedule.repository.dto.ReviseBusinessSchedule;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -78,6 +79,18 @@ public class BusinessScheduleRepositoryAdapter implements BusinessScheduleReposi
 
         return businessScheduleEntityList.stream()
                 .map(BusinessScheduleEntity::toPojo).toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<BusinessScheduleAlarm> findAllScheduleAlarmByBusinessScheduleIdList(
+            List<Long> businessScheduleIdList) {
+
+        List<BusinessScheduleAlarmEntity> entityList = scheduleAlarmJpaRepository.findAllByBusinessScheduleIdIn(
+                businessScheduleIdList);
+
+        return entityList.stream().map(BusinessScheduleAlarmEntity::toPojo)
+                .collect(Collectors.toList());
     }
 
     @Override

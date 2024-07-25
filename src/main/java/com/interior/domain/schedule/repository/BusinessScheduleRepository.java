@@ -16,5 +16,8 @@ public interface BusinessScheduleRepository {
 
     List<BusinessSchedule> findAllByBusinessId(final List<Long> businessId);
 
+    List<BusinessScheduleAlarm> findAllScheduleAlarmByBusinessScheduleIdList(
+            final List<Long> businessScheduleIdList);
+
     Long reviseBusinessSchedule(final ReviseBusinessSchedule businessSchedule);
 }

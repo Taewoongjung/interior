@@ -39,7 +39,7 @@ public class BusinessSchedule {
 
     private final BoolType isDeleted;
 
-    private String colorHexInfo;
+    private final String colorHexInfo;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private final LocalDateTime lastModified;

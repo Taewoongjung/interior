@@ -58,6 +58,12 @@ public class BusinessScheduleRepositorySpy implements BusinessScheduleRepository
     }
 
     @Override
+    public List<BusinessScheduleAlarm> findAllScheduleAlarmByBusinessScheduleIdList(
+            List<Long> businessScheduleIdList) {
+        return null;
+    }
+
+    @Override
     public Long reviseBusinessSchedule(ReviseBusinessSchedule businessSchedule) {
         return null;
     }

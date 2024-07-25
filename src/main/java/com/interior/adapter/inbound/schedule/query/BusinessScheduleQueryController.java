@@ -3,7 +3,6 @@ package com.interior.adapter.inbound.schedule.query;
 import com.interior.adapter.inbound.schedule.webdto.GetBusinessSchedulesWebDtoV1;
 import com.interior.application.readmodel.schedule.handlers.GetBusinessScheduleByBusinessIdQueryHandler;
 import com.interior.application.readmodel.schedule.queries.GetBusinessScheduleByBusinessIdQuery;
-import com.interior.domain.schedule.BusinessSchedule;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,12 +20,13 @@ public class BusinessScheduleQueryController {
 
 
     @GetMapping(value = "/api/businesses/schedules")
-    public ResponseEntity<List<BusinessSchedule>> getBusinessSchedules(
+    public ResponseEntity<List<GetBusinessSchedulesWebDtoV1.Res>> getBusinessSchedules(
             final GetBusinessSchedulesWebDtoV1.Req req
     ) {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(getBusinessScheduleByBusinessIdQueryHandler.handle(
-                        new GetBusinessScheduleByBusinessIdQuery(req.businessIds())));
+                                new GetBusinessScheduleByBusinessIdQuery(req.businessIds()))
+                        .convertToGetBusinessSchedulesWebDtoV1Res());
     }
 }

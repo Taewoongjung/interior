@@ -2,7 +2,9 @@ package com.interior.application.readmodel.schedule.handlers;
 
 import com.interior.abstraction.domain.IQueryHandler;
 import com.interior.application.readmodel.schedule.queries.GetBusinessScheduleByBusinessIdQuery;
+import com.interior.application.readmodel.schedule.queryresponses.GetBusinessScheduleByBusinessIdQueryResponse;
 import com.interior.domain.schedule.BusinessSchedule;
+import com.interior.domain.schedule.BusinessScheduleAlarm;
 import com.interior.domain.schedule.repository.BusinessScheduleRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class GetBusinessScheduleByBusinessIdQueryHandler implements
-        IQueryHandler<GetBusinessScheduleByBusinessIdQuery, List<BusinessSchedule>> {
+        IQueryHandler<GetBusinessScheduleByBusinessIdQuery, GetBusinessScheduleByBusinessIdQueryResponse> {
 
     private final BusinessScheduleRepository businessScheduleRepository;
 
@@ -26,8 +28,19 @@ public class GetBusinessScheduleByBusinessIdQueryHandler implements
 
     @Override
     @Transactional(readOnly = true)
-    public List<BusinessSchedule> handle(final GetBusinessScheduleByBusinessIdQuery event) {
+    public GetBusinessScheduleByBusinessIdQueryResponse handle(
+            final GetBusinessScheduleByBusinessIdQuery event) {
 
-        return businessScheduleRepository.findAllByBusinessId(event.businessIdList());
+        List<BusinessSchedule> businessSchedules = businessScheduleRepository.findAllByBusinessId(
+                event.businessIdList());
+
+        List<BusinessScheduleAlarm> businessScheduleAlarmList = businessScheduleRepository.findAllScheduleAlarmByBusinessScheduleIdList(
+                businessSchedules.stream()
+                        .map(BusinessSchedule::getId).toList()
+        );
+
+        return new GetBusinessScheduleByBusinessIdQueryResponse(
+                businessSchedules,
+                businessScheduleAlarmList);
     }
 }
