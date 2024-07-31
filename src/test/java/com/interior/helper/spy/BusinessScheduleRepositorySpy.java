@@ -23,8 +23,8 @@ public class BusinessScheduleRepositorySpy implements BusinessScheduleRepository
 
     @Override
     public BusinessSchedule createSchedule(BusinessSchedule businessSchedule) {
-        // saveAll
-        return null;
+        // save
+        return BS_1; // 알람과 함께 설정 시 스케줄 생성이 선행 돼야 해서 임의 BusinessSchedule 객체 return
     }
 
     @Override
