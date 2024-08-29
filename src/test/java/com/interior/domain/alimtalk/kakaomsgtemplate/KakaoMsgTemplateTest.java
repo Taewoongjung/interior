@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 class KakaoMsgTemplateTest {
 
     @Test
-    @DisplayName("생성된다.")
+    @DisplayName("생성된다")
     void test1() {
         assertDoesNotThrow(() -> KakaoMsgTemplate.of(
                 10L,
